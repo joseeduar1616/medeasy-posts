@@ -1,0 +1,13 @@
+# Novidades já verificadas
+
+| Data em que vi | Prova | Novidade | Fonte | Virou post? |
+|---|---|---|---|---|
+| 2026-10-07 | PSU-GO 2027 | Edital publicado em 23/09; inscrições e currículo de 07 a 20/10; prova em 29/11; 317 vagas | aremg.org.br / edital Ânima | sim (prazos e fila) |
+| 2026-10-07 | SES-GO 2027 | Inscrições de 05/10 a 03/11; prova em 06/12; 219 vagas | Estratégia MED | sim (prazos) |
+| 2026-10-07 | SES-DF 2027 | Inscrições de 01/10 a 18/11; prova em 12/12; banca IADES | Estratégia MED | sim (prazos) |
+| 2026-10-07 | USP-SP (FMUSP) 2027 | Inscrições de 06 a 26/10; prova em 06/12; taxa R$ 620 | Estratégia MED / FUVEST | sim (prazos) |
+| 2026-10-07 | Unifesp 2027 | Inscrições de 07 a 30/10; prova em 29/11 | Estratégia MED | sim (prazos) |
+| 2026-10-07 | SUS-SP 2027 | Inscrições de 20/10 a 05/11; prova em 13/12; Vunesp; R$ 120 | Estratégia MED | sim (prazos) |
+| 2026-10-07 | AMRIGS 2027 | Inscrições até 19/10; boleto até 27/10 | Estratégia MED | sim (prazos) |
+| 2026-10-07 | PSU-MG 2027 | Inscrições até 15/10 (cronograma Medway; edital não visto); prova em 22/11 | Medway | sim (prazos) |
+| 2026-10-07 | Unicamp 2027 | Inscrições de 01 a 15/10 (até 16h); prova em 15/11 | Vestibulandoweb | sim (prazos) |
