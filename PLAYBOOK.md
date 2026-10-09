@@ -38,7 +38,7 @@ Dê prioridade a GO, DF, MG, ENARE e USP, porque é onde está o público.
 
 1. Puxe os dados recentes no Windsor (conector `instagram`, conta `17841452692504029`, campos `media_id, timestamp, media_type, media_caption, media_reach, media_like_count, media_comments_count, media_saved, media_shares, media_engagement`, `date_preset: last_3m`). Use só dados diários: o plano de teste do Windsor não tem dados horários, e `force_refresh` falha.
 2. Leia `log/posts.md` para não repetir tema recente e veja como foram os últimos posts automáticos. Se um tipo foi mal em 2 posts seguidos, troque de tipo.
-3. Se houver arquivo em `queue/`, use primeiro os que têm `"urgent": true`, depois o mais antigo. Confira de novo os dados (prazos podem ter passado ou mudado), mova o arquivo para `posts/` e só então gere as artes.
+3. Se houver arquivo em `queue/`, use primeiro os que têm `"urgent": true`, depois o mais antigo. Arquivo com `"pauta": true` é um pedido do José com tema e ângulo, sem slides prontos: pesquise, confira e monte o JSON completo seguindo a pauta. Pauta pedida pelo José tem prioridade sobre qualquer outro tema e não pode ser trocada. Confira de novo os dados (prazos podem ter passado ou mudado), mova o arquivo para `posts/` e só então gere as artes.
 
 ## Conferência (obrigatória, sem exceção)
 

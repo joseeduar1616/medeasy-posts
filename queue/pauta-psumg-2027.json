@@ -1,0 +1,11 @@
+{
+  "slug": "psumg-2027-guia",
+  "urgent": true,
+  "pauta": true,
+  "pedido_por": "José (dono da conta), 09/10/2026 17h46: post sobre o PSU-MG",
+  "tema": "PSU-MG 2027: tudo o que você precisa saber antes de 15/10",
+  "angulo": "Guia rápido para quem vai prestar PSU-MG: inscrições (06 a 15/10 no site da AREMG, taxa por programa), data e horário da prova (22/11), total de vagas e onde estão (especialidades e instituições com mais vagas), formato da seleção (prova e análise curricular, pesos e envio do currículo) e concorrência ou nota de corte da edição anterior. Fechar com CTA de currículo da MedEasy.",
+  "ja_conferido": ["Inscrições de 06 a 15/10/2026 pelo site da AREMG", "Taxa de R$ 300 por programa", "Prova em 22/11/2026", "2 retificações do edital em 05/10 (acesso direto e pré-requisito)"],
+  "fontes_iniciais": ["https://www.aremg.org.br/processos-atuais", "https://med.estrategia.com/portal/noticias/inscricoes-residencia-medica-psu-mg-2027/", "https://ipmeducacao.com.br/portal/psu-mg-inscricoes-residencia-medica-2027"],
+  "observacao": "Conferir de novo tudo no edital ou na AREMG antes de publicar. Se as inscrições já tiverem encerrado na hora do post, trocar o ângulo para vagas e concorrência."
+}
