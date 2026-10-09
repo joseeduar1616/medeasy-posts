@@ -1,0 +1,187 @@
+{
+ "slug": "2026-10-09-1800-sesgo-2027-edital",
+ "pillar": "o que diz o edital",
+ "header": [
+  "EDITAL",
+  "SES-GO 2027"
+ ],
+ "verified_on": "2026-10-09",
+ "sources": [
+  "https://sistemas.institutoverbena.ufg.br/2027/coreme-ses/sistema/arquivos/editais/EDITAL_DE_ABERTURA_COREME_SES_2027.pdf",
+  "https://sistemas.institutoverbena.ufg.br/2027/coreme-ses/",
+  "https://goias.gov.br/saude/?p=985995",
+  "https://med.estrategia.com/portal/noticias/ses-go-edital-residencia-medica-2027/"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em Goiás",
+   "pill": "SES-GO 2027",
+   "title": [
+    "O QUE DIZ O",
+    "<span class='g glow'>EDITAL</span>"
+   ],
+   "body": "A SES-GO abriu <b>219 vagas</b> de residência médica nos hospitais estaduais de Goiás. Veja prazos, taxa, como é a prova e o que vale ponto no currículo.",
+   "bullets": [
+    "Inscrições até <b>03/11, às 17h</b>",
+    "Prova em <b>06/12/2026</b>, em Goiânia",
+    "Currículo vale <b>100 pontos</b> na 2ª fase"
+   ]
+  },
+  {
+   "type": "rows",
+   "label": "Datas e valores",
+   "title": [
+    "ANOTA <span class='y'>AÍ</span>"
+   ],
+   "sub": "Cronograma e taxas divulgados pela SES-GO",
+   "rows": [
+    {
+     "name": "Inscrições",
+     "sub": "Portal do candidato do Instituto Verbena/UFG",
+     "value": "05/10 a 03/11"
+    },
+    {
+     "name": "Prova objetiva",
+     "sub": "À tarde, 4 horas, em Goiânia",
+     "value": "06/12"
+    },
+    {
+     "name": "Resultado final",
+     "sub": "Previsto no cronograma",
+     "value": "17/02/2027"
+    },
+    {
+     "name": "Taxa: 1 programa",
+     "value": "R$ 500"
+    },
+    {
+     "name": "Taxa: 2 programas",
+     "sub": "Valor por inscrição",
+     "value": "R$ 400"
+    },
+    {
+     "name": "Taxa: 3 ou mais",
+     "sub": "Valor por inscrição",
+     "value": "R$ 300"
+    }
+   ],
+   "note": "As inscrições e a emissão do boleto fecham às <b>17h (Brasília)</b> do último dia."
+  },
+  {
+   "type": "grid",
+   "label": "Vagas",
+   "title": [
+    "<span class='y'>219</span> VAGAS NO TOTAL"
+   ],
+   "sub": "Divisão por modalidade de concorrência",
+   "cells": [
+    {
+     "v": "163",
+     "k": "Ampla concorrência"
+    },
+    {
+     "v": "44",
+     "k": "Pessoas negras"
+    },
+    {
+     "v": "12",
+     "k": "Pessoas com deficiência"
+    },
+    {
+     "v": "R$ 4.106",
+     "k": "Bolsa (R$ 4.106,09)"
+    }
+   ],
+   "box": {
+    "h": "ONDE",
+    "x": "Programas de acesso direto, com pré-requisito e anos adicionais em hospitais da rede estadual, como HCN, Heana, Cresm, Hecad e Hemu."
+   }
+  },
+  {
+   "type": "cards",
+   "label": "Como funciona",
+   "title": [
+    "DUAS <span class='g'>FASES</span>"
+   ],
+   "sub": "O que o edital diz sobre cada etapa",
+   "cards": [
+    {
+     "num": "1",
+     "h": "Prova objetiva",
+     "tag": "100 pontos",
+     "p": "<b>100 questões</b> no acesso direto e <b>50 questões</b> nas especialidades com pré-requisito. Quem fizer menos de <b>50 pontos</b> é eliminado."
+    },
+    {
+     "num": "2",
+     "h": "Análise do currículo",
+     "tag": "100 pontos",
+     "p": "Só para quem for classificado na prova. Os convocados enviam currículo e comprovantes pelo portal, no prazo do cronograma."
+    }
+   ],
+   "note": "Na prova de acesso direto caem Clínica, Cirurgia, Urgência, GO, Pediatria, Preventiva/MFC e Saúde Mental."
+  },
+  {
+   "type": "grid",
+   "label": "Análise do currículo",
+   "title": [
+    "O QUE <span class='g'>VALE PONTO</span>"
+   ],
+   "sub": "Pontuação máxima de cada item, de um total de 100",
+   "cells": [
+    {
+     "v": "20",
+     "k": "Histórico escolar"
+    },
+    {
+     "v": "15",
+     "k": "Pesquisa ou extensão"
+    },
+    {
+     "v": "12",
+     "k": "Instituição de origem"
+    },
+    {
+     "v": "10",
+     "k": "Monitoria"
+    },
+    {
+     "v": "10",
+     "k": "Artigos publicados"
+    },
+    {
+     "v": "6",
+     "k": "Trabalhos em eventos"
+    },
+    {
+     "v": "5",
+     "k": "Ligas e centros acadêmicos"
+    },
+    {
+     "v": "5",
+     "k": "Proficiência em Medicina"
+    }
+   ],
+   "box": {
+    "h": "E TAMBÉM",
+    "x": "Cursos ATLS, ACLS, BLS e afins (4), capítulo de livro (5), ouvinte em eventos (5) e estágio extracurricular (3). Em instituição de origem entram Enade, hospital de ensino, OSCE e Teste de Progresso."
+   }
+  },
+  {
+   "type": "cta",
+   "title": [
+    "VAI PRESTAR",
+    "<span class='g glow'>SES-GO</span>?"
+   ],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "Os comprovantes do currículo precisam estar prontos quando sair a convocação. Precisa de ajuda para organizar? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: Edital de Abertura nº 24/2026 COREME SES-GO 2027 (Instituto Verbena/UFG, 28/09/2026) e SES-GO (goias.gov.br). Confira o edital completo antes de se inscrever."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "SES-GO 2027: <span>219 vagas</span>, prazos e o que vale ponto no currículo.<br>Já está no feed da @med_easyy."
+ },
+ "caption": "📋 SES-GO 2027: O QUE DIZ O EDITAL\n\nSão 219 vagas de residência médica na rede estadual de Goiás. As inscrições vão até 03/11, às 17h, e a prova é no dia 06/12, à tarde, em Goiânia.\n\nA seleção tem duas fases: prova objetiva (100 questões no acesso direto, mínimo de 50 pontos) e análise do currículo, que vale 100 pontos. Histórico escolar, pesquisa ou extensão e monitoria são os itens que mais pontuam.\n\nArrasta para ver as taxas, a divisão das vagas e a tabela completa do currículo. Salva e manda para quem vai prestar com você 📌\n\nQual hospital da SES-GO é o seu alvo? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#sesgo #residenciamedica #goias #goiania #medicina #residencia2027"
+}
