@@ -11,3 +11,4 @@
 | 2026-10-07 | AMRIGS 2027 | Inscrições até 19/10; boleto até 27/10 | Estratégia MED | sim (prazos) |
 | 2026-10-07 | PSU-MG 2027 | Inscrições até 15/10 (cronograma Medway; edital não visto); prova em 22/11 | Medway | sim (prazos) |
 | 2026-10-07 | Unicamp 2027 | Inscrições de 01 a 15/10 (até 16h); prova em 15/11 | Vestibulandoweb | sim (prazos) |
+| 2026-10-08 | SES-GO 2027 | Comunicado nº 01/2026 (06/10): prazo de pedido de isenção da taxa prorrogado até 08/10/2026; modelos de declaração publicados | sistemas.institutoverbena.ufg.br/2027/coreme-ses (COMUNICADO_01_2026) | não (prazo terminava no mesmo dia da verificação, 23h) |
