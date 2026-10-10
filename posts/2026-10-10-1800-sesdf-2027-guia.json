@@ -1,0 +1,50 @@
+{
+ "slug": "2026-10-10-1800-sesdf-2027-guia",
+ "pillar": "o que diz o edital",
+ "header": ["EDITAL", "SES-DF 2027"],
+ "verified_on": "2026-10-10",
+ "sources": [
+  "https://www.vestibulandoweb.com.br/pos-graduacao/inscricao-residencia-medica-ses-df-2027/",
+  "https://grupomedcof.com.br/blog/residencia-medica-ses-df",
+  "https://med.estrategia.com/portal/noticias/ses-df-inscricoes-residencia-medica-2027/",
+  "https://www.iades.com.br/inscricao/ProcessoSeletivo.aspx?id=f76de971e3"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica no DF", "pill": "SES-DF 2027",
+   "title": ["SÓ A PROVA", "<span class='y glow'>DECIDE</span>"],
+   "body": "Na SES-DF 2027 <b>não tem análise curricular</b>: a classificação sai da prova objetiva. São <b>mais de 560 vagas</b> em <b>74 programas</b>.",
+   "bullets": ["Inscrições até <b>18/11/2026</b>", "Taxa de <b>R$ 120</b>", "Prova em <b>12/12/2026</b>"]},
+  {"type": "rows", "label": "Datas e valores", "title": ["ANOTA <span class='y'>AÍ</span>"],
+   "sub": "Cronograma da SES-DF 2027 (banca IADES)",
+   "rows": [
+    {"name": "Inscrições", "sub": "Só pela internet, no site do IADES", "value": "até 18/11"},
+    {"name": "Boleto", "sub": "Sem Pix, depósito ou transferência", "value": "até 19/11"},
+    {"name": "Taxa", "sub": "Um único programa por candidato", "value": "R$ 120"},
+    {"name": "Locais de prova", "sub": "Divulgação a partir de", "value": "07/12"},
+    {"name": "Prova objetiva", "sub": "Sábado, no Distrito Federal", "value": "12/12"}
+   ],
+   "note": "Depois de finalizar a inscrição, não dá para trocar de programa."},
+  {"type": "cards", "label": "Formato da seleção", "title": ["COMO A NOTA <span class='g'>É FEITA</span>"],
+   "sub": "Segundo o edital da SES-DF 2027",
+   "cards": [
+    {"num": "1", "h": "Prova objetiva", "tag": "única fase com nota", "p": "<b>100 questões</b> de múltipla escolha com 4 alternativas, em <b>4 horas</b>. Cada questão vale 1 ponto e é preciso fazer pelo menos <b>50 pontos</b>."},
+    {"num": "2", "h": "Escolha de cenário", "tag": "sem pontuação", "p": "Pelo SisRESID, o aprovado escolhe onde vai fazer a residência. Não tem prova prática nem currículo."}
+   ],
+   "note": "Quem concluiu residência em Medicina de Família e Comunidade tem bônus de 10% na nota da prova."},
+  {"type": "rows", "label": "Depois da prova", "title": ["E DEPOIS <span class='y'>DA PROVA</span>"],
+   "sub": "Datas previstas no cronograma",
+   "rows": [
+    {"name": "Resultado preliminar", "sub": "1ª fase", "value": "07/01"},
+    {"name": "Resultado definitivo", "sub": "1ª fase", "value": "13/01"},
+    {"name": "Escolha de cenário", "sub": "Pelo SisRESID, datas prováveis", "value": "19 e 20/01"},
+    {"name": "Convocação para matrícula", "sub": "Ano de 2027", "value": "28/01"}
+   ],
+   "note": "Há reserva de vagas: 20% para pessoas com deficiência, 20% para pessoas negras e 10% para hipossuficientes, conforme as regras do edital."},
+  {"type": "cta", "title": ["VAI PRESTAR", "<span class='g glow'>SES-DF</span>?"], "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "Vai fazer outras provas com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: Edital Normativo nº 1 RM-1/SES/DF/2027 (FEPECS/IADES), resumos de VestibulandoWeb, MedCof e Estratégia MED. Confira o edital no site do IADES (iades.com.br)."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "SES-DF 2027: sem currículo, só a prova. Inscrições até <span>18/11</span>.<br>Já está no feed da @med_easyy."},
+ "caption": "📍 SES-DF 2027: SÓ A PROVA DECIDE\n\nA residência médica da SES-DF 2027 não tem análise curricular. A classificação sai da prova objetiva de 100 questões, marcada para 12/12, no Distrito Federal. Depois, os aprovados só escolhem o cenário pelo SisRESID.\n\nAs inscrições vão até 18/11, só pelo site do IADES. A taxa é de R$ 120, o boleto vence em 19/11 e cada candidato escolhe um único programa. São mais de 560 vagas em 74 programas.\n\nArrasta para ver o cronograma completo, o bônus para quem fez MFC e as datas depois da prova. Salva e manda para quem vai prestar com você 📌\n\nVai prestar SES-DF? Qual especialidade? Comenta aqui 👇\n\nPrecisa organizar o currículo para as outras provas? Chama a MedEasy no direct 💚\n\n#sesdf #residenciamedica #brasilia #iades #medicina #residencia2027"
+}
