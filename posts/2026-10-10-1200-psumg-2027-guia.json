@@ -1,0 +1,57 @@
+{
+ "slug": "2026-10-10-1200-psumg-2027-guia",
+ "pillar": "o que diz o edital",
+ "header": ["EDITAL", "PSU-MG 2027"],
+ "verified_on": "2026-10-10",
+ "pauta": "posts/pauta-psumg-2027.json (pedido do José, 09/10)",
+ "sources": [
+  "https://www.aremg.org.br/processos-atuais",
+  "https://www.galaxcms.com.br/up_crud_comum/601/Retificacao2aosEditaisdoPSUMG2027-20261005132305.pdf",
+  "https://www.galaxcms.com.br/up_crud_comum/601/Retificacao3aosEditaisdoPSUMG2027-20261005132606.pdf",
+  "https://med.estrategia.com/portal/noticias/inscricoes-residencia-medica-psu-mg-2027/",
+  "https://med.estrategia.com/portal/residencia-medica/psu-mg-residencia-medica/",
+  "https://med.estrategia.com/portal/residencia-medica/psu-mg-instituicoes/",
+  "https://med.estrategia.com/portal/noticias/aremg-avaliacao-curricular-psu-mg-2027/",
+  "https://ipmeducacao.com.br/portal/psu-mg-inscricoes-residencia-medica-2027/",
+  "https://www.medway.com.br/conteudos/residencia-medica-psu-mg/",
+  "https://www.grupomedcof.com.br/blog/edital-residencia-medica-psu-mg/"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica em Minas", "pill": "PSU-MG 2027",
+   "title": ["O QUE SABER", "ANTES DE <span class='y glow'>15/10</span>"],
+   "body": "O PSU-MG 2027 reúne <b>mais de 90 instituições</b> e <b>mais de 1.300 vagas</b>. As inscrições fecham na quinta. Veja prazos, taxa e como a nota é feita.",
+   "bullets": ["Inscrições até <b>15/10/2026</b>", "Taxa de <b>R$ 300 por programa</b>", "Prova em <b>22/11/2026</b>"]},
+  {"type": "rows", "label": "Datas e valores", "title": ["ANOTA <span class='y'>AÍ</span>"],
+   "sub": "Cronograma do PSU-MG 2027",
+   "rows": [
+    {"name": "Inscrições", "sub": "Só pela internet, no site da AREMG", "value": "06 a 15/10"},
+    {"name": "Envio do currículo", "sub": "Junto com a inscrição", "value": "até 15/10"},
+    {"name": "Taxa", "sub": "Paga por programa escolhido", "value": "R$ 300"},
+    {"name": "2ª via do boleto", "sub": "Vencimento máximo", "value": "16/10"},
+    {"name": "Prova objetiva", "sub": "Domingo", "value": "22/11"}
+   ],
+   "note": "Depois de concluir a inscrição, não dá para incluir nem trocar programa."},
+  {"type": "cards", "label": "Formato da seleção", "title": ["COMO A NOTA <span class='g'>É FEITA</span>"],
+   "sub": "Duas etapas, segundo as regras do PSU-MG",
+   "cards": [
+    {"num": "1", "h": "Prova objetiva", "tag": "90% da nota", "p": "Até <b>100 questões</b> no acesso direto. Nas especialidades com pré-requisito, até <b>50 objetivas</b> ou até <b>10 abertas</b>. É preciso acertar pelo menos <b>50%</b>."},
+    {"num": "2", "h": "Análise curricular", "tag": "10% da nota", "p": "O currículo vai no modelo padronizado da AREMG, com os comprovantes, <b>durante a inscrição</b>. Depois do envio, nada pode ser acrescentado ou alterado, nem em recurso."}
+   ],
+   "note": "Os 10% do currículo podem mudar a classificação entre quem tem nota parecida na prova."},
+  {"type": "grid", "label": "Em números", "title": ["O TAMANHO DA <span class='y'>DISPUTA</span>"],
+   "sub": "PSU-MG 2027 e a edição anterior",
+   "cells": [
+    {"v": "+1.300", "k": "Vagas em 2027"},
+    {"v": "+90", "k": "Instituições participantes"},
+    {"v": "+40 mil", "k": "Inscritos na edição 2026"},
+    {"v": "R$ 300", "k": "Taxa por programa"}
+   ],
+   "box": {"h": "COTAS", "x": "Há reserva de vagas para pessoas com deficiência e para pessoas negras, conforme o número de vagas de cada programa."}},
+  {"type": "cta", "title": ["VAI PRESTAR", "<span class='g glow'>PSU-MG</span>?"], "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "O currículo vai junto com a inscrição e fecha em <b>15/10</b>. Precisa de ajuda para organizar? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: AREMG (aremg.org.br), retificações de 05/10/2026, Estratégia MED, Medway, MedCof e IPM Educação. O total de vagas varia entre os levantamentos. Confira o edital do seu programa no site da AREMG."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "PSU-MG 2027: inscrições até <span>15/10</span>, taxa e como a nota é feita.<br>Já está no feed da @med_easyy."},
+ "caption": "⏰ PSU-MG 2027: O QUE SABER ANTES DE 15/10\n\nAs inscrições do PSU-MG 2027 vão até quinta, 15/10, só pelo site da AREMG. A taxa é de R$ 300 por programa, e a prova objetiva é no dia 22/11.\n\nA nota tem duas partes: a prova vale 90% e a análise curricular vale 10%. O currículo vai junto com a inscrição, no modelo padronizado, e depois do envio não dá para acrescentar nem trocar nada.\n\nSão mais de 1.300 vagas em mais de 90 instituições, e a edição passada teve mais de 40 mil inscritos. Arrasta para ver o cronograma e o formato da seleção. Salva e manda para quem vai prestar com você 📌\n\nQual programa do PSU-MG é o seu alvo? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#psumg #residenciamedica #minasgerais #aremg #medicina #residencia2027"
+}
