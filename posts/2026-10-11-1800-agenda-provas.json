@@ -1,0 +1,57 @@
+{
+ "slug": "2026-10-11-1800-agenda-provas",
+ "pillar": "calendário e prazos",
+ "header": ["AGENDA", "PROVAS 2027"],
+ "verified_on": "2026-10-11",
+ "sources": [
+  "https://www.fuvest.br/?p=73436",
+  "https://www.vestibulandoweb.com.br/pos-graduacao/inscricao-residencia-medica-unifesp-2027/",
+  "https://portal.estrategia.com/medicina/residencia-medica/edital-unifesp-2027-tudo-sobre-a-residencia-medica/",
+  "https://www.vestibulandoweb.com.br/pos-graduacao/edital-residencia-medica-sus-sp-2027/",
+  "https://med.estrategia.com/portal/noticias/sus-sp-edital-residencia-medica-2027/",
+  "https://www.grupomedcof.com.br/blog/edital-psu-go-publicado/",
+  "https://med.estrategia.com/portal/noticias/psu-go-edital-residencia-medica-2027/",
+  "https://www.vestibulandoweb.com.br/pos-graduacao/inscricao-residencia-medica-unicamp-2027/",
+  "https://www.blogdovestibular.com/pos-graduacao/inscricao-residencia-medica-unicamp-2027.html",
+  "posts/2026-10-09-1800-sesgo-2027-edital.json (Edital 24/2026 COREME SES-GO)",
+  "posts/2026-10-10-1200-psumg-2027-guia.json (AREMG)",
+  "posts/2026-10-10-1800-sesdf-2027-guia.json (Edital RM-1/SES/DF/2027)"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "AGENDA DE PROVAS",
+   "title": ["8 PROVAS EM", "<span class='y glow'>29 DIAS</span>"],
+   "body": "De <b>15/11 a 13/12</b> caem as principais provas de residência. E tem <b>data repetida</b>: em dois domingos você vai ter que escolher.",
+   "bullets": ["<b>29/11</b>: PSU-GO e Unifesp", "<b>06/12</b>: USP-SP e SES-GO", "Confira antes de pagar a taxa"]},
+  {"type": "rows", "label": "Novembro", "title": ["PROVAS EM <span class='y'>NOVEMBRO</span>"],
+   "sub": "Data da prova objetiva e fim das inscrições",
+   "rows": [
+    {"name": "Unicamp", "sub": "Inscrições até 15/10", "value": "15/11"},
+    {"name": "PSU-MG", "sub": "Inscrições até 15/10, no site da AREMG", "value": "22/11"},
+    {"name": "PSU-GO", "sub": "Inscrições e currículo até 20/10", "value": "29/11"},
+    {"name": "Unifesp", "sub": "Inscrições até 30/10", "value": "29/11"}
+   ],
+   "note": "PSU-MG e Unicamp fecham as inscrições nesta quinta, 15/10."},
+  {"type": "rows", "label": "Dezembro", "title": ["PROVAS EM <span class='y'>DEZEMBRO</span>"],
+   "sub": "Data da prova objetiva e fim das inscrições",
+   "rows": [
+    {"name": "USP-SP", "sub": "Inscrições até 26/10, às 12h", "value": "06/12"},
+    {"name": "SES-GO", "sub": "Inscrições até 03/11, às 17h", "value": "06/12"},
+    {"name": "SES-DF", "sub": "Inscrições até 18/11, no IADES", "value": "12/12"},
+    {"name": "SUS-SP", "sub": "Inscrições de 20/10 a 05/11", "value": "13/12"}
+   ],
+   "note": "A SES-DF é a única desta lista que cai num sábado."},
+  {"type": "cards", "label": "Atenção", "title": ["AS DATAS QUE <span class='g'>BATEM</span>"],
+   "sub": "Dois domingos com duas provas grandes",
+   "cards": [
+    {"num": "1", "h": "29/11", "tag": "PSU-GO e Unifesp", "p": "As duas provas objetivas são <b>no mesmo dia</b>. A da Unifesp começa às <b>13h</b>. Não dá para fazer as duas."},
+    {"num": "2", "h": "06/12", "tag": "USP-SP e SES-GO", "p": "Mesmo dia e <b>as duas à tarde</b>: a USP começa às <b>13h</b>, em São Paulo, e a SES-GO é aplicada em <b>Goiânia</b>."}
+   ],
+   "note": "Antes de pagar a inscrição, veja se a data não bate com outra prova que você quer fazer."},
+  {"type": "cta", "title": ["MONTA SUA", "<span class='g glow'>AGENDA</span>"], "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "Vai prestar prova com currículo, como PSU-GO, PSU-MG ou SES-GO? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: FUVEST, editais da AREMG, COREME SES-GO, SES-DF (IADES), Unifesp e SUS-SP (Vunesp) e Unicamp, com resumos de Estratégia MED, MedCof, VestibulandoWeb e Blog do Vestibular. Datas podem mudar: confira sempre o edital."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "8 provas de residência entre <span>15/11 e 13/12</span>, e duas datas que batem.<br>Já está no feed da @med_easyy."},
+ "caption": "📅 8 PROVAS EM 29 DIAS\n\nEntre 15/11 e 13/12 caem as principais provas de residência médica do país: Unicamp, PSU-MG, PSU-GO, Unifesp, USP-SP, SES-GO, SES-DF e SUS-SP.\n\nE atenção às datas repetidas. No dia 29/11 tem PSU-GO e Unifesp. No dia 06/12 tem USP-SP e SES-GO, as duas à tarde. Em cada um desses domingos você vai ter que escolher uma prova só, então confira antes de pagar a taxa.\n\nPSU-MG e Unicamp fecham as inscrições nesta quinta, 15/10. Arrasta para ver todas as datas e os prazos de inscrição. Salva e manda para quem vai prestar com você 📌\n\nQuais provas estão na sua agenda? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #psugo #sesgo #sesdf #psumg #residencia2027"
+}
