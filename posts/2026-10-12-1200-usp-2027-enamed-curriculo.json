@@ -1,0 +1,50 @@
+{
+ "slug": "2026-10-12-1200-usp-2027-enamed-curriculo",
+ "pillar": "o que diz o edital",
+ "header": ["EDITAL", "USP-SP 2027"],
+ "verified_on": "2026-10-12",
+ "sources": [
+  "https://www.vestibulandoweb.com.br/wp-content/uploads/2026/09/edital-residencia-medica-usp-sp-2027.pdf (Edital COREME/FM nº 02/2026, de 18/09/2026)",
+  "https://med.estrategia.com/portal/noticias/usp-sp-edital-residencia-medica-2027/",
+  "https://www.vestibulandoweb.com.br/?p=33308",
+  "https://www.fuvest.br/residencia-medica-2027/"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica na FMUSP", "pill": "USP-SP 2027",
+   "title": ["O ENAMED DA SUA", "<span class='y glow'>FACULDADE CONTA</span>"],
+   "body": "No acesso direto da USP-SP 2027, a nota do currículo é <b>multiplicada</b> pelo conceito ENAMED 2025 da faculdade onde você se formou.",
+   "bullets": ["Inscrições até <b>26/10, às 12h</b>", "Taxa de <b>R$ 620</b>", "Prova em <b>06/12/2026</b>"]},
+  {"type": "cards", "label": "Formato da seleção", "title": ["COMO A NOTA <span class='g'>É FEITA</span>"],
+   "sub": "Segundo o edital da FMUSP 2027 (banca FUVEST)",
+   "cards": [
+    {"num": "1", "h": "Prova objetiva", "tag": "peso 9", "p": "<b>100 questões</b> em <b>5 horas</b> no acesso direto. Quem não acertar pelo menos <b>50%</b> está eliminado."},
+    {"num": "2", "h": "Avaliação curricular", "tag": "peso 1", "p": "Nota de <b>0 a 100</b>, sem prova. Os documentos são enviados em PDF em janeiro."}
+   ],
+   "note": "É nessa nota do currículo que entra o multiplicador do ENAMED."},
+  {"type": "rows", "label": "Multiplicador do currículo", "title": ["QUANTO O <span class='y'>ENAMED</span> VALE"],
+   "sub": "Conceito ENAMED 2025 da faculdade de origem",
+   "rows": [
+    {"name": "Conceito 5", "sub": "Nota do currículo multiplicada por", "value": "x 1,20"},
+    {"name": "Conceito 4", "sub": "Nota do currículo multiplicada por", "value": "x 1,10"},
+    {"name": "Conceitos 1, 2 e 3", "sub": "Nota do currículo fica igual", "value": "x 1,00"}
+   ],
+   "note": "Vale para os programas de acesso direto. A nota do currículo nunca passa de 100, mesmo com o multiplicador."},
+  {"type": "rows", "label": "Datas e valores", "title": ["ANOTA <span class='y'>AÍ</span>"],
+   "sub": "Cronograma da USP-SP 2027 (horário de Brasília)",
+   "rows": [
+    {"name": "Inscrições", "sub": "Só pela internet, no site da FUVEST", "value": "até 26/10, 12h"},
+    {"name": "Prova objetiva", "sub": "Portões das 12h às 13h, início às 13h", "value": "06/12"},
+    {"name": "Resultado da 1ª fase", "sub": "Data prevista", "value": "04/01"},
+    {"name": "Envio do currículo", "sub": "Em PDF, até 12h do último dia", "value": "04 a 12/01"},
+    {"name": "Nota da 2ª fase", "sub": "Data prevista", "value": "28/01"},
+    {"name": "Resultado final", "sub": "E 1ª convocação para matrícula", "value": "11/02"}
+   ],
+   "note": "Atenção: no dia 06/12 também tem a prova da SES-GO."},
+  {"type": "cta", "title": ["VAI PRESTAR", "<span class='g glow'>USP-SP</span>?"], "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "O currículo da USP vai em janeiro. Precisa organizar o seu? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: Edital COREME/FM nº 02/2026 (FMUSP/FUVEST, 18/09/2026), resumos de Estratégia MED e VestibulandoWeb. Confira no site da FUVEST (fuvest.br)."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "USP-SP 2027: o ENAMED da sua faculdade multiplica o currículo. Inscrições até <span>26/10</span>.<br>Já está no feed da @med_easyy."},
+ "caption": "🎯 USP-SP 2027: O ENAMED DA SUA FACULDADE CONTA\n\nNo acesso direto da residência da FMUSP 2027, a nota do currículo é multiplicada pelo conceito da sua faculdade no ENAMED 2025: x 1,20 para conceito 5, x 1,10 para conceito 4 e x 1,00 para conceitos 1 a 3. A nota do currículo nunca passa de 100.\n\nA prova objetiva tem peso 9 e o currículo tem peso 1. São 100 questões no dia 06/12, às 13h, e quem não acertar pelo menos 50% está eliminado.\n\nAs inscrições vão até 26/10, às 12h, só pelo site da FUVEST. A taxa é de R$ 620. Arrasta para ver o cronograma completo até o resultado final. Salva e manda para quem vai prestar com você 📌\n\nQual o conceito ENAMED da sua faculdade? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #usp #fmusp #fuvest #enamed #residencia2027"
+}
