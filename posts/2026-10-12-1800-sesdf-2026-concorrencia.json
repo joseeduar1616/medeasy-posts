@@ -1,0 +1,53 @@
+{
+ "slug": "2026-10-12-1800-sesdf-2026-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "header": ["CONCORRÊNCIA", "SES-DF 2026"],
+ "verified_on": "2026-10-12",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/ses-df-2026-concorrencia-residencia-medica/ (a partir da lista oficial de inscrições homologadas da SES-DF)",
+  "https://www.medway.com.br/conteudos/concorrencia-residencia-medica-ses-df/",
+  "posts/2026-10-10-1800-sesdf-2027-guia.json (Edital Normativo nº 1 RM-1/SES/DF/2027: inscrições até 18/11 no IADES, taxa R$ 120, prova 12/12, sem análise curricular)"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica SES-DF", "pill": "CONCORRÊNCIA 2026",
+   "title": ["QUANTOS DISPUTAM", "<span class='y glow'>CADA VAGA</span>"],
+   "body": "Na seleção de 2026 da SES-DF foram <b>6.570 inscritos</b> para <b>574 vagas</b>: média de <b>11,4 candidatos por vaga</b>.",
+   "bullets": ["As especialidades mais disputadas", "As grandes áreas", "O que vale para 2027"]},
+  {"type": "rows", "label": "Acesso direto", "title": ["AS MAIS <span class='y'>DISPUTADAS</span>"],
+   "sub": "Candidatos por vaga na SES-DF 2026",
+   "rows": [
+    {"name": "Otorrinolaringologia", "sub": "143 inscritos para 2 vagas", "value": "71,5"},
+    {"name": "Neurocirurgia", "sub": "93 inscritos para 3 vagas", "value": "31,0"},
+    {"name": "Oftalmologia", "sub": "302 inscritos para 10 vagas", "value": "30,2"},
+    {"name": "Psiquiatria", "sub": "419 inscritos para 16 vagas", "value": "26,2"},
+    {"name": "Cirurgia Geral", "sub": "759 inscritos para 36 vagas", "value": "21,1"},
+    {"name": "Anestesiologia", "sub": "475 inscritos para 23 vagas", "value": "20,7"}
+   ],
+   "note": "Poucas vagas puxam a concorrência para cima: Otorrino teve só 2."},
+  {"type": "rows", "label": "Grandes áreas", "title": ["AS <span class='y'>GRANDES ÁREAS</span>"],
+   "sub": "Candidatos por vaga na SES-DF 2026",
+   "rows": [
+    {"name": "Ginecologia e Obstetrícia", "sub": "610 inscritos para 35 vagas", "value": "17,4"},
+    {"name": "Ortopedia e Traumatologia", "sub": "388 inscritos para 32 vagas", "value": "12,1"},
+    {"name": "Pediatria", "sub": "576 inscritos para 49 vagas", "value": "11,8"},
+    {"name": "Clínica Médica", "sub": "830 inscritos para 77 vagas", "value": "10,8"},
+    {"name": "Medicina de Família", "sub": "430 inscritos para 56 vagas", "value": "7,7"},
+    {"name": "Medicina de Emergência", "sub": "52 inscritos para 24 vagas", "value": "2,2"}
+   ],
+   "note": "Clínica Médica tem mais inscritos, mas também é a que mais oferece vagas."},
+  {"type": "cards", "label": "Para 2027", "title": ["E EM <span class='g'>2027</span>?"],
+   "sub": "O que já está no edital da SES-DF 2027",
+   "cards": [
+    {"num": "1", "h": "Até 18/11", "tag": "Inscrições no IADES", "p": "Taxa de <b>R$ 120</b> e escolha de <b>um programa só</b>. Pense na concorrência antes de decidir."},
+    {"num": "2", "h": "12/12", "tag": "Prova objetiva", "p": "<b>Sem análise curricular</b>: a classificação sai da prova de <b>100 questões</b>."},
+    {"num": "3", "h": "Vagas", "tag": "Mudam todo ano", "p": "A concorrência de 2026 é uma referência, não uma previsão. Confira o <b>quadro de vagas de 2027</b> no edital."}
+   ],
+   "note": "Dados de 2026: inscrições homologadas, calculadas por especialidade."},
+  {"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>ESCOLHER</span>"], "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar SES-DF com você.",
+   "note": "Vai prestar provas com currículo, como PSU-GO e SES-GO? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: inscrições homologadas da SES-DF 2026, com levantamentos de Estratégia MED e Medway (dados conferidos entre os dois). Dermatologia ficou fora por divergência no número de vagas. Edital RM-1/SES/DF/2027 (IADES)."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "SES-DF 2026: <span>6.570 inscritos</span> para 574 vagas.<br>Veja as mais disputadas no feed da @med_easyy."},
+ "caption": "📊 QUANTOS DISPUTAM CADA VAGA NA SES-DF\n\nNa seleção de residência médica 2026 da SES-DF foram 6.570 inscritos para 574 vagas, uma média de 11,4 candidatos por vaga.\n\nNo acesso direto, Otorrinolaringologia foi a mais disputada, com 71,5 candidatos por vaga, seguida de Neurocirurgia (31) e Oftalmologia (30,2). Entre as grandes áreas, Ginecologia e Obstetrícia teve 17,4 por vaga e Clínica Médica, 10,8.\n\nPara 2027, as inscrições vão até 18/11 no IADES e cada candidato escolhe um programa só. Arrasta para ver a lista completa e salva para decidir com calma 📌\n\nQual especialidade você vai prestar na SES-DF? Comenta aqui 👇\n\nPrecisa organizar o currículo para as outras provas? Chama a MedEasy no direct 💚\n\n#sesdf #residenciamedica #brasilia #concorrencia #medicina #residencia2027"
+}
