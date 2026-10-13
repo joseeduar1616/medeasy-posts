@@ -34,6 +34,14 @@ Dê prioridade a GO, DF, MG, ENARE e USP, porque é onde está o público.
 - Aviso curto em imagem única ("Alerta de mudança"): 8 a 20.
 - Post de opinião pedindo debate: comenta pouco.
 
+## Foco editorial (pedido do José em 13/10/2026; vale até ele mudar)
+
+- O eixo dos posts é **vagas e concorrência** de cada prova, sempre dizendo **se a prova tem análise de currículo ou não** (e quanto ela vale). Em todo post de prova, inclua um slide ou bloco "Precisa de currículo?" com a resposta confirmada no edital.
+- Mantenha as **provas paulistas** no rodízio: USP-SP, Unifesp, UNESP, Unicamp, SUS-SP, Santa Casa SP, FAMERP, FMRP-USP e outras de SP.
+- Inclua a **AMRIGS** (RS, SC e MS) no rodízio.
+- Continue com GO, DF, MG e ENARE, que são a base do público.
+- Varie a prova de um post para o outro: não repita a mesma prova em dois posts seguidos, a menos que seja pauta do José ou novidade oficial.
+
 ## Antes de escolher o tema de cada post
 
 1. Puxe os dados recentes no Windsor (conector `instagram`, conta `17841452692504029`, campos `media_id, timestamp, media_type, media_caption, media_reach, media_like_count, media_comments_count, media_saved, media_shares, media_engagement`, `date_preset: last_3m`). Use só dados diários: o plano de teste do Windsor não tem dados horários, e `force_refresh` falha.
