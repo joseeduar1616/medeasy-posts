@@ -1,0 +1,49 @@
+{
+ "slug": "2026-10-13-1200-psumg-2026-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "header": ["CONCORRÊNCIA", "PSU-MG 2026"],
+ "verified_on": "2026-10-13",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/psu-mg-publica-concorrencia-para-residencia-medica-2026/ (relação candidato/vaga por programa divulgada pela AREMG; 44.590 inscrições)",
+  "https://www.medway.com.br/conteudos/concorrencia-residencia-medica-psu-mg/ (totais por especialidade; Otorrino 1.063/7, Dermato 305/3, Psiquiatria 1.110/11 batem com a soma dos programas no Estratégia MED)",
+  "posts/2026-10-10-1200-psumg-2027-guia.json (inscrições 2027 até 15/10 no site da AREMG, R$ 300 por programa, prova 22/11, já conferidos)"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica PSU-MG", "pill": "CONCORRÊNCIA 2026",
+   "title": ["ONDE A DISPUTA", "<span class='y glow'>FOI MAIOR</span>"],
+   "body": "O PSU-MG 2026 teve <b>44.590 inscrições</b>. Em três especialidades, passou de <b>100 inscrições por vaga</b>.",
+   "bullets": ["As 3 especialidades mais disputadas", "Os programas campeões", "O que vale para 2027"]},
+  {"type": "rows", "label": "Acesso direto", "title": ["AS MAIS <span class='y'>DISPUTADAS</span>"],
+   "sub": "Inscrições por vaga no PSU-MG 2026",
+   "rows": [
+    {"name": "Otorrinolaringologia", "sub": "1.063 inscrições para 7 vagas", "value": "151,9"},
+    {"name": "Dermatologia", "sub": "305 inscrições para 3 vagas", "value": "101,7"},
+    {"name": "Psiquiatria", "sub": "1.110 inscrições para 11 vagas", "value": "100,9"}
+   ],
+   "note": "Poucas vagas puxam a concorrência para cima: Dermatologia teve só 3 vagas."},
+  {"type": "rows", "label": "Por programa", "title": ["OS <span class='y'>CAMPEÕES</span>"],
+   "sub": "Inscrições por vaga em cada hospital",
+   "rows": [
+    {"name": "Hospital Madre Teresa (BH)", "sub": "Otorrino: 231 inscrições para 1 vaga", "value": "231"},
+    {"name": "Complexo Hospitalar Uberlândia", "sub": "Otorrino: 175 inscrições para 1 vaga", "value": "175"},
+    {"name": "Hospital Felício Rocho", "sub": "Otorrino: 319 inscrições para 2 vagas", "value": "159,5"},
+    {"name": "Hospital Therezinha de Jesus", "sub": "Dermato: 139 inscrições para 1 vaga", "value": "139"},
+    {"name": "HC Samuel Libânio", "sub": "Psiquiatria: 226 inscrições para 2 vagas", "value": "113"}
+   ],
+   "note": "Na mesma especialidade, a disputa muda muito de um hospital para outro."},
+  {"type": "cards", "label": "Para 2027", "title": ["E EM <span class='g'>2027</span>?"],
+   "sub": "O que já está no edital do PSU-MG 2027",
+   "cards": [
+    {"num": "1", "h": "Até 15/10", "tag": "Inscrições na AREMG", "p": "Taxa de <b>R$ 300 por programa</b>. Dá para se inscrever em mais de um."},
+    {"num": "2", "h": "22/11", "tag": "Prova objetiva", "p": "A prova vale <b>90%</b> e o currículo, enviado na inscrição, vale <b>10%</b>."},
+    {"num": "3", "h": "Atenção", "tag": "Inscrições, não pessoas", "p": "Como cada candidato pode se inscrever em vários programas, os números contam <b>inscrições</b>. É uma referência, não uma previsão."}
+   ],
+   "note": "Dados de 2026 divulgados pela AREMG e organizados por Estratégia MED e Medway."},
+  {"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>ESCOLHER</span>"], "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar PSU-MG com você.",
+   "note": "O currículo vai junto com a inscrição até 15/10. Precisa organizar o seu? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: relação candidato/vaga do PSU-MG 2026 (AREMG), via Estratégia MED e Medway (totais conferidos entre os dois). Edital PSU-MG 2027 (AREMG)."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "PSU-MG 2026: Otorrino teve <span>151,9 inscrições</span> por vaga.<br>Veja as mais disputadas no feed da @med_easyy."},
+ "caption": "📊 PSU-MG: ONDE A DISPUTA FOI MAIOR\n\nO PSU-MG 2026 teve 44.590 inscrições. No acesso direto, Otorrinolaringologia foi a mais disputada, com 151,9 inscrições por vaga (1.063 para só 7 vagas). Dermatologia (101,7) e Psiquiatria (100,9) também passaram de 100.\n\nPor programa, o recorde foi Otorrino no Hospital Madre Teresa, em BH: 231 inscrições para 1 vaga. Como cada candidato pode se inscrever em vários programas, os números contam inscrições, não pessoas.\n\nAs inscrições do PSU-MG 2027 fecham nesta quinta, 15/10, no site da AREMG, com o currículo indo junto. Arrasta para ver os campeões e salva para decidir com calma 📌\n\nQual programa do PSU-MG é o seu alvo? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#psumg #residenciamedica #minasgerais #aremg #concorrencia #residencia2027"
+}
