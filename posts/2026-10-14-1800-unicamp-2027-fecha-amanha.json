@@ -1,0 +1,70 @@
+{
+ "slug": "2026-10-14-1800-unicamp-2027-fecha-amanha",
+ "pillar": "o que diz o edital",
+ "header": ["EDITAL", "UNICAMP 2027"],
+ "verified_on": "2026-10-14",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/unicamp-edital-residencia-medica-2027/ (editais 001 a 006 da FCM Unicamp anexados)",
+  "https://www.vestibulandoweb.com.br/?p=33266",
+  "https://www.medway.com.br/conteudos/como-se-inscrever-residencia-medica-unicamp/",
+  "Página oficial: portal.fcm.unicamp.br/residencias-em-saude/residencia-medica/processo-seletivo-2027/ (não abriu nesta execução)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica 2027",
+   "pill": "FECHA AMANHÃ",
+   "title": ["UNICAMP 2027:", "<span class='g glow'>ÚLTIMA CHAMADA</span>"],
+   "body": "As inscrições da residência médica da Unicamp terminam <b>amanhã, 15/10</b>. Veja se precisa de currículo, quanto custa e as datas até o resultado.",
+   "bullets": ["Precisa de currículo?", "Taxas por tipo de programa", "Datas da prova ao resultado"]
+  },
+  {
+   "type": "rows",
+   "label": "Como é a seleção",
+   "title": ["PRECISA DE <span class='y'>CURRÍCULO?</span>"],
+   "sub": "Sim, mas só depois da prova",
+   "rows": [
+    {"name": "1ª fase", "sub": "Prova objetiva para todos os candidatos", "value": "15/11"},
+    {"name": "Classificados", "sub": "Lista de quem segue para a 2ª fase", "value": "02/12"},
+    {"name": "Currículo", "sub": "Envio só para os classificados", "value": "04 a 08/12"}
+   ],
+   "note": "Ou seja: o currículo <b>não vai na inscrição</b>. Mas quem passar tem só <b>5 dias</b> para enviar, então vale deixar tudo pronto antes."
+  },
+  {
+   "type": "rows",
+   "label": "Inscrições",
+   "title": ["QUANTO <span class='g'>CUSTA?</span>"],
+   "sub": "Taxa de inscrição por tipo de programa",
+   "rows": [
+    {"name": "Acesso direto", "sub": "Programas sem pré-requisito", "value": "R$ 770"},
+    {"name": "Pré-requisito", "sub": "Especialidades que exigem residência anterior", "value": "R$ 660"},
+    {"name": "Área de atuação", "sub": "Anos adicionais", "value": "R$ 630"}
+   ],
+   "note": "Inscrições de <b>01 a 15/10</b>, pela página do processo seletivo 2027 da FCM Unicamp."
+  },
+  {
+   "type": "rows",
+   "label": "Cronograma",
+   "title": ["AS DATAS <span class='y'>QUE IMPORTAM</span>"],
+   "sub": "Da inscrição ao resultado final",
+   "rows": [
+    {"name": "Inscrições", "sub": "Último dia", "value": "15/10"},
+    {"name": "Prova objetiva", "sub": "1ª fase", "value": "15/11"},
+    {"name": "Classificados", "sub": "Para a 2ª fase", "value": "02/12"},
+    {"name": "Currículo", "sub": "Envio pelos classificados", "value": "04 a 08/12"},
+    {"name": "Resultado final", "sub": "Em 2027", "value": "25/01"}
+   ],
+   "note": "Endoscopia Ginecológica e Transplante de Córnea têm ainda prova teórico-prática em <b>09/12</b>."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA E", "<span class='g glow'>MANDA HOJE</span>"],
+   "pill": "SALVA",
+   "body": "para quem vai prestar<br>Unicamp com você.",
+   "note": "Vai precisar do currículo em dezembro? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: editais 2027 da residência médica da FCM Unicamp, conforme Estratégia MED, VestibulandoWeb e Medway. Confira o edital do seu programa."
+  }
+ ],
+ "story": {"kicker": "FECHA AMANHÃ", "cta": "Unicamp 2027: <span>inscrições até 15/10</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "⏰ UNICAMP 2027: INSCRIÇÕES FECHAM AMANHÃ\n\nAs inscrições da residência médica da Unicamp terminam nesta quinta, 15/10. A taxa é de R$ 770 no acesso direto, R$ 660 nos programas com pré-requisito e R$ 630 nas áreas de atuação.\n\nPrecisa de currículo? Sim, mas não na inscrição. A prova objetiva é em 15/11, a lista de classificados para a 2ª fase sai em 02/12 e quem passar envia o currículo de 04 a 08/12. O resultado final está marcado para 25/01/2027.\n\nArrasta para ver o cronograma completo. Salva e manda para quem vai prestar com você 📌\n\nVai prestar Unicamp? Qual especialidade? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#unicamp #residenciamedica #residencia2027 #campinas #medicina"
+}
