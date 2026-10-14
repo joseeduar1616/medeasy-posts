@@ -1,0 +1,165 @@
+{
+ "slug": "2026-10-14-1200-precisa-curriculo-8-provas",
+ "pillar": "calendário e prazos",
+ "header": [
+  "CURRÍCULO",
+  "8 PROVAS 2027"
+ ],
+ "verified_on": "2026-10-14",
+ "sources": [
+  "Edital Unifesp 2027 (Vunesp, vunesp.com.br/UFSP2602; PDF via vestibulandoweb.com.br/wp-content/uploads/2026/09/edital-residencia-medica-unifesp-2027.pdf): itens 2.2, 10.1, 10.6 e 15.1.3",
+  "https://www.grupomedcof.com.br/blog/edital-unifesp-residencia-medica/ e https://www.vestibulandoweb.com.br/?p=33428 (Unifesp, conferência)",
+  "https://med.estrategia.com/portal/noticias/sus-sp-edital-residencia-medica-2027/ e https://www.vestibulandoweb.com.br/pos-graduacao/edital-residencia-medica-sus-sp-2027/amp/ (SUS-SP: inscrições 20/10 a 05/11 na Vunesp, prova 13/12 como etapa única)",
+  "posts/2026-10-10-1200-psumg-2027-guia.json (AREMG, PSU-MG: inscrições e currículo até 15/10, 10% da nota)",
+  "posts/psugo-2027-vagas.json (PSU-GO: currículo com a inscrição até 20/10, 10 pontos)",
+  "posts/2026-10-12-1200-usp-2027-enamed-curriculo.json (Edital COREME/FM nº 02/2026: inscrições até 26/10 12h, prova peso 9, currículo peso 1, envio 04 a 12/01)",
+  "posts/2026-10-09-1800-sesgo-2027-edital.json (Edital nº 24/2026 COREME SES-GO: inscrições até 03/11 17h, currículo 100 pontos na 2ª fase)",
+  "posts/2026-10-13-1800-amrigs-2027-curriculo.json (Edital Unificado nº 01/2026: inscrições até 19/10 17h, currículo de cada instituição, 10%, Currículo Online até 27/10)",
+  "posts/2026-10-10-1800-sesdf-2027-guia.json (Edital RM-1/SES/DF/2027: sem análise curricular, inscrições até 18/11 23h59)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica 2027",
+   "pill": "8 PROVAS",
+   "title": [
+    "PRECISA DE",
+    "<span class='g glow'>CURRÍCULO?</span>"
+   ],
+   "body": "Em algumas provas só a nota objetiva conta. Em outras, o currículo vai <b>junto com a inscrição</b> e o prazo está quase acabando. Veja prova por prova, conforme os editais.",
+   "bullets": [
+    "Quais provas não pedem currículo",
+    "Onde o currículo vai na inscrição",
+    "Todos os prazos de inscrição"
+   ]
+  },
+  {
+   "type": "rows",
+   "label": "Antes da prova",
+   "title": [
+    "E ANTES DA <span class='y'>PROVA?</span>"
+   ],
+   "sub": "Duas não pedem currículo. Duas pedem já na inscrição",
+   "rows": [
+    {
+     "name": "SES-DF",
+     "sub": "Sem análise curricular. Prova em 12/12",
+     "value": "NÃO"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "Prova objetiva em 13/12 é a etapa única",
+     "value": "NÃO"
+    },
+    {
+     "name": "PSU-MG",
+     "sub": "Vale 10% da nota. Vai com a inscrição até 15/10",
+     "value": "SIM"
+    },
+    {
+     "name": "PSU-GO",
+     "sub": "Vale 10 de 100 pontos. Vai com a inscrição até 20/10",
+     "value": "SIM"
+    }
+   ],
+   "note": "No PSU-MG e no PSU-GO, o currículo enviado <b>não pode ser trocado depois</b>. O PSU-MG fecha <b>amanhã, 15/10</b>."
+  },
+  {
+   "type": "rows",
+   "label": "Depois da prova",
+   "title": [
+    "E DEPOIS DA <span class='g'>PROVA?</span>"
+   ],
+   "sub": "A análise do currículo vem depois da prova objetiva",
+   "rows": [
+    {
+     "name": "USP-SP",
+     "sub": "Peso 1 (prova peso 9). Envio de 04 a 12/01",
+     "value": "SIM"
+    },
+    {
+     "name": "Unifesp",
+     "sub": "Peso 1. Lattes atualizado até 04/12",
+     "value": "SIM"
+    },
+    {
+     "name": "SES-GO",
+     "sub": "100 pontos na 2ª fase, só para classificados",
+     "value": "SIM"
+    },
+    {
+     "name": "AMRIGS",
+     "sub": "10%, só nas instituições que adotam",
+     "value": "DEPENDE"
+    }
+   ],
+   "note": "Na AMRIGS, o Currículo Online é cadastrado até <b>27/10</b>. Na Unifesp, a nota tem ainda a prova prática."
+  },
+  {
+   "type": "rows",
+   "label": "Inscrições",
+   "title": [
+    "ATÉ <span class='y'>QUANDO</span> DÁ?"
+   ],
+   "sub": "Último dia de inscrição, horário de Brasília",
+   "rows": [
+    {
+     "name": "PSU-MG",
+     "sub": "Site da AREMG",
+     "value": "15/10"
+    },
+    {
+     "name": "AMRIGS",
+     "sub": "Até as 17h",
+     "value": "19/10"
+    },
+    {
+     "name": "PSU-GO",
+     "sub": "Com o currículo",
+     "value": "20/10"
+    },
+    {
+     "name": "USP-SP",
+     "sub": "Até as 12h, FUVEST",
+     "value": "26/10"
+    },
+    {
+     "name": "Unifesp",
+     "sub": "Até as 23h59, Vunesp",
+     "value": "30/10"
+    },
+    {
+     "name": "SES-GO",
+     "sub": "Até as 17h, Instituto Verbena",
+     "value": "03/11"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "Abre em 20/10, Vunesp",
+     "value": "05/11"
+    },
+    {
+     "name": "SES-DF",
+     "sub": "Até as 23h59, IADES",
+     "value": "18/11"
+    }
+   ]
+  },
+  {
+   "type": "cta",
+   "title": [
+    "SALVA PARA",
+    "<span class='g glow'>NÃO PERDER</span>"
+   ],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: editais 2027 de Unifesp (Vunesp), USP-SP (FMUSP/FUVEST), SES-GO (Instituto Verbena/UFG), SES-DF (IADES), PSU-MG (AREMG), AMRIGS (Fundatec) e PSU-GO; SUS-SP conforme Estratégia MED e VestibulandoWeb. Confira o edital do seu programa."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "Precisa de currículo? <span>8 provas de 2027</span> lado a lado.<br>Veja no feed da @med_easyy."
+ },
+ "caption": "📝 PRECISA DE CURRÍCULO? 8 PROVAS LADO A LADO\n\nSES-DF e SUS-SP não têm análise curricular: só a prova objetiva decide.\n\nNo PSU-MG e no PSU-GO, o currículo vai junto com a inscrição e não pode ser trocado depois. O PSU-MG fecha amanhã, 15/10, e o PSU-GO em 20/10.\n\nNa USP-SP, na Unifesp e na SES-GO, o currículo entra depois da prova. Na AMRIGS, depende da instituição. Arrasta para ver os pesos e todos os prazos de inscrição 📌\n\nSalva e manda para quem vai prestar com você. Qual dessas você vai fazer? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #curriculo #residencia2027 #psumg #unifesp #sussp"
+}
