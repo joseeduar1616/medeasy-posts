@@ -56,6 +56,8 @@ const ADMINS = ["José"]; // todos os mentores têm o mesmo acesso; mantido só 
 /* ---------- serviços e provas ---------- */
 const SERVICOS = { "vitae": "Currículo Vitae", "lattes": "Currículo Lattes", "analise": "Análise curricular", "certificados": "Organização de certificados", "trabalho escrito": "Trabalho escrito", "slide": "Slides", "emprego": "Vitae emprego", "formatacao de trabalho": "Formatação de trabalho" };
 const PROVA_NOME = { "USP SP": "USP-SP", "AMIRGS": "AMRIGS", "PSUGO": "PSU-GO", "PSUMG": "PSU-MG", "SESGO": "SES-GO", "SANTA CASA DE SP": "Santa Casa SP", "SIRIO LIBANES": "Sírio-Libanês", "EINSTEIN": "Einstein", "DANTE": "Dante Pazzanese" };
+// Prova escrita no fim do nome do cliente no Notion ("Jose Nicolas PSU", "Jose Nicolas fubog")
+const PROVA_NO_NOME = { psu: "PSUGO", psugo: "PSUGO", psumg: "PSUMG", sesgo: "SESGO", fubog: "FUBOG", hpp: "HPP", uel: "UEL", amrigs: "AMIRGS", amirgs: "AMIRGS" };
 function etapaDe(status, pagamento) {
   const s = semAcento(status);
   if (s.startsWith("concluido")) return 6;
@@ -132,7 +134,8 @@ async function montar(linhas) {
   const grupos = new Map();
   for (const l of linhas) {
     if (!l.cliente || !String(l.cliente).trim()) continue;
-    const nome = String(l.cliente).replace(/\(\d+\)\s*$/, "").replace(/\s+/g, " ").trim();
+    let nome = String(l.cliente).replace(/\(\d+\)\s*$/, "").replace(/\s+/g, " ").trim();
+    for (let m; (m = nome.match(/\s+(\S+)$/)) && PROVA_NO_NOME[kProva(m[1])];) { const t = PROVA_NO_NOME[kProva(m[1])]; if (!l.tipos.includes(t)) l.tipos.push(t); nome = nome.slice(0, m.index).trim(); }
     const tel = String(l.telefone || "").replace(/\D/g, "").slice(-8);
     const k = semAcento(nome) + "|" + tel;
     if (!grupos.has(k)) grupos.set(k, { chave: k, nome, telefone: l.telefone || "", linhas: [] });
