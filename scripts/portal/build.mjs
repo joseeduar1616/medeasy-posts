@@ -75,6 +75,8 @@ function linhaDeExport(r) {
     mentor: r["Mentor"], corretor: r["Corretor"], trainee: r["Trainee"], status: r["Status"], pagamento: r["Pagamento"], total: n(r["Valor total"]),
     mentorPago: sim(r["Mentor pago"]), corretorPago: sim(r["corretor  pago "]), desconto: arr(r["DESCONTO APLICADO "]), forma: r["FORMA DE PAGAMENTO "], origem: r["ORIGEM DO CLIENTE "],
     inicio: r["date:Data de início :start"], entrega: r["date:Data da entrega:start"], dataPagMentor: r["date:DATA DE PAGAMENTO  MENTOR:start"] || r["date:Data do Pagamento do Mentor/Corretor:start"], dataPagCorretor: r["date:Data do Pagamento do Mentor/Corretor:start"],
+    nCert: n(Object.entries(r).find(([k, v]) => /certificad/i.test(k) && typeof v === "number")?.[1]),
+    nArtigos: n(Object.entries(r).find(([k, v]) => /artigo/i.test(k) && typeof v === "number")?.[1]),
     analises: Object.entries(r).filter(([k, v]) => /an[aá]lise/i.test(k) && Array.isArray(v) && v.length && typeof v[0] === "object").flatMap(([, v]) => v),
     valorMentor: n(r["Valor para mentor"] ?? r["Valor para o mentor"]), valorCorretor: n(r["Valor para corretor"]), valorMedeasy: n(r["Valor para Medeasy"]),
   };
@@ -169,6 +171,9 @@ async function montar(linhas) {
       servicos, provas: [...provas.values()], pendencias: [], atualizacoes: [], documentos: [], notas: "",
       origem: g.linhas.map(l => l.origem).find(Boolean) || "", desconto: [...new Set(g.linhas.flatMap(l => l.desconto).filter(d => d && d !== "NENHUM"))],
       financeiro: { total, pago, pagamentos }, repasses,
+      nCert: Math.max(...g.linhas.map(l => l.nCert ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nCert ?? -1)) : null,
+      nArtigos: Math.max(...g.linhas.map(l => l.nArtigos ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nArtigos ?? -1)) : null,
+      tipos: [...new Set(g.linhas.flatMap(l => l.tipos.map(t => semAcento(t))))],
     });
   }
   const nomes = new Set(ADMINS);
@@ -191,6 +196,54 @@ async function juntarExtras(dados) {
     c.pendencias.push(...(e.pendencias || []).map((p, i) => ({ id: "x" + i, ...p }))); c.atualizacoes.push(...(e.atualizacoes || [])); c.documentos.push(...(e.documentos || []));
     if (e.notas) c.notas = [c.notas, e.notas].filter(Boolean).join("\n");
   }
+}
+
+/* ---------- valor pelos certificados ---------- */
+// Tabela de preços MedEasy (Vitae por prova, Lattes por certificado único, artigo na íntegra à parte).
+const PRECO = { taxa: 100, taxaMaisDeDuas: 90, artigo: 12.5, analise1: 100, analise2: 90,
+  vitae: { A: [9, 8.5, 8], B: [9.5, 9, 8.5], C: [8, 7.5, 7], D: [9, 8.5, 8], E: [9, 8.5, 8] }, lattes: { A: [7, 6.5, 6], B: [12, 11.5, 11] } };
+// Modelo do Vitae que cada prova costuma pedir (skill de orçamento). Prova fora da lista usa o Modelo A.
+const MODELO = { psugo: "D", psumg: "D", hpp: "C", santacasasp: "C", scmsp: "C", fmabc: "C", unitau: "C", idor: "C", puccamp: "C", hcpa: "C", enare: "C", sesdf: "C", cet: "E", cetcentromedicodecampinas: "E" };
+const faixa = q => q >= 50 ? 2 : q >= 31 ? 1 : 0;
+const br2 = v => v.toFixed(2).replace(".", ",");
+const ehArtigo = t => /artigo|cap[ií]tulo|publica/i.test(t || "");
+function estimar(c) {
+  const linhas = []; let faltaContagem = false;
+  const temLattes = c.tipos.includes("lattes"), temCert = c.tipos.includes("certificados");
+  // Lattes + Certificados = plano B do Lattes: o documento de comprovação já está incluso, a prova cobra só a análise.
+  const lattesB = temLattes && temCert && !c.tipos.includes("vitae");
+  const temVitae = c.tipos.includes("vitae") || (temCert && !lattesB), temAnalise = c.tipos.includes("analise") || lattesB;
+  const provas = c.provas.filter(p => p.nome);
+  const taxa = provas.length > 2 ? PRECO.taxaMaisDeDuas : PRECO.taxa;
+  let maxCert = c.nCert ?? null;
+  for (const p of provas) {
+    const itens = p.itens || [];
+    const comp = itens.flatMap(i => (i.comprovantes || []).map(t => ({ t, item: i.nome })));
+    let n = comp.length ? comp.filter(x => !ehArtigo(x.item) || !/na íntegra|completo/i.test(x.t)).length : c.nCert;
+    let a = comp.length ? comp.filter(x => ehArtigo(x.item) && /artigo completo|cap[ií]tulo/i.test(x.item)).length : (c.nArtigos || 0);
+    if (comp.length) maxCert = Math.max(maxCert ?? 0, n);
+    const k = kProva(p.nome), m = MODELO[k] || (Object.entries(MODELO).find(([kk]) => k.startsWith(kk)) || [, "A"])[1];
+    if (temVitae || (!temAnalise && !lattesB)) {
+      if (n == null) { faltaContagem = true; linhas.push({ desc: `${p.nome}: análise curricular + seleção dos certificados (Modelo ${m} Vitae)`, conta: "falta o número de certificados", valor: null }); continue; }
+      const u = PRECO.vitae[m][faixa(n)];
+      linhas.push({ desc: `${p.nome}: análise curricular + seleção dos certificados (Modelo ${m} Vitae)`, conta: `${br2(taxa)} + ${n} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor: taxa + n * u + a * PRECO.artigo, fonte: comp.length ? "análise" : "Notion" });
+    } else {
+      const v = provas.length >= 2 ? PRECO.analise2 : PRECO.analise1;
+      linhas.push({ desc: `${p.nome}: análise curricular`, conta: "1", valor: v });
+    }
+  }
+  if (!provas.length && temVitae) {
+    if (c.nCert == null) { faltaContagem = true; linhas.push({ desc: "Currículo Vitae", conta: "falta o número de certificados", valor: null }); }
+    else { const u = PRECO.vitae.A[faixa(c.nCert)]; const a = c.nArtigos || 0; linhas.push({ desc: "Currículo Vitae (Modelo A)", conta: `${br2(PRECO.taxa)} + ${c.nCert} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor: PRECO.taxa + c.nCert * u + a * PRECO.artigo, fonte: "Notion" }); }
+  }
+  if (temLattes) {
+    const cat = lattesB ? "B" : "A", nome = `Atualização do Currículo Lattes (Categoria ${cat}${lattesB ? ", com o documento de comprovação" : ""})`;
+    if (maxCert == null) { faltaContagem = true; linhas.push({ desc: nome, conta: "falta o número de certificados", valor: null }); }
+    else { const u = PRECO.lattes[cat][faixa(maxCert)]; linhas.push({ desc: nome, conta: `${maxCert} X ${br2(u)}`, valor: maxCert * u }); }
+  }
+  if (!linhas.length) return null;
+  const total = Math.round(linhas.reduce((s, l) => s + (l.valor || 0), 0) * 100) / 100;
+  return { linhas, total, completo: !faltaContagem };
 }
 
 /* ---------- espelho do cliente ---------- */
@@ -220,6 +273,7 @@ const linhas = iLin >= 0 ? JSON.parse(fs.readFileSync(args[iLin + 1], "utf8")).m
 args.forEach((a, i) => { if (a !== "--analise") return; const [nome, arq] = args[i + 1].split("="); const l = linhas.find(x => semAcento(x.cliente) === semAcento(nome)); if (l) (l.analises ||= []).push({ arquivo: arq, nome: path.basename(arq) }); else console.warn("Cliente não encontrado: " + nome); });
 const dados = await montar(linhas);
 await juntarExtras(dados);
+for (const c of dados.clientes) c.estimativa = estimar(c);
 const contato = { mentor: "Equipe MedEasy", whats: "5562991373642", texto: "(62) 99137-3642", email: "medeasyy0@gmail.com" };
 
 // Só regrava quando os dados mudam, para não gerar commit a cada hora.
