@@ -1,8 +1,10 @@
 // Gera os arquivos criptografados do Portal MedEasy em portal/data/.
 // Nenhum dado legível vai para o repositório: tudo sai cifrado com AES-GCM.
 //
-// Uso local:   PORTAL_SENHA=... node scripts/portal/build.mjs --entrada caminho/dados.json
-// Uso Notion:  PORTAL_SENHA=... NOTION_TOKEN=... NOTION_DB=... node scripts/portal/build.mjs
+// Uso pelo Notion (GitHub Action):
+//   PORTAL_SENHA=... NOTION_TOKEN=... NOTION_DB=<link ou id da página Clientes> node scripts/portal/build.mjs
+// Uso local com linhas exportadas:
+//   PORTAL_SENHA=... node scripts/portal/build.mjs --linhas linhas.json
 //
 // A senha da equipe abre portal/data/equipe.json. Cada cliente tem um código
 // próprio que abre só o arquivo dele em portal/data/c/.
@@ -16,137 +18,197 @@ const ITER = 310000;
 const ALFA = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 const enc = new TextEncoder();
 const b64 = u8 => Buffer.from(u8).toString("base64");
+const unb64 = s => Uint8Array.from(Buffer.from(s, "base64"));
 
 const SENHA = (process.env.PORTAL_SENHA || "").trim();
 if (!SENHA) { console.error("Defina PORTAL_SENHA"); process.exit(1); }
 
-async function cifrar(obj, senha) {
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  const iv = crypto.getRandomValues(new Uint8Array(12));
+/* ---------- cripto ---------- */
+async function chave(senha, salt, uso) {
   const base = await crypto.subtle.importKey("raw", enc.encode(senha), "PBKDF2", false, ["deriveKey"]);
-  const chave = await crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: ITER, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt"]);
-  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, chave, enc.encode(JSON.stringify(obj))));
+  return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: ITER, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, [uso]);
+}
+async function cifrar(obj, senha) {
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, await chave(senha, salt, "encrypt"), enc.encode(JSON.stringify(obj))));
   return { v: 1, it: ITER, salt: b64(salt), iv: b64(iv), ct: b64(ct) };
 }
-async function sha256hex(s) { return Buffer.from(await crypto.subtle.digest("SHA-256", enc.encode(s))).toString("hex"); }
-async function codigoPadrao(id) {
-  const k = await crypto.subtle.importKey("raw", enc.encode(SENHA), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const mac = new Uint8Array(await crypto.subtle.sign("HMAC", k, enc.encode("cliente:" + id)));
-  let s = ""; for (let i = 0; i < 10; i++) s += ALFA[mac[i] % ALFA.length];
-  return s;
+async function abrir(env, senha) {
+  const k = await chave(senha, unb64(env.salt), "decrypt");
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(env.iv) }, k, unb64(env.ct))));
 }
+async function hmac(txt) {
+  const k = await crypto.subtle.importKey("raw", enc.encode(SENHA), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return new Uint8Array(await crypto.subtle.sign("HMAC", k, enc.encode(txt)));
+}
+async function codigoDe(chaveCliente) { const m = await hmac("cliente:" + chaveCliente); let s = ""; for (let i = 0; i < 10; i++) s += ALFA[m[i] % ALFA.length]; return s; }
 const normCodigo = c => String(c || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-const arquivoCliente = async codigo => (await sha256hex("medeasy-c:" + normCodigo(codigo))).slice(0, 32);
+async function arquivoCliente(codigo) { return Buffer.from(await crypto.subtle.digest("SHA-256", enc.encode("medeasy-c:" + normCodigo(codigo)))).toString("hex").slice(0, 32); }
 
-/* ---------- Notion ---------- */
-const ETAPAS = ["certificado", "triagem|orçamento|orcamento", "entrada|pagamento", "produção|producao|andamento|fazendo", "conferência|conferencia|revisão|revisao", "ajuste", "entregue|finalizado|concluído|concluido|pronto"];
-function etapaDe(txt) { const t = String(txt || "").toLowerCase(); let e = 0; ETAPAS.forEach((re, i) => { if (new RegExp(re).test(t)) e = i; }); return e; }
+/* ---------- pessoas ---------- */
+const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
+const APELIDOS = { eder: "Éder", leo: "Leonardo", leonardo: "Leonardo", lucas: "Lucas", erick: "Erick", jose: "José", cadu: "Cadu", matheus: "Matheus", eduardo: "Eduardo", caroline: "Caroline", pedro: "Pedro", "joao gabriel": "João Gabriel", "ana eluiza": "Ana Eluiza" };
+const pessoa = n => { if (!n) return ""; const k = semAcento(n); return APELIDOS[k] || String(n).trim().replace(/\b\w/g, c => c.toUpperCase()); };
+const ADMINS = (process.env.PORTAL_ADMINS || "José").split(",").map(pessoa);
+
+/* ---------- serviços e provas ---------- */
+const SERVICOS = { "vitae": "Currículo Vitae", "lattes": "Currículo Lattes", "analise": "Análise curricular", "certificados": "Organização de certificados", "trabalho escrito": "Trabalho escrito", "slide": "Slides", "emprego": "Vitae emprego", "formatacao de trabalho": "Formatação de trabalho" };
+const PROVA_NOME = { "USP SP": "USP-SP", "AMIRGS": "AMRIGS", "PSUGO": "PSU-GO", "PSUMG": "PSU-MG", "SESGO": "SES-GO", "SANTA CASA DE SP": "Santa Casa SP", "SIRIO LIBANES": "Sírio-Libanês", "EINSTEIN": "Einstein", "DANTE": "Dante Pazzanese" };
+function etapaDe(status, pagamento) {
+  const s = semAcento(status);
+  if (s.startsWith("concluido")) return 6;
+  if (s.startsWith("em andamento")) return 3;
+  if (s.startsWith("aguardando")) return 0;
+  return !pagamento || semAcento(pagamento).startsWith("nao pago") ? 2 : 1;
+}
+function pagoDe(total, pagamento) { const p = semAcento(pagamento); if (p.startsWith("pagamento finalizado")) return total; if (p.startsWith("1")) return Math.round(total * 50) / 100; return 0; }
+const n = v => (v === null || v === undefined || v === "" || isNaN(Number(v))) ? null : Number(v);
+const sim = v => v === true || v === "__YES__";
+const arr = v => Array.isArray(v) ? v : (typeof v === "string" && v.startsWith("[") ? JSON.parse(v) : v ? [v] : []);
+
+/* Linha no formato comum, vinda da API do Notion ou do export local. */
+function linhaDeExport(r) {
+  return {
+    id: String(r.url || "").split("/").pop().replace(/-/g, ""), url: r.url, cliente: r["Cliente"], telefone: r["Telefone"], tipos: arr(r["Tipo de serviço"]),
+    mentor: r["Mentor"], corretor: r["Corretor"], trainee: r["Trainee"], status: r["Status"], pagamento: r["Pagamento"], total: n(r["Valor total"]),
+    mentorPago: sim(r["Mentor pago"]), corretorPago: sim(r["corretor  pago "]), desconto: arr(r["DESCONTO APLICADO "]), forma: r["FORMA DE PAGAMENTO "], origem: r["ORIGEM DO CLIENTE "],
+    inicio: r["date:Data de início :start"], entrega: r["date:Data da entrega:start"], dataPagMentor: r["date:DATA DE PAGAMENTO  MENTOR:start"] || r["date:Data do Pagamento do Mentor/Corretor:start"], dataPagCorretor: r["date:Data do Pagamento do Mentor/Corretor:start"],
+    valorMentor: n(r["Valor para mentor"] ?? r["Valor para o mentor"]), valorCorretor: n(r["Valor para corretor"]), valorMedeasy: n(r["Valor para Medeasy"]),
+  };
+}
+
+/* ---------- Notion API ---------- */
 function valorProp(p) {
   if (!p) return null;
   switch (p.type) {
     case "title": case "rich_text": return p[p.type].map(x => x.plain_text).join("").trim();
     case "number": return p.number;
-    case "select": return p.select ? p.select.name : "";
-    case "status": return p.status ? p.status.name : "";
+    case "select": return p.select ? p.select.name : null;
+    case "status": return p.status ? p.status.name : null;
     case "multi_select": return p.multi_select.map(x => x.name);
-    case "date": return p.date ? p.date.start : "";
+    case "date": return p.date ? p.date.start : null;
     case "checkbox": return p.checkbox;
-    case "email": return p.email || "";
-    case "phone_number": return p.phone_number || "";
-    case "url": return p.url || "";
-    case "people": return p.people.map(x => x.name || "").filter(Boolean).join(", ");
-    case "formula": return p.formula[p.formula.type];
-    case "rollup": return p.rollup.type === "number" ? p.rollup.number : null;
+    case "phone_number": return p.phone_number;
+    case "formula": return p.formula[p.formula.type] ?? null;
     default: return null;
   }
 }
-function pegar(props, re, tipo) {
-  for (const [nome, p] of Object.entries(props)) if (re.test(nome) && (!tipo || p.type === tipo)) return valorProp(p);
-  return null;
+async function api(caminho, corpo) {
+  const r = await fetch("https://api.notion.com/v1/" + caminho, { method: corpo ? "POST" : "GET", headers: { Authorization: `Bearer ${process.env.NOTION_TOKEN}`, "Notion-Version": "2022-06-28", "Content-Type": "application/json" }, body: corpo ? JSON.stringify(corpo) : undefined });
+  const j = await r.json(); if (!r.ok) { const e = new Error(`Notion ${r.status}: ${j.message}`); e.status = r.status; throw e; } return j;
+}
+async function idDaBase(entrada) {
+  const id = (String(entrada).match(/[0-9a-f]{32}/i) || [String(entrada).replace(/-/g, "")])[0];
+  try { await api("databases/" + id); return id; }
+  catch { const filhos = await api(`blocks/${id}/children?page_size=100`); const db = filhos.results.find(b => b.type === "child_database"); if (!db) throw new Error("Não achei a base de clientes dentro dessa página"); return db.id.replace(/-/g, ""); }
 }
 async function lerNotion() {
-  const token = process.env.NOTION_TOKEN, db = process.env.NOTION_DB;
-  const linhas = []; let cursor;
-  do {
-    const r = await fetch(`https://api.notion.com/v1/databases/${db}/query`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Notion-Version": "2022-06-28", "Content-Type": "application/json" }, body: JSON.stringify(cursor ? { start_cursor: cursor } : {}) });
-    if (!r.ok) throw new Error("Notion respondeu " + r.status + ": " + await r.text());
-    const j = await r.json(); linhas.push(...j.results); cursor = j.has_more ? j.next_cursor : null;
-  } while (cursor);
-  const clientes = linhas.filter(l => !l.archived).map(l => {
-    const P = l.properties;
-    const titulo = Object.values(P).find(p => p.type === "title");
-    let provas = pegar(P, /prova|edital/i); if (typeof provas === "string") provas = provas.split(/[,/;]+/).map(s => s.trim()).filter(Boolean);
-    const etapa = etapaDe(pegar(P, /status|etapa|situa/i));
-    const servico = pegar(P, /servi[cç]o|produto|tipo/i);
-    const valor = Number(pegar(P, /^valor|total|pre[cç]o/i)) || 0;
-    const pagoRaw = pegar(P, /^pago|recebido|valor pago/i);
-    const pago = typeof pagoRaw === "number" ? pagoRaw : pagoRaw === true ? valor : 0;
-    const repasse = Number(pegar(P, /repasse|mentor recebe|comiss|receber/i)) || 0;
-    const repassePago = !!pegar(P, /repasse pago|pago ao mentor/i, "checkbox");
-    return {
-      id: l.id.replace(/-/g, ""), notion: l.url,
-      nome: valorProp(titulo) || "Sem nome",
-      mentor: pegar(P, /mentor|respons/i) || "",
-      whatsapp: pegar(P, /whats|telefone|celular/i) || "",
-      email: pegar(P, /e-?mail/i) || "",
-      codigo: pegar(P, /c[oó]digo/i) || "",
-      provas: (provas || []).map((n, i) => ({ id: "p" + i, nome: n, prazoEnvio: "" })),
-      servicos: servico || etapa ? [{ id: "s0", tipo: /lattes/i.test(servico) ? "lattes" : /an[aá]lise/i.test(servico) ? "analise" : "vitae", nome: (Array.isArray(servico) ? servico.join(", ") : servico) || "Currículo", etapa, prazo: pegar(P, /prazo|entrega/i, "date") || "" }] : [],
-      pendencias: String(pegar(P, /pend[eê]ncia|falta/i) || "").split(/\n+/).filter(Boolean).map((t, i) => ({ id: "q" + i, texto: t, feita: false })),
-      financeiro: { total: valor, pago, pagamentos: [] },
-      repasse: { valor: repasse, pago: repassePago },
-      notas: pegar(P, /obs|nota/i) || "",
-      atualizacoes: [], documentos: [],
-    };
+  const db = await idDaBase(process.env.NOTION_DB); const linhas = []; let cursor;
+  do { const j = await api(`databases/${db}/query`, cursor ? { start_cursor: cursor, page_size: 100 } : { page_size: 100 }); linhas.push(...j.results); cursor = j.has_more ? j.next_cursor : null; } while (cursor);
+  return linhas.filter(l => !l.archived && !l.in_trash).map(l => {
+    const r = { url: l.url }; for (const [k, p] of Object.entries(l.properties)) {
+      const v = valorProp(p);
+      if (p.type === "date") r[`date:${k}:start`] = v; else if (p.type === "checkbox") r[k] = v ? "__YES__" : "__NO__"; else r[k] = v;
+    }
+    return linhaDeExport(r);
   });
-  const nomes = [...new Set(clientes.map(c => c.mentor).filter(Boolean))];
-  return { mentores: nomes.map(n => ({ nome: n, admin: /jos[eé]/i.test(n) })), clientes };
+}
+
+/* ---------- montar clientes ---------- */
+async function montar(linhas) {
+  const grupos = new Map();
+  for (const l of linhas) {
+    if (!l.cliente || !String(l.cliente).trim()) continue;
+    const nome = String(l.cliente).replace(/\(\d+\)\s*$/, "").replace(/\s+/g, " ").trim();
+    const tel = String(l.telefone || "").replace(/\D/g, "").slice(-8);
+    const k = semAcento(nome) + "|" + tel;
+    if (!grupos.has(k)) grupos.set(k, { chave: k, nome, telefone: l.telefone || "", linhas: [] });
+    grupos.get(k).linhas.push(l);
+  }
+  const clientes = [];
+  for (const g of grupos.values()) {
+    const servicos = [], provas = new Map(), repasses = [], mentores = new Set(), corretores = new Set(), trainees = new Set();
+    let total = 0, pago = 0; const pagamentos = [];
+    for (const l of g.linhas) {
+      const tipos = l.tipos.map(t => [t, semAcento(t)]);
+      const sv = tipos.filter(([, k]) => SERVICOS[k]).map(([, k]) => SERVICOS[k]);
+      const pv = tipos.filter(([, k]) => !SERVICOS[k]).map(([t]) => PROVA_NOME[t] || t);
+      pv.forEach(p => provas.has(p) || provas.set(p, { id: "p" + provas.size, nome: p, prazoEnvio: "", itens: [] }));
+      const etapa = etapaDe(l.status, l.pagamento);
+      const m = pessoa(l.mentor), c = pessoa(l.corretor), t = pessoa(l.trainee);
+      if (m) mentores.add(m); if (c) corretores.add(c); if (t) trainees.add(t);
+      servicos.push({ id: l.id, nome: (sv.length ? sv.join(" + ") : "Serviço") + (pv.length ? " · " + pv.join(", ") : ""), etapa, prazo: etapa < 6 ? (l.entrega || "") : "", entregueEm: etapa === 6 ? (l.entrega || "") : "", inicio: l.inicio || "", notion: l.url, mentor: m, corretor: c, trainee: t, status: l.status || "" });
+      const tt = l.total || 0, pg = pagoDe(tt, l.pagamento); total += tt; pago += pg;
+      if (pg) pagamentos.push({ valor: pg, forma: l.forma || "" });
+      if (m) repasses.push({ pessoa: m, papel: "Mentor", servico: l.id, valor: l.valorMentor, pago: l.mentorPago, data: l.dataPagMentor || "" });
+      if (c) repasses.push({ pessoa: c, papel: "Corretor", servico: l.id, valor: l.valorCorretor, pago: l.corretorPago, data: l.dataPagCorretor || "" });
+      if (l.valorMedeasy != null) repasses.push({ pessoa: "MedEasy", papel: "Empresa", servico: l.id, valor: l.valorMedeasy, pago: true, data: "" });
+    }
+    const id = (await hmac("id:" + g.chave)).slice(0, 8).reduce((a, b) => a + b.toString(16).padStart(2, "0"), "");
+    clientes.push({
+      id, chave: g.chave, nome: g.nome, whatsapp: g.telefone, codigo: await codigoDe(g.chave),
+      mentores: [...mentores], corretores: [...corretores], trainees: [...trainees], mentor: [...mentores][0] || "",
+      servicos, provas: [...provas.values()], pendencias: [], atualizacoes: [], documentos: [], notas: "",
+      origem: g.linhas.map(l => l.origem).find(Boolean) || "", desconto: [...new Set(g.linhas.flatMap(l => l.desconto).filter(d => d && d !== "NENHUM"))],
+      financeiro: { total, pago, pagamentos }, repasses,
+    });
+  }
+  const nomes = new Set(ADMINS);
+  for (const c of clientes) [...c.mentores, ...c.corretores, ...c.trainees].forEach(p => nomes.add(p));
+  return { mentores: [...nomes].sort().map(nome => ({ nome, admin: ADMINS.includes(nome) })), clientes };
+}
+
+/* Extras: detalhes que não existem no Notion (nota da análise, itens da ficha, pendências).
+   Ficam cifrados em portal/data/extras.json e são juntados pelo nome do cliente. */
+async function juntarExtras(dados) {
+  const arq = path.join(SAIDA, "extras.json"); if (!fs.existsSync(arq)) return;
+  const extras = await abrir(JSON.parse(fs.readFileSync(arq, "utf8")), SENHA);
+  for (const c of dados.clientes) {
+    const e = extras.clientes.find(x => semAcento(c.nome).includes(semAcento(x.casar)) || semAcento(x.casar).includes(semAcento(c.nome))); if (!e) continue;
+    const k = s => semAcento(s).replace(/[^a-z]/g, "");
+    for (const p of e.provas || []) { const q = c.provas.find(x => k(p.nome).startsWith(k(x.nome)) || k(x.nome).startsWith(k(p.nome))); if (q) Object.assign(q, { ...p, id: q.id, nome: q.nome }); else c.provas.push(p); }
+    c.pendencias.push(...(e.pendencias || [])); c.atualizacoes.push(...(e.atualizacoes || [])); c.documentos.push(...(e.documentos || []));
+    if (e.notas) c.notas = [c.notas, e.notas].filter(Boolean).join("\n");
+  }
 }
 
 /* ---------- espelho do cliente ---------- */
-function nomeServico(c, s) {
-  const T = { vitae: "Currículo Vitae", analise: "Análise curricular", lattes: "Currículo Lattes", emprego: "Vitae emprego" };
-  const p = (c.provas || []).find(p => p.id === s.provaId);
-  return (T[s.tipo] || "Serviço") + (s.detalhe ? " " + s.detalhe.replace(/Modelo |Categoria /, "") : "") + (p ? " · " + p.nome + (p.ano ? " " + p.ano : "") : "");
-}
 function espelho(c, contato) {
-  const total = Number(c.financeiro?.total) || 0;
-  const pago = (c.financeiro?.pagamentos || []).reduce((a, p) => a + (Number(p.valor) || 0), 0) || Number(c.financeiro?.pago) || 0;
+  const pago = c.financeiro.pago, total = c.financeiro.total;
   return {
-    nome: c.nome, mentor: c.mentor || "",
-    servicos: (c.servicos || []).map(s => ({ nome: s.nome || nomeServico(c, s), etapa: s.etapa || 0, prazo: s.prazo || "" })),
-    provas: (c.provas || []).map(p => ({ nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [] })),
-    pendencias: (c.pendencias || []).filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
-    atualizacoes: (c.atualizacoes || []).filter(a => !a.interna).slice(-40),
-    documentos: (c.documentos || []).filter(d => d.link),
+    nome: c.nome,
+    servicos: c.servicos.map(s => ({ nome: s.nome, etapa: s.etapa, prazo: s.prazo })),
+    provas: c.provas.map(p => ({ nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [] })),
+    pendencias: c.pendencias.filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
+    atualizacoes: c.atualizacoes.filter(a => !a.interna).slice(-40),
+    documentos: c.documentos.filter(d => d.link),
     financeiro: { total, pago, saldo: Math.max(0, total - pago), entradaOk: total > 0 && pago >= total / 2 - 0.009 },
-    contato, progresso: (c.servicos || []).length ? Math.round((c.servicos || []).reduce((a, x) => a + (x.etapa || 0) / 6, 0) / c.servicos.length * 100) : 0,
+    contato: { ...contato, mentor: c.mentores[0] ? `${c.mentores[0]} (MedEasy)` : "Equipe MedEasy" },
+    progresso: c.servicos.length ? Math.round(c.servicos.reduce((a, s) => a + s.etapa / 6, 0) / c.servicos.length * 100) : 0,
   };
 }
 
 /* ---------- principal ---------- */
 const args = process.argv.slice(2);
-const iEnt = args.indexOf("--entrada");
-let dados;
-if (iEnt >= 0) dados = JSON.parse(fs.readFileSync(args[iEnt + 1], "utf8"));
-else if (process.env.NOTION_TOKEN && process.env.NOTION_DB) dados = await lerNotion();
-else { console.error("Informe --entrada dados.json ou NOTION_TOKEN e NOTION_DB"); process.exit(1); }
+const iLin = args.indexOf("--linhas");
+const linhas = iLin >= 0 ? JSON.parse(fs.readFileSync(args[iLin + 1], "utf8")).map(linhaDeExport)
+  : process.env.NOTION_TOKEN && process.env.NOTION_DB ? await lerNotion()
+  : (console.error("Informe --linhas arquivo.json ou NOTION_TOKEN e NOTION_DB"), process.exit(1));
+
+const dados = await montar(linhas);
+await juntarExtras(dados);
+const contato = { mentor: "Equipe MedEasy", whats: "5562991373642", texto: "(62) 99137-3642", email: "medeasyy0@gmail.com" };
 
 // Só regrava quando os dados mudam, para não gerar commit a cada hora.
-const marca = Buffer.from(new Uint8Array(await crypto.subtle.sign("HMAC", await crypto.subtle.importKey("raw", enc.encode(SENHA), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]), enc.encode(JSON.stringify(dados))))).toString("hex");
+const marca = Buffer.from(await hmac(JSON.stringify(dados))).toString("hex");
 const arqMarca = path.join(SAIDA, "versao.txt");
-if (!process.argv.includes("--forcar") && fs.existsSync(arqMarca) && fs.readFileSync(arqMarca, "utf8").trim() === marca) { console.log("Sem mudanças"); process.exit(0); }
+if (!args.includes("--forcar") && fs.existsSync(arqMarca) && fs.readFileSync(arqMarca, "utf8").trim() === marca) { console.log("Sem mudanças"); process.exit(0); }
 
-const contato = dados.contato || { mentor: "José Eduardo", whats: "5562991373642", texto: "(62) 99137-3642", email: "medeasyy0@gmail.com" };
 fs.rmSync(path.join(SAIDA, "c"), { recursive: true, force: true });
 fs.mkdirSync(path.join(SAIDA, "c"), { recursive: true });
-for (const c of dados.clientes) {
-  c.codigo = normCodigo(c.codigo) || await codigoPadrao(c.id);
-  const arq = await arquivoCliente(c.codigo);
-  const mentorContato = { ...contato };
-  fs.writeFileSync(path.join(SAIDA, "c", arq + ".json"), JSON.stringify(await cifrar({ ...espelho(c, mentorContato), atualizadoEm: Date.now() }, c.codigo)));
-}
-const equipe = { geradoEm: new Date().toISOString(), contato, mentores: dados.mentores || [], clientes: dados.clientes };
-fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar(equipe, SENHA)));
+const agora = Date.now();
+for (const c of dados.clientes) fs.writeFileSync(path.join(SAIDA, "c", await arquivoCliente(c.codigo) + ".json"), JSON.stringify(await cifrar({ ...espelho(c, contato), atualizadoEm: agora }, c.codigo)));
+const semValor = linhas.filter(l => l.cliente && l.valorMentor == null && l.mentor).length;
+fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, mentores: dados.mentores, clientes: dados.clientes, valoresPendentes: semValor > 0 }, SENHA)));
 fs.writeFileSync(arqMarca, marca + "\n");
-console.log(`OK: ${dados.clientes.length} clientes, ${equipe.mentores.length} mentores`);
+console.log(`OK: ${dados.clientes.length} clientes de ${linhas.length} linhas, ${dados.mentores.length} pessoas na equipe${semValor ? `, ${semValor} linhas sem valor de repasse` : ""}`);

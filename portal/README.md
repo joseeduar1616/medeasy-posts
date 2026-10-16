@@ -6,7 +6,7 @@ Endereço depois de ligar o GitHub Pages: `https://joseeduar1616.github.io/medea
 
 ## Como funciona o login
 
-- **Mentor:** nome + senha da equipe. A senha abre `data/equipe.json`. Cada mentor vê só os próprios clientes. Quem está marcado como admin vê todos.
+- **Equipe:** nome + senha da equipe. A senha abre `data/equipe.json`. Cada pessoa vê os clientes em que aparece como mentor, corretor ou trainee, e o que vai receber em cada papel. José vê todos (para mudar quem vê tudo, crie a variável `PORTAL_ADMINS` com os nomes separados por vírgula).
 - **Cliente:** código de 10 letras e números. O código abre só o arquivo dele em `data/c/`.
 
 Os arquivos em `data/` são criptografados (AES-GCM, chave derivada da senha com PBKDF2). A senha não fica escrita em nenhum arquivo do repositório. Sem a senha ou o código, os arquivos são ilegíveis.
@@ -15,18 +15,18 @@ Limites: como todos os mentores usam a mesma senha, quem tem a senha consegue ab
 
 ## Atualização pelo Notion
 
-O workflow `.github/workflows/portal-notion.yml` roda de hora em hora, lê a base de clientes do Notion e regrava `data/`. Ele precisa de três segredos em Settings > Secrets and variables > Actions:
+O workflow `.github/workflows/portal-notion.yml` roda de hora em hora, lê a base Controle cliente do Notion e regrava `data/`. Ele usa a API oficial, que traz o resultado das fórmulas (Valor para mentor, Valor para corretor e Valor para Medeasy). Ele precisa de três segredos em Settings > Secrets and variables > Actions:
 
 | Segredo | O que é |
 | --- | --- |
 | `PORTAL_SENHA` | a senha da equipe |
 | `NOTION_TOKEN` | token de uma integração interna do Notion (notion.so/my-integrations) com acesso à base |
-| `NOTION_DB` | o id da base de clientes (o trecho de 32 caracteres no link) |
+| `NOTION_DB` | o link da página Clientes (ou só o código de 32 caracteres) |
 
 ## Gerar à mão
 
 ```
-PORTAL_SENHA=... node scripts/portal/build.mjs --entrada dados.json
+PORTAL_SENHA=... NOTION_TOKEN=... NOTION_DB=... node scripts/portal/build.mjs --forcar
 ```
 
-Nunca coloque o `dados.json` legível dentro do repositório.
+Detalhes que não existem no Notion (nota da análise, itens da ficha, pendências) ficam em `data/extras.json`, também cifrado. Para editar: `node scripts/portal/extras.mjs abrir > extras.json`, mude o arquivo e rode `node scripts/portal/extras.mjs cifrar extras.json`. Nunca coloque arquivos legíveis dentro do repositório.
