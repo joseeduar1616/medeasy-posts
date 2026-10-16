@@ -27,7 +27,6 @@ jobs:
           PORTAL_SENHA: ${{ secrets.PORTAL_SENHA }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DB: ${{ secrets.NOTION_DB }}
-          PORTAL_ADMINS: ${{ vars.PORTAL_ADMINS }}
         run: |
           if [ -z "$NOTION_TOKEN" ] || [ -z "$NOTION_DB" ] || [ -z "$PORTAL_SENHA" ]; then
             echo "Segredos do Notion ainda não configurados. Nada a fazer."; exit 0

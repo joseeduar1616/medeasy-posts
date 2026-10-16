@@ -6,12 +6,14 @@ Endereço depois de ligar o GitHub Pages: `https://joseeduar1616.github.io/medea
 
 ## Como funciona o login
 
-- **Equipe:** nome + senha da equipe. A senha abre `data/equipe.json`. Cada pessoa vê os clientes em que aparece como mentor, corretor ou trainee, e o que vai receber em cada papel. José vê todos (para mudar quem vê tudo, crie a variável `PORTAL_ADMINS` com os nomes separados por vírgula).
+- **Equipe:** nome + senha da equipe. A senha abre `data/equipe.json`. Todos os mentores têm o mesmo acesso: veem a equipe inteira e podem filtrar por pessoa para ver os clientes e os repasses de cada um.
 - **Cliente:** código de 10 letras e números. O código abre só o arquivo dele em `data/c/`.
 
 Os arquivos em `data/` são criptografados (AES-GCM, chave derivada da senha com PBKDF2). A senha não fica escrita em nenhum arquivo do repositório. Sem a senha ou o código, os arquivos são ilegíveis.
 
 Limites: como todos os mentores usam a mesma senha, quem tem a senha consegue abrir os dados da equipe inteira, mesmo que a tela mostre só os clientes dele. O site é só de leitura. As mudanças são feitas no Notion.
+
+O botão "Falar com o mentor" do cliente abre o WhatsApp do mentor dele. Os números ficam em `data/extras.json` (cifrado), no campo `equipe`.
 
 ## Atualização pelo Notion
 

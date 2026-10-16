@@ -51,7 +51,7 @@ const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").
 const APELIDOS = { eder: "Éder", leo: "Leonardo", leonardo: "Leonardo", lucas: "Lucas", erick: "Erick", jose: "José", cadu: "Cadu", matheus: "Matheus", eduardo: "Eduardo", caroline: "Caroline", pedro: "Pedro", "joao gabriel": "João Gabriel", "ana eluiza": "Ana Eluiza" };
 const pessoa = n => { if (!n) return ""; const k = semAcento(n); return APELIDOS[k] || String(n).trim().replace(/\b\w/g, c => c.toUpperCase()); };
 const PCT_MENTOR = Number(process.env.PORTAL_PCT_MENTOR || 0.6);
-const ADMINS = (process.env.PORTAL_ADMINS || "José").split(",").map(pessoa);
+const ADMINS = ["José"]; // todos os mentores têm o mesmo acesso; mantido só para a lista de nomes
 
 /* ---------- serviços e provas ---------- */
 const SERVICOS = { "vitae": "Currículo Vitae", "lattes": "Currículo Lattes", "analise": "Análise curricular", "certificados": "Organização de certificados", "trabalho escrito": "Trabalho escrito", "slide": "Slides", "emprego": "Vitae emprego", "formatacao de trabalho": "Formatação de trabalho" };
@@ -172,14 +172,16 @@ async function montar(linhas) {
   }
   const nomes = new Set(ADMINS);
   for (const c of clientes) [...c.mentores, ...c.corretores, ...c.trainees].forEach(p => nomes.add(p));
-  return { mentores: [...nomes].sort().map(nome => ({ nome, admin: ADMINS.includes(nome) })), clientes };
+  return { mentores: [...nomes].sort().map(nome => ({ nome, admin: true })), clientes };
 }
 
 /* Extras: detalhes que não existem no Notion (nota da análise, itens da ficha, pendências).
    Ficam cifrados em portal/data/extras.json e são juntados pelo nome do cliente. */
+let EQUIPE = {};
 async function juntarExtras(dados) {
   const arq = path.join(SAIDA, "extras.json"); if (!fs.existsSync(arq)) return;
   const extras = await abrir(JSON.parse(fs.readFileSync(arq, "utf8")), SENHA);
+  EQUIPE = Object.fromEntries(Object.entries(extras.equipe || {}).map(([k, v]) => [pessoa(k), v]));
   for (const c of dados.clientes) {
     const e = extras.clientes.find(x => semAcento(c.nome).includes(semAcento(x.casar)) || semAcento(x.casar).includes(semAcento(c.nome))); if (!e) continue;
     const k = s => semAcento(s).replace(/[^a-z]/g, "");
@@ -200,7 +202,7 @@ function espelho(c, contato) {
     atualizacoes: c.atualizacoes.filter(a => !a.interna).slice(-40),
     documentos: c.documentos.filter(d => d.link),
     financeiro: { total, pago, saldo: Math.max(0, total - pago), entradaOk: total > 0 && pago >= total / 2 - 0.009 },
-    contato: { ...contato, mentor: c.mentores[0] ? `${c.mentores[0]} (MedEasy)` : "Equipe MedEasy" },
+    contato: (() => { const m = c.mentores.find(x => EQUIPE[x]) || c.mentores[0]; const tel = m && EQUIPE[m]; return tel ? { ...contato, mentor: `${m} (MedEasy)`, whats: tel.replace(/\D/g, ""), texto: tel.replace(/^\+55\s*/, "") } : { ...contato, mentor: m ? `${m} (MedEasy)` : "Equipe MedEasy" }; })(),
     progresso: c.servicos.length ? Math.round(c.servicos.reduce((a, s) => a + s.etapa / 6, 0) / c.servicos.length * 100) : 0,
   };
 }
@@ -228,6 +230,6 @@ fs.mkdirSync(path.join(SAIDA, "c"), { recursive: true });
 const agora = Date.now();
 for (const c of dados.clientes) fs.writeFileSync(path.join(SAIDA, "c", await arquivoCliente(c.codigo) + ".json"), JSON.stringify(await cifrar({ ...espelho(c, contato), atualizadoEm: agora }, c.codigo)));
 const semValor = dados.clientes.flatMap(c => c.repasses).filter(r => r.valor == null).length;
-fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, mentores: dados.mentores, clientes: dados.clientes, valoresPendentes: semValor > 0 }, SENHA)));
+fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, valoresPendentes: semValor > 0 }, SENHA)));
 fs.writeFileSync(arqMarca, marca + "\n");
 console.log(`OK: ${dados.clientes.length} clientes de ${linhas.length} linhas, ${dados.mentores.length} pessoas na equipe${semValor ? `, ${semValor} repasses sem valor` : ""}`);
