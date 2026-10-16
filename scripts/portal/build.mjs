@@ -158,7 +158,8 @@ async function montar(linhas) {
       // Mentor recebe 60% do valor total do serviço (PORTAL_PCT_MENTOR muda a regra). A fórmula do Notion, quando vem, tem prioridade.
       const vm = l.valorMentor ?? (l.total != null ? Math.round(l.total * PCT_MENTOR * 100) / 100 : null);
       if (m) repasses.push({ pessoa: m, papel: "Mentor", servico: l.id, valor: vm, pago: l.mentorPago, data: l.dataPagMentor || "" });
-      if (c) repasses.push({ pessoa: c, papel: "Corretor", servico: l.id, valor: l.valorCorretor, pago: l.corretorPago, data: l.dataPagCorretor || "" });
+      // Hoje o corretor é o próprio mentor: o repasse é um só, os 60% do mentor. Para voltar a pagar corretor à parte, use PORTAL_CORRETOR_SEPARADO=1.
+      if (c && process.env.PORTAL_CORRETOR_SEPARADO === "1") repasses.push({ pessoa: c, papel: "Corretor", servico: l.id, valor: l.valorCorretor, pago: l.corretorPago, data: l.dataPagCorretor || "" });
       if (l.valorMedeasy != null) repasses.push({ pessoa: "MedEasy", papel: "Empresa", servico: l.id, valor: l.valorMedeasy, pago: true, data: "" });
     }
     const id = (await hmac("id:" + g.chave)).slice(0, 8).reduce((a, b) => a + b.toString(16).padStart(2, "0"), "");
@@ -186,7 +187,8 @@ async function juntarExtras(dados) {
     const e = extras.clientes.find(x => semAcento(c.nome).includes(semAcento(x.casar)) || semAcento(x.casar).includes(semAcento(c.nome))); if (!e) continue;
     const k = s => semAcento(s).replace(/[^a-z]/g, "");
     for (const p of e.provas || []) { const q = c.provas.find(x => k(p.nome).startsWith(k(x.nome)) || k(x.nome).startsWith(k(p.nome))); if (q) Object.assign(q, { ...p, id: q.id, nome: q.nome }); else c.provas.push(p); }
-    c.pendencias.push(...(e.pendencias || [])); c.atualizacoes.push(...(e.atualizacoes || [])); c.documentos.push(...(e.documentos || []));
+    if (e.area) c.area = e.area;
+    c.pendencias.push(...(e.pendencias || []).map((p, i) => ({ id: "x" + i, ...p }))); c.atualizacoes.push(...(e.atualizacoes || [])); c.documentos.push(...(e.documentos || []));
     if (e.notas) c.notas = [c.notas, e.notas].filter(Boolean).join("\n");
   }
 }
