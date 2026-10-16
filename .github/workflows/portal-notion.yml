@@ -20,6 +20,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Instalar leitor de PDF
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
       - name: Gerar dados criptografados
         env:
           PORTAL_SENHA: ${{ secrets.PORTAL_SENHA }}

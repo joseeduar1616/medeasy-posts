@@ -11,6 +11,7 @@
 import { webcrypto as crypto } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { lerAnaliseDaUrl, lerArquivoAnalise } from "./analise.mjs";
 
 const RAIZ = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
 const SAIDA = path.join(RAIZ, "portal", "data");
@@ -74,6 +75,7 @@ function linhaDeExport(r) {
     mentor: r["Mentor"], corretor: r["Corretor"], trainee: r["Trainee"], status: r["Status"], pagamento: r["Pagamento"], total: n(r["Valor total"]),
     mentorPago: sim(r["Mentor pago"]), corretorPago: sim(r["corretor  pago "]), desconto: arr(r["DESCONTO APLICADO "]), forma: r["FORMA DE PAGAMENTO "], origem: r["ORIGEM DO CLIENTE "],
     inicio: r["date:Data de início :start"], entrega: r["date:Data da entrega:start"], dataPagMentor: r["date:DATA DE PAGAMENTO  MENTOR:start"] || r["date:Data do Pagamento do Mentor/Corretor:start"], dataPagCorretor: r["date:Data do Pagamento do Mentor/Corretor:start"],
+    analises: Object.entries(r).filter(([k, v]) => /an[aá]lise/i.test(k) && Array.isArray(v) && v.length && typeof v[0] === "object").flatMap(([, v]) => v),
     valorMentor: n(r["Valor para mentor"] ?? r["Valor para o mentor"]), valorCorretor: n(r["Valor para corretor"]), valorMedeasy: n(r["Valor para Medeasy"]),
   };
 }
@@ -91,6 +93,7 @@ function valorProp(p) {
     case "checkbox": return p.checkbox;
     case "phone_number": return p.phone_number;
     case "formula": return p.formula[p.formula.type] ?? null;
+    case "files": return p.files.map(f => ({ nome: f.name, url: f.file ? f.file.url : f.external ? f.external.url : "" })).filter(f => f.url);
     default: return null;
   }
 }
@@ -116,6 +119,13 @@ async function lerNotion() {
 }
 
 /* ---------- montar clientes ---------- */
+const kProva = s => semAcento(s).replace(/[^a-z0-9]/g, "");
+function juntarProva(provas, pr) {
+  if (!pr || !pr.nome) return;
+  const atual = [...provas.values()].find(x => kProva(pr.nome).startsWith(kProva(x.nome)) || kProva(x.nome).startsWith(kProva(pr.nome)));
+  if (atual) { const id = atual.id; provas.delete(atual.nome); provas.set(pr.nome, { ...atual, ...pr, id }); }
+  else provas.set(pr.nome, { id: "p" + provas.size, ...pr });
+}
 async function montar(linhas) {
   const grupos = new Map();
   for (const l of linhas) {
@@ -135,6 +145,10 @@ async function montar(linhas) {
       const sv = tipos.filter(([, k]) => SERVICOS[k]).map(([, k]) => SERVICOS[k]);
       const pv = tipos.filter(([, k]) => !SERVICOS[k]).map(([t]) => PROVA_NOME[t] || t);
       pv.forEach(p => provas.has(p) || provas.set(p, { id: "p" + provas.size, nome: p, prazoEnvio: "", itens: [] }));
+      for (const a of l.analises || []) {
+        try { const pr = a.url ? await lerAnaliseDaUrl(a.url, a.nome || "") : lerArquivoAnalise(a.arquivo); juntarProva(provas, pr); }
+        catch (e) { console.warn(`Não consegui ler a análise "${a.nome || a.arquivo}" de ${l.cliente}: ${e.message}`); }
+      }
       const etapa = etapaDe(l.status, l.pagamento);
       const m = pessoa(l.mentor), c = pessoa(l.corretor), t = pessoa(l.trainee);
       if (m) mentores.add(m); if (c) corretores.add(c); if (t) trainees.add(t);
@@ -198,6 +212,8 @@ const linhas = iLin >= 0 ? JSON.parse(fs.readFileSync(args[iLin + 1], "utf8")).m
   : process.env.NOTION_TOKEN && process.env.NOTION_DB ? await lerNotion()
   : (console.error("Informe --linhas arquivo.json ou NOTION_TOKEN e NOTION_DB"), process.exit(1));
 
+// Teste local: --analise "NOME DO CLIENTE=arquivo.pdf" (pode repetir)
+args.forEach((a, i) => { if (a !== "--analise") return; const [nome, arq] = args[i + 1].split("="); const l = linhas.find(x => semAcento(x.cliente) === semAcento(nome)); if (l) (l.analises ||= []).push({ arquivo: arq, nome: path.basename(arq) }); else console.warn("Cliente não encontrado: " + nome); });
 const dados = await montar(linhas);
 await juntarExtras(dados);
 const contato = { mentor: "Equipe MedEasy", whats: "5562991373642", texto: "(62) 99137-3642", email: "medeasyy0@gmail.com" };

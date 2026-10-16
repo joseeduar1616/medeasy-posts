@@ -30,3 +30,9 @@ PORTAL_SENHA=... NOTION_TOKEN=... NOTION_DB=... node scripts/portal/build.mjs --
 ```
 
 Detalhes que não existem no Notion (nota da análise, itens da ficha, pendências) ficam em `data/extras.json`, também cifrado. Para editar: `node scripts/portal/extras.mjs abrir > extras.json`, mude o arquivo e rode `node scripts/portal/extras.mjs cifrar extras.json`. Nunca coloque arquivos legíveis dentro do repositório.
+
+## Análise curricular
+
+Na base Controle cliente do Notion, crie uma coluna do tipo **Arquivos e mídia** com o nome **Análise curricular**. O mentor arrasta o PDF da análise (o modelo MedEasy) ou o `triagem.json` para essa coluna, na linha do cliente. Na sincronização seguinte, o portal lê a nota atual, a nota possível, o prazo, as regras do edital e cada item: situação, nota, ganho possível, comprovantes que a pessoa já tem e o comentário do mentor. Pode anexar mais de uma análise, uma por prova.
+
+Para testar um PDF à mão: `node scripts/portal/analise.mjs arquivo.pdf`

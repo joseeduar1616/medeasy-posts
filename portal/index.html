@@ -478,7 +478,7 @@ function portalView(p, preview){
           <div class="bar" style="margin-top:12px;height:8px;position:relative"><i style="width:${Math.min(100, num(pv.notaEstimada) / (num(pv.notaMax) || 100) * 100)}%"></i></div>` : `<p class="muted small" style="margin:0">A projeção da nota aparece aqui depois da análise curricular</p>`}
         ${pv.prazoEnvio || pv.dataProva ? `<div class="row small" style="margin-top:12px">${pv.prazoEnvio ? `<span class="pill gold">Envio até ${dBR(pv.prazoEnvio)}</span>` : ""}${pv.dataProva ? `<span class="pill info">Prova ${dBR(pv.dataProva)}</span>` : ""}</div>` : ""}
         ${pv.regras ? `<p class="small" style="margin:12px 0 0;color:var(--muted)">${esc(pv.regras)}</p>` : ""}
-        ${it.length ? `<details style="margin-top:12px"><summary class="small" style="cursor:pointer;font-weight:600">Pontuação por item (${it.length})</summary><div style="margin-top:8px">${it.map(x => `<div class="itbar"><div style="min-width:0"><div style="overflow-wrap:anywhere">${esc(x.nome)}</div><div class="bar ${x.pontos >= x.max && x.max ? "" : "gold"}"><i style="width:${x.max ? Math.min(100, x.pontos / x.max * 100) : 0}%"></i></div></div><div class="num" style="text-align:right"><b>${d1(x.pontos)}</b><span class="muted"> / ${d1(x.max)}</span>${x.ganho ? `<div class="xs gold">+${d1(x.ganho)} possível</div>` : ""}</div></div>`).join("")}</div></details>` : ""}
+        ${it.length ? itensView(it) : ""}
       </section>`; }).join("")}
 
     ${(p.documentos || []).length ? `<section class="card"><div class="card-h"><h2>Seus documentos</h2></div><div class="list">${p.documentos.map(d => `<div class="li"><div class="grow"><div class="t">${esc(d.nome)}</div></div>${d.link ? `<a class="btn sm pri" href="${esc(d.link)}" target="_blank" rel="noopener">Abrir</a>` : ""}</div>`).join("")}</div></section>` : ""}
@@ -501,6 +501,21 @@ function portalView(p, preview){
     <section class="card"><div class="row between"><div><div class="label">Seu mentor</div><b style="font-size:17px">${esc(ct.mentor)}</b><div class="small muted">${esc(ct.texto)} · ${esc(ct.email)}</div></div><a class="btn pri" target="_blank" rel="noopener" href="${waLink(ct.whats, waTxt)}">Chamar no WhatsApp</a></div></section>
     <p class="xs faint" style="text-align:center">MedEasy · @med_easyy · Goiânia, Goiás</p>
   </main>`;
+}
+
+function itensView(it){
+  const sit = x => { const t = semAcento(x.situacao || ""); if (t.startsWith("completo")) return ["ok","Completo"]; if (t.startsWith("aumentar")) return ["gold","Dá para aumentar agora"]; if (t.startsWith("parcial")) return ["gold","Parcial"]; if (t.startsWith("medio")) return ["info","Médio prazo"]; if (t.startsWith("nao se aplica")) return ["","Não se aplica agora"]; return x.situacao ? ["", x.situacao] : (x.max && x.pontos >= x.max ? ["ok","Completo"] : ["",""]); };
+  const completos = it.filter(x => x.max && x.pontos >= x.max).length;
+  const chances = it.filter(x => x.ganho > 0 && /^(aumentar|parcial)/.test(semAcento(x.situacao || "aumentar"))).sort((a, b) => b.ganho - a.ganho).slice(0, 3);
+  return `<div class="hr"></div>
+   <div class="row between small"><span><b>${completos}</b> de ${it.length} itens completos</span>${chances.length ? `<span class="gold">Onde dá para ganhar mais agora</span>` : ""}</div>
+   ${chances.length ? `<div class="stack" style="gap:6px;margin-top:8px">${chances.map(x => `<div class="pend" style="padding:8px 12px"><div class="grow small"><b>${esc(x.nome)}</b><div class="xs muted">${esc(x.regra || "")}</div></div><b class="num gold">+${d1(x.ganho)}</b></div>`).join("")}</div>` : ""}
+   <div style="margin-top:12px">${it.map(x => { const [k, t] = sit(x); const tem = (x.comprovantes || []).length;
+     return `<details class="faq"><summary style="list-style:none"><div class="itbar" style="border:0;padding:0"><div style="min-width:0"><div style="overflow-wrap:anywhere;font-weight:600">${esc(x.nome)}</div><div class="row" style="gap:6px;margin-top:4px">${t ? `<span class="pill ${k}">${esc(t)}</span>` : ""}${tem ? `<span class="xs muted">${tem} ${tem === 1 ? "comprovante" : "comprovantes"}</span>` : ""}</div><div class="bar ${x.max && x.pontos >= x.max ? "" : "gold"}" style="margin-top:6px"><i style="width:${x.max ? Math.min(100, x.pontos / x.max * 100) : 0}%"></i></div></div>
+       <div class="num" style="text-align:right"><b>${d1(x.pontos)}</b><span class="muted"> / ${d1(x.max)}</span>${x.ganho ? `<div class="xs gold">+${d1(x.ganho)} possível</div>` : ""}</div></div></summary>
+       <div class="small" style="margin-top:8px">${x.regra ? `<p class="muted" style="margin:0 0 8px">${esc(x.regra)}</p>` : ""}
+        ${tem ? `<div class="label" style="margin-bottom:4px">O que você já tem</div><ol style="margin:0 0 8px;padding-left:20px">${x.comprovantes.map(c => `<li>${esc(c)}</li>`).join("")}</ol>` : `<p class="faint" style="margin:0 0 8px">Nenhum comprovante neste item ainda</p>`}
+        ${x.comentario ? `<div class="label" style="margin-bottom:4px">Comentário do mentor</div><p style="margin:0">${esc(x.comentario)}</p>` : ""}</div></details>`; }).join("")}</div>`;
 }
 
 function render(){
@@ -533,6 +548,7 @@ app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
   else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }
   else render();
+  if (S.modo === "login") S.erro = "", render();
 })();
 </script>
 </body>
