@@ -43,7 +43,7 @@ function portalView(p, preview){
     ${f.total ? `<section class="card"><div class="card-h"><h2>Pagamento</h2>${f.saldo > 0 ? `<span class="pill gold">Saldo ${brl(f.saldo)}</span>` : `<span class="pill ok">Quitado</span>`}</div>
       <div class="row between small"><span>Total do serviço</span><b class="num">${brl(f.total)}</b></div><div class="row between small" style="margin-top:4px"><span>Pago</span><b class="num neon">${brl(f.pago)}</b></div>
       <div class="bar" style="margin-top:10px"><i style="width:${Math.min(100, f.pago / f.total * 100)}%"></i></div>
-      <p class="xs muted" style="margin:10px 0 0">${f.entradaOk ? "Entrada recebida. O restante é pago quando você receber a versão para conferência." : `A entrada é de 50% (${brl(f.total / 2)}) e libera o começo da produção.`}</p>
+      <p class="xs muted" style="margin:10px 0 0">${f.saldo <= 0.009 ? "Pagamento completo. Obrigado pela confiança." : f.entradaOk ? "Entrada recebida. O restante é pago quando você receber a versão para conferência." : `A entrada é de 50% (${brl(f.total / 2)}) e libera o começo da produção.`}</p>
       ${f.pix && f.saldo > 0 ? `<div class="code" style="margin-top:10px;font-family:var(--f-body);font-size:13px">${esc(f.pix)}</div>` : ""}</section>` : ""}
 
     <section class="card"><div class="card-h"><h2>Como funciona</h2></div>
