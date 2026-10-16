@@ -371,10 +371,10 @@ function loginView(){
     </form>
     <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : "Acesso da equipe MedEasy."}</p></div>`);
 }
-const ABAS = [["painel","Painel"],["clientes","Clientes"],["agenda","Agenda"],["repasses","Repasses"]];
+const ABAS = [["painel","Painel"],["clientes","Clientes"],["agenda","Agenda"],["editais","Editais"],["repasses","Repasses"]];
 function mentorView(){
   const v = S.view === "cliente" ? "clientes" : S.view; let body = "";
-  if (S.view === "painel") body = painelView(); else if (S.view === "clientes") body = clientesView(); else if (S.view === "cliente") body = clienteView(); else if (S.view === "agenda") body = agendaView(); else body = repassesView();
+  if (S.view === "painel") body = painelView(); else if (S.view === "clientes") body = clientesView(); else if (S.view === "cliente") body = clienteView(); else if (S.view === "agenda") body = agendaView(); else if (S.view === "editais") body = editaisView(); else body = repassesView();
   const mentores = (S.eq.mentores || []).map(m => m.nome);
   return `<header class="top"><div class="wrap top-in"><img class="logo" src="${LOGO}" alt=""><div class="brand"><b>MED<i>EASY</i></b><span>${esc(S.mentor.nome)}</span></div>
     <nav class="tabs">${ABAS.map(([k, t]) => `<button class="tab" data-a="nav" data-v="${k}" ${v === k ? 'aria-current="page"' : ""}>${t}</button>`).join("")}</nav>
@@ -419,7 +419,7 @@ function clienteView(){
     <div class="row"><button class="btn" data-a="preview">Ver como cliente</button>${c.whatsapp ? `<a class="btn" href="${waLink(c.whatsapp, "Oi, " + primeiro(c.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}</div></div>
    <div class="grid2"><div class="stack">
     <section class="card"><div class="card-h"><h2>Serviços</h2></div>${(c.servicos || []).length ? `<div class="stack">${c.servicos.map(s => `<div class="svc"><div class="row between"><b>${esc(s.nome)}</b>${s.notion ? `<a class="btn sm ghost" href="${esc(s.notion)}" target="_blank" rel="noopener">Notion</a>` : ""}</div><div class="small ${ETAPAS[s.etapa || 0].cli ? "gold" : "muted"}">${esc(s.status || ETAPAS[s.etapa || 0].t)}${s.inicio ? " · início " + dBR(s.inicio) : ""}${s.prazo ? " · entrega " + dBR(s.prazo) : ""}${s.entregueEm ? " · entregue " + dBR(s.entregueEm) : ""}</div><div class="steps ro">${ETAPAS.map((e, j) => `<button class="${j < (s.etapa || 0) ? "done" : j === (s.etapa || 0) ? "cur" : ""}" title="${esc(e.t)}" tabindex="-1"></button>`).join("")}</div><div class="xs muted" style="margin-top:8px">${[s.mentor && "Mentor " + s.mentor, s.corretor && "Corretor " + s.corretor, s.trainee && "Trainee " + s.trainee].filter(Boolean).map(esc).join(" · ")}</div></div>`).join("")}</div>` : `<div class="empty">Sem serviço</div>`}</section>
-    <section class="card"><div class="card-h"><h2>Provas</h2></div>${(c.provas || []).length ? `<div class="list">${c.provas.map(p => `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${esc(p.ano || "")}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) : "Sem prazo cadastrado"}</div></div>${p.notaEstimada !== "" && p.notaEstimada != null ? `<b class="num">${d1(p.notaEstimada)} / ${d1(p.notaMax || 100)}</b>` : ""}</div>`).join("")}</div>` : `<div class="empty">Sem prova</div>`}</section>
+    <section class="card"><div class="card-h"><h2>Provas</h2></div>${(c.provas || []).length ? `<div class="list">${c.provas.map(p => `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${esc(p.ano || "")}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div>${p.edital ? `<div class="xs muted" style="margin-top:2px">${esc(p.edital.peso || "")}. ${esc(p.edital.formato || "")}</div>` : ""}</div>${p.notaEstimada !== "" && p.notaEstimada != null ? `<b class="num">${d1(p.notaEstimada)} / ${d1(p.notaMax || 100)}</b>` : ""}</div>`).join("")}</div>` : `<div class="empty">Sem prova</div>`}</section>
     ${(c.pendencias || []).length ? `<section class="card"><div class="card-h"><h2>Pendências</h2></div>${c.pendencias.map(p => `<div class="pend ${p.feita ? "feita" : ""}">${esc(p.texto)}</div>`).join("")}</section>` : ""}
    </div><div class="stack">
     <section class="card"><div class="card-h"><h2>Acesso do cliente</h2></div><div class="label">Código</div><div class="code" style="font-size:18px;margin:6px 0 12px;letter-spacing:.08em">${esc(codFmt(c.codigo))}</div>
@@ -436,6 +436,22 @@ function clienteView(){
 function agendaView(){
   const ev = eventos(meus()).filter(e => dias(e.d) >= -1); const g = {}; ev.forEach(e => (g[e.d.slice(0, 7)] ||= []).push(e));
   return `<div class="pagehead"><div><h1>Agenda</h1><p>Prazos de inscrição, provas e entregas</p></div></div>${Object.keys(g).length ? `<div class="grid2">${Object.entries(g).map(([k, es]) => `<section class="card"><div class="card-h"><h2>${MESES[+k.slice(5, 7) - 1]} de ${k.slice(0, 4)}</h2></div><div class="list">${es.map(e => `<div class="li clickable" data-a="abrir" data-id="${e.c.id}"><span class="sev ${e.k}"></span><div class="countdown"><b class="num">${e.d.slice(8, 10)}</b><span>${mesNome(+e.d.slice(5, 7) - 1)}</span></div><div class="grow"><div class="t">${esc(e.t)}</div><div class="small muted">${esc(e.c.nome)} · ${quando(e.d)}</div></div></div>`).join("")}</div></section>`).join("")}</div>` : `<div class="empty">Sem datas</div>`}`;
+}
+
+function fichaTabela(e){ return e.ficha && e.ficha.length ? `<div class="tbl-wrap" style="margin-top:8px"><table class="tbl"><thead><tr><th>Item</th><th>Pontos</th><th class="r">Máximo</th></tr></thead><tbody>${e.ficha.map(f => `<tr><td class="small">${esc(f.item)}</td><td class="small muted">${esc(f.pontos || "")}</td><td class="r num">${esc(f.max || "")}</td></tr>`).join("")}</tbody></table></div>` : ""; }
+function editaisView(){
+  const E = S.eq.editais || {}; const cs = S.eq.clientes || [];
+  const kP = s => semAcento(s).replace(/[^a-z0-9]/g, "");
+  const quem = k => cs.filter(c => (c.provas || []).some(p => { const x = kP(p.nome); return x.startsWith(k) || (k.startsWith(x) && x.length >= 3); }));
+  const lista = Object.entries(E).sort((a, b) => (a[1].prazoEnvio || "9").localeCompare(b[1].prazoEnvio || "9"));
+  return `<div class="pagehead"><div><h1>Editais 2027</h1><p>Parte do currículo de cada prova, em ordem de prazo de envio</p></div><input class="in search" id="buscaEd" placeholder="Buscar prova" value="${esc(S.buscaEd || "")}"></div>
+   <div class="stack">${lista.filter(([k, e]) => !S.buscaEd || semAcento(e.nome).includes(semAcento(S.buscaEd))).map(([k, e]) => { const q = quem(k); const d = dias(e.prazoEnvio);
+     return `<section class="card"><div class="card-h"><div><h2>${esc(e.nome)}</h2><div class="sub">${esc(e.peso || "")}</div></div><div class="row">${e.prazoEnvio ? `<span class="pill ${d < 0 ? "" : d <= 7 ? "bad" : d <= 30 ? "warn" : "gold"}">Envio até ${dBR(e.prazoEnvio)}${d < 0 ? " (encerrado)" : ""}</span>` : `<span class="pill">Sem data</span>`}${e.dataProva ? `<span class="pill info">Prova ${dBR(e.dataProva)}</span>` : ""}</div></div>
+       <div class="grid2" style="gap:10px"><div class="small"><div class="label">Como enviar</div><p style="margin:4px 0 8px">${esc(e.formato || "")}</p><div class="label">Quando</div><p style="margin:4px 0 8px">${esc(e.envio || "")}</p>${e.obs ? `<div class="label">Atenção</div><p style="margin:4px 0 0">${esc(e.obs)}</p>` : ""}</div>
+       <div class="small"><div class="label">Inscrição</div><p style="margin:4px 0 8px">${esc(e.inscricao || "")}</p><div class="label">Resultado</div><p style="margin:4px 0 8px">${esc(e.resultado || "")}</p>${e.link ? `<a class="btn sm" href="${esc(e.link)}" target="_blank" rel="noopener">Abrir edital</a>` : ""}</div></div>
+       ${e.ficha && e.ficha.length ? `<details style="margin-top:10px"><summary class="small" style="cursor:pointer;font-weight:600">Ficha de pontuação (${e.ficha.length} itens)</summary>${fichaTabela(e)}</details>` : ""}
+       <p class="xs muted" style="margin:10px 0 0">Ficha: ${esc(e.fichaFonte || "")}</p>
+       ${q.length ? `<div class="row" style="margin-top:10px;gap:6px">${q.map(c => `<button class="btn sm ghost" data-a="abrir" data-id="${c.id}">${esc(c.nome)}</button>`).join("")}</div>` : ""}</section>`; }).join("")}</div>`;
 }
 function repassesView(){
   const linhas = []; for (const c of meus()) for (const r of meusRepasses(c)) linhas.push({ c, r, s:(c.servicos || []).find(s => s.id === r.servico) });
@@ -482,6 +498,7 @@ function portalView(p, preview){
           <div class="bar" style="margin-top:12px;height:8px;position:relative"><i style="width:${Math.min(100, num(pv.notaEstimada) / (num(pv.notaMax) || 100) * 100)}%"></i></div>` : `<p class="muted small" style="margin:0">A projeção da nota aparece aqui depois da análise curricular</p>`}
         ${pv.prazoEnvio || pv.dataProva ? `<div class="row small" style="margin-top:12px">${pv.prazoEnvio ? `<span class="pill gold">Envio até ${dBR(pv.prazoEnvio)}</span>` : ""}${pv.dataProva ? `<span class="pill info">Prova ${dBR(pv.dataProva)}</span>` : ""}</div>` : ""}
         ${pv.regras ? `<p class="small" style="margin:12px 0 0;color:var(--muted)">${esc(pv.regras)}</p>` : ""}
+        ${pv.edital ? `<details style="margin-top:12px"><summary class="small" style="cursor:pointer;font-weight:600">Como o currículo conta nesta prova</summary><div class="small" style="margin-top:8px"><p style="margin:0 0 6px"><b>Peso:</b> ${esc(pv.edital.peso || "")}</p><p style="margin:0 0 6px"><b>Envio:</b> ${esc(pv.edital.envio || "")}</p><p style="margin:0 0 6px"><b>Formato:</b> ${esc(pv.edital.formato || "")}</p>${pv.edital.obs ? `<p style="margin:0 0 6px"><b>Atenção:</b> ${esc(pv.edital.obs)}</p>` : ""}${typeof fichaTabela === "function" ? fichaTabela(pv.edital) : ""}</div></details>` : ""}
         ${it.length ? itensView(it) : ""}
       </section>`; }).join("")}
 
@@ -532,6 +549,7 @@ function render(){
   const f = $("#fLogin"); if (f){ f.onsubmit = e => { e.preventDefault(); if (S.aba === "cliente") entrarCliente($("#lCodigo").value); else entrarMentor($("#lNome").value, $("#lSenha").value); }; const first = f.querySelector("input"); if (first && !S.carregando) first.focus(); }
   const b = $("#busca"); if (b){ b.oninput = () => { S.busca = b.value; const pos = b.selectionStart; render(); const nb = $("#busca"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
   const vm = $("#verMentor"); if (vm) vm.onchange = () => { S.verMentor = vm.value; render(); };
+  const be = $("#buscaEd"); if (be){ be.oninput = () => { S.buscaEd = be.value; const pos = be.selectionStart; render(); const nb = $("#buscaEd"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
 }
 const A = {
   aba: el => { S.aba = el.dataset.v; S.erro = ""; render(); },

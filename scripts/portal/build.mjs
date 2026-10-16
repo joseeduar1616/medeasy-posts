@@ -252,7 +252,7 @@ function espelho(c, contato) {
   return {
     nome: c.nome,
     servicos: c.servicos.map(s => ({ nome: s.nome, etapa: s.etapa, prazo: s.prazo })),
-    provas: c.provas.map(p => ({ nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [] })),
+    provas: c.provas.map(p => ({ nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [], edital: p.edital || null })),
     pendencias: c.pendencias.filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
     atualizacoes: c.atualizacoes.filter(a => !a.interna).slice(-40),
     documentos: c.documentos.filter(d => d.link),
@@ -273,6 +273,17 @@ const linhas = iLin >= 0 ? JSON.parse(fs.readFileSync(args[iLin + 1], "utf8")).m
 args.forEach((a, i) => { if (a !== "--analise") return; const [nome, arq] = args[i + 1].split("="); const l = linhas.find(x => semAcento(x.cliente) === semAcento(nome)); if (l) (l.analises ||= []).push({ arquivo: arq, nome: path.basename(arq) }); else console.warn("Cliente não encontrado: " + nome); });
 const dados = await montar(linhas);
 await juntarExtras(dados);
+// Ficha de cada edital (parte do currículo), com datas e regras. Completa o que a prova do cliente ainda não tem.
+const EDITAIS = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), "editais.json"), "utf8")); delete EDITAIS._fonte;
+const editalDe = nome => { const k = kProva(nome); const e = Object.entries(EDITAIS).find(([kk]) => k.startsWith(kk) || (kk.startsWith(k) && k.length >= 3)); return e ? e[1] : null; };
+for (const c of dados.clientes) for (const p of c.provas) {
+  const e = editalDe(p.nome); if (!e) continue;
+  p.edital = e;
+  if (!p.prazoEnvio && e.prazoEnvio) p.prazoEnvio = e.prazoEnvio;
+  if (!p.dataProva && e.dataProva) p.dataProva = e.dataProva;
+  if (!p.link && e.link) p.link = e.link;
+  if (!p.regras) p.regras = [e.formato, e.envio].filter(Boolean).join(". ");
+}
 for (const c of dados.clientes) c.estimativa = estimar(c);
 const contato = { mentor: "Equipe MedEasy", whats: "5562991373642", texto: "(62) 99137-3642", email: "medeasyy0@gmail.com" };
 
@@ -286,6 +297,6 @@ fs.mkdirSync(path.join(SAIDA, "c"), { recursive: true });
 const agora = Date.now();
 for (const c of dados.clientes) fs.writeFileSync(path.join(SAIDA, "c", await arquivoCliente(c.codigo) + ".json"), JSON.stringify(await cifrar({ ...espelho(c, contato), atualizadoEm: agora }, c.codigo)));
 const semValor = dados.clientes.flatMap(c => c.repasses).filter(r => r.valor == null).length;
-fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, valoresPendentes: semValor > 0 }, SENHA)));
+fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, editais: EDITAIS, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, valoresPendentes: semValor > 0 }, SENHA)));
 fs.writeFileSync(arqMarca, marca + "\n");
 console.log(`OK: ${dados.clientes.length} clientes de ${linhas.length} linhas, ${dados.mentores.length} pessoas na equipe${semValor ? `, ${semValor} repasses sem valor` : ""}`);
