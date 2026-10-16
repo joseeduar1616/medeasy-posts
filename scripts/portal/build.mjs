@@ -49,6 +49,7 @@ async function arquivoCliente(codigo) { return Buffer.from(await crypto.subtle.d
 const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
 const APELIDOS = { eder: "Éder", leo: "Leonardo", leonardo: "Leonardo", lucas: "Lucas", erick: "Erick", jose: "José", cadu: "Cadu", matheus: "Matheus", eduardo: "Eduardo", caroline: "Caroline", pedro: "Pedro", "joao gabriel": "João Gabriel", "ana eluiza": "Ana Eluiza" };
 const pessoa = n => { if (!n) return ""; const k = semAcento(n); return APELIDOS[k] || String(n).trim().replace(/\b\w/g, c => c.toUpperCase()); };
+const PCT_MENTOR = Number(process.env.PORTAL_PCT_MENTOR || 0.6);
 const ADMINS = (process.env.PORTAL_ADMINS || "José").split(",").map(pessoa);
 
 /* ---------- serviços e provas ---------- */
@@ -140,7 +141,9 @@ async function montar(linhas) {
       servicos.push({ id: l.id, nome: (sv.length ? sv.join(" + ") : "Serviço") + (pv.length ? " · " + pv.join(", ") : ""), etapa, prazo: etapa < 6 ? (l.entrega || "") : "", entregueEm: etapa === 6 ? (l.entrega || "") : "", inicio: l.inicio || "", notion: l.url, mentor: m, corretor: c, trainee: t, status: l.status || "" });
       const tt = l.total || 0, pg = pagoDe(tt, l.pagamento); total += tt; pago += pg;
       if (pg) pagamentos.push({ valor: pg, forma: l.forma || "" });
-      if (m) repasses.push({ pessoa: m, papel: "Mentor", servico: l.id, valor: l.valorMentor, pago: l.mentorPago, data: l.dataPagMentor || "" });
+      // Mentor recebe 60% do valor total do serviço (PORTAL_PCT_MENTOR muda a regra). A fórmula do Notion, quando vem, tem prioridade.
+      const vm = l.valorMentor ?? (l.total != null ? Math.round(l.total * PCT_MENTOR * 100) / 100 : null);
+      if (m) repasses.push({ pessoa: m, papel: "Mentor", servico: l.id, valor: vm, pago: l.mentorPago, data: l.dataPagMentor || "" });
       if (c) repasses.push({ pessoa: c, papel: "Corretor", servico: l.id, valor: l.valorCorretor, pago: l.corretorPago, data: l.dataPagCorretor || "" });
       if (l.valorMedeasy != null) repasses.push({ pessoa: "MedEasy", papel: "Empresa", servico: l.id, valor: l.valorMedeasy, pago: true, data: "" });
     }
@@ -208,7 +211,7 @@ fs.rmSync(path.join(SAIDA, "c"), { recursive: true, force: true });
 fs.mkdirSync(path.join(SAIDA, "c"), { recursive: true });
 const agora = Date.now();
 for (const c of dados.clientes) fs.writeFileSync(path.join(SAIDA, "c", await arquivoCliente(c.codigo) + ".json"), JSON.stringify(await cifrar({ ...espelho(c, contato), atualizadoEm: agora }, c.codigo)));
-const semValor = linhas.filter(l => l.cliente && l.valorMentor == null && l.mentor).length;
+const semValor = dados.clientes.flatMap(c => c.repasses).filter(r => r.valor == null).length;
 fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, mentores: dados.mentores, clientes: dados.clientes, valoresPendentes: semValor > 0 }, SENHA)));
 fs.writeFileSync(arqMarca, marca + "\n");
-console.log(`OK: ${dados.clientes.length} clientes de ${linhas.length} linhas, ${dados.mentores.length} pessoas na equipe${semValor ? `, ${semValor} linhas sem valor de repasse` : ""}`);
+console.log(`OK: ${dados.clientes.length} clientes de ${linhas.length} linhas, ${dados.mentores.length} pessoas na equipe${semValor ? `, ${semValor} repasses sem valor` : ""}`);
