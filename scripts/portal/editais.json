@@ -3,7 +3,7 @@
  "uel": {
   "nome": "UEL",
   "peso": "10% (só especialidades com 2 fases)",
-  "maximo": "10",
+  "maximo": "100",
   "formato": "Entrega ao fiscal no dia da prova ou online, conforme a especialidade",
   "envio": "Dia da prova, 08/11/2026",
   "prazoEnvio": "2026-11-08",
@@ -11,8 +11,307 @@
   "inscricao": "Até 14/10/2026",
   "resultado": "Nota com análise curricular em 09/12/2026",
   "link": "https://sites.uel.br/proppg/residencias/",
-  "fichaFonte": "não encontrada no edital 2027 (Anexo III), conferir",
-  "obs": "Algumas especialidades são decididas só pela prova. Passam ao currículo os aprovados com nota mínima de 5,0."
+  "fichaFonte": "Edital COREME UEL nº RM012/2026 (processo 2027), Quadro I. O candidato preenche 90 pontos e a banca dá o histórico (até 10). Só nas especialidades com 2 fases; currículo tem peso 1 e a prova peso 9",
+  "obs": "Algumas especialidades são decididas só pela prova. Passam ao currículo os aprovados com nota mínima de 5,0.",
+  "ficha": [
+   {
+    "item": "1.1 Hospital universitário próprio",
+    "pontos": "12,0 com declaração da instituição, uma vez só",
+    "maxN": 12,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1.2 Pós-graduação stricto sensu na área da saúde",
+    "pontos": "Doutorado 7,0. Só mestrado 3,0. Não somam",
+    "maxN": 7,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1.3 Curso acreditado SAEME/CFM",
+    "pontos": "1,0 com acreditação vigente",
+    "maxN": 1,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1.4 Carga horária do internato",
+    "pontos": "3.500 h ou mais 5,0. De 2.000 a 3.499 h 3,0",
+    "maxN": 5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "2 Histórico escolar",
+    "pontos": "Nota da banca de 0 a 10, pelo ranking da turma ou pela média global",
+    "maxN": 10,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "3.1a IC com bolsa, mais de 2 semestres",
+    "pontos": "4,0 cada",
+    "maxN": 10,
+    "unit": 4,
+    "artigo": false,
+    "grupo": "3.1 IC e pesquisa",
+    "grupoMax": 10
+   },
+   {
+    "item": "3.1b IC com bolsa, até 2 semestres",
+    "pontos": "2,0 cada",
+    "maxN": 10,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "3.1 IC e pesquisa",
+    "grupoMax": 10
+   },
+   {
+    "item": "3.1c IC sem bolsa, mais de 2 semestres",
+    "pontos": "2,0 cada",
+    "maxN": 10,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "3.1 IC e pesquisa",
+    "grupoMax": 10
+   },
+   {
+    "item": "3.1d IC sem bolsa, até 2 semestres",
+    "pontos": "1,0 cada",
+    "maxN": 10,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "3.1 IC e pesquisa",
+    "grupoMax": 10
+   },
+   {
+    "item": "3.1e Projeto de pesquisa sem IC",
+    "pontos": "1,0 cada",
+    "maxN": 10,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "3.1 IC e pesquisa",
+    "grupoMax": 10
+   },
+   {
+    "item": "3.2a Artigo completo PubMed, SciELO, Web of Science, Cochrane ou Embase",
+    "pontos": "3,0 cada, até 6,0",
+    "maxN": 6,
+    "unit": 3,
+    "artigo": true,
+    "grupo": "3.2 Artigo indexado",
+    "grupoMax": 10
+   },
+   {
+    "item": "3.2b Artigo completo em outras bases indexadoras",
+    "pontos": "2,0 cada, até 4,0",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": true,
+    "grupo": "3.2 Artigo indexado",
+    "grupoMax": 10
+   },
+   {
+    "item": "3.3 Artigo em periódico não indexado ou em anais",
+    "pontos": "0,5 cada, até 3,0",
+    "maxN": 3,
+    "unit": 0.5,
+    "artigo": true
+   },
+   {
+    "item": "3.4 Livro ou capítulo de livro na área da saúde",
+    "pontos": "1,5 cada, até 3,0",
+    "maxN": 3,
+    "unit": 1.5,
+    "artigo": true
+   },
+   {
+    "item": "3.5 Trabalho oral em congresso nacional ou internacional",
+    "pontos": "0,5 cada, até 2,0",
+    "maxN": 2,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "3.6 Pôster em congresso nacional ou internacional",
+    "pontos": "0,2 cada, até 1,0",
+    "maxN": 1,
+    "unit": 0.2,
+    "artigo": false
+   },
+   {
+    "item": "3.7 Outras produções (trabalho em evento regional ou local)",
+    "pontos": "0,1 cada, até 1,0",
+    "maxN": 1,
+    "unit": 0.1,
+    "artigo": false
+   },
+   {
+    "item": "4.1a Mestrado concluído",
+    "pontos": "1,0",
+    "maxN": 6,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "4.1 Pós-graduação",
+    "grupoMax": 6
+   },
+   {
+    "item": "4.1b Doutorado concluído",
+    "pontos": "3,0",
+    "maxN": 6,
+    "unit": 3,
+    "artigo": false,
+    "grupo": "4.1 Pós-graduação",
+    "grupoMax": 6
+   },
+   {
+    "item": "4.1c Outro curso superior ou especialização",
+    "pontos": "1,0 cada",
+    "maxN": 6,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "4.1 Pós-graduação",
+    "grupoMax": 6
+   },
+   {
+    "item": "4.2a Monitoria com mais de 6 meses",
+    "pontos": "1,0 cada, até 2,0",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "4.2 Monitoria",
+    "grupoMax": 3
+   },
+   {
+    "item": "4.2b Monitoria de até 6 meses",
+    "pontos": "0,5 cada, até 1,0",
+    "maxN": 1,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "4.2 Monitoria",
+    "grupoMax": 3
+   },
+   {
+    "item": "4.3 Curso com 60 h ou mais",
+    "pontos": "1,0 cada, até 2,0. On-line só com avaliação formal",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "4.4 ACLS, ATLS, PALS e equivalentes",
+    "pontos": "1,0 cada, até 2,0, dentro da validade",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "4.5 Curso de 12 a 59 h",
+    "pontos": "0,2 cada, até 1,0",
+    "maxN": 1,
+    "unit": 0.2,
+    "artigo": false
+   },
+   {
+    "item": "4.6 Evento científico regional ou local",
+    "pontos": "0,1 cada, até 0,5",
+    "maxN": 0.5,
+    "unit": 0.1,
+    "artigo": false
+   },
+   {
+    "item": "4.7 Evento científico nacional ou internacional",
+    "pontos": "0,2 cada, até 1,0",
+    "maxN": 1,
+    "unit": 0.2,
+    "artigo": false
+   },
+   {
+    "item": "4.8 Teste de Progresso",
+    "pontos": "0,2 por participação, até 1,0",
+    "maxN": 1,
+    "unit": 0.2,
+    "artigo": false
+   },
+   {
+    "item": "4.9 Outras atividades acadêmicas",
+    "pontos": "0,1 cada, até 0,5",
+    "maxN": 0.5,
+    "unit": 0.1,
+    "artigo": false
+   },
+   {
+    "item": "5.1 Estágio extracurricular de 200 h ou mais",
+    "pontos": "2,0 cada, até 4,0",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "5.2 Estágio extracurricular de 60 a 199 h",
+    "pontos": "1,0 cada, até 2,0",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "5.3 Projeto de extensão de 500 h ou mais",
+    "pontos": "1,0 cada, até 2,0",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "5.4 Experiência profissional na saúde",
+    "pontos": "1,0",
+    "maxN": 1,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "5.5 Trabalho voluntário social (60 h ou mais)",
+    "pontos": "0,5 cada, até 1,0",
+    "maxN": 1,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "6.1 Diretoria de liga (mandato de 6 meses ou mais)",
+    "pontos": "1,0",
+    "maxN": 1,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "6.2 Membro de liga",
+    "pontos": "0,2 por ano, até 1,0",
+    "maxN": 1,
+    "unit": 0.2,
+    "artigo": false
+   },
+   {
+    "item": "6.3 Representação discente",
+    "pontos": "1,0 cada, até 2,0",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "6.4 Prêmio em congresso ou láurea",
+    "pontos": "1,0 cada, até 2,0",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "6.5 Língua estrangeira B2 ou mais",
+    "pontos": "1,0 por idioma, até 2,0",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false
+   }
+  ]
  },
  "amrigs": {
   "nome": "AMRIGS",
@@ -25,63 +324,166 @@
   "inscricao": "09/09 a 19/10/2026",
   "resultado": "Resultado final do GHC em 13/01/2027",
   "link": "https://www2.ghc.com.br/GepNet/docscoreme/Edital%20n%C2%BA%201-%20AMRIGS%202026-2027.pdf",
-  "fichaFonte": "ficha oficial 2027 do GHC. PUCRS, SES/SC, UNIVALI e HSVP Cruz Alta têm ficha própria, conferir no edital de cada hospital",
+  "fichaFonte": "GHC, Instrumento de Análise Curricular 2026/2027 (Anexo 2 do Edital nº 01, acesso direto, prova AMRIGS). Os 10 pontos são os títulos. A nota do currículo é histórico x 0,3 + títulos x 0,7, com histórico = (A x 10 + B x 8 + C x 6 + D x 0) / número de notas (A acima de 8,9, B 7,5 a 8,9, C 6,0 a 7,4, D abaixo de 6,0). Currículo vale 10% da nota final. PUCRS, HSVP e outras instituições da AMRIGS têm ficha própria",
   "obs": "A nota do currículo do GHC é 30% histórico e 70% títulos. Não aceita documento depois da entrega.",
   "ficha": [
    {
-    "item": "Monitoria",
-    "pontos": "0,5 cada (mínimo 1 semestre)",
-    "max": "2,0 com a IC"
+    "item": "1a Monitoria (mínimo 1 semestre)",
+    "pontos": "0,5 cada",
+    "maxN": 2,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "1 Formação profissional",
+    "grupoMax": 2
    },
    {
-    "item": "Bolsa de iniciação científica",
-    "pontos": "0,5 cada (mínimo 1 semestre)",
-    "max": "no grupo acima"
+    "item": "1b Bolsa de iniciação científica (mínimo 1 semestre)",
+    "pontos": "0,5 cada",
+    "maxN": 2,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "1 Formação profissional",
+    "grupoMax": 2
    },
    {
-    "item": "ENADE da faculdade",
-    "pontos": "≥4: 1,0. Entre 2 e 4: 0,5",
-    "max": "1,0"
+    "item": "2 ENADE da faculdade",
+    "pontos": "Conceito 4 ou mais 1,0. Maior que 2 e menor que 4 0,5. De 1 a 2 zero",
+    "maxN": 1,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Artigo em revista indexada (Lilacs, Scielo, Medline)",
+    "item": "3a Artigo em revista indexada (Lilacs, SciELO, Medline)",
     "pontos": "1,5 cada",
-    "max": "2,0 no grupo de publicações"
+    "maxN": 2,
+    "unit": 1.5,
+    "artigo": true,
+    "grupo": "3 Produção científica",
+    "grupoMax": 2
    },
    {
-    "item": "Outras revistas ou capítulo de livro",
+    "item": "3b Artigo em outras revistas, indexadas ou não",
     "pontos": "1,0 cada",
-    "max": "no grupo de publicações"
+    "maxN": 2,
+    "unit": 1,
+    "artigo": true,
+    "grupo": "3 Produção científica",
+    "grupoMax": 2
    },
    {
-    "item": "Tema livre oral / pôster",
-    "pontos": "0,5 / 0,1 cada",
-    "max": "no grupo de publicações"
+    "item": "3c Capítulo de livro",
+    "pontos": "1,0 cada",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": true,
+    "grupo": "3 Produção científica",
+    "grupoMax": 2
    },
    {
-    "item": "Estágio extracurricular (30 dias ou 120 h)",
-    "pontos": "0,5 cada, 1,0 se na área pretendida",
-    "max": "2,0"
+    "item": "3d Tema livre oral",
+    "pontos": "0,5 cada",
+    "maxN": 2,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "3 Produção científica",
+    "grupoMax": 2
    },
    {
-    "item": "Congresso ou simpósio",
-    "pontos": "internacional 0,2. Nacional acima de 16 h 0,1. Curso acima de 20 h 0,2",
-    "max": "1,0"
+    "item": "3e Tema livre pôster",
+    "pontos": "0,1 cada",
+    "maxN": 2,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "3 Produção científica",
+    "grupoMax": 2
    },
    {
-    "item": "Inglês (TOEFL, Cambridge, IELTS ou curso avançado)",
+    "item": "4a Estágio extracurricular (30 dias ou 120 h)",
+    "pontos": "0,5 cada",
+    "maxN": 2,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "4 Estágios",
+    "grupoMax": 2
+   },
+   {
+    "item": "4b Estágio extracurricular na área pretendida (30 dias ou 120 h)",
+    "pontos": "1,0 cada",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "4 Estágios",
+    "grupoMax": 2
+   },
+   {
+    "item": "5a Congresso ou simpósio internacional",
+    "pontos": "0,2 cada",
+    "maxN": 1,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "5 Atualização",
+    "grupoMax": 1
+   },
+   {
+    "item": "5b Congresso, jornada ou simpósio nacional acima de 16 h",
+    "pontos": "0,1 cada",
+    "maxN": 1,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "5 Atualização",
+    "grupoMax": 1
+   },
+   {
+    "item": "5c Curso acima de 20 h",
+    "pontos": "0,2 cada",
+    "maxN": 1,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "5 Atualização",
+    "grupoMax": 1
+   },
+   {
+    "item": "6 Inglês (curso avançado, TOEFL, Cambridge ou IELTS válido)",
     "pontos": "1,0",
-    "max": "1,0"
+    "maxN": 1,
+    "unit": 1,
+    "artigo": false
    },
    {
-    "item": "Projeto de pesquisa, ação comunitária, liga",
-    "pontos": "projeto 0,25 a 0,5. Ação e liga 0,1 (até 2 cada)",
-    "max": "1,0"
+    "item": "7a Projeto de pesquisa em andamento",
+    "pontos": "0,25 cada, até 2",
+    "maxN": 0.5,
+    "unit": 0.25,
+    "artigo": false,
+    "grupo": "7 Outras atividades",
+    "grupoMax": 1
    },
    {
-    "item": "Histórico escolar",
-    "pontos": "A 10, B 8, C 6, D 0",
-    "max": "30% da nota"
+    "item": "7b Projeto de pesquisa concluído",
+    "pontos": "0,5 cada, até 2",
+    "maxN": 1,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "7 Outras atividades",
+    "grupoMax": 1
+   },
+   {
+    "item": "7c Ação comunitária na área da saúde",
+    "pontos": "0,1 cada, até 2",
+    "maxN": 0.2,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "7 Outras atividades",
+    "grupoMax": 1
+   },
+   {
+    "item": "7d Liga acadêmica (mínimo 1 semestre)",
+    "pontos": "0,1 cada, até 2",
+    "maxN": 0.2,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "7 Outras atividades",
+    "grupoMax": 1
    }
   ]
  },
@@ -96,8 +498,105 @@
   "inscricao": "07 a 20/10/2026",
   "resultado": "Análise curricular em 25/01/2027 e notas finais em 28/01/2027",
   "link": "https://www.aremg.org.br/processos-atuais",
-  "fichaFonte": "Anexo 1 do PSU-GO 2027 não lido, conferir",
-  "obs": "O currículo é enviado uma única vez, mesmo concorrendo a várias instituições."
+  "fichaFonte": "Anexo 1, Avaliação Curricular Padronizada Entrada Direta PSU-GO 2027 (CEREM-GO, ceremgoias.org.br/psu-go/2027). O arquivo se chama ENTRADA COM PRÉ-REQUISITO, mas o título interno é ENTRADA DIRETA",
+  "obs": "O currículo é enviado uma única vez, mesmo concorrendo a várias instituições.",
+  "ficha": [
+   {
+    "item": "1. Diploma, CRM ou declaração de previsão de conclusão",
+    "pontos": "0,1 fixo",
+    "maxN": 0.1,
+    "unit": 0.1,
+    "artigo": false
+   },
+   {
+    "item": "2. Monitoria",
+    "pontos": "0,25 por semestre, mínimo de 4 meses, qualquer disciplina",
+    "maxN": 0.5,
+    "unit": 0.25,
+    "artigo": false
+   },
+   {
+    "item": "3. Bolsa ou programa oficial de pesquisa (PIBIC, PIVIC, PET, PROBEC, PROEXT, FAPEG, CNPq)",
+    "pontos": "0,45 por pesquisa",
+    "maxN": 0.9,
+    "unit": 0.45,
+    "artigo": false
+   },
+   {
+    "item": "4. Trabalhos apresentados em congressos médicos",
+    "pontos": "0,25 por trabalho, autor ou coautor, de 2020 a 2026",
+    "maxN": 1.0,
+    "unit": 0.25,
+    "artigo": false
+   },
+   {
+    "item": "5. Artigos completos e capítulos de livro",
+    "pontos": "0,5 por publicação em periódico com corpo editorial, autor ou coautor, de 2020 a 2026",
+    "maxN": 1.5,
+    "unit": 0.5,
+    "artigo": true
+   },
+   {
+    "item": "6. Congressos, jornadas e extensão",
+    "pontos": "0,1 por evento, mínimo de 8 h ou 2 dias, fora de liga, de 2020 a 2026",
+    "maxN": 1.0,
+    "unit": 0.1,
+    "artigo": false
+   },
+   {
+    "item": "7. Ligas acadêmicas",
+    "pontos": "0,25 por ano de liga, até 2 ligas",
+    "maxN": 0.5,
+    "unit": 0.25,
+    "artigo": false
+   },
+   {
+    "item": "8. Representação estudantil",
+    "pontos": "0,25 por cargo titular (presidente, diretor, secretário ou tesoureiro)",
+    "maxN": 0.5,
+    "unit": 0.25,
+    "artigo": false
+   },
+   {
+    "item": "9a. Teste de progresso",
+    "pontos": "0,5 por participação, até 3",
+    "maxN": 1.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "9. Teste de progresso e bônus ENADE/ENAMED",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "9b. Bônus ENADE/ENAMED da faculdade",
+    "pontos": "Lançado pelo sistema: conceito 5 vale 0,4, conceito 4 vale 0,3, conceito 3 vale 0,2, 1 ou 2 vale 0",
+    "maxN": 0.4,
+    "unit": null,
+    "artigo": false,
+    "grupo": "9. Teste de progresso e bônus ENADE/ENAMED",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "10. Suporte à vida (ATLS, ACLS, BLS, PALS, PHTLS)",
+    "pontos": "0,5 por curso com aprovação, últimos 2 anos",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "11. Prova de proficiência em medicina",
+    "pontos": "1,0 fixo, com aprovação",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "12. Estágio no exterior ou no Brasil",
+    "pontos": "0,5 fixo, mínimo de 1 mês, eletivo vale",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   }
+  ]
  },
  "unicamp": {
   "nome": "UNICAMP",
@@ -110,8 +609,182 @@
   "inscricao": "01 a 15/10/2026",
   "resultado": "Resultado final em 25/01/2027",
   "link": "https://portal.fcm.unicamp.br/residencias-em-saude/residencia-medica/processo-seletivo-2027/",
-  "fichaFonte": "critérios por especialidade, conferir no site",
-  "obs": "O limite de 5 MB é o mais apertado entre as provas."
+  "fichaFonte": "UNICAMP FCM, Edital Acesso Direto 2027 (001-Edital-Acesso-Direto-2027), tabela do item 5.2.3. Nota de 0 a 100, peso 10 na nota final. Para IC, monitoria e extensão o edital não diz se as faixas somam, por isso cada uma usa o teto do item",
+  "obs": "O limite de 5 MB é o mais apertado entre as provas.",
+  "ficha": [
+   {
+    "item": "1 Instituição com pós-graduação em Medicina (CAPES)",
+    "pontos": "Doutorado 15. Só mestrado 10",
+    "maxN": 15,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "2 Hospital de ensino",
+    "pontos": "Próprio 10. Conveniado 5",
+    "maxN": 10,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "3a IC com bolsa, mais de 2 semestres",
+    "pontos": "20",
+    "maxN": 20,
+    "unit": 20,
+    "artigo": false,
+    "grupo": "3 Iniciação científica",
+    "grupoMax": 20
+   },
+   {
+    "item": "3b IC com bolsa, até 2 semestres",
+    "pontos": "15",
+    "maxN": 20,
+    "unit": 15,
+    "artigo": false,
+    "grupo": "3 Iniciação científica",
+    "grupoMax": 20
+   },
+   {
+    "item": "3c IC sem bolsa, mais de 2 semestres",
+    "pontos": "10",
+    "maxN": 20,
+    "unit": 10,
+    "artigo": false,
+    "grupo": "3 Iniciação científica",
+    "grupoMax": 20
+   },
+   {
+    "item": "3d IC sem bolsa, até 2 semestres",
+    "pontos": "5",
+    "maxN": 20,
+    "unit": 5,
+    "artigo": false,
+    "grupo": "3 Iniciação científica",
+    "grupoMax": 20
+   },
+   {
+    "item": "4a Artigo completo PubMed (com DOI)",
+    "pontos": "10 cada",
+    "maxN": 15,
+    "unit": 10,
+    "artigo": true,
+    "grupo": "4 Artigo",
+    "grupoMax": 15
+   },
+   {
+    "item": "4b Artigo completo SciELO (com DOI)",
+    "pontos": "5 cada",
+    "maxN": 15,
+    "unit": 5,
+    "artigo": true,
+    "grupo": "4 Artigo",
+    "grupoMax": 15
+   },
+   {
+    "item": "5a Trabalho oral em congresso de sociedade nacional ou internacional",
+    "pontos": "10 cada",
+    "maxN": 10,
+    "unit": 10,
+    "artigo": false,
+    "grupo": "5 Trabalho em congresso",
+    "grupoMax": 10
+   },
+   {
+    "item": "5b Pôster em congresso de sociedade nacional ou internacional",
+    "pontos": "6 cada",
+    "maxN": 10,
+    "unit": 6,
+    "artigo": false,
+    "grupo": "5 Trabalho em congresso",
+    "grupoMax": 10
+   },
+   {
+    "item": "5c Trabalho em evento local ou regional (oral ou pôster)",
+    "pontos": "2 cada",
+    "maxN": 10,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "5 Trabalho em congresso",
+    "grupoMax": 10
+   },
+   {
+    "item": "6 Liga acadêmica (mínimo 2 semestres na mesma liga)",
+    "pontos": "Até 5. O edital não dá valor por liga",
+    "maxN": 5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "7a Monitoria ou CCI, mais de 2 semestres",
+    "pontos": "5",
+    "maxN": 5,
+    "unit": 5,
+    "artigo": false,
+    "grupo": "7 Monitoria",
+    "grupoMax": 5
+   },
+   {
+    "item": "7b Monitoria ou CCI, até 2 semestres",
+    "pontos": "2",
+    "maxN": 5,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "7 Monitoria",
+    "grupoMax": 5
+   },
+   {
+    "item": "8a Extensão com mais de 96 h no total",
+    "pontos": "10",
+    "maxN": 10,
+    "unit": 10,
+    "artigo": false,
+    "grupo": "8 Extensão",
+    "grupoMax": 10
+   },
+   {
+    "item": "8b Extensão de 48 a 96 h no total",
+    "pontos": "5",
+    "maxN": 10,
+    "unit": 5,
+    "artigo": false,
+    "grupo": "8 Extensão",
+    "grupoMax": 10
+   },
+   {
+    "item": "9 Representação estudantil em colegiado (2 semestres ou mais)",
+    "pontos": "5",
+    "maxN": 5,
+    "unit": 5,
+    "artigo": false
+   },
+   {
+    "item": "10a Diretoria de centro acadêmico (2 semestres ou mais)",
+    "pontos": "2 cada",
+    "maxN": 5,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "10 CA e atlética",
+    "grupoMax": 5
+   },
+   {
+    "item": "10b Diretoria de atlética (2 semestres ou mais)",
+    "pontos": "2 cada",
+    "maxN": 5,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "10 CA e atlética",
+    "grupoMax": 5
+   },
+   {
+    "item": "10c Equipe esportiva ou bateria (2 semestres ou mais)",
+    "pontos": "1 cada",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "10 CA e atlética",
+    "grupoMax": 5
+   }
+  ]
  },
  "unitau": {
   "nome": "UNITAU",
@@ -124,8 +797,94 @@
   "inscricao": "19/08 a 25/10/2026",
   "resultado": "Resultado do currículo em 28/01/2027 e final em 04/02/2027",
   "link": "https://unitau.br/concursos",
-  "fichaFonte": "itens conhecidos, pontos não encontrados, conferir",
-  "obs": "Itens: atividades práticas extracurriculares, gestão de liga (mínimo 1 ano) e extensão, atividades sociais, monitoria, produção científica, língua estrangeira e ENAMED/ENARE."
+  "fichaFonte": "UNITAU, Edital do Processo Seletivo de Residência Médica 2027, quadro de análise curricular do acesso direto (itens 1 a 4). Currículo vale 10%. A maioria dos itens só aceita atividades até o 4º ano ou até a colação de grau",
+  "obs": "Itens: atividades práticas extracurriculares, gestão de liga (mínimo 1 ano) e extensão, atividades sociais, monitoria, produção científica, língua estrangeira e ENAMED/ENARE.",
+  "ficha": [
+   {
+    "item": "1a Estágio extracurricular (80 h e 2 semanas, até o 4º ano)",
+    "pontos": "1 estágio 10. 2 ou mais 20",
+    "maxN": 20,
+    "unit": 10,
+    "artigo": false
+   },
+   {
+    "item": "1b Gestão de liga ou projeto de extensão (mínimo 1 ano)",
+    "pontos": "1,0 cada, até 5",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "1c Atividade ou projeto social durante o curso",
+    "pontos": "1,0 cada, até 5",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "1d Habilitação no ENAMED ou ENARE (boletim individual)",
+    "pontos": "10 se habilitado",
+    "maxN": 10,
+    "unit": 10,
+    "artigo": false
+   },
+   {
+    "item": "2e Monitoria (20 h por mês, 1 semestre ou mais)",
+    "pontos": "1 monitoria 5. 2 ou mais 10",
+    "maxN": 10,
+    "unit": 5,
+    "artigo": false
+   },
+   {
+    "item": "3f Iniciação científica concluída (1 ano ou mais)",
+    "pontos": "Até 15. O edital não dá valor por projeto",
+    "maxN": 15,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "3g Publicação em revista com ISSN ou DOI, indexada em 2 bases",
+    "pontos": "1 publicação 5. 2 ou mais 10",
+    "maxN": 10,
+    "unit": 5,
+    "artigo": true
+   },
+   {
+    "item": "3h Trabalho apresentado em evento (tema livre ou pôster)",
+    "pontos": "1,0 cada, até 5",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "3i Teste de Progresso, competição ou avaliação progressiva",
+    "pontos": "1,0 cada, até 5",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "3j Ouvinte em jornada, curso ou congresso",
+    "pontos": "1,0 cada, até 5",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false
+   },
+   {
+    "item": "4k Inglês (Michigan, Cambridge, IELTS ou TOEFL válido)",
+    "pontos": "Até 7,5. O edital não detalha valor por nível",
+    "maxN": 7.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "4l Outro idioma (DELF, TCF, DELE, SCIELE, TestDAF, Goethe)",
+    "pontos": "Até 2,5. O edital não detalha valor por nível",
+    "maxN": 2.5,
+    "unit": null,
+    "artigo": false
+   }
+  ]
  },
  "unesp": {
   "nome": "UNESP",
@@ -138,8 +897,136 @@
   "inscricao": "20/10 a 06/11/2026",
   "resultado": "Classificação final até 02/02/2027",
   "link": "https://www.vunesp.com.br",
-  "fichaFonte": "critérios por especialidade, conferir no Edital 072/2026",
-  "obs": ""
+  "fichaFonte": "UNESP Botucatu (FMB), Edital nº 072/2026 FM/DTA, Anexo II, modelo de Anestesiologia, Cirurgia Cardiovascular, Medicina de Emergência, Medicina Intensiva, Medicina Nuclear e Patologia. Cada especialidade tem tabela própria (Pediatria muda IC com bolsa: 1 = 0,5, 2 ou mais = 1,0; sem bolsa 0,25 cada até 0,5). Clínica Médica e Ortopedia não têm currículo. Nota de 0 a 10, 10% da nota final",
+  "obs": "",
+  "ficha": [
+   {
+    "item": "1a IGC da instituição",
+    "pontos": "IGC 4 ou 5: 1,5. IGC 2 ou 3: 0,75",
+    "maxN": 1.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1b Internato de 2 anos ou mais",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1c Coeficiente de rendimento",
+    "pontos": "De 7 a 8: 0,5. 8 ou mais: 1,0",
+    "maxN": 1,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1d Teste do Progresso",
+    "pontos": "6 testes: 0,5. Mais de 6: 1,0",
+    "maxN": 1,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1e Plantões acima de 750 h",
+    "pontos": "1,0",
+    "maxN": 1,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "2a IC ou extensão com bolsa (10 meses ou mais)",
+    "pontos": "1,0 cada",
+    "maxN": 2.5,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "2 Atividades extracurriculares",
+    "grupoMax": 2.5
+   },
+   {
+    "item": "2b IC sem bolsa (12 meses ou mais)",
+    "pontos": "0,5 cada",
+    "maxN": 2.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "2 Atividades extracurriculares",
+    "grupoMax": 2.5
+   },
+   {
+    "item": "2c Monitoria sem bolsa",
+    "pontos": "0,25 cada",
+    "maxN": 2.5,
+    "unit": 0.25,
+    "artigo": false,
+    "grupo": "2 Atividades extracurriculares",
+    "grupoMax": 2.5
+   },
+   {
+    "item": "2d Monitoria com bolsa",
+    "pontos": "0,5 cada",
+    "maxN": 2.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "2 Atividades extracurriculares",
+    "grupoMax": 2.5
+   },
+   {
+    "item": "2e Liga acadêmica",
+    "pontos": "0,1 cada, até 5",
+    "maxN": 0.5,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "2 Atividades extracurriculares",
+    "grupoMax": 2.5
+   },
+   {
+    "item": "3a Trabalho em congresso nacional ou internacional",
+    "pontos": "1 trabalho 0,5. 2 ou mais 0,75",
+    "maxN": 0.75,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "3 Eventos",
+    "grupoMax": 1
+   },
+   {
+    "item": "3b Trabalho em evento local ou regional",
+    "pontos": "0,25",
+    "maxN": 0.25,
+    "unit": 0.25,
+    "artigo": false,
+    "grupo": "3 Eventos",
+    "grupoMax": 1
+   },
+   {
+    "item": "4 Artigo publicado",
+    "pontos": "1 artigo 0,25. 2 ou mais 0,5",
+    "maxN": 0.5,
+    "unit": 0.25,
+    "artigo": true
+   },
+   {
+    "item": "5a Representação discente",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "5b Atividade de interesse da graduação",
+    "pontos": "0,25",
+    "maxN": 0.25,
+    "unit": 0.25,
+    "artigo": false
+   },
+   {
+    "item": "5c Organização de evento",
+    "pontos": "0,25",
+    "maxN": 0.25,
+    "unit": 0.25,
+    "artigo": false
+   }
+  ]
  },
  "uniara": {
   "nome": "UNIARA",
@@ -152,45 +1039,88 @@
   "inscricao": "Edital 2027 não publicado",
   "resultado": "",
   "link": "https://www.uniara.com.br/coreme/processo-seletivo/",
-  "fichaFonte": "ficha de 2026, conferir quando sair o edital 2027",
+  "fichaFonte": "UNIARA e Santa Casa de Araraquara, Edital PRM 2026 (Anexo I, fase 2). O edital 2027 ainda não foi publicado, conferir quando sair. Currículo vale 10%, só convocados enviam",
   "obs": "Só os convocados (4× as vagas) enviam. Quem não envia é eliminado.",
   "ficha": [
    {
-    "item": "Instituição de ensino e histórico",
-    "pontos": "0,05 por critério",
-    "max": "2,5"
+    "item": "1 Instituição de ensino e histórico",
+    "pontos": "0,5 por critério cumprido (universidade com ensino, assistência e pesquisa; internato de 2 anos nos 3 níveis; 400 h de saúde coletiva; nota MEC 4 ou 5; ENADE acima de 3)",
+    "maxN": 2.5,
+    "unit": 0.5,
+    "artigo": false
    },
    {
-    "item": "Monitoria, IC, extensão, ACLS, ATLS, PALS, ALSO",
-    "pontos": "0,30 cada",
-    "max": "1,5"
+    "item": "2 Monitoria, IC, extensão, ACLS, ATLS, PALS, ALSO",
+    "pontos": "0,3 cada",
+    "maxN": 1.5,
+    "unit": 0.3,
+    "artigo": false
    },
    {
-    "item": "Pôster ou tema livre / artigo indexado",
-    "pontos": "0,50 / 1,0 cada",
-    "max": "2,5"
+    "item": "3a Pôster ou tema livre (autor ou coautor)",
+    "pontos": "0,5 cada",
+    "maxN": 2.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "3 Publicações e trabalhos",
+    "grupoMax": 2.5
    },
    {
-    "item": "Organização de evento / ouvinte",
-    "pontos": "1,0 / 0,10",
-    "max": "2,0"
+    "item": "3b Artigo em periódico indexado (autor ou coautor)",
+    "pontos": "1,0 cada",
+    "maxN": 2.5,
+    "unit": 1,
+    "artigo": true,
+    "grupo": "3 Publicações e trabalhos",
+    "grupoMax": 2.5
    },
    {
-    "item": "Representação estudantil",
+    "item": "4a Organização de evento científico ou esportivo",
+    "pontos": "1,0 cada",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "4 Eventos e ligas",
+    "grupoMax": 2
+   },
+   {
+    "item": "4b Participante ou ouvinte em congresso, jornada ou simpósio",
+    "pontos": "0,1 cada",
+    "maxN": 2,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "4 Eventos e ligas",
+    "grupoMax": 2
+   },
+   {
+    "item": "4c Membro de liga acadêmica",
+    "pontos": "Está no item 4, mas o edital não dá valor separado",
+    "maxN": 2,
+    "unit": null,
+    "artigo": false,
+    "grupo": "4 Eventos e ligas",
+    "grupoMax": 2
+   },
+   {
+    "item": "5 Representação estudantil (DA, atlética, DENEM, coordenação de liga)",
     "pontos": "0,25 cada",
-    "max": "1,0"
+    "maxN": 1,
+    "unit": 0.25,
+    "artigo": false
    },
    {
-    "item": "Língua estrangeira",
-    "pontos": "com certificado",
-    "max": "0,5"
+    "item": "6 Língua estrangeira com certificado",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
    }
   ]
  },
  "hpp": {
   "nome": "HPP",
   "peso": "10% (arguição, análise e defesa do currículo)",
-  "maximo": "10",
+  "maximo": "100",
   "formato": "PDF único de até 60 MB na inscrição, com Lattes, ficha preenchida, comprovantes, histórico, diploma, RG, CPF e CRM. Não dá para editar depois",
   "envio": "Na inscrição, até 09/11/2026 às 16h",
   "prazoEnvio": "2026-11-09",
@@ -198,8 +1128,164 @@
   "inscricao": "01/10 a 09/11/2026",
   "resultado": "Arguição de 14 a 16/12/2026 e classificação em 18/12/2026",
   "link": "https://fpp.edu.br",
-  "fichaFonte": "ficha no Edital 28/2026",
-  "obs": "Sem currículo, a nota é zero e conta só a entrevista."
+  "fichaFonte": "Ficha da análise curricular HPP (Hospital Pequeno Príncipe) usada na análise da Beatriz, 2026",
+  "obs": "Sem currículo, a nota é zero e conta só a entrevista.",
+  "ficha": [
+   {
+    "item": "1. Participação em congressos nacionais e internacionais",
+    "pontos": "Cada congresso vale 2,0 pontos, com limite de 3 certificados.",
+    "maxN": 6,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "2. Participação em eventos (seminários, semanas acadêmicas, simpósios, jornadas, mostras, workshops, mesa redonda, conferências e encontros)",
+    "pontos": "Cada evento vale 2,0 pontos, com limite de 3 certificados. O edital não exige carga horária mínima neste item.",
+    "maxN": 6,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "3. Participação em cursos na área pretendida com mais de 10 horas",
+    "pontos": "Cada curso na área pretendida com mais de 10 horas vale 2,0 pontos, com limite de 3 certificados.",
+    "maxN": 6,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "4. Participação em cursos de outras áreas com mais de 10 horas, exceto língua estrangeira",
+    "pontos": "Cada curso com mais de 10 horas vale 2,0 pontos, com limite de 3 certificados.",
+    "maxN": 6,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "5. Preleção de palestras",
+    "pontos": "Cada palestra ministrada vale 2,0 pontos, com limite de 2 certificados.",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "6. Estágio extracurricular na área pretendida",
+    "pontos": "Cada estágio na área pretendida vale 2,5 pontos, com limite de 2 certificados.",
+    "maxN": 5,
+    "unit": 2.5,
+    "artigo": false
+   },
+   {
+    "item": "7. Estágio extracurricular fora da área pretendida",
+    "pontos": "Cada estágio fora na área pretendida vale 2,0 pontos, com limite de 2 certificados.",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "8. Monitoria de disciplina concluída",
+    "pontos": "Cada monitoria concluída vale 2,0 pontos, com limite de 2 certificados.",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "9. Participação em programas de iniciação científica concluído",
+    "pontos": "Um programa de iniciação científica concluído vale 4,0 pontos.",
+    "maxN": 4,
+    "unit": 4,
+    "artigo": false
+   },
+   {
+    "item": "10. Participação em projetos de extensão, projetos de voluntariado acadêmico e ligas acadêmicas",
+    "pontos": "Cada participação vale 2,0 pontos, com limite de 2 certificados.",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "11. Participação em Educação pelo Trabalho para a Saúde (PET-Saúde)",
+    "pontos": "A participação no PET-Saúde vale 5,0 pontos.",
+    "maxN": 5,
+    "unit": 5,
+    "artigo": false
+   },
+   {
+    "item": "12. Especialização",
+    "pontos": "Uma especialização concluída vale 4,0 pontos.",
+    "maxN": 4,
+    "unit": 4,
+    "artigo": false
+   },
+   {
+    "item": "13. Mestrado",
+    "pontos": "Um mestrado concluído vale 4,5 pontos.",
+    "maxN": 4.5,
+    "unit": 4.5,
+    "artigo": false
+   },
+   {
+    "item": "14. Organização de eventos",
+    "pontos": "Cada evento organizado vale 2,5 pontos, com limite de 2 certificados.",
+    "maxN": 5,
+    "unit": 2.5,
+    "artigo": false
+   },
+   {
+    "item": "15. Artigo completo publicado em periódico científico indexado",
+    "pontos": "Cada artigo vale 2,0 pontos, com limite de 2 artigos.",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": true
+   },
+   {
+    "item": "16. Artigo completo e resumo expandido em anais de eventos",
+    "pontos": "Cada publicação vale 2,5 pontos, com limite de 2.",
+    "maxN": 5,
+    "unit": 2.5,
+    "artigo": false
+   },
+   {
+    "item": "17. Resumo simples em anais de eventos",
+    "pontos": "Cada resumo vale 2,0 pontos, com limite de 2.",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "18. Apresentação de trabalho em eventos na área pretendida",
+    "pontos": "Cada apresentação em evento na área pretendida vale 2,5 pontos, com limite de 2.",
+    "maxN": 5,
+    "unit": 2.5,
+    "artigo": false
+   },
+   {
+    "item": "19. Apresentação de trabalho em eventos fora da área pretendida",
+    "pontos": "Cada apresentação vale 2,0 pontos, com limite de 2.",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "20. Suficiência em língua estrangeira",
+    "pontos": "Um certificado de suficiência vale 0,5 ponto.",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "21. PALS em área pretendida",
+    "pontos": "O certificado de PALS vale 5,0 pontos.",
+    "maxN": 5,
+    "unit": 5,
+    "artigo": false
+   },
+   {
+    "item": "22. Reanimação Neonatal",
+    "pontos": "O certificado de Reanimação Neonatal vale 5,0 pontos.",
+    "maxN": 5,
+    "unit": 5,
+    "artigo": false
+   }
+  ]
  },
  "ipsemg": {
   "nome": "IPSEMG",
@@ -212,13 +1298,14 @@
   "inscricao": "28/09 a 05/11/2026",
   "resultado": "Resultado final em 26/01/2027",
   "link": "https://www.institutoaccess.org.br",
-  "fichaFonte": "Anexo I não lido, conferir",
-  "obs": "Quem não envia fica com zero, sem eliminação."
+  "fichaFonte": "Edital IPSEMG 2027 (Edital nº 2/2026, Instituto Access). O Anexo I (Avaliação Curricular Padronizada, entrada direta) está em PDF escaneado e não foi possível ler. No edital 2026 só deu para ler o item 1 (aproveitamento curricular, até 3,0). Conferir no PDF oficial",
+  "obs": "Quem não envia fica com zero, sem eliminação.",
+  "ficha": []
  },
  "psumg": {
   "nome": "PSU-MG",
   "peso": "10 pontos",
-  "maximo": "10",
+  "maximo": "13",
   "formato": "Currículo padronizado e upload dos comprovantes na inscrição (sistema AREMG, não funciona no celular). Subitens a e b em arquivos separados",
   "envio": "Na inscrição, até 19/10/2026 às 17h (prorrogado)",
   "prazoEnvio": "2026-10-19",
@@ -226,8 +1313,158 @@
   "inscricao": "06 a 19/10/2026",
   "resultado": "Currículo em 21/01/2027 e nota final em 26/01/2027",
   "link": "https://www.aremg.org.br/detalhes-do-processo/aremg-publica-modelo-de-avaliacao-curricular-para-o-psu-minas-gerais-2027/2348",
-  "fichaFonte": "Anexo I não lido, conferir",
-  "obs": "Só tem o currículo avaliado quem faz 45 pontos na prova e fica entre 20 por vaga. Conta só o que foi feito na graduação. Item 8 (cursos) não exige mais comprovação de aprovação."
+  "fichaFonte": "Anexo 1, Avaliação Curricular Padronizada Entrada Direta PSU-MG 2027 (AREMG, publicado em 29/06/2026). O Notion tem a versão 2026, de teto 10, que mudou",
+  "obs": "Só tem o currículo avaliado quem faz 45 pontos na prova e fica entre 20 por vaga. Conta só o que foi feito na graduação. Item 8 (cursos) não exige mais comprovação de aprovação.",
+  "ficha": [
+   {
+    "item": "1.1 Histórico, 4 primeiros anos",
+    "pontos": "Faixa: metade das notas igual ou acima de 85 vale 1,5, de 80 vale 1,0, de 75 vale 0,5, abaixo disso ou só conceito vale 0,25. Só uma faixa",
+    "maxN": 1.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1.2 Histórico, 2 últimos anos",
+    "pontos": "Faixa: 70% das notas igual ou acima de 85 (ou A) vale 1,5, de 80 (ou B) vale 1,0, abaixo disso 0,5, só conceito 0,25. Só diploma ou CRM sem histórico vale 0,1",
+    "maxN": 1.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "2. Língua estrangeira",
+    "pontos": "Só uma opção: título avançado em inglês 1,0, intermediário em inglês 0,5, avançado em outra língua 0,5, 4 semestres de outra língua 0,5, intermediário em outra língua 0,25",
+    "maxN": 1.0,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "3a. Estágio extracurricular ou PET-Saúde",
+    "pontos": "1,0 por 1 estágio de 6 meses e 180 h (ou 2 de 3 meses e 90 h) ou PET-Saúde de 6 meses",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "3b. Monitoria ou PID",
+    "pontos": "1,0 por 1 monitoria na faculdade de origem, 1 semestre e mínimo de 80 h",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "4a. Bolsa de iniciação científica",
+    "pontos": "0,5 por 1 bolsa de IC, mínimo de 6 meses e 80 h",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "4b. IC voluntária",
+    "pontos": "0,3 por 1 IC voluntária, mínimo de 6 meses e 80 h",
+    "maxN": 0.3,
+    "unit": 0.3,
+    "artigo": false
+   },
+   {
+    "item": "4c. Projeto de grupo de pesquisa CNPq",
+    "pontos": "0,5 por 1 projeto de 12 meses e 80 h, com publicação ou apresentação",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "5a. Organizador de evento",
+    "pontos": "0,25 por 1 evento de entidade médica, mínimo de 8 h, fora de liga",
+    "maxN": 0.25,
+    "unit": 0.25,
+    "artigo": false
+   },
+   {
+    "item": "5b. Palestrante em evento",
+    "pontos": "0,25 por 1 palestra em evento de entidade médica, diferente do 5a",
+    "maxN": 0.25,
+    "unit": 0.25,
+    "artigo": false
+   },
+   {
+    "item": "6a. Ligas acadêmicas",
+    "pontos": "0,8 por participação em até 2 ligas da faculdade, em 2 semestres não coincidentes, mínimo de 80 h",
+    "maxN": 0.8,
+    "unit": 0.8,
+    "artigo": false
+   },
+   {
+    "item": "6b. Representação estudantil",
+    "pontos": "0,3 por cargo titular (presidente, diretor geral, secretário ou tesoureiro) por 1 ano",
+    "maxN": 0.3,
+    "unit": 0.3,
+    "artigo": false
+   },
+   {
+    "item": "7. Suporte avançado à vida",
+    "pontos": "0,7 por 1 curso de no mínimo 16 h, com aprovação e dentro da validade. BLS não vale",
+    "maxN": 0.7,
+    "unit": 0.7,
+    "artigo": false
+   },
+   {
+    "item": "8. Cursos de temas médicos",
+    "pontos": "0,3 por curso de entidade médica, mínimo de 8 h, últimos 5 anos. 2 cursos de entidades diferentes valem 0,6",
+    "maxN": 0.6,
+    "unit": 0.3,
+    "artigo": false
+   },
+   {
+    "item": "9a. Projeto de extensão",
+    "pontos": "0,7 por 1 projeto de extensão da faculdade, 1 semestre e 80 h",
+    "maxN": 0.7,
+    "unit": 0.7,
+    "artigo": false
+   },
+   {
+    "item": "9b. Trabalho voluntário comunitário",
+    "pontos": "0,3 só com no mínimo 2 projetos em instituições públicas diferentes e semestres diferentes, 16 h no total",
+    "maxN": 0.3,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "10a. Apresentação de trabalho",
+    "pontos": "0,5 por 1 tema livre ou pôster em evento científico, até 5 autores",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "10. Apresentação e publicação de trabalho",
+    "grupoMax": 0.8
+   },
+   {
+    "item": "10b. Apresentação com publicação indexada",
+    "pontos": "0,8 por 1 apresentação em evento de sociedade com publicação em revista indexada, Qualis mínimo B2",
+    "maxN": 0.8,
+    "unit": 0.8,
+    "artigo": false,
+    "grupo": "10. Apresentação e publicação de trabalho",
+    "grupoMax": 0.8
+   },
+   {
+    "item": "11a. Artigo em PubMed, Embase, Scopus ou Web of Science",
+    "pontos": "1,0 por 1 artigo completo, até 5 autores",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": true,
+    "grupo": "11. Artigos publicados",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "11b. Artigo em SciELO ou LILACS",
+    "pontos": "0,5 por 1 artigo completo, Qualis mínimo B2",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": true,
+    "grupo": "11. Artigos publicados",
+    "grupoMax": 1.0
+   }
+  ]
  },
  "sesgo": {
   "nome": "SES-GO",
@@ -240,83 +1477,206 @@
   "inscricao": "05/10 a 03/11/2026",
   "resultado": "Currículo em 22/01/2027 e final em 17/02/2027",
   "link": "https://sistemas.institutoverbena.ufg.br/2027/coreme-ses/sistema/arquivos/editais/EDITAL_DE_ABERTURA_COREME_SES_2027.pdf",
-  "fichaFonte": "ficha oficial 2027 (Quadro 32)",
+  "fichaFonte": "SES-GO COREME 2027, Edital nº 24/2026 (Instituto Verbena/UFG), Quadros 32 e 33. Currículo só classificatório, 10% da nota",
   "obs": "Cada documento pontua em um só item.",
   "ficha": [
    {
-    "item": "Histórico escolar",
-    "pontos": "média 8,1 a 10: 20. 6,1 a 8: 15. 4,1 a 6: 10",
-    "max": "20"
+    "item": "1 Histórico escolar",
+    "pontos": "Média 8,1 a 10: 20. 6,1 a 8: 15. 4,1 a 6: 10. Só aprovado ou satisfatório conta como média 7,5",
+    "maxN": 20,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "ENADE da instituição",
-    "pontos": "1 a 3: 2. ≥4: 4",
-    "max": "4"
+    "item": "2.1 ENADE da instituição",
+    "pontos": "Conceito 1 a 3: 2,0. Conceito 4 ou mais: 4,0",
+    "maxN": 4,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Hospital universitário ou de ensino",
-    "pontos": "",
-    "max": "3"
+    "item": "2.2 Hospital universitário ou de ensino",
+    "pontos": "Sim: 3,0",
+    "maxN": 3,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "OSCE na graduação",
-    "pontos": "",
-    "max": "3"
+    "item": "2.3 OSCE na graduação",
+    "pontos": "Sim: 3,0",
+    "maxN": 3,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Teste de Progresso",
-    "pontos": "1 vez 0,5. 2 vezes 1. 3 ou mais 2",
-    "max": "2"
+    "item": "2.4 Teste de Progresso",
+    "pontos": "1 participação 0,5. 2 participações 1,0. 3 ou mais 2,0",
+    "maxN": 2,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Pesquisa ou extensão oficial (FAPEG, CNPq)",
-    "pontos": "5 cada, até 3",
-    "max": "15"
+    "item": "3 Programa oficial de pesquisa ou extensão (IC, extensão, FAPEG, CNPq)",
+    "pontos": "5,0 cada",
+    "maxN": 15,
+    "unit": 5,
+    "artigo": false
    },
    {
-    "item": "Monitoria",
-    "pontos": "2,5 por semestre, até 4",
-    "max": "10"
+    "item": "4 Monitoria",
+    "pontos": "2,5 por semestre, qualquer disciplina",
+    "maxN": 10,
+    "unit": 2.5,
+    "artigo": false
    },
    {
-    "item": "Artigo completo",
-    "pontos": "Qualis A 1,5. B 1,0. C 0,5. Sem Qualis 0,25",
-    "max": "10"
+    "item": "5a Artigo completo Qualis A (2021-2024)",
+    "pontos": "1,5 cada",
+    "maxN": 10,
+    "unit": 1.5,
+    "artigo": true,
+    "grupo": "5 Artigos",
+    "grupoMax": 10
    },
    {
-    "item": "Capítulo de livro",
-    "pontos": "1,0 com corpo editorial. 0,5 sem",
-    "max": "5"
+    "item": "5b Artigo completo Qualis B",
+    "pontos": "1,0 cada",
+    "maxN": 10,
+    "unit": 1,
+    "artigo": true,
+    "grupo": "5 Artigos",
+    "grupoMax": 10
    },
    {
-    "item": "Apresentação em evento",
-    "pontos": "1,0 com anais. 0,5 sem",
-    "max": "6"
+    "item": "5c Artigo completo Qualis C",
+    "pontos": "0,5 cada",
+    "maxN": 10,
+    "unit": 0.5,
+    "artigo": true,
+    "grupo": "5 Artigos",
+    "grupoMax": 10
    },
    {
-    "item": "Direção de CA ou liga / membro de liga",
-    "pontos": "2,5 por ano / 1,0 por ano",
-    "max": "5"
+    "item": "5d Artigo completo sem Qualis",
+    "pontos": "0,25 cada",
+    "maxN": 10,
+    "unit": 0.25,
+    "artigo": true,
+    "grupo": "5 Artigos",
+    "grupoMax": 10
    },
    {
-    "item": "Ouvinte em evento de 8 h ou mais",
-    "pontos": "regional 0,5. Nacional 0,7. Internacional 1,0",
-    "max": "5"
+    "item": "6a Capítulo em editora com corpo editorial",
+    "pontos": "1,0 cada",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": true,
+    "grupo": "6 Capítulo",
+    "grupoMax": 5
    },
    {
-    "item": "ATLS, ACLS, BLS, PALS, PHTLS, PNRN",
-    "pontos": "2,0 cada. Outros de urgência 1,0",
-    "max": "4"
+    "item": "6b Capítulo em editora sem corpo editorial",
+    "pontos": "0,5 cada",
+    "maxN": 5,
+    "unit": 0.5,
+    "artigo": true,
+    "grupo": "6 Capítulo",
+    "grupoMax": 5
    },
    {
-    "item": "Estágio extracurricular (80 h/mês ou mais)",
-    "pontos": "0,02 por hora",
-    "max": "3"
+    "item": "7a Apresentação em evento com anais",
+    "pontos": "1,0 cada",
+    "maxN": 6,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "7 Apresentação",
+    "grupoMax": 6
    },
    {
-    "item": "Prova de proficiência em Medicina (associações ou CRM)",
-    "pontos": "",
-    "max": "5"
+    "item": "7b Apresentação em evento sem anais",
+    "pontos": "0,5 cada",
+    "maxN": 6,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "7 Apresentação",
+    "grupoMax": 6
+   },
+   {
+    "item": "8a Direção de CA, liga ou representação estudantil",
+    "pontos": "2,5 por ano",
+    "maxN": 5,
+    "unit": 2.5,
+    "artigo": false,
+    "grupo": "8 Associações",
+    "grupoMax": 5
+   },
+   {
+    "item": "8b Membro de liga",
+    "pontos": "1,0 por ano",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "8 Associações",
+    "grupoMax": 5
+   },
+   {
+    "item": "9a Ouvinte em evento regional (8 h ou mais)",
+    "pontos": "0,5 cada",
+    "maxN": 5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "9 Ouvinte",
+    "grupoMax": 5
+   },
+   {
+    "item": "9b Ouvinte em evento nacional (8 h ou mais)",
+    "pontos": "0,7 cada",
+    "maxN": 5,
+    "unit": 0.7,
+    "artigo": false,
+    "grupo": "9 Ouvinte",
+    "grupoMax": 5
+   },
+   {
+    "item": "9c Ouvinte em evento internacional (8 h ou mais)",
+    "pontos": "1,0 cada",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "9 Ouvinte",
+    "grupoMax": 5
+   },
+   {
+    "item": "10a ATLS, ACLS, BLS, PALS, PHTLS ou PNRN",
+    "pontos": "2,0 cada, com aprovação e válido",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "10 Suporte à vida",
+    "grupoMax": 4
+   },
+   {
+    "item": "10b Outro curso de urgência e emergência",
+    "pontos": "1,0 cada, com aprovação e válido",
+    "maxN": 4,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "10 Suporte à vida",
+    "grupoMax": 4
+   },
+   {
+    "item": "11 Estágio extracurricular (mínimo 80 h)",
+    "pontos": "0,02 por hora. Conte as horas",
+    "maxN": 3,
+    "unit": 0.02,
+    "artigo": false
+   },
+   {
+    "item": "12 Prova de proficiência em Medicina (associação médica ou CRM)",
+    "pontos": "5,0 com aprovação, só 1 concurso",
+    "maxN": 5,
+    "unit": 5,
+    "artigo": false
    }
   ]
  },
@@ -331,8 +1691,73 @@
   "inscricao": "05/10 a 11/11/2026",
   "resultado": "Resultado do currículo em 16/12/2026",
   "link": "https://www.edudata.com.br",
-  "fichaFonte": "não encontrada, conferir",
-  "obs": ""
+  "fichaFonte": "Edital Dante Pazzanese RM 2027 nº 01, Seção III, item 3.1.1 (acesso direto, que é Cirurgia Cardiovascular). Nota de 0 a 10, peso 10%",
+  "obs": "",
+  "ficha": [
+   {
+    "item": "1a Faculdade no RUF 2025",
+    "pontos": "1ª a 20ª: 1,5. 21ª a 40ª: 1,0. Demais ou sem RUF: 0,5",
+    "maxN": 1.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1b Internato em hospital",
+    "pontos": "Sim: 1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "2a Artigo em revista indexada",
+    "pontos": "Sim: 1,0 (não soma por artigo)",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": true
+   },
+   {
+    "item": "2b Trabalhos apresentados em congressos",
+    "pontos": "1: 0,5. 2: 1,0. 3 ou mais: 1,5",
+    "maxN": 1.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "2c Participação em congressos, simpósios e jornadas",
+    "pontos": "1: 0,25. 2: 0,5. 3 ou mais: 1,0",
+    "maxN": 1.0,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "2d Curso ou proficiência em inglês",
+    "pontos": "Sim: 1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "3a Monitoria oficial",
+    "pontos": "Sim: 1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "3b Bolsa de estudos ou pesquisa",
+    "pontos": "Sim: 1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "3c Estágios, projetos voluntários, organização de cursos, ligas e aulas",
+    "pontos": "1: 0,25. 2: 0,5. 3 ou mais: 1,0",
+    "maxN": 1.0,
+    "unit": null,
+    "artigo": false
+   }
+  ]
  },
  "uspsp": {
   "nome": "USP-SP",
@@ -345,8 +1770,297 @@
   "inscricao": "06 a 26/10/2026",
   "resultado": "Avaliação de 13 a 22/01/2027 e nota em 28/01/2027",
   "link": "https://www.fuvest.br/wp-content/uploads/rm2027-edital-02-2026.pdf",
-  "fichaFonte": "14 itens no item 1.1.2 do edital, pontos parcialmente encontrados",
-  "obs": "Mestrado, doutorado ou outra residência concluídos valem até 8 pontos. Há fator ligado ao ENAMED."
+  "fichaFonte": "Edital COREME/FM nº 02/2026 (FUVEST), residência 2027, áreas básicas e acesso direto, itens 1 a 13. O total é multiplicado pelo fator ENAMED 2025 da faculdade (5: x1,20, 4: x1,10, 1 a 3: x1,00), com limite de 100",
+  "obs": "Mestrado, doutorado ou outra residência concluídos valem até 8 pontos. Há fator ligado ao ENAMED.",
+  "ficha": [
+   {
+    "item": "1a. Faculdade com 2 ou mais programas nota 6 ou 7",
+    "pontos": "15 fixo, por declaração da faculdade",
+    "maxN": 15,
+    "unit": null,
+    "artigo": false,
+    "grupo": "1. Pós-graduação da faculdade",
+    "grupoMax": 15
+   },
+   {
+    "item": "1b. Doutorado acadêmico nota 4 ou 5",
+    "pontos": "3 por programa, até 3 programas",
+    "maxN": 9,
+    "unit": 3,
+    "artigo": false,
+    "grupo": "1. Pós-graduação da faculdade",
+    "grupoMax": 15
+   },
+   {
+    "item": "1c. Só mestrado acadêmico",
+    "pontos": "1,5 por programa, até 2 programas",
+    "maxN": 3,
+    "unit": 1.5,
+    "artigo": false,
+    "grupo": "1. Pós-graduação da faculdade",
+    "grupoMax": 15
+   },
+   {
+    "item": "1d. Mestrado ou doutorado profissional",
+    "pontos": "1 por programa, até 2 programas",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "1. Pós-graduação da faculdade",
+    "grupoMax": 15
+   },
+   {
+    "item": "2a. Hospital de ensino próprio",
+    "pontos": "12 fixo, por termo da faculdade",
+    "maxN": 12,
+    "unit": 12,
+    "artigo": false,
+    "grupo": "2. Hospital de ensino",
+    "grupoMax": 12
+   },
+   {
+    "item": "2b. Hospital de ensino conveniado",
+    "pontos": "Até 3, por convênio formal",
+    "maxN": 3,
+    "unit": null,
+    "artigo": false,
+    "grupo": "2. Hospital de ensino",
+    "grupoMax": 12
+   },
+   {
+    "item": "3. Corpo docente com pós-graduação",
+    "pontos": "Faixa: mais de 80% de doutores 8, de 60 a 80% 4, de 50 a 60% de doutores ou mestres 2",
+    "maxN": 8,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "4. Monitoria",
+    "pontos": "Faixa na mesma monitoria: mais de 2 semestres (192 h) 4, 2 semestres (128 h) 3, 1 semestre (64 h) 1",
+    "maxN": 4,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "5a. IC com bolsa e publicação",
+    "pontos": "14 por 1 projeto de 2 ou mais semestres com publicação",
+    "maxN": 14,
+    "unit": 14,
+    "artigo": false,
+    "grupo": "5. Iniciação científica",
+    "grupoMax": 14
+   },
+   {
+    "item": "5b. IC com bolsa sem publicação",
+    "pontos": "2 por projeto de 2 semestres, até 2 projetos",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "5. Iniciação científica",
+    "grupoMax": 14
+   },
+   {
+    "item": "5c. IC sem bolsa com publicação",
+    "pontos": "8 por 1 projeto de 2 ou mais semestres com publicação",
+    "maxN": 8,
+    "unit": 8,
+    "artigo": false,
+    "grupo": "5. Iniciação científica",
+    "grupoMax": 14
+   },
+   {
+    "item": "6a. Artigo indexado no PubMed",
+    "pontos": "10 por 1 artigo, diferente do item 5",
+    "maxN": 10,
+    "unit": 10,
+    "artigo": true,
+    "grupo": "6. Publicação científica",
+    "grupoMax": 10
+   },
+   {
+    "item": "6b. Artigo indexado no SciELO",
+    "pontos": "8 por 1 artigo, diferente do item 5",
+    "maxN": 8,
+    "unit": 8,
+    "artigo": true,
+    "grupo": "6. Publicação científica",
+    "grupoMax": 10
+   },
+   {
+    "item": "7a. Organização de congresso de entidade AMB ou internacional",
+    "pontos": "4 por 1 atividade",
+    "maxN": 4,
+    "unit": 4,
+    "artigo": false,
+    "grupo": "7. Organização e participação em congressos",
+    "grupoMax": 5
+   },
+   {
+    "item": "7b. Organização de evento de liga ou estudantes",
+    "pontos": "1 por atividade, até 2",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "7. Organização e participação em congressos",
+    "grupoMax": 5
+   },
+   {
+    "item": "7c. Participação em congresso reconhecido",
+    "pontos": "1 por atividade, até 2",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "7. Organização e participação em congressos",
+    "grupoMax": 5
+   },
+   {
+    "item": "7d. Participação em evento de liga ou estudantes",
+    "pontos": "1 por 1 atividade",
+    "maxN": 1,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "7. Organização e participação em congressos",
+    "grupoMax": 5
+   },
+   {
+    "item": "8a. Oral em congresso internacional com prêmio",
+    "pontos": "8 por 1 apresentação",
+    "maxN": 8,
+    "unit": 8,
+    "artigo": false,
+    "grupo": "8. Apresentação oral",
+    "grupoMax": 8
+   },
+   {
+    "item": "8b. Oral em congresso internacional sem prêmio",
+    "pontos": "7 por 1 apresentação",
+    "maxN": 7,
+    "unit": 7,
+    "artigo": false,
+    "grupo": "8. Apresentação oral",
+    "grupoMax": 8
+   },
+   {
+    "item": "8c. Oral em congresso nacional AMB com prêmio",
+    "pontos": "6 por 1 apresentação",
+    "maxN": 6,
+    "unit": 6,
+    "artigo": false,
+    "grupo": "8. Apresentação oral",
+    "grupoMax": 8
+   },
+   {
+    "item": "8d. Oral em congresso nacional AMB sem prêmio",
+    "pontos": "5 por 1 apresentação",
+    "maxN": 5,
+    "unit": 5,
+    "artigo": false,
+    "grupo": "8. Apresentação oral",
+    "grupoMax": 8
+   },
+   {
+    "item": "8e. Oral em jornada de sociedade AMB com prêmio",
+    "pontos": "4 por 1 apresentação",
+    "maxN": 4,
+    "unit": 4,
+    "artigo": false,
+    "grupo": "8. Apresentação oral",
+    "grupoMax": 8
+   },
+   {
+    "item": "8f. Oral em jornada de sociedade AMB sem prêmio",
+    "pontos": "3 por 1 apresentação",
+    "maxN": 3,
+    "unit": 3,
+    "artigo": false,
+    "grupo": "8. Apresentação oral",
+    "grupoMax": 8
+   },
+   {
+    "item": "8g. Oral em jornada de liga ou estudantes",
+    "pontos": "1 por atividade, até 2",
+    "maxN": 2,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "8. Apresentação oral",
+    "grupoMax": 8
+   },
+   {
+    "item": "9a. Pôster em congresso internacional",
+    "pontos": "4 por 1 pôster",
+    "maxN": 4,
+    "unit": 4,
+    "artigo": false,
+    "grupo": "9. Apresentação de pôster",
+    "grupoMax": 4
+   },
+   {
+    "item": "9b. Pôster em evento nacional AMB",
+    "pontos": "3 por 1 pôster",
+    "maxN": 3,
+    "unit": 3,
+    "artigo": false,
+    "grupo": "9. Apresentação de pôster",
+    "grupoMax": 4
+   },
+   {
+    "item": "9c. Pôster em encontro de liga ou estudantes",
+    "pontos": "1 por 1 pôster",
+    "maxN": 1,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "9. Apresentação de pôster",
+    "grupoMax": 4
+   },
+   {
+    "item": "10. Extensão universitária",
+    "pontos": "Faixa: diretoria do grupo por 1 ano 5, membro por 2 anos 3, membro por 1 ano 1. Não vale liga",
+    "maxN": 5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "11a. Doutorado acadêmico concluído",
+    "pontos": "8 por título",
+    "maxN": 8,
+    "unit": 8,
+    "artigo": false,
+    "grupo": "11. Aprimoramento profissional",
+    "grupoMax": 8
+   },
+   {
+    "item": "11b. Mestrado acadêmico concluído",
+    "pontos": "4 por título",
+    "maxN": 4,
+    "unit": 4,
+    "artigo": false,
+    "grupo": "11. Aprimoramento profissional",
+    "grupoMax": 8
+   },
+   {
+    "item": "11c. Residência concluída em outra área",
+    "pontos": "2 por residência",
+    "maxN": 2,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "11. Aprimoramento profissional",
+    "grupoMax": 8
+   },
+   {
+    "item": "12. Suporte de vida (ACLS, ATLS, PALS, BLS)",
+    "pontos": "2 por curso, até 2 cursos",
+    "maxN": 4,
+    "unit": 2,
+    "artigo": false
+   },
+   {
+    "item": "13. Representação estudantil",
+    "pontos": "Faixa: 2 anos (4 semestres) 3, 1 ano (2 semestres) 1. Não vale liga",
+    "maxN": 3,
+    "unit": null,
+    "artigo": false
+   }
+  ]
  },
  "unifesp": {
   "nome": "UNIFESP",
@@ -359,8 +2073,9 @@
   "inscricao": "07 a 30/10/2026",
   "resultado": "Resultado final a partir de 04/02/2027",
   "link": "https://site.unifesp.br/coreme/images/documentos/PSRM_20262027/Edital_690_-_2026_-_PSRM_2026-2027.pdf",
-  "fichaFonte": "critérios por programa",
-  "obs": "Prova prática do acesso direto em 08/01/2027."
+  "fichaFonte": "Edital UNIFESP 2026 e 2027 (nº 690/2026): sem barema numérico. A análise curricular avalia instituição de origem, histórico, internato, representação, pesquisa, monitoria, extracurriculares, congressos, prêmios, atividades comunitárias e língua estrangeira, com peso definido por cada programa (Notion, painel UNIFESP 2026)",
+  "obs": "Prova prática do acesso direto em 08/01/2027.",
+  "ficha": []
  },
  "siriolibanes": {
   "nome": "Sírio-Libanês",
@@ -373,30 +2088,9 @@
   "inscricao": "01/06 a 14/08/2026",
   "resultado": "Classificação definitiva em 29/01/2027",
   "link": "https://www.vunesp.com.br/HSLI2601",
-  "fichaFonte": "ficha oficial 2027 do pré-requisito",
+  "fichaFonte": "Edital Sírio-Libanês 2027 (VUNESP). No acesso direto não há análise de currículo, só prova. A ficha de 0 a 100 do edital é só para pré-requisito",
   "obs": "No acesso direto o currículo não pontua.",
-  "ficha": [
-   {
-    "item": "Artigo completo publicado (com DOI)",
-    "pontos": "SciELO 20. PubMed 40",
-    "max": "40"
-   },
-   {
-    "item": "Trabalho ou pôster em evento (durante a residência)",
-    "pontos": "10",
-    "max": "10"
-   },
-   {
-    "item": "Proficiência em inglês",
-    "pontos": "20",
-    "max": "20"
-   },
-   {
-    "item": "Atividade de interesse adicional",
-    "pontos": "10 cada, até 3",
-    "max": "30"
-   }
-  ]
+  "ficha": []
  },
  "fmabc": {
   "nome": "FMABC",
@@ -409,8 +2103,108 @@
   "inscricao": "07/10 a 04/11/2026",
   "resultado": "Currículo em 20/01/2027 e final em 12/02/2027",
   "link": "https://www.avalia.org.br/concursos/640",
-  "fichaFonte": "não encontrada, conferir",
-  "obs": "Só contam atividades da época da faculdade."
+  "fichaFonte": "Edital FMABC 2027 (Instituto Avalia), Anexo I, lido na triagem do Yago em 11/10/2026. Só contam atividades da graduação, exceto inglês",
+  "obs": "Só contam atividades da época da faculdade.",
+  "ficha": [
+   {
+    "item": "1a Teste do Progresso Interinstitucional",
+    "pontos": "4 ou mais participações: 1,0",
+    "maxN": 1.0,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1b Estágio extracurricular ou eletivo (mais de 120 h)",
+    "pontos": "1,0 (mínimo de 20 dias)",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "1c Associações acadêmicas (CA, DA, atlética, IFMSA, ligas), 6 meses ou mais",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "1d Atividades e projetos sociais",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "1e Curso ACLS (durante a graduação)",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "1f Representante em órgãos colegiados",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "2g Monitoria de 40 h e 1 ano",
+    "pontos": "1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "2h Monitoria de 20 a 40 h e 1 semestre",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "3i Iniciação científica (1 ano ou mais)",
+    "pontos": "1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "3j Artigo completo em revista indexada (PubMed ou Lilacs)",
+    "pontos": "0,5 por artigo, até 1,0",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": true
+   },
+   {
+    "item": "3k Trabalho apresentado em evento científico",
+    "pontos": "0,5 por trabalho, até 1,0",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "3l Organizador de ligas, jornadas, cursos ou congressos",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "3m Ouvinte em jornadas, cursos, simpósios ou congressos",
+    "pontos": "Até 3: 0,25. 4 ou mais: 0,5",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "4n Língua inglesa (Cambridge, TOEIC, IELTS, FCE)",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   }
+  ]
  },
  "einstein": {
   "nome": "Einstein",
@@ -423,8 +2217,9 @@
   "inscricao": "19/08 a 21/09/2026",
   "resultado": "Prática e currículo em 11/01/2027, classificação em 27/01/2027",
   "link": "https://www.vunesp.com.br",
-  "fichaFonte": "não encontrada, conferir",
-  "obs": "A banca olha IC, publicações PubMed (primeiro ou último autor), fator de impacto e pós-graduação."
+  "fichaFonte": "Edital Einstein 2027 (VUNESP), item 4.5.8. Cita IC, publicações PubMed (autoria, DOI e fator de impacto) e pós-graduação stricto sensu, mas os pesos sairão em aditivo ainda não encontrado. Currículo vale 10% da nota",
+  "obs": "A banca olha IC, publicações PubMed (primeiro ou último autor), fator de impacto e pós-graduação.",
+  "ficha": []
  },
  "santacasasp": {
   "nome": "Santa Casa SP",
@@ -437,25 +2232,14 @@
   "inscricao": "05/10 a 04/11/2026",
   "resultado": "Currículo em 28/01/2027 e final em 17/02/2027",
   "link": "https://www.concursosfcc.com.br/concursos/scmsp126/index.html",
-  "fichaFonte": "parcial, conferir",
+  "fichaFonte": "Edital SCMSP 2027 (FCC). Nota de 0 a 100, peso 1. Os critérios ficam no Anexo II e mudam por grupo de especialidade. Não foi possível abrir o Anexo II. Único valor confirmado: nota da faculdade no ENAMED 2025 vale até 2,5",
   "obs": "Novidade: nota da faculdade no ENAMED 2025 vale até 2,5 pontos. ATLS válido no ano da inscrição é aceito.",
-  "ficha": [
-   {
-    "item": "ENAMED 2025 da faculdade",
-    "pontos": "",
-    "max": "2,5"
-   },
-   {
-    "item": "Internato, publicações, IC, monitoria, ligas e eventos",
-    "pontos": "não encontrados",
-    "max": ""
-   }
-  ]
+  "ficha": []
  },
  "usprp": {
   "nome": "USP-RP",
   "peso": "10% em 16 áreas de acesso direto (com prova escrita 0,5 e prática 0,4)",
-  "maximo": "não encontrado",
+  "maximo": "10",
   "formato": "Resumo do currículo e comprovantes, um PDF por documento, pela plataforma",
   "envio": "27/11 a 01/12/2026, só habilitados. Quem não envia é eliminado",
   "prazoEnvio": "2026-12-01",
@@ -463,25 +2247,204 @@
   "inscricao": "06 a 26/10/2026 (16h)",
   "resultado": "Resultado final em 17/12/2026",
   "link": "https://extranet.hcrp.usp.br/novorh/ListaArquivos.aspx?edital=3650&s=3",
-  "fichaFonte": "parcial, conferir no item 5",
+  "fichaFonte": "Edital USP-RP 2027 acesso direto (HCRP), item 5.2. Vale para os 16 programas de acesso direto com análise curricular. A residência de pré-requisito (2,0) é só para R+ e ficou de fora",
   "obs": "Prova prática em 05/12/2026.",
   "ficha": [
    {
-    "item": "Histórico acadêmico (hospital universitário, pós-graduação CAPES, ENAMED)",
-    "pontos": "",
-    "max": "1,5"
+    "item": "1a Faculdade com hospital universitário próprio",
+    "pontos": "0,5 com declaração da instituição",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "1 Histórico acadêmico",
+    "grupoMax": 1.5
    },
    {
-    "item": "Residência de pré-requisito (só R+)",
-    "pontos": "",
-    "max": "2,0"
+    "item": "1b Programas de pós-graduação em saúde (CAPES) da faculdade",
+    "pontos": "5 ou mais: 0,5. 2 a 4: 0,3. 1: 0,2",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false,
+    "grupo": "1 Histórico acadêmico",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "1c Conceito da faculdade no último ENAMED",
+    "pontos": "Conceito 1: 0,1 até conceito 5: 0,5",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false,
+    "grupo": "1 Histórico acadêmico",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "2a Liga estudantil (ano letivo, 80 h ou mais)",
+    "pontos": "0,5 por ano",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "2 Atividades assistenciais extracurriculares",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "2b Trabalho voluntário social (últimos 7 anos)",
+    "pontos": "0,5 a cada 120 h",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "2 Atividades assistenciais extracurriculares",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "3a Artigo completo em revista PubMed, SciELO ou Scopus, com DOI",
+    "pontos": "1,0 por artigo",
+    "maxN": 3.0,
+    "unit": 1.0,
+    "artigo": true,
+    "grupo": "3 Atividades científicas",
+    "grupoMax": 3.0
+   },
+   {
+    "item": "3b Iniciação científica sem bolsa (12 meses)",
+    "pontos": "0,5 por ano",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "3 Atividades científicas",
+    "grupoMax": 3.0
+   },
+   {
+    "item": "3c Iniciação científica com bolsa (12 meses)",
+    "pontos": "0,7 por ano",
+    "maxN": 1.4,
+    "unit": 0.7,
+    "artigo": false,
+    "grupo": "3 Atividades científicas",
+    "grupoMax": 3.0
+   },
+   {
+    "item": "3d Apresentação oral como 1º autor",
+    "pontos": "0,5 por apresentação",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "3 Atividades científicas",
+    "grupoMax": 3.0
+   },
+   {
+    "item": "3e Pôster regional (1º ou 2º autor)",
+    "pontos": "0,10 cada. Os pôsteres juntos valem até 0,6",
+    "maxN": 0.6,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "3 Atividades científicas",
+    "grupoMax": 3.0
+   },
+   {
+    "item": "3f Pôster estadual (1º ou 2º autor)",
+    "pontos": "0,15 cada. Os pôsteres juntos valem até 0,6",
+    "maxN": 0.6,
+    "unit": 0.15,
+    "artigo": false,
+    "grupo": "3 Atividades científicas",
+    "grupoMax": 3.0
+   },
+   {
+    "item": "3g Pôster nacional (1º ou 2º autor)",
+    "pontos": "0,20 cada. Os pôsteres juntos valem até 0,6",
+    "maxN": 0.6,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "3 Atividades científicas",
+    "grupoMax": 3.0
+   },
+   {
+    "item": "3h Pôster internacional (1º ou 2º autor)",
+    "pontos": "0,30 cada. Os pôsteres juntos valem até 0,6",
+    "maxN": 0.6,
+    "unit": 0.3,
+    "artigo": false,
+    "grupo": "3 Atividades científicas",
+    "grupoMax": 3.0
+   },
+   {
+    "item": "4a Monitoria com bolsa (6 meses ou mais)",
+    "pontos": "0,25 por semestre",
+    "maxN": 1.0,
+    "unit": 0.25,
+    "artigo": false,
+    "grupo": "4 Atividades de ensino extracurriculares",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "4b Docência em cursinho pré-vestibular (1 ano)",
+    "pontos": "0,5 por ano",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "4 Atividades de ensino extracurriculares",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "4c Organização de evento científico",
+    "pontos": "0,3 por evento",
+    "maxN": 0.6,
+    "unit": 0.3,
+    "artigo": false,
+    "grupo": "4 Atividades de ensino extracurriculares",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "4d Prova avaliativa não obrigatória (ex.: teste do progresso)",
+    "pontos": "0,5 por prova",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "4 Atividades de ensino extracurriculares",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "4e Prêmio acadêmico institucional",
+    "pontos": "0,2 por prêmio",
+    "maxN": 0.4,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "4 Atividades de ensino extracurriculares",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "5a Cargo em DA, CA ou atlética (1 ano letivo)",
+    "pontos": "0,5 por ano, um cargo por mandato",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "5 Atividades estudantis",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "5b Representação discente em colegiados oficiais",
+    "pontos": "0,5 por ano letivo",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "5 Atividades estudantis",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "5c Representação em comissões de avaliação ou reforma curricular",
+    "pontos": "0,5 por ano letivo",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "5 Atividades estudantis",
+    "grupoMax": 2.0
    }
   ]
  },
  "famerp": {
   "nome": "FAMERP",
   "peso": "10% (peso 1, sem entrevista)",
-  "maximo": "não encontrado",
+  "maximo": "10",
   "formato": "Não confirmado",
   "envio": "11 a 14/12/2026, só convocados para a 2ª fase",
   "prazoEnvio": "2026-12-14",
@@ -489,8 +2452,120 @@
   "inscricao": "21/09 a 21/10/2026",
   "resultado": "Currículo em 20/01/2027 e final em 29/01/2027",
   "link": "https://www.famerp.br/index.php/diretoria-de-pos-graduacao/coreme/processo-seletivo-coreme-2027-acesso-direto-e-especialidades/",
-  "fichaFonte": "itens conhecidos, pontos não encontrados",
-  "obs": "Ficha do acesso direto: internato, monitoria por semestre letivo, liga e IC."
+  "fichaFonte": "Edital FAMERP 2027 acesso direto (GDG nº 032/2026), Anexo VI",
+  "obs": "Ficha do acesso direto: internato, monitoria por semestre letivo, liga e IC.",
+  "ficha": [
+   {
+    "item": "1 Internato de 2 anos ou mais em hospital universitário ou de ensino",
+    "pontos": "1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "2 Faculdade com pós stricto sensu nota CAPES 4 ou mais",
+    "pontos": "Doutorado: 1,0. Mestrado: 0,5",
+    "maxN": 1.0,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "3 Teste do Progresso Interinstitucional",
+    "pontos": "6 participações: 0,4. 7 ou mais: 0,5",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "4a Estágios extracurriculares (60 h ou mais)",
+    "pontos": "1: 0,3. 2 ou mais: 0,5",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false,
+    "grupo": "4 Outras atividades extracurriculares",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "4b Projetos de extensão (2 semestres ou mais)",
+    "pontos": "1: 0,3. 2 ou mais: 0,5",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false,
+    "grupo": "4 Outras atividades extracurriculares",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "5 Monitoria oficial",
+    "pontos": "0,5 por semestre",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "6 Liga científica (2 semestres ou mais)",
+    "pontos": "1: 0,3. 2 ou mais: 0,5",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "7 Artigo completo em periódico indexado, com DOI",
+    "pontos": "1: 1,0. 2 ou mais: 1,5",
+    "maxN": 1.5,
+    "unit": null,
+    "artigo": true
+   },
+   {
+    "item": "8a Apresentação oral em congresso",
+    "pontos": "0,4 cada",
+    "maxN": 0.8,
+    "unit": 0.4,
+    "artigo": false,
+    "grupo": "8 Trabalhos em congressos",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "8b Pôster em congresso",
+    "pontos": "0,1 cada",
+    "maxN": 0.2,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "8 Trabalhos em congressos",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "9 Congressos ou cursos extracurriculares (10 h ou mais)",
+    "pontos": "1: 0,2. 2: 0,4. 3 ou mais: 0,5",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "10 Iniciação científica regulamentada",
+    "pontos": "1: 1,0. 2 ou mais: 1,5",
+    "maxN": 1.5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "11a Diretorias e colegiados (2 semestres ou mais)",
+    "pontos": "0,3 por participação",
+    "maxN": 0.5,
+    "unit": 0.3,
+    "artigo": false,
+    "grupo": "11 Representação estudantil",
+    "grupoMax": 0.5
+   },
+   {
+    "item": "11b Equipe esportiva universitária (3 anos ou mais)",
+    "pontos": "0,2 por participação",
+    "maxN": 0.5,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "11 Representação estudantil",
+    "grupoMax": 0.5
+   }
+  ]
  },
  "cet": {
   "nome": "CET Centro Médico de Campinas",
@@ -503,8 +2578,9 @@
   "inscricao": "até 27/11/2026",
   "resultado": "2ª fase de 07 a 09/12/2026",
   "link": "https://cetcmc.com.br",
-  "fichaFonte": "sem ficha",
-  "obs": "É especialização credenciada pela SBA, não residência do MEC."
+  "fichaFonte": "Edital CET Centro Médico de Campinas (Anestesiologia, SBA) 2027. Sem tabela de pontos: a banca avalia o currículo em PDF na 2ª fase (prático-oral e análise curricular, nota de 0 a 100, 60% da nota final)",
+  "obs": "É especialização credenciada pela SBA, não residência do MEC.",
+  "ficha": []
  },
  "hcpa": {
   "nome": "HCPA",
@@ -517,60 +2593,340 @@
   "inscricao": "28/08 a 29/09/2026",
   "resultado": "Definitivo em 16/12/2026",
   "link": "https://fundmed.org.br/website/wp-content/uploads/2026/08/HCPA-MEDICA-Edital-de-Abertura-das-Inscricoes.pdf",
-  "fichaFonte": "máximos por item de fonte secundária (somam 8,5), conferir",
+  "fichaFonte": "Edital HCPA 2027 (FUNDMED), Anexo III, acesso direto. Tetos dos itens lidos no edital (triagem do Yago, 13/10/2026). Valores por subitem do resumo da Medcof de 2026/2027, conferir. Capítulo: Medcof diz 0,1 e a triagem anotou 0,2",
   "obs": "Exige 50% de acertos na prova.",
   "ficha": [
    {
-    "item": "Histórico escolar",
-    "pontos": "",
-    "max": "0,6"
+    "item": "A Histórico escolar da graduação",
+    "pontos": "Maioria A (9 ou mais): 0,6. Maioria B: 0,3. Maioria C: 0",
+    "maxN": 0.6,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Última nota ENADE da faculdade",
-    "pontos": "",
-    "max": "0,5"
+    "item": "B Última nota do curso no ENADE",
+    "pontos": "5: 0,5. 4: 0,3. 3: 0,1. 1, 2 ou sem nota: 0",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Instituição de formação (pós stricto sensu)",
-    "pontos": "",
-    "max": "0,5"
+    "item": "C Instituição com pós stricto sensu",
+    "pontos": "Doutorado: 0,5. Mestrado: 0,2",
+    "maxN": 0.5,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Teste do Progresso",
-    "pontos": "",
-    "max": "0,2"
+    "item": "D Teste do progresso",
+    "pontos": "0,05 por participação",
+    "maxN": 0.2,
+    "unit": 0.05,
+    "artigo": false
    },
    {
-    "item": "Produção científica",
-    "pontos": "capítulo 0,2",
-    "max": "1,5"
+    "item": "E1 Artigo indexado com JCR 1 ou mais",
+    "pontos": "1,0 por artigo",
+    "maxN": 1.5,
+    "unit": 1.0,
+    "artigo": true,
+    "grupo": "E Produção científica",
+    "grupoMax": 1.5
    },
    {
-    "item": "Eventos científicos",
-    "pontos": "",
-    "max": "1,2"
+    "item": "E2 Artigo indexado com JCR menor que 1",
+    "pontos": "0,5 por artigo",
+    "maxN": 1.5,
+    "unit": 0.5,
+    "artigo": true,
+    "grupo": "E Produção científica",
+    "grupoMax": 1.5
    },
    {
-    "item": "Monitorias, projetos e IC",
-    "pontos": "",
-    "max": "2,0"
+    "item": "E3 Artigo indexado sem JCR (Lilacs, SciELO, Medline)",
+    "pontos": "0,2 por artigo",
+    "maxN": 1.5,
+    "unit": 0.2,
+    "artigo": true,
+    "grupo": "E Produção científica",
+    "grupoMax": 1.5
    },
    {
-    "item": "Domínio de línguas",
-    "pontos": "",
-    "max": "1,0"
+    "item": "E4 Livro ou capítulo",
+    "pontos": "0,1 por publicação (conferir, pode ser 0,2)",
+    "maxN": 0.5,
+    "unit": 0.1,
+    "artigo": true,
+    "grupo": "E Produção científica",
+    "grupoMax": 1.5
    },
    {
-    "item": "Experiências extracurriculares (suporte de vida: 0,2 cada, BLS 0,1)",
-    "pontos": "",
-    "max": "1,0"
+    "item": "F1 Organização de congresso de entidade de classe",
+    "pontos": "0,3 por evento",
+    "maxN": 0.6,
+    "unit": 0.3,
+    "artigo": false,
+    "grupo": "F Eventos científicos",
+    "grupoMax": 1.2
+   },
+   {
+    "item": "F2 Organização de jornada ou evento de liga ou diretório",
+    "pontos": "0,2 por evento",
+    "maxN": 0.4,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "F Eventos científicos",
+    "grupoMax": 1.2
+   },
+   {
+    "item": "F3 Trabalho premiado",
+    "pontos": "0,3 por prêmio",
+    "maxN": 0.6,
+    "unit": 0.3,
+    "artigo": false,
+    "grupo": "F Eventos científicos",
+    "grupoMax": 1.2
+   },
+   {
+    "item": "F4 Participação em evento internacional",
+    "pontos": "0,1 por evento",
+    "maxN": 0.5,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "F Eventos científicos",
+    "grupoMax": 1.2
+   },
+   {
+    "item": "F5 Participação em evento nacional",
+    "pontos": "0,05 por evento",
+    "maxN": 0.5,
+    "unit": 0.05,
+    "artigo": false,
+    "grupo": "F Eventos científicos",
+    "grupoMax": 1.2
+   },
+   {
+    "item": "F6 Apresentação oral",
+    "pontos": "0,4 por apresentação",
+    "maxN": 0.8,
+    "unit": 0.4,
+    "artigo": false,
+    "grupo": "F Eventos científicos",
+    "grupoMax": 1.2
+   },
+   {
+    "item": "F7 Pôster",
+    "pontos": "0,2 por apresentação",
+    "maxN": 0.6,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "F Eventos científicos",
+    "grupoMax": 1.2
+   },
+   {
+    "item": "G1 Monitoria voluntária",
+    "pontos": "0,1 por semestre",
+    "maxN": 0.3,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "G Monitorias, projetos e IC",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "G2 Monitoria",
+    "pontos": "0,2 por semestre",
+    "maxN": 0.6,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "G Monitorias, projetos e IC",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "G3 Mesma monitoria em semestres seguidos",
+    "pontos": "0,3 por semestre concluído",
+    "maxN": 0.9,
+    "unit": 0.3,
+    "artigo": false,
+    "grupo": "G Monitorias, projetos e IC",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "G4 Projeto de extensão",
+    "pontos": "0,1 por projeto",
+    "maxN": 0.5,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "G Monitorias, projetos e IC",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "G5 Liga acadêmica (mínimo 1 ano)",
+    "pontos": "0,2 por ano",
+    "maxN": 0.6,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "G Monitorias, projetos e IC",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "G6 IC sem bolsa",
+    "pontos": "0,2 por semestre",
+    "maxN": 0.6,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "G Monitorias, projetos e IC",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "G7 IC com bolsa",
+    "pontos": "0,3 por semestre",
+    "maxN": 0.9,
+    "unit": 0.3,
+    "artigo": false,
+    "grupo": "G Monitorias, projetos e IC",
+    "grupoMax": 2.0
+   },
+   {
+    "item": "H1 Inglês com proficiência",
+    "pontos": "1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false,
+    "grupo": "H Domínio de línguas",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "H2 Inglês em outros níveis",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "H Domínio de línguas",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "H3 Outras línguas com proficiência",
+    "pontos": "0,4 por língua",
+    "maxN": 1.0,
+    "unit": 0.4,
+    "artigo": false,
+    "grupo": "H Domínio de línguas",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "I1 Voluntariado em campanha curta",
+    "pontos": "0,1 por atividade",
+    "maxN": 1.0,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "I Experiências extracurriculares",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "I2 Voluntariado de 48 a 96 h",
+    "pontos": "0,15 por atividade",
+    "maxN": 1.0,
+    "unit": 0.15,
+    "artigo": false,
+    "grupo": "I Experiências extracurriculares",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "I3 Voluntariado acima de 96 h",
+    "pontos": "0,3 por atividade",
+    "maxN": 1.0,
+    "unit": 0.3,
+    "artigo": false,
+    "grupo": "I Experiências extracurriculares",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "I4 Atividades representativas",
+    "pontos": "0,2 por ano por atividade",
+    "maxN": 0.6,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "I Experiências extracurriculares",
+    "grupoMax": 1.0
+   },
+   {
+    "item": "J1 Doutorado concluído",
+    "pontos": "1,5",
+    "maxN": 1.5,
+    "unit": 1.5,
+    "artigo": false,
+    "grupo": "J Aprimoramento profissional e humano",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "J2 Mestrado concluído",
+    "pontos": "1,0",
+    "maxN": 1.0,
+    "unit": 1.0,
+    "artigo": false,
+    "grupo": "J Aprimoramento profissional e humano",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "J3 Mestrado ou doutorado profissional",
+    "pontos": "0,8",
+    "maxN": 0.8,
+    "unit": 0.8,
+    "artigo": false,
+    "grupo": "J Aprimoramento profissional e humano",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "J4 Mestrado ou doutorado em andamento",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "J Aprimoramento profissional e humano",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "J5 Outra graduação concluída",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "J Aprimoramento profissional e humano",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "J6 ACLS, ATLS, PALS, ALSO ou reanimação neonatal (últimos 2 anos)",
+    "pontos": "0,2 por curso",
+    "maxN": 1.5,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "J Aprimoramento profissional e humano",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "J7 BLS (últimos 2 anos)",
+    "pontos": "0,1 por curso",
+    "maxN": 1.5,
+    "unit": 0.1,
+    "artigo": false,
+    "grupo": "J Aprimoramento profissional e humano",
+    "grupoMax": 1.5
+   },
+   {
+    "item": "J8 Atividades culturais ou esportivas",
+    "pontos": "0,2 por atividade",
+    "maxN": 0.6,
+    "unit": 0.2,
+    "artigo": false,
+    "grupo": "J Aprimoramento profissional e humano",
+    "grupoMax": 1.5
    }
   ]
  },
  "idor": {
   "nome": "IDOR",
   "peso": "Currículo eliminatório (mínimo de 4 pontos)",
-  "maximo": "não encontrado",
+  "maximo": "10",
   "formato": "Cada documento em arquivo separado, nomeado e sem senha, frente e verso",
   "envio": "Na inscrição, de 23/10 a 07/12/2026. Reabre de 21/12/2026 a 04/01/2027 para os aprovados",
   "prazoEnvio": "2026-12-07",
@@ -578,8 +2934,66 @@
   "inscricao": "23/10 a 07/12/2026",
   "resultado": "Convocação da 2ª fase em 22/01/2027",
   "link": "https://econrio.com.br/index.php/course/residencia-medica-idor-2027-unificado/",
-  "fichaFonte": "Anexo 4 de 2027 não publicado. Ficha de 2026 como referência",
-  "obs": "Quem não envia no prazo é eliminado."
+  "fichaFonte": "Anexo 4 do Edital RM IDOR Unificado 2027 (ECONRIO), acesso direto exceto Patologia. Currículo eliminatório, mínimo de 4 pontos",
+  "obs": "Quem não envia no prazo é eliminado.",
+  "ficha": [
+   {
+    "item": "1 Bolsa de IC (6 meses) ou projeto de extensão em saúde (30 h)",
+    "pontos": "0,5 cada",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "2 Monitoria (6 meses ou 1 semestre)",
+    "pontos": "0,5 cada",
+    "maxN": 1.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "3 Liga acadêmica (6 meses ou 1 semestre)",
+    "pontos": "0,5 cada",
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "4 Artigo publicado (PubMed, Scopus, Web of Science ou SciELO), até 8 autores salvo 1º autor",
+    "pontos": "0,5 cada",
+    "maxN": 1.5,
+    "unit": 0.5,
+    "artigo": true
+   },
+   {
+    "item": "5 Apresentação oral ou pôster em congresso",
+    "pontos": "1,0 cada",
+    "maxN": 2.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "6 Estágio extracurricular (6 meses)",
+    "pontos": "1,0 cada",
+    "maxN": 2.0,
+    "unit": 1.0,
+    "artigo": false
+   },
+   {
+    "item": "7 Internato de 2 anos ou hospital de ensino próprio ou conveniado",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   },
+   {
+    "item": "8 Proficiência em inglês ou curso de 3 anos",
+    "pontos": "0,5",
+    "maxN": 0.5,
+    "unit": 0.5,
+    "artigo": false
+   }
+  ]
  },
  "puccamp": {
   "nome": "PUC-Campinas",
@@ -592,33 +3006,229 @@
   "inscricao": "01/10 a 10/11/2026",
   "resultado": "Resultado final em 02/02/2027",
   "link": "https://www.tekyou.com.br",
-  "fichaFonte": "grupos oficiais, pontos por atividade não encontrados",
+  "fichaFonte": "Edital Hospital PUC-Campinas 2027, Anexo I, acesso direto. Graduação 36, científicas 20, pesquisa 14, voluntariado 20, idiomas 10. Teto do ENAMED do aluno lido como 4 (o anexo traz 14, que não fecha com o grupo). Tetos do grupo 4 ambíguos no anexo",
   "obs": "Cursos de suporte de vida precisam ter mais de 12 horas.",
   "ficha": [
    {
-    "item": "Curso de graduação",
-    "pontos": "",
-    "max": "36"
+    "item": "1.1 Hospital de ensino",
+    "pontos": "Próprio: 10. Conveniado: 3",
+    "maxN": 10,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Atividades científicas e publicações",
-    "pontos": "",
-    "max": "20"
+    "item": "1.2a Faculdade com mestrado ou doutorado",
+    "pontos": "4",
+    "maxN": 4,
+    "unit": 4,
+    "artigo": false
    },
    {
-    "item": "Atividades de pesquisa",
-    "pontos": "",
-    "max": "14"
+    "item": "1.2b Nota ENAMED da faculdade",
+    "pontos": "Até 2: 0. 3: 1. 4 ou mais: 4",
+    "maxN": 4,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Voluntariado e órgãos colegiados",
-    "pontos": "",
-    "max": "20"
+    "item": "1.3 Sanções disciplinares",
+    "pontos": "Desconta 5 pontos por sanção",
+    "maxN": 0,
+    "unit": null,
+    "artigo": false
    },
    {
-    "item": "Proficiência em idiomas",
-    "pontos": "",
-    "max": "10"
+    "item": "1.4 Monitoria",
+    "pontos": "192 h ou mais: 10. 128 h: 4. 64 h: 2",
+    "maxN": 10,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1.5 Nota ENAMED do aluno",
+    "pontos": "Menor que 6: 0. 6 a 8: 2. 8 ou mais: 4",
+    "maxN": 4,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "1.6 Cursos de mais de 12 h (ACLS, ATLS, PALS, BLS, SAVIC, PHTLS)",
+    "pontos": "Valor por curso não informado. Certificado com data, duração e entidade",
+    "maxN": 4,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "2.1a Artigo em periódico indexado",
+    "pontos": "1 por artigo",
+    "maxN": 10,
+    "unit": 1,
+    "artigo": true,
+    "grupo": "2.1 Artigos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.1b Artigo em periódico com fator de impacto até 0,5",
+    "pontos": "2 por artigo",
+    "maxN": 10,
+    "unit": 2,
+    "artigo": true,
+    "grupo": "2.1 Artigos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.1c Artigo em periódico com fator de impacto acima de 1,0",
+    "pontos": "10 por artigo",
+    "maxN": 10,
+    "unit": 10,
+    "artigo": true,
+    "grupo": "2.1 Artigos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.2a Tema livre em congresso internacional",
+    "pontos": "4 cada",
+    "maxN": 10,
+    "unit": 4,
+    "artigo": false,
+    "grupo": "2.2 Comunicações em congressos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.2b Pôster em congresso internacional",
+    "pontos": "2 cada",
+    "maxN": 10,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "2.2 Comunicações em congressos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.2c Tema livre em congresso nacional",
+    "pontos": "2 cada",
+    "maxN": 10,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "2.2 Comunicações em congressos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.2d Pôster em congresso nacional",
+    "pontos": "1 cada",
+    "maxN": 10,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "2.2 Comunicações em congressos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.2e Tema livre em congresso regional",
+    "pontos": "1 cada",
+    "maxN": 10,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "2.2 Comunicações em congressos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.2f Pôster em congresso regional",
+    "pontos": "0,5 cada",
+    "maxN": 10,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "2.2 Comunicações em congressos",
+    "grupoMax": 10
+   },
+   {
+    "item": "2.2g Comunicação em congresso acadêmico da faculdade",
+    "pontos": "0,5 cada",
+    "maxN": 10,
+    "unit": 0.5,
+    "artigo": false,
+    "grupo": "2.2 Comunicações em congressos",
+    "grupoMax": 10
+   },
+   {
+    "item": "3a Iniciação científica com bolsa",
+    "pontos": "10",
+    "maxN": 10,
+    "unit": 10,
+    "artigo": false
+   },
+   {
+    "item": "3b Iniciação científica sem bolsa",
+    "pontos": "4",
+    "maxN": 4,
+    "unit": 4,
+    "artigo": false
+   },
+   {
+    "item": "4.1a Diretoria de liga por 1 ano",
+    "pontos": "4",
+    "maxN": 5,
+    "unit": 4,
+    "artigo": false,
+    "grupo": "4.1 Ligas e representação",
+    "grupoMax": 5
+   },
+   {
+    "item": "4.1b Liga por 2 anos ou mais",
+    "pontos": "2",
+    "maxN": 5,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "4.1 Ligas e representação",
+    "grupoMax": 5
+   },
+   {
+    "item": "4.1c Liga por 1 ano",
+    "pontos": "1",
+    "maxN": 5,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "4.1 Ligas e representação",
+    "grupoMax": 5
+   },
+   {
+    "item": "4.1d Representante estudantil, departamento científico ou atlética",
+    "pontos": "2 por certificado",
+    "maxN": 5,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "4.1 Ligas e representação",
+    "grupoMax": 5
+   },
+   {
+    "item": "4.2a Organização de congresso de entidade de classe",
+    "pontos": "2 por certificado",
+    "maxN": 10,
+    "unit": 2,
+    "artigo": false,
+    "grupo": "4.2 Organização de eventos",
+    "grupoMax": 10
+   },
+   {
+    "item": "4.2b Organização de jornada ou evento de liga",
+    "pontos": "1 por certificado",
+    "maxN": 10,
+    "unit": 1,
+    "artigo": false,
+    "grupo": "4.2 Organização de eventos",
+    "grupoMax": 10
+   },
+   {
+    "item": "4.3 Voluntariado certificado",
+    "pontos": "Mais de 100 h: 5. 50 a 100 h: 2",
+    "maxN": 5,
+    "unit": null,
+    "artigo": false
+   },
+   {
+    "item": "5 Inglês B2 ou mais (Cambridge, TOEIC, IELTS) ou TOEFL 460 ou mais",
+    "pontos": "Até 10. Valor por certificado não informado",
+    "maxN": 10,
+    "unit": null,
+    "artigo": false
    }
   ]
  },
@@ -639,47 +3249,65 @@
    {
     "item": "01. Histórico escolar da graduação",
     "pontos": "Média de todas as disciplinas, reprovação conta como zero. Declaração só com média ou coeficiente não vale",
-    "max": "1,0"
+    "maxN": 1.0,
+    "unit": null,
+    "artigo": false
    },
    {
     "item": "02. Monitoria oficial em disciplina regular",
     "pontos": "0,2 por ano e 0,1 por semestre. O certificado precisa ter o nome da disciplina",
-    "max": "1,5"
+    "maxN": 1.5,
+    "unit": 0.2,
+    "artigo": false
    },
    {
     "item": "03. Bolsa de pesquisa ou extensão (PIBIC, PIVIC, PET, PROBEC, PROVEC, PROEXT, FAPEG, CNPq)",
     "pontos": "0,2 por bolsa",
-    "max": "2,0"
+    "maxN": 2.0,
+    "unit": 0.2,
+    "artigo": false
    },
    {
     "item": "04. Liga acadêmica e representação estudantil",
     "pontos": "Liga 0,25 por ano. Representação 0,1",
-    "max": "1,0"
+    "maxN": 1.0,
+    "unit": 0.25,
+    "artigo": false
    },
    {
     "item": "05. Trabalho apresentado ou publicado em anais (últimos 10 anos)",
     "pontos": "Autor 0,05 e coautor 0,025. Sem autoria clara conta como coautor. Cada trabalho conta uma vez",
-    "max": "0,5"
+    "maxN": 0.5,
+    "unit": 0.05,
+    "artigo": false
    },
    {
     "item": "06. Artigo completo em periódico com corpo editorial",
     "pontos": "Autor 0,1 e coautor 0,05. Resumo não conta",
-    "max": "2,0"
+    "maxN": 2.0,
+    "unit": 0.1,
+    "artigo": true
    },
    {
     "item": "07. Suporte avançado (ATLS, ACLS, ABLS, PALS, PHTLS) nos últimos 2 anos",
     "pontos": "0,5 por curso, só com aprovação",
-    "max": "1,0"
+    "maxN": 1.0,
+    "unit": 0.5,
+    "artigo": false
    },
    {
     "item": "08. Atividade de extensão (campanha, vacinação, ação comunitária)",
     "pontos": "0,05 por atividade",
-    "max": "0,5"
+    "maxN": 0.5,
+    "unit": 0.05,
+    "artigo": false
    },
    {
     "item": "09. Atividade extracurricular (curso, estágio, idioma, informática, concurso, congresso)",
     "pontos": "0,05 por atividade, com pelo menos 30 horas por certificado",
-    "max": "0,5"
+    "maxN": 0.5,
+    "unit": 0.05,
+    "artigo": false
    }
   ]
  }

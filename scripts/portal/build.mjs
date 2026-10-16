@@ -78,6 +78,7 @@ function linhaDeExport(r) {
     mentorPago: sim(r["Mentor pago"]), corretorPago: sim(r["corretor  pago "]), desconto: arr(r["DESCONTO APLICADO "]), forma: r["FORMA DE PAGAMENTO "], origem: r["ORIGEM DO CLIENTE "],
     inicio: r["date:Data de início :start"], entrega: r["date:Data da entrega:start"], dataPagMentor: r["date:DATA DE PAGAMENTO  MENTOR:start"] || r["date:Data do Pagamento do Mentor/Corretor:start"], dataPagCorretor: r["date:Data do Pagamento do Mentor/Corretor:start"],
     nCert: n(Object.entries(r).find(([k, v]) => /certificad/i.test(k) && typeof v === "number")?.[1]),
+    contTexto: String(r["Certificados por item"] || ""),
     nArtigos: n(Object.entries(r).find(([k, v]) => /artigo/i.test(k) && typeof v === "number")?.[1]),
     analises: Object.entries(r).filter(([k, v]) => /an[aá]lise/i.test(k) && Array.isArray(v) && v.length && typeof v[0] === "object").flatMap(([, v]) => v),
     valorMentor: n(r["Valor para mentor"] ?? r["Valor para o mentor"]), valorCorretor: n(r["Valor para corretor"]), valorMedeasy: n(r["Valor para Medeasy"]),
@@ -130,6 +131,15 @@ function juntarProva(provas, pr) {
   if (atual) { const id = atual.id; provas.delete(atual.nome); provas.set(pr.nome, { ...atual, ...pr, id }); }
   else provas.set(pr.nome, { id: "p" + provas.size, ...pr });
 }
+/* Coluna "Certificados por item": uma linha por prova, "PSU-GO: 2=2; 4=3; 9=/0,5" (item=certificados, /pontos digitados) */
+function lerTextoCont(t) {
+  const out = {};
+  for (const ln of String(t || "").split(/\n|\|/)) {
+    const m = ln.match(/^\s*([^:]+):(.*)$/); if (!m) continue; const pr = (out[kProva(m[1])] ||= {});
+    for (const par of m[2].split(";")) { const x = par.trim().match(/^(\d+)\s*=\s*(\d+)?\s*(?:\/\s*([\d.,]+))?/); if (x) pr[+x[1]] = { n: x[2] ? +x[2] : 0, pts: x[3] != null ? Number(x[3].replace(",", ".")) : "" }; }
+  }
+  return out;
+}
 async function montar(linhas) {
   const grupos = new Map();
   for (const l of linhas) {
@@ -174,6 +184,7 @@ async function montar(linhas) {
       servicos, provas: [...provas.values()], pendencias: [], atualizacoes: [], documentos: [], notas: "",
       origem: g.linhas.map(l => l.origem).find(Boolean) || "", desconto: [...new Set(g.linhas.flatMap(l => l.desconto).filter(d => d && d !== "NENHUM"))],
       financeiro: { total, pago, pagamentos }, repasses,
+      contagem: lerTextoCont(g.linhas.map(l => l.contTexto).filter(Boolean).join("\n")),
       nCert: Math.max(...g.linhas.map(l => l.nCert ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nCert ?? -1)) : null,
       nArtigos: Math.max(...g.linhas.map(l => l.nArtigos ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nArtigos ?? -1)) : null,
       tipos: [...new Set(g.linhas.flatMap(l => l.tipos.map(t => semAcento(t))))],
@@ -261,6 +272,7 @@ function espelho(c, contato) {
     documentos: c.documentos.filter(d => d.link),
     financeiro: { total, pago, saldo: Math.max(0, total - pago), entradaOk: total > 0 && pago >= total / 2 - 0.009 },
     contato: (() => { const m = c.mentores.find(x => EQUIPE[x]) || c.mentores[0]; const tel = m && EQUIPE[m]; return tel ? { ...contato, mentor: `${m} (MedEasy)`, whats: tel.replace(/\D/g, ""), texto: tel.replace(/^\+55\s*/, "") } : { ...contato, mentor: m ? `${m} (MedEasy)` : "Equipe MedEasy" }; })(),
+    contagem: c.contagem || {},
     progresso: c.servicos.length ? Math.round(c.servicos.reduce((a, s) => a + s.etapa / 6, 0) / c.servicos.length * 100) : 0,
   };
 }

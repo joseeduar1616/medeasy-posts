@@ -39,4 +39,5 @@ jobs:
           git add portal/data
           if git diff --cached --quiet; then echo "Sem mudanças"; exit 0; fi
           git commit -m "Portal: dados atualizados do Notion"
+          git pull --rebase -q origin main || true
           git push

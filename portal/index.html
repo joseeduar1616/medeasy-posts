@@ -318,14 +318,14 @@ const BASE = location.pathname.replace(/[^/]*$/, "");
 async function baixar(url){ const r = await fetch(BASE + url + "?t=" + Date.now(), { cache:"no-store" }); if (!r.ok) throw new Error(r.status); return r.json(); }
 
 /* ---------- estado ---------- */
-const S = { modo:"login", aba:"cliente", erro:"", carregando:false, eq:null, mentor:null, admin:false, portal:null, view:"painel", sel:null, preview:null, busca:"", filtro:"ativos", verMentor:"" };
+const S = { modo:"login", aba:"cliente", erro:"", carregando:false, eq:null, mentor:null, admin:false, portal:null, view:"painel", sel:null, preview:null, busca:"", filtro:"ativos", verMentor:"", cont:{}, ciProva:{}, ciCopiado:null };
 function guardar(tipo, nome, segredo){ try { sessionStorage.setItem("medeasy", JSON.stringify({ tipo, nome, segredo })); } catch {} }
 function sair(){ try { sessionStorage.removeItem("medeasy"); } catch {} Object.assign(S, { modo:"login", eq:null, portal:null, mentor:null, preview:null, sel:null, erro:"" }); render(); }
 
 async function entrarCliente(codigo){
   codigo = normCodigo(codigo); if (codigo.length < 8){ S.erro = "Confira o código. Ele tem 10 letras e números"; render(); return; }
   S.carregando = true; S.erro = ""; render();
-  try { const env = await baixar(`data/c/${await arquivoCliente(codigo)}.json`); S.portal = await abrir(env, codigo); S.modo = "cliente"; guardar("cliente", "", codigo); }
+  try { const env = await baixar(`data/c/${await arquivoCliente(codigo)}.json`); S.portal = await abrir(env, codigo); juntarContagemCliente(S.portal); S.modo = "cliente"; guardar("cliente", "", codigo); }
   catch { S.erro = "Código não encontrado. Confira com o seu mentor"; }
   S.carregando = false; render();
 }
@@ -353,7 +353,7 @@ const abertos = c => (c.servicos || []).filter(s => (s.etapa || 0) < ULT);
 function progresso(c){ const s = c.servicos || []; if (!s.length) return 0; return Math.round(s.reduce((a, x) => a + (x.etapa || 0) / ULT, 0) / s.length * 100); }
 function nomeServico(c, s){ if (s.nome) return s.nome; const T = { vitae:"Currículo Vitae", analise:"Análise curricular", lattes:"Currículo Lattes" }; const p = (c.provas || []).find(p => p.id === s.provaId); return (T[s.tipo] || "Serviço") + (s.detalhe ? " " + s.detalhe.replace(/Modelo |Categoria /, "") : "") + (p ? " · " + p.nome : ""); }
 function status(c){ const ab = abertos(c); if (!(c.servicos || []).length) return { t:"Novo contato", k:"info" }; if (!ab.length) return { t:"Tudo entregue", k:"ok" }; const m = Math.min(...ab.map(s => s.etapa || 0)); return { t:ETAPAS[m].t, k:ETAPAS[m].cli ? "gold" : "" }; }
-function espelho(c){ const f = fin(c); return { nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:c.provas || [], pendencias:(c.pendencias || []).filter(p => !p.interna), atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
+function espelho(c){ const f = fin(c); return { nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:(c.pendencias || []).filter(p => !p.interna), atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
 function eventos(cs){ const ev = []; for (const c of cs){ for (const p of c.provas || []){ if (p.prazoEnvio) ev.push({ d:p.prazoEnvio, t:`Fim do envio ${p.nome}`, c, k:"gold" }); if (p.dataProva) ev.push({ d:p.dataProva, t:`Prova ${p.nome}`, c, k:"info" }); } for (const s of c.servicos || []) if (s.prazo && (s.etapa || 0) < ULT) ev.push({ d:s.prazo, t:`Entrega ${nomeServico(c, s)}`, c, k:"warn" }); } return ev.sort((a, b) => a.d.localeCompare(b.d)); }
 function convite(c){ const link = location.href.split("#")[0].split("?")[0]; return `Oi, ${primeiro(c.nome)}! Tudo bem? Criei o seu acesso no portal da MedEasy. Por lá você acompanha cada etapa do seu currículo, os prazos das provas e o que ainda falta enviar\n\nLink: ${link}?c=${c.codigo}\nSeu código: ${codFmt(c.codigo)}\n\nGuarde esse código, ele é só seu`; }
 
@@ -392,7 +392,7 @@ function painelView(){
   const al = [];
   for (const c of cs){ for (const s of abertos(c)){ const d = dias(s.prazo); if (d !== null && d < 0) al.push({ k:"bad", c, t:`Entrega atrasada: ${nomeServico(c, s)}`, o:d - 100 }); else if (d !== null && d <= 3) al.push({ k:"warn", c, t:`Entrega ${quando(s.prazo)}: ${nomeServico(c, s)}`, o:d }); }
     for (const p of c.provas || []){ const d = dias(p.prazoEnvio); if (d !== null && d >= 0 && d <= 10 && abertos(c).length) al.push({ k:d <= 3 ? "bad" : "warn", c, t:`Inscrição ${p.nome} fecha ${quando(p.prazoEnvio)}`, o:d - 50 }); }
-    if (c.estimativa && c.estimativa.completo && abertos(c).length && Math.abs(fin(c).total - c.estimativa.total) >= 1) al.push({ k:"info", c, t:`Valor no Notion (${brl(fin(c).total)}) diferente do calculado (${brl(c.estimativa.total)})`, o:45 });
+    { const e = estimarJS(c); if (e && e.completo && abertos(c).length && Math.abs(fin(c).total - e.total) >= 1) al.push({ k:"info", c, t:`Valor no Notion (${brl(fin(c).total)}) diferente do calculado (${brl(e.total)})`, o:45 }); }
     if (precisaProva(c)) al.push({ k:"info", c, t:"Prova não marcada no Notion", o:60 });
     const pa = (c.pendencias || []).filter(p => !p.feita).length; if (pa) al.push({ k:"gold", c, t:`${pa} ${pa > 1 ? "pendências" : "pendência"} com o cliente`, o:40 }); }
   al.sort((a, b) => a.o - b.o);
@@ -424,26 +424,25 @@ function clienteView(){
     <div class="row"><button class="btn" data-a="preview">Ver como cliente</button>${c.whatsapp ? `<a class="btn" href="${waLink(c.whatsapp, "Oi, " + primeiro(c.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}</div></div>
    <div class="grid2"><div class="stack">
     <section class="card"><div class="card-h"><h2>Serviços</h2></div>${(c.servicos || []).length ? `<div class="stack">${c.servicos.map(s => `<div class="svc"><div class="row between"><b>${esc(s.nome)}</b>${s.notion ? `<a class="btn sm ghost" href="${esc(s.notion)}" target="_blank" rel="noopener">Notion</a>` : ""}</div><div class="small ${ETAPAS[s.etapa || 0].cli ? "gold" : "muted"}">${esc(s.status || ETAPAS[s.etapa || 0].t)}${s.inicio ? " · início " + dBR(s.inicio) : ""}${s.prazo ? " · entrega " + dBR(s.prazo) : ""}${s.entregueEm ? " · entregue " + dBR(s.entregueEm) : ""}</div><div class="steps ro">${ETAPAS.map((e, j) => `<button class="${j < (s.etapa || 0) ? "done" : j === (s.etapa || 0) ? "cur" : ""}" title="${esc(e.t)}" tabindex="-1"></button>`).join("")}</div><div class="xs muted" style="margin-top:8px">${[s.mentor && "Mentor " + s.mentor, s.corretor && "Corretor " + s.corretor, s.trainee && "Trainee " + s.trainee].filter(Boolean).map(esc).join(" · ")}</div></div>`).join("")}</div>` : `<div class="empty">Sem serviço</div>`}</section>
-    <section class="card"><div class="card-h"><h2>Provas</h2></div>${(c.provas || []).length ? `<div class="list">${c.provas.map(p => `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${esc(p.ano || "")}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div>${p.edital ? `<div class="xs muted" style="margin-top:2px">${esc(p.edital.peso || "")}. ${esc(p.edital.formato || "")}</div>` : ""}</div>${p.notaEstimada !== "" && p.notaEstimada != null ? `<b class="num">${d1(p.notaEstimada)} / ${d1(p.notaMax || 100)}</b>` : ""}</div>`).join("")}</div>` : `<div class="empty">Nenhuma prova marcada no Notion${notionDe(c) ? `<div style="margin-top:8px"><a class="btn sm ghost" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Marcar a prova no Notion</a></div>` : ""}</div>`}</section>
+    <section class="card"><div class="card-h"><h2>Provas</h2></div>${(c.provas || []).length ? `<div class="list">${c.provas.map(p => `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${esc(p.ano || "")}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div>${p.edital ? `<div class="xs muted" style="margin-top:2px">${esc(p.edital.peso || "")}. ${esc(p.edital.formato || "")}</div>` : ""}</div>${(() => { const cp = calcDe(c, p); return cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : p.notaEstimada !== "" && p.notaEstimada != null ? `<b class="num">${d1(p.notaEstimada)} / ${d1(p.notaMax || 100)}</b>` : ""; })()}</div>`).join("")}</div>` : `<div class="empty">Nenhuma prova marcada no Notion${notionDe(c) ? `<div style="margin-top:8px"><a class="btn sm ghost" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Marcar a prova no Notion</a></div>` : ""}</div>`}</section>
     ${(c.pendencias || []).length ? `<section class="card"><div class="card-h"><h2>Pendências</h2></div>${c.pendencias.map(p => `<div class="pend ${p.feita ? "feita" : ""}">${esc(p.texto)}</div>`).join("")}</section>` : ""}
    </div><div class="stack">
     <section class="card"><div class="card-h"><h2>Acesso do cliente</h2></div><div class="label">Código</div><div class="code" style="font-size:18px;margin:6px 0 12px;letter-spacing:.08em">${esc(codFmt(c.codigo))}</div>
       <div class="row"><button class="btn sm" data-a="copiarConvite">Copiar convite</button>${c.whatsapp ? `<a class="btn sm pri" target="_blank" rel="noopener" href="${waLink(c.whatsapp, convite(c))}">Enviar no WhatsApp</a>` : ""}</div></section>
     <section class="card"><div class="card-h"><h2>Pagamento do cliente</h2></div><div class="row between small"><span>Total</span><b class="num">${brl(f.total)}</b></div><div class="row between small"><span>Pago</span><b class="num neon">${brl(f.pago)}</b></div><div class="row between small"><span>Saldo</span><b class="num gold">${brl(f.saldo)}</b></div></section>
-    ${c.estimativa ? (() => { const e = c.estimativa; const dif = Math.round((f.total - e.total) * 100) / 100; return `<section class="card"><div class="card-h"><h2>Valor pelos certificados</h2>${e.completo ? (Math.abs(dif) < 1 ? `<span class="pill ok">Bate com o Notion</span>` : `<span class="pill warn">Diferente do Notion</span>`) : `<span class="pill">Falta contagem</span>`}</div>
-      <div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${l.fonte ? " · certificados da " + esc(l.fonte) : ""}</div></td><td class="r num">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody><tfoot><tr><td>Total calculado</td><td class="r num">${brl(e.total)}</td></tr></tfoot></table></div>
-      <p class="xs muted" style="margin:8px 0 0">No Notion: ${brl(f.total)}${e.completo && Math.abs(dif) >= 1 ? ` (diferença de ${brl(Math.abs(dif))} ${dif > 0 ? "a mais no Notion" : "a menos no Notion"})` : ""}. Descontos e cortesias não entram nesta conta.</p></section>`; })() : ""}
+    ${valorCard(c)}
     <section class="card"><div class="card-h"><h2>Repasses</h2></div>${reps.length ? `<div class="list">${reps.map(r => `<div class="li"><div class="grow"><div class="t">${esc(r.pessoa)}</div><div class="small muted">${esc(r.papel)}${r.data ? " · pago em " + dBR(r.data) : ""}</div></div><div style="text-align:right"><b class="num">${r.valor == null ? "–" : brl(r.valor)}</b><div>${r.papel === "Empresa" ? "" : r.pago ? `<span class="pill ok">Pago</span>` : `<span class="pill gold">A receber</span>`}</div></div></div>`).join("")}</div>` : `<div class="empty">Sem repasse</div>`}
       ${reps.some(r => r.valor == null) ? `<p class="xs muted" style="margin:10px 0 0">Os valores vêm das fórmulas do Notion e aparecem quando a sincronização automática estiver ligada.</p>` : ""}</section>
     ${c.notas ? `<section class="card"><div class="card-h"><h2>Notas internas</h2></div><p class="small" style="margin:0;white-space:pre-wrap">${esc(c.notas)}</p></section>` : ""}
-   </div></div>`;
+   </div></div>
+   <div style="margin-top:16px">${certItensView(c)}</div>`;
 }
 function agendaView(){
   const ev = eventos(meus()).filter(e => dias(e.d) >= -1); const g = {}; ev.forEach(e => (g[e.d.slice(0, 7)] ||= []).push(e));
   return `<div class="pagehead"><div><h1>Agenda</h1><p>Prazos de inscrição, provas e entregas</p></div></div>${Object.keys(g).length ? `<div class="grid2">${Object.entries(g).map(([k, es]) => `<section class="card"><div class="card-h"><h2>${MESES[+k.slice(5, 7) - 1]} de ${k.slice(0, 4)}</h2></div><div class="list">${es.map(e => `<div class="li clickable" data-a="abrir" data-id="${e.c.id}"><span class="sev ${e.k}"></span><div class="countdown"><b class="num">${e.d.slice(8, 10)}</b><span>${mesNome(+e.d.slice(5, 7) - 1)}</span></div><div class="grow"><div class="t">${esc(e.t)}</div><div class="small muted">${esc(e.c.nome)} · ${quando(e.d)}</div></div></div>`).join("")}</div></section>`).join("")}</div>` : `<div class="empty">Sem datas</div>`}`;
 }
 
-function fichaTabela(e){ return e.ficha && e.ficha.length ? `<div class="tbl-wrap" style="margin-top:8px"><table class="tbl"><thead><tr><th>Item</th><th>Pontos</th><th class="r">Máximo</th></tr></thead><tbody>${e.ficha.map(f => `<tr><td class="small">${esc(f.item)}</td><td class="small muted">${esc(f.pontos || "")}</td><td class="r num">${esc(f.max || "")}</td></tr>`).join("")}</tbody></table></div>` : ""; }
+function fichaTabela(e){ return e.ficha && e.ficha.length ? `<div class="tbl-wrap" style="margin-top:8px"><table class="tbl"><thead><tr><th>Item</th><th>Pontos</th><th class="r">Máximo</th></tr></thead><tbody>${e.ficha.map(f => `<tr><td class="small">${esc(f.item)}</td><td class="small muted">${esc(f.pontos || "")}</td><td class="r num">${esc(f.maxN != null ? d1(f.maxN) + (f.grupo ? ` (${f.grupo}${f.grupoMax != null ? ", até " + d1(f.grupoMax) : ""})` : "") : f.max || "")}</td></tr>`).join("")}</tbody></table></div>` : ""; }
 function editaisView(){
   const E = S.eq.editais || {}; const cs = S.eq.clientes || [];
   const kP = s => semAcento(s).replace(/[^a-z0-9]/g, "");
@@ -469,6 +468,154 @@ function repassesView(){
    <section class="card"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Cliente</th>${geral ? "<th>Pessoa</th>" : ""}<th>Papel</th><th>Serviço</th><th class="r">Valor</th><th>Situação</th></tr></thead><tbody>
    ${linhas.map(({ c, r, s }) => `<tr class="clickable" data-a="abrir" data-id="${c.id}"><td><b>${esc(c.nome)}</b></td>${geral ? `<td>${esc(r.pessoa)}</td>` : ""}<td>${esc(r.papel)}</td><td class="small">${esc(s ? s.status : "")}</td><td class="r num">${r.valor == null ? "–" : brl(r.valor)}</td><td>${r.pago ? `<span class="pill ok">Pago${r.data ? " " + dBR(r.data) : ""}</span>` : `<span class="pill gold">A receber</span>`}</td></tr>`).join("") || `<tr><td colspan="6" class="muted">Nenhum repasse</td></tr>`}</tbody></table></div></section>`;
 }
+/* ---------- certificados por item (contagem do mentor) ---------- */
+const kP = s => semAcento(s).replace(/[^a-z0-9]/g, "");
+const r2 = n => Math.round((Number(n) || 0) * 100) / 100;
+const PRECO = { taxa:100, taxaMaisDeDuas:90, artigo:12.5, analise1:100, analise2:90,
+  vitae:{ A:[9, 8.5, 8], B:[9.5, 9, 8.5], C:[8, 7.5, 7], D:[9, 8.5, 8], E:[9, 8.5, 8] }, lattes:{ A:[7, 6.5, 6], B:[12, 11.5, 11] } };
+const MODELO = { psugo:"D", psumg:"D", hpp:"C", santacasasp:"C", scmsp:"C", fmabc:"C", unitau:"C", idor:"C", puccamp:"C", hcpa:"C", enare:"C", sesdf:"C", cet:"E" };
+const faixaQ = q => q >= 50 ? 2 : q >= 31 ? 1 : 0;
+const br2 = v => (Number(v) || 0).toFixed(2).replace(".", ",");
+const modeloDe = nome => { const k = kP(nome); return MODELO[k] || (Object.entries(MODELO).find(([kk]) => k.startsWith(kk)) || [, "A"])[1]; };
+
+/* Itens de uma prova: da análise curricular lida (se houver) ou da ficha do edital */
+function itensDaProva(p){
+  const an = (p.itens || []).filter(i => i.max != null && p.fonte !== "contagem");
+  if (an.length) return an.map(i => { const unit = num(i.porAtividade) || null, n = (i.comprovantes || []).length;
+    return { key:i.nome, item:i.nome, pontos:i.regra || "", maxN:num(i.max), unit, artigo:/artigo completo|cap[ií]tulo/i.test(i.nome),
+      base:{ n, lista:i.comprovantes || [], pts: unit && Math.abs(Math.min(num(i.max), n * unit) - num(i.pontos)) < 0.01 ? "" : num(i.pontos) } }; });
+  return ((p.edital && p.edital.ficha) || []).filter(x => x.maxN != null).map(x => ({ key:x.item, item:x.item, pontos:x.pontos || "", maxN:num(x.maxN), unit:x.unit == null ? null : num(x.unit), artigo:!!x.artigo, grupo:x.grupo || "", grupoMax:x.grupoMax == null ? null : num(x.grupoMax) }));
+}
+function calcProva(itens, reg){
+  reg = reg || {}; let nCert = 0, nArt = 0, total = 0, max = 0; const g = {}, gm = {};
+  const rows = itens.map(it => {
+    const r = reg[it.key] || it.base || {}; const lista = (r.lista || []).filter(Boolean);
+    const n = Math.max(0, Math.floor(num(r.n)));
+    const auto = it.unit != null ? Math.min(it.maxN, n * it.unit) : 0;
+    const manual = r.pts !== undefined && r.pts !== null && r.pts !== "";
+    const pts = r2(Math.max(0, Math.min(it.maxN, manual ? num(r.pts) : auto)));
+    if (it.artigo) nArt += n; else nCert += n;
+    return { ...it, n, auto:r2(auto), manual, pts, lista };
+  });
+  for (const x of rows){ if (x.grupo){ g[x.grupo] = (g[x.grupo] || 0) + x.pts; gm[x.grupo] = x.grupoMax ?? Infinity; } else { total += x.pts; max += x.maxN; } }
+  for (const k in g){ total += Math.min(g[k], gm[k]); max += isFinite(gm[k]) ? gm[k] : 0; }
+  return { rows, total:r2(total), max:r2(max), nCert, nArt, tem:rows.some(x => x.n || x.manual) };
+}
+const regDe = (c, p) => (carregarCont(c).provas || {})[kP(p.nome)];
+const calcDe = (c, p) => calcProva(itensDaProva(p), regDe(c, p));
+
+/* Orçamento pela contagem (mesmas regras do build e da skill de orçamento) */
+function estimarJS(c){
+  const tipos = c.tipos || []; const linhas = []; let falta = false;
+  const temLattes = tipos.includes("lattes"), temCert = tipos.includes("certificados");
+  const lattesB = temLattes && temCert && !tipos.includes("vitae");
+  const temVitae = tipos.includes("vitae") || (temCert && !lattesB), temAnalise = tipos.includes("analise") || lattesB;
+  const provas = (c.provas || []).filter(p => p.nome); const taxa = provas.length > 2 ? PRECO.taxaMaisDeDuas : PRECO.taxa;
+  let maxCert = c.nCert ?? null;
+  for (const p of provas){
+    const cp = calcDe(c, p); let n = c.nCert, a = c.nArtigos || 0, fonte = c.nCert != null ? "Notion" : "";
+    if (cp.tem){ n = cp.nCert; a = cp.nArt; fonte = "contagem"; maxCert = Math.max(maxCert ?? 0, n + a); }
+    const m = modeloDe(p.nome);
+    if (temVitae || (!temAnalise && !lattesB)){
+      const desc = `${p.nome}: análise curricular + seleção dos certificados (Modelo ${m} Vitae)`;
+      if (n == null){ falta = true; linhas.push({ desc, conta:"falta o número de certificados", valor:null }); continue; }
+      const u = PRECO.vitae[m][faixaQ(n)];
+      linhas.push({ desc, conta:`${br2(taxa)} + ${n} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor:taxa + n * u + a * PRECO.artigo, fonte });
+    } else linhas.push({ desc:`${p.nome}: análise curricular`, conta:"1", valor:provas.length >= 2 ? PRECO.analise2 : PRECO.analise1 });
+  }
+  if (!provas.length && temVitae){
+    if (c.nCert == null){ falta = true; linhas.push({ desc:"Currículo Vitae", conta:"falta o número de certificados", valor:null }); }
+    else { const u = PRECO.vitae.A[faixaQ(c.nCert)], a = c.nArtigos || 0; linhas.push({ desc:"Currículo Vitae (Modelo A)", conta:`${br2(PRECO.taxa)} + ${c.nCert} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor:PRECO.taxa + c.nCert * u + a * PRECO.artigo, fonte:"Notion" }); }
+  }
+  if (temLattes){
+    const cat = lattesB ? "B" : "A", desc = `Atualização do Currículo Lattes (Categoria ${cat}${lattesB ? ", com o documento de comprovação" : ""})`;
+    if (maxCert == null){ falta = true; linhas.push({ desc, conta:"falta o número de certificados", valor:null }); }
+    else { const u = PRECO.lattes[cat][faixaQ(maxCert)]; linhas.push({ desc, conta:`${maxCert} X ${br2(u)}`, valor:maxCert * u }); }
+  }
+  if (!linhas.length) return null;
+  return { linhas, total:r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)), completo:!falta };
+}
+
+/* Contagem: vem do Notion (coluna "Certificados por item") e o rascunho fica no navegador */
+const rascKey = id => "medeasy-rasc-" + id;
+function lerRasc(id){ try { return JSON.parse(localStorage.getItem(rascKey(id)) || "null"); } catch { return null; } }
+function gravarRasc(id){ try { localStorage.setItem(rascKey(id), JSON.stringify({ provas:S.cont[id].provas, em:Date.now() })); } catch {} }
+function apagarRasc(id){ try { localStorage.removeItem(rascKey(id)); } catch {} }
+/* Texto da coluna: uma linha por prova. "PSU-GO: 2=2; 4=3; 9=/0,5" (item=certificados, /pontos quando digitados) */
+function lerTextoCont(t){ const out = {}; for (const ln of String(t || "").split(/\n|\|/)){ const m = ln.match(/^\s*([^:]+):(.*)$/); if (!m) continue; const pr = (out[kP(m[1])] ||= {});
+  for (const par of m[2].split(";")){ const x = par.trim().match(/^(\d+)\s*=\s*(\d+)?\s*(?:\/\s*([\d.,]+))?/); if (x) pr[+x[1]] = { n:x[2] ? +x[2] : 0, pts:x[3] != null ? num(x[3]) : "" }; } } return out; }
+function regDoNotion(c, p){ const t = (c.contagem || {})[kP(p.nome)]; if (!t) return null; const itens = itensDaProva(p); const r = {}; for (const [i, v] of Object.entries(t)){ const it = itens[+i - 1]; if (it) r[it.key] = { ...(it.base || {}), n:v.n, pts:v.pts }; } return r; }
+function carregarCont(c){
+  if (S.cont[c.id]) return S.cont[c.id];
+  const reg = S.cont[c.id] = { provas:{} };
+  for (const p of c.provas || []){ const r = regDoNotion(c, p); if (r) reg.provas[kP(p.nome)] = r; }
+  const ras = c.id === "cli" ? null : lerRasc(c.id); if (ras && ras.provas && Object.keys(ras.provas).length && ras.texto !== textoCont(c, reg.provas)){ reg.provas = ras.provas; reg.rascunho = true; reg.copiado = !!ras.texto; }
+  return reg;
+}
+function textoCont(c, provasReg){ return (c.provas || []).filter(p => p.nome).map(p => { const itens = itensDaProva(p), reg = (provasReg || {})[kP(p.nome)]; if (!reg) return "";
+  const cp = calcProva(itens, reg); const pares = cp.rows.map((x, i) => (x.n || x.manual) ? `${i + 1}=${x.n || ""}${x.manual ? "/" + String(x.pts).replace(".", ",") : ""}` : "").filter(Boolean);
+  return pares.length ? `${p.nome}: ${pares.join("; ")}` : ""; }).filter(Boolean).join("\n"); }
+function itensParaCliente(cp){ return cp.rows.map(x => ({ nome:x.item, regra:x.pontos, max:x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN, pontos:x.pts, ganho:0,
+  situacao:x.maxN && x.pts >= x.maxN ? "Completo" : x.pts > 0 ? "Parcial" : "", comprovantes:x.lista.length ? x.lista : Array.from({ length:x.n }, (_, i) => `Certificado ${i + 1}`), comentario:"" })); }
+function provasComContagem(c){ carregarCont(c); return (c.provas || []).map(p => { const cp = calcDe(c, p); if (!cp.tem) return p; return { ...p, itens:itensParaCliente(cp), notaEstimada:cp.total, notaMax:cp.max || num(p.notaMax) || 100, fonte:"contagem" }; }); }
+/* No portal do cliente: monta os itens a partir da contagem que veio do Notion */
+function juntarContagemCliente(portal){ if (!portal.contagem || !Object.keys(portal.contagem).length) return; delete S.cont.cli;
+  portal.provas = provasComContagem({ id:"cli", provas:portal.provas || [], contagem:portal.contagem }); }
+async function copiarParaNotion(c){ const reg = carregarCont(c); const t = textoCont(c, reg.provas);
+  if (!t){ toast("Nada para copiar ainda"); return; }
+  await copiar(t); try { localStorage.setItem(rascKey(c.id), JSON.stringify({ provas:reg.provas, em:Date.now(), texto:t })); } catch {}
+  reg.copiado = true; S.ciCopiado = c.id; render(); }
+
+/* Tela */
+function statusTxt(reg){ if (!reg) return ""; if (reg.copiado) return "Copiado. Falta colar no Notion"; return reg.rascunho ? "Rascunho neste navegador. Copie para o Notion para a equipe ver" : Object.keys(reg.provas || {}).length ? "Igual ao que está no Notion" : "Ainda não está no Notion"; }
+function pintarStatus(c){ const el = document.getElementById("ciStatus"); if (el) el.textContent = statusTxt(S.cont[c.id]); }
+function valorCard(c){
+  const e = estimarJS(c); if (!e) return `<section class="card" id="valorCard" hidden></section>`; const f = fin(c); const dif = r2(f.total - e.total);
+  return `<section class="card" id="valorCard"><div class="card-h"><h2>Valor pelos certificados</h2>${e.completo ? (Math.abs(dif) < 1 ? `<span class="pill ok">Bate com o Notion</span>` : `<span class="pill warn">Diferente do Notion</span>`) : `<span class="pill">Falta contagem</span>`}</div>
+   <div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${l.fonte ? " · certificados da " + esc(l.fonte) : ""}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody><tfoot><tr><td>Total calculado</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot></table></div>
+   <p class="xs muted" style="margin:8px 0 0">No Notion: ${brl(f.total)}${e.completo && Math.abs(dif) >= 1 ? ` (diferença de ${brl(Math.abs(dif))} ${dif > 0 ? "a mais no Notion" : "a menos no Notion"})` : ""}. Descontos e cortesias não entram nesta conta.</p></section>`;
+}
+function certItensView(c){
+  const provas = (c.provas || []).filter(p => p.nome); if (!provas.length) return "";
+  const reg = carregarCont(c);
+  const pk = S.ciProva[c.id] && provas.some(p => kP(p.nome) === S.ciProva[c.id]) ? S.ciProva[c.id] : kP(provas[0].nome);
+  const p = provas.find(p => kP(p.nome) === pk); const itens = itensDaProva(p); const cp = calcProva(itens, regDe(c, p));
+  const tabs = provas.map(x => { const k = kP(x.nome), cx = calcDe(c, x); return `<button class="btn sm ${k === pk ? "pri" : ""}" data-a="ciProva" data-v="${k}">${esc(x.nome)}${cx.tem ? ` · ${d1(cx.total)}` : ""}</button>`; }).join("");
+  const grupos = [...new Set(itens.filter(i => i.grupo).map(i => i.grupo))];
+  return `<section class="card" id="certItens"><div class="card-h"><div><h2>Certificados por item</h2><div class="sub">Digite quantos certificados o cliente tem em cada item. A nota e o valor se atualizam na hora</div></div>
+    <div class="row"><span class="xs muted" id="ciStatus">${esc(statusTxt(reg))}</span><button class="btn sm pri" data-a="copiarCont">Copiar para o Notion</button></div></div>
+   ${S.ciCopiado === c.id ? `<div class="wait small" style="margin-bottom:12px"><b>Copiado.</b> Abra o cliente no Notion e cole na coluna "Certificados por item". Na próxima sincronização a nota e o valor aparecem para toda a equipe e no portal do cliente.${notionDe(c) ? `<div style="margin-top:8px"><a class="btn sm pri" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Abrir no Notion</a></div>` : ""}</div>` : ""}
+   <div class="row" style="gap:6px;margin-bottom:12px">${tabs}</div>
+   ${itens.length ? `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Nota ${esc(p.nome)}</div><div class="v"><span id="ciNota">${d1(cp.total)}</span><small class="muted" style="font-size:16px"> / ${d1(cp.max)}</small></div><div class="d">${esc((p.edital && p.edital.peso) || "")}</div></div>
+     <div class="kpi"><div class="label">Certificados</div><div class="v" id="ciCert">${cp.nCert}</div><div class="d" id="ciArt">${cp.nArt ? cp.nArt + " artigos ou capítulos" : "sem artigo"}</div></div>
+     <div class="kpi"><div class="label">Valor desta prova</div><div class="v gold" id="ciValor">${(() => { const l = (estimarJS(c) || { linhas:[] }).linhas.find(l => l.desc.startsWith(p.nome + ":")); return l && l.valor != null ? brl(l.valor) : "–"; })()}</div><div class="d">Modelo ${modeloDe(p.nome)} Vitae</div></div></div>
+   <div class="tbl-wrap"><table class="tbl ci"><thead><tr><th>Item</th><th class="r" style="width:92px">Certificados</th><th class="r" style="width:92px">Pontos</th><th class="r" style="width:64px">Máx</th></tr></thead><tbody>
+   ${cp.rows.map((x, i) => `<tr><td class="small"><b>${esc(x.item)}</b>${x.grupo ? ` <span class="pill" style="font-size:10px">${esc(x.grupo)}${x.grupoMax != null ? " até " + d1(x.grupoMax) : ""}</span>` : ""}<div class="xs muted">${esc(x.pontos)}</div>
+       <details style="margin-top:4px"><summary class="xs" style="cursor:pointer">${x.lista.length ? `${x.lista.length} certificados listados` : "Listar certificados"}</summary><textarea class="in" data-ci="lista" data-i="${i}" rows="3" placeholder="Um certificado por linha" style="margin-top:6px;font-size:13px">${esc(x.lista.join("\n"))}</textarea></details></td>
+     <td class="r"><input class="in num" data-ci="n" data-i="${i}" type="number" min="0" step="1" inputmode="numeric" value="${x.n || ""}" placeholder="0" style="width:76px;text-align:right"></td>
+     <td class="r"><input class="in num" data-ci="pts" data-i="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${x.manual ? x.pts : ""}" placeholder="${x.unit != null ? String(x.auto).replace(".", ",") : "pontos"}" title="${x.unit != null ? "Calculado pelos certificados. Digite só para corrigir" : "Este item não é por certificado. Digite os pontos"}" style="width:76px;text-align:right"><div class="xs ${x.pts >= x.maxN ? "neon" : "muted"}" id="ciP${i}">${d1(x.pts)}</div></td>
+     <td class="r num small">${d1(x.maxN)}</td></tr>`).join("")}</tbody></table></div>
+   <p class="xs muted" style="margin:10px 0 0">Itens marcados com grupo dividem o mesmo teto.${grupos.length ? "" : ""} Quando o item não é por certificado (histórico, ENADE, faixa), digite os pontos direto. Ficha: ${esc((p.edital && p.edital.fichaFonte) || (p.itens && p.itens.length ? "análise curricular do cliente" : ""))}</p>`
+   : `<div class="empty">A ficha desta prova ainda não está no site${p.edital && p.edital.fichaFonte ? ". " + esc(p.edital.fichaFonte) : ""}</div>`}</section>`;
+}
+function ciInput(el){
+  const c = (S.eq.clientes || []).find(x => x.id === S.sel); if (!c) return;
+  const provas = (c.provas || []).filter(p => p.nome); const pk = S.ciProva[c.id] && provas.some(p => kP(p.nome) === S.ciProva[c.id]) ? S.ciProva[c.id] : kP(provas[0].nome);
+  const p = provas.find(p => kP(p.nome) === pk); const itens = itensDaProva(p); const it = itens[+el.dataset.i]; if (!it) return;
+  const reg = S.cont[c.id]; const pr = (reg.provas[pk] ||= {}); const r = (pr[it.key] ||= { ...(it.base || {}) });
+  if (el.dataset.ci === "n") r.n = el.value === "" ? 0 : Math.max(0, Math.floor(num(el.value)));
+  else if (el.dataset.ci === "pts") r.pts = el.value === "" ? "" : num(el.value);
+  else { r.lista = el.value.split("\n").map(s => s.trim()).filter(Boolean); r.n = r.lista.length; const inp = document.querySelector(`[data-ci="n"][data-i="${el.dataset.i}"]`); if (inp) inp.value = r.n || ""; }
+  reg.rascunho = true; reg.copiado = false; S.ciCopiado = null; gravarRasc(c.id);
+  const cp = calcProva(itens, pr); const x = cp.rows[+el.dataset.i];
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.innerHTML = v; };
+  set("ciP" + el.dataset.i, d1(x.pts)); const pe = document.querySelector(`[data-ci="pts"][data-i="${el.dataset.i}"]`); if (pe && x.unit != null) pe.placeholder = String(x.auto).replace(".", ",");
+  set("ciNota", d1(cp.total)); set("ciCert", cp.nCert); set("ciArt", cp.nArt ? cp.nArt + " artigos ou capítulos" : "sem artigo");
+  const l = (estimarJS(c) || { linhas:[] }).linhas.find(l => l.desc.startsWith(p.nome + ":")); set("ciValor", l && l.valor != null ? brl(l.valor) : "–");
+  const vc = document.getElementById("valorCard"); if (vc) vc.outerHTML = valorCard(c);
+  pintarStatus(c);
+}
+
 function anel(p){ const r = 46, c = 2 * Math.PI * r; return `<svg class="ring" viewBox="0 0 110 110" role="img" aria-label="${p}% concluído"><circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--line)" stroke-width="9"/><circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--neon)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - p / 100)}" transform="rotate(-90 55 55)"/><text x="55" y="58" text-anchor="middle" font-size="24">${p}%</text><text x="55" y="76" text-anchor="middle" font-size="9" fill="var(--muted)" style="fill:var(--muted);font-family:var(--f-body);font-weight:600;letter-spacing:.08em">CONCLUÍDO</text></svg>`; }
 function portalView(p, preview){
   const ct = p.contato || CONTATO; const nome = primeiro(p.nome);
@@ -565,7 +712,10 @@ const A = {
   preview: () => { S.preview = S.sel; render(); window.scrollTo(0, 0); },
   sairPreview: () => { S.preview = null; render(); },
   copiarConvite: () => copiar(convite(S.eq.clientes.find(c => c.id === S.sel))),
+  ciProva: el => { S.ciProva[S.sel] = el.dataset.v; render(); },
+  copiarCont: () => copiarParaNotion(S.eq.clientes.find(c => c.id === S.sel)),
 };
+app.addEventListener("input", e => { if (e.target.dataset && e.target.dataset.ci) ciInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 (async () => {
