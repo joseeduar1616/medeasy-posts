@@ -268,6 +268,7 @@ details.faq p{margin:8px 0 0;color:var(--muted)}
 <div id="toast" class="toast" hidden></div>
 <script>
 "use strict";
+if (/\/portal$/.test(location.pathname)) location.replace(location.pathname + "/" + location.search);
 const LOGO = "logo.webp";
 const CONTATO = { whats:"5562991373642", texto:"(62) 99137-3642", email:"medeasyy0@gmail.com", mentor:"José Eduardo" };
 const ETAPAS = [
@@ -313,7 +314,8 @@ async function abrir(env, senha){
 }
 const normCodigo = c => String(c || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 async function arquivoCliente(codigo){ const h = new Uint8Array(await crypto.subtle.digest("SHA-256", enc.encode("medeasy-c:" + normCodigo(codigo)))); return [...h].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 32); }
-async function baixar(url){ const r = await fetch(url + "?t=" + Date.now(), { cache:"no-store" }); if (!r.ok) throw new Error(r.status); return r.json(); }
+const BASE = location.pathname.replace(/[^/]*$/, "");
+async function baixar(url){ const r = await fetch(BASE + url + "?t=" + Date.now(), { cache:"no-store" }); if (!r.ok) throw new Error(r.status); return r.json(); }
 
 /* ---------- estado ---------- */
 const S = { modo:"login", aba:"cliente", erro:"", carregando:false, eq:null, mentor:null, admin:false, portal:null, view:"painel", sel:null, preview:null, busca:"", filtro:"ativos", verMentor:"" };
@@ -331,11 +333,12 @@ async function entrarMentor(nome, senha){
   if (!nome.trim() || !senha){ S.erro = "Preencha o nome e a senha"; render(); return; }
   S.carregando = true; S.erro = ""; render();
   try {
-    const env = await baixar("data/equipe.json"); const eq = await abrir(env, senha.trim());
+    let env; try { env = await baixar("data/equipe.json"); } catch { S.erro = "Não consegui carregar os dados. Confira a internet e tente de novo"; S.carregando = false; render(); return; }
+    senha = senha.trim(); let eq; try { eq = await abrir(env, senha); } catch { senha = senha.toLowerCase(); eq = await abrir(env, senha); }
     const n = semAcento(nome); const ms = eq.mentores || []; const m = ms.find(x => semAcento(x.nome) === n) || ms.find(x => semAcento(x.nome).startsWith(n)) || ms.find(x => semAcento(x.nome).split(" ")[0] === n.split(" ")[0]);
     if (!m){ S.erro = "Esse nome não está na lista de mentores"; S.carregando = false; render(); return; }
-    S.eq = eq; S.mentor = m; S.admin = !!m.admin; S.modo = "mentor"; guardar("mentor", nome, senha.trim());
-  } catch { S.erro = "Nome ou senha incorretos"; }
+    S.eq = eq; S.mentor = m; S.admin = !!m.admin; S.modo = "mentor"; guardar("mentor", nome, senha);
+  } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
 }
 
@@ -362,7 +365,7 @@ function loginView(){
     <div class="seg"><button data-a="aba" data-v="cliente" aria-pressed="${cli}">Sou cliente</button><button data-a="aba" data-v="mentor" aria-pressed="${!cli}">Sou mentor</button></div>
     <form id="fLogin" class="stack" autocomplete="on">
       ${cli ? `<label class="f"><span>Seu código de acesso</span><input class="in mono" id="lCodigo" placeholder="XXXXX-XXXXX" autocomplete="one-time-code" autocapitalize="characters" required></label>`
-            : `<label class="f"><span>Seu nome</span><input class="in" id="lNome" autocomplete="username" required></label><label class="f"><span>Senha</span><input class="in" id="lSenha" type="password" autocomplete="current-password" required></label>`}
+            : `<label class="f"><span>Seu nome</span><input class="in" id="lNome" autocomplete="username" autocorrect="off" spellcheck="false" required></label><label class="f"><span>Senha</span><input class="in" id="lSenha" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>`}
       <div class="err">${esc(S.erro)}</div>
       <button class="btn pri" type="submit" ${S.carregando ? "disabled" : ""}>${S.carregando ? "Abrindo" : "Entrar"}</button>
     </form>
