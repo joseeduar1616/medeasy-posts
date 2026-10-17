@@ -101,6 +101,7 @@ async function entrarMentor(nome, senha){
     const n = semAcento(nome); const ms = eq.mentores || []; const m = ms.find(x => semAcento(x.nome) === n) || ms.find(x => semAcento(x.nome).startsWith(n)) || ms.find(x => semAcento(x.nome).split(" ")[0] === n.split(" ")[0]);
     if (!m){ S.erro = "Esse nome não está na lista de mentores"; S.carregando = false; render(); return; }
     S.eq = eq; S.mentor = m; S.admin = !!m.admin; S.modo = "mentor"; guardar("mentor", nome, senha);
+    if (S.importar){ const d = lerCodigoTri("?i=" + S.importar); S.importar = null; if (d) importarTri("?i=" + codigoTri(d)); }
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
 }
@@ -133,7 +134,7 @@ function loginView(){
       <div class="err">${esc(S.erro)}</div>
       <button class="btn pri" type="submit" ${S.carregando ? "disabled" : ""}>${S.carregando ? "Abrindo" : "Entrar"}</button>
     </form>
-    <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : "Acesso da equipe MedEasy."}</p></div>`);
+    <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : S.importar ? "Entre para abrir a triagem do cliente no seu painel." : "Acesso da equipe MedEasy."}</p></div>`);
 }
 const ABAS = [["painel","Painel"],["clientes","Clientes"],["triagem","Triagem"],["agenda","Agenda"],["editais","Editais"],["repasses","Repasses"]];
 function mentorView(){
@@ -293,6 +294,9 @@ app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if
   const cod = new URLSearchParams(location.search).get("c");
   const tri = new URLSearchParams(location.search).get("triagem");
   if (tri !== null){ S.modo = "triagem"; S.triDestino = soDigitos(tri); render(); return; }
+  // Link "Abrir no painel" da mensagem de triagem: importa depois que o mentor entrar
+  const imp = new URLSearchParams(location.search).get("i");
+  if (imp){ S.importar = imp; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
   if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo);
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
   else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }
