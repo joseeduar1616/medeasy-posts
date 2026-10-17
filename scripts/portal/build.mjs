@@ -130,6 +130,20 @@ async function lerNotion() {
   });
 }
 
+/* Base "Triagem MedEasy": clientes novos que chegaram pelo formulário do Notion. Vai para o painel do mentor. */
+async function lerTriagemNotion() {
+  if (!process.env.NOTION_TOKEN) return [];
+  try {
+    const busca = await api("search", { filter: { property: "object", value: "database" }, page_size: 100 });
+    const db = (busca.results || []).find(d => /triagem medeasy/i.test((d.title || []).map(t => t.plain_text).join(""))); if (!db) return [];
+    const linhas = []; let cursor;
+    do { const j = await api(`databases/${db.id}/query`, cursor ? { start_cursor: cursor, page_size: 100 } : { page_size: 100 }); linhas.push(...j.results); cursor = j.has_more ? j.next_cursor : null; } while (cursor);
+    return linhas.filter(l => !l.archived && !l.in_trash).map(l => { const v = k => valorProp(l.properties[k]); return {
+      url: l.url, em: Date.parse(l.created_time) || 0, nome: v("Nome") || "", whats: v("WhatsApp") || "", mentor: v("Mentor") || "", provas: v("Provas") || [], area: v("Especialidade") || "", pedido: v("Pedido") || "",
+      nCert: v("Certificados"), drive: v("Drive") || "", arquivos: (v("Arquivos") || []).length, obs: v("Observações") || "", situacao: v("Situação") || "" }; });
+  } catch (e) { console.warn("Não li a base Triagem MedEasy: " + e.message); return []; }
+}
+
 /* ---------- montar clientes ---------- */
 const kProva = s => semAcento(s).replace(/[^a-z0-9]/g, "");
 function juntarProva(provas, pr) {
@@ -307,6 +321,7 @@ const linhas = iLin >= 0 ? JSON.parse(fs.readFileSync(args[iLin + 1], "utf8")).m
 // Teste local: --analise "NOME DO CLIENTE=arquivo.pdf" (pode repetir)
 args.forEach((a, i) => { if (a !== "--analise") return; const [nome, arq] = args[i + 1].split("="); const l = linhas.find(x => semAcento(x.cliente) === semAcento(nome)); if (l) (l.analises ||= []).push({ arquivo: arq, nome: path.basename(arq) }); else console.warn("Cliente não encontrado: " + nome); });
 const dados = await montar(linhas);
+dados.triagem = await lerTriagemNotion();
 await juntarExtras(dados);
 // Ficha de cada edital (parte do currículo), com datas e regras. Completa o que a prova do cliente ainda não tem.
 const EDITAIS = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), "editais.json"), "utf8")); delete EDITAIS._fonte;
@@ -332,6 +347,6 @@ fs.mkdirSync(path.join(SAIDA, "c"), { recursive: true });
 const agora = Date.now();
 for (const c of dados.clientes) fs.writeFileSync(path.join(SAIDA, "c", await arquivoCliente(c.codigo) + ".json"), JSON.stringify(await cifrar({ ...espelho(c, contato), atualizadoEm: agora }, c.codigo)));
 const semValor = dados.clientes.flatMap(c => c.repasses).filter(r => r.valor == null).length;
-fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, editais: EDITAIS, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, valoresPendentes: semValor > 0 }, SENHA)));
+fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, editais: EDITAIS, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, triagem: dados.triagem || [], valoresPendentes: semValor > 0 }, SENHA)));
 fs.writeFileSync(arqMarca, marca + "\n");
 console.log(`OK: ${dados.clientes.length} clientes de ${linhas.length} linhas, ${dados.mentores.length} pessoas na equipe${semValor ? `, ${semValor} repasses sem valor` : ""}`);

@@ -12,7 +12,7 @@ const modeloDe = nome => { const k = kP(nome); return MODELO[k] || (Object.entri
 function itensDaProva(p){
   const an = (p.itens || []).filter(i => i.max != null && p.fonte !== "contagem");
   if (an.length) return an.map(i => { const unit = num(i.porAtividade) || null, n = (i.comprovantes || []).length;
-    return { key:i.nome, item:i.nome, pontos:i.regra || "", maxN:num(i.max), unit, artigo:/artigo completo|cap[ií]tulo/i.test(i.nome),
+    return { key:i.nome, item:i.nome, pontos:i.regra || "", maxN:num(i.max), unit, artigo:/artigo completo|cap[ií]tulo/i.test(i.nome), com:i.comentario || "", sit:i.situacao || "", ganhoBase:num(i.ganho),
       base:{ n, lista:i.comprovantes || [], pts: unit && Math.abs(Math.min(num(i.max), n * unit) - num(i.pontos)) < 0.01 ? "" : num(i.pontos) } }; });
   return ((p.edital && p.edital.ficha) || []).filter(x => x.maxN != null).map(x => ({ key:x.item, item:x.item, pontos:x.pontos || "", maxN:num(x.maxN), unit:x.unit == null ? null : num(x.unit), artigo:!!x.artigo, grupo:x.grupo || "", grupoMax:x.grupoMax == null ? null : num(x.grupoMax) }));
 }
@@ -25,7 +25,7 @@ function calcProva(itens, reg, teto){
     const manual = r.pts !== undefined && r.pts !== null && r.pts !== "";
     const pts = r2(Math.max(0, Math.min(it.maxN, manual ? num(r.pts) : auto)));
     if (it.artigo) nArt += n; else nCert += n;
-    return { ...it, n, auto:r2(auto), manual, pts, lista, com:r.com || "", sit:r.sit || "" };
+    return { ...it, n, auto:r2(auto), manual, pts, lista, com:r.com || it.com || "", sit:r.sit || it.sit || "" };
   });
   for (const x of rows){ if (x.grupo){ g[x.grupo] = (g[x.grupo] || 0) + x.pts; gm[x.grupo] = x.grupoMax ?? Infinity; } else { total += x.pts; max += x.maxN; } }
   for (const k in g){ total += Math.min(g[k], gm[k]); max += isFinite(gm[k]) ? gm[k] : 0; }
@@ -89,9 +89,9 @@ function carregarCont(c){
 function textoCont(c, provasReg){ return (c.provas || []).filter(p => p.nome).map(p => { const itens = itensDaProva(p), reg = (provasReg || {})[kP(p.nome)]; if (!reg) return "";
   const cp = calcProva(itens, reg); const pares = cp.rows.map((x, i) => (x.n || x.manual) ? `${i + 1}=${x.n || ""}${x.manual ? "/" + String(x.pts).replace(".", ",") : ""}` : "").filter(Boolean);
   return pares.length ? `${p.nome}: ${pares.join("; ")}` : ""; }).filter(Boolean).join("\n"); }
-function itensParaCliente(cp){ return cp.rows.map(x => ({ nome:x.item, regra:x.pontos, max:x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN, pontos:x.pts, ganho:0,
-  situacao:x.maxN && x.pts >= x.maxN ? "Completo" : x.pts > 0 ? "Parcial" : "", comprovantes:x.lista.length ? x.lista : Array.from({ length:x.n }, (_, i) => `Certificado ${i + 1}`), comentario:"" })); }
-function provasComContagem(c){ carregarCont(c); return (c.provas || []).map(p => { const cp = calcDe(c, p); if (!cp.tem) return p; return { ...p, itens:itensParaCliente(cp), notaEstimada:cp.total, notaMax:cp.max || num(p.notaMax) || 100, fonte:"contagem" }; }); }
+function itensParaCliente(cp){ return cp.rows.map(x => ({ nome:x.item, regra:x.pontos, max:x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN, pontos:x.pts, ganho:x.ganhoBase || 0,
+  situacao:x.sit || (x.maxN && x.pts >= x.maxN ? "Completo" : x.pts > 0 ? "Parcial" : ""), comprovantes:x.lista.length ? x.lista : Array.from({ length:x.n }, (_, i) => `Certificado ${i + 1}`), comentario:x.com || "" })); }
+function provasComContagem(c){ carregarCont(c); return (c.provas || []).map(p => { const cp = calcDe(c, p); if (!cp.tem || (p.fonte === "analise" && !regDe(c, p))) return p; return { ...p, itens:itensParaCliente(cp), notaEstimada:cp.total, notaMax:cp.max || num(p.notaMax) || 100, fonte:"contagem" }; }); }
 /* No portal do cliente: monta os itens a partir da contagem que veio do Notion */
 function juntarContagemCliente(portal){ if (!portal.contagem || !Object.keys(portal.contagem).length) return; delete S.cont.cli;
   portal.provas = provasComContagem({ id:"cli", provas:portal.provas || [], contagem:portal.contagem }); }

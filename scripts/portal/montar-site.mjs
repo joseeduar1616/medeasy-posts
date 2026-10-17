@@ -7,6 +7,6 @@ let t = ler("index.tpl.html");
 const editais = JSON.parse(fs.readFileSync(path.join(d, "..", "editais.json"), "utf8")); delete editais._fonte;
 // Lista pública de provas para a triagem: só nome e chave
 const provas = JSON.stringify(Object.entries(editais).map(([k, e]) => ({ k, nome: e.nome })));
-t = t.split("__CSS__").join(ler("base.css")).split("__CERTITENS__").join(ler("certitens.js")).split("__PORTALVIEW__").join(ler("portalview.js")).split("__TRIAGEM__").join(ler("triagem.js").replace("__PROVAS__", provas));
+t = t.split("__CSS__").join(ler("base.css")).split("__CERTITENS__").join(ler("certitens.js")).split("__PORTALVIEW__").join(ler("portalview.js")).split("__TRIAGEM__").join(ler("triagem.js").replace("__PROVAS__", provas)).split("__ANALISE__").join(ler("analise.js"));
 fs.writeFileSync(path.resolve(d, "../../../portal/index.html"), t);
 console.log("portal/index.html montado");

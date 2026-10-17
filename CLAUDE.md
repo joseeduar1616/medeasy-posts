@@ -27,11 +27,14 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
   - `unit`: pontos por certificado, ou null quando não é por contagem.
   - `artigo`: marca artigo ou capítulo.
   - `grupo` e `grupoMax`: teto comum entre vários itens.
-- `scripts/portal/analise.mjs` lê o PDF da análise curricular MedEasy, item por item.
+- `scripts/portal/analise.mjs` lê o PDF da análise curricular MedEasy, item por item. O build lê os PDFs anexados na coluna "Análise" (arquivo) do cliente no Notion e o portal do cliente mostra a nota, o que falta e como conseguir.
+- `scripts/portal/form-cert.txt` (opcional, fora do git se quiser) guarda o link público do formulário do Notion "Enviar certificados". Com ele, a triagem mostra o botão para o cliente mandar os PDFs.
 - `scripts/portal/site/` tem os moldes do site:
   - `index.tpl.html`: tela do mentor e login.
   - `certitens.js`: certificados por item, nota e valor.
   - `portalview.js`: tela do cliente.
+  - `triagem.js`: triagem de cliente novo. Formulário público em `portal/?triagem=<whatsapp do mentor>`, aba Triagem do mentor (fica no localStorage), orçamento com opções, mensagem de WhatsApp e PDFs do orçamento e da análise gerados no navegador. O PDF da análise sai no formato que `analise.js` e `analise.mjs` sabem ler.
+  - `analise.js`: lê a análise curricular (PDF com pdf.js ou triagem.json) no navegador e junta nas provas do cliente ou da triagem.
   - `base.css`: estilo.
 - Depois de mexer nos moldes, rode `node scripts/portal/montar-site.mjs`. Ele gera `portal/index.html`, e nunca se edita esse arquivo direto.
 - Workflows:
@@ -42,6 +45,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 
 - A base "Controle cliente" fica em https://app.notion.com/p/Clientes-10e01997062f83fdbe2001c61ce41a4b. Cada linha é um serviço, e as linhas são agrupadas por nome do cliente mais os 8 últimos dígitos do telefone.
 - "Tipo de serviço" mistura serviços (Vitae, Lattes, ANALISE, Certificados) e provas (PSUGO, PSUMG, HPP...). Uma prova escrita no fim do nome do cliente ("Jose Nicolas PSU") também conta.
+- A base "Triagem MedEasy", dentro da página Clientes, recebe o formulário "Enviar certificados" (nome, WhatsApp, mentor, provas, pedido, arquivos). O build lê essa base e a aba Triagem do site mostra quem chegou, com botão Importar.
 - "Certificados por item" é preenchida com o botão "Copiar para o Notion" do site. Formato: uma linha por prova, como `PSU-GO: 2=2; 4=3; 9=/0,5`, em que o número antes do = é o número do item na ficha e "/0,5" são pontos digitados.
 - O mentor recebe 60% do valor total. O corretor hoje é o mesmo mentor, então não há repasse separado.
 
@@ -76,4 +80,5 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
   - HPP: a ficha vem da análise da Beatriz.
   - UNIARA: usa o edital de 2026.
 - 21 clientes em andamento ainda estão sem prova marcada no Notion. A lista aparece no Painel do site.
+- O secret PORTAL_SENHA foi cadastrado com maiúscula. O build usa a forma que abre os extras (minúsculas), então funciona, mas o certo é corrigir o secret.
 - Não guarde chave de escrita (GitHub, Notion) dentro do site. Ele é público, e a senha da equipe é compartilhada.
