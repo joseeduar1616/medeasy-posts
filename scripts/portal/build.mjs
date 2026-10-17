@@ -207,7 +207,13 @@ async function montar(linhas) {
 let EQUIPE = {};
 async function juntarExtras(dados) {
   const arq = path.join(SAIDA, "extras.json"); if (!fs.existsSync(arq)) return;
-  const extras = await abrir(JSON.parse(fs.readFileSync(arq, "utf8")), SENHA);
+  let extras;
+  try { extras = await abrir(JSON.parse(fs.readFileSync(arq, "utf8")), SENHA); }
+  catch {
+    // O site aceita a senha em minúsculas. Se nem assim abrir, o secret PORTAL_SENHA está diferente da senha da equipe.
+    try { extras = await abrir(JSON.parse(fs.readFileSync(arq, "utf8")), SENHA.toLowerCase()); }
+    catch { console.error("PORTAL_SENHA não abre portal/data/extras.json. Confira se o secret é a mesma senha da equipe que os mentores usam no site, sem espaço no fim."); process.exit(1); }
+  }
   EQUIPE = Object.fromEntries(Object.entries(extras.equipe || {}).map(([k, v]) => [pessoa(k), v]));
   for (const c of dados.clientes) {
     const e = extras.clientes.find(x => semAcento(c.nome).includes(semAcento(x.casar)) || semAcento(x.casar).includes(semAcento(c.nome))); if (!e) continue;
