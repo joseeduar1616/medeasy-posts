@@ -20,6 +20,10 @@ __CSS__
 .seg button{border:0;background:none;padding:8px;border-radius:999px;font-weight:700;cursor:pointer;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--neon);color:var(--neon-ink)}
 .err{color:var(--bad);font-size:14px;min-height:20px}
+.chks{display:flex;flex-wrap:wrap;gap:6px}
+.chk{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:5px 10px;font-size:13px;cursor:pointer;background:var(--bg)}
+.chk:has(input:checked){border-color:var(--neon);color:var(--neon);background:var(--neon-soft)}
+.chk input{accent-color:var(--neon);margin:0}
 </style>
 </head>
 <body>
@@ -131,10 +135,10 @@ function loginView(){
     </form>
     <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : "Acesso da equipe MedEasy."}</p></div>`);
 }
-const ABAS = [["painel","Painel"],["clientes","Clientes"],["agenda","Agenda"],["editais","Editais"],["repasses","Repasses"]];
+const ABAS = [["painel","Painel"],["clientes","Clientes"],["triagem","Triagem"],["agenda","Agenda"],["editais","Editais"],["repasses","Repasses"]];
 function mentorView(){
-  const v = S.view === "cliente" ? "clientes" : S.view; let body = "";
-  if (S.view === "painel") body = painelView(); else if (S.view === "clientes") body = clientesView(); else if (S.view === "cliente") body = clienteView(); else if (S.view === "agenda") body = agendaView(); else if (S.view === "editais") body = editaisView(); else body = repassesView();
+  const v = S.view === "cliente" ? "clientes" : S.view === "triagemItem" ? "triagem" : S.view; let body = "";
+  if (S.view === "painel") body = painelView(); else if (S.view === "clientes") body = clientesView(); else if (S.view === "cliente") body = clienteView(); else if (S.view === "triagem") body = triagemView(); else if (S.view === "triagemItem") body = triagemItemView(); else if (S.view === "agenda") body = agendaView(); else if (S.view === "editais") body = editaisView(); else body = repassesView();
   const mentores = (S.eq.mentores || []).map(m => m.nome);
   return `<header class="top"><div class="wrap top-in"><img class="logo" src="${LOGO}" alt=""><div class="brand"><b>MED<i>EASY</i></b><span>${esc(S.mentor.nome)}</span></div>
     <nav class="tabs">${ABAS.map(([k, t]) => `<button class="tab" data-a="nav" data-v="${k}" ${v === k ? 'aria-current="page"' : ""}>${t}</button>`).join("")}</nav>
@@ -240,9 +244,11 @@ function repassesView(){
 }
 __CERTITENS__
 __PORTALVIEW__
+__TRIAGEM__
 function render(){
   const sy = window.scrollY;
   if (S.modo === "login") app.innerHTML = loginView();
+  else if (S.modo === "triagem") app.innerHTML = triagemFormView();
   else if (S.modo === "cliente") app.innerHTML = portalView(S.portal, false);
   else if (S.preview) app.innerHTML = portalView(espelho(S.eq.clientes.find(c => c.id === S.preview)), true);
   else app.innerHTML = mentorView();
@@ -250,6 +256,8 @@ function render(){
   const f = $("#fLogin"); if (f){ f.onsubmit = e => { e.preventDefault(); if (S.aba === "cliente") entrarCliente($("#lCodigo").value); else entrarMentor($("#lNome").value, $("#lSenha").value); }; const first = f.querySelector("input"); if (first && !S.carregando) first.focus(); }
   const b = $("#busca"); if (b){ b.oninput = () => { S.busca = b.value; const pos = b.selectionStart; render(); const nb = $("#busca"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
   const vm = $("#verMentor"); if (vm) vm.onchange = () => { S.verMentor = vm.value; render(); };
+  const ft = $("#fTri"); if (ft) ft.onsubmit = e => { e.preventDefault(); enviarTriagem(); };
+  const te = $("#triEtapa"); if (te) te.onchange = () => { const t = triDe(S.sel); if (t){ t.etapa = te.value; salvarTri(t); render(); } };
   const be = $("#buscaEd"); if (be){ be.oninput = () => { S.buscaEd = be.value; const pos = be.selectionStart; render(); const nb = $("#buscaEd"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
 }
 const A = {
@@ -266,14 +274,25 @@ const A = {
   filtroRep: el => { S.filtroRep = el.dataset.v; render(); },
   copiarRep: el => copiar(textoRepasses(el.dataset.v)),
   ciProva: el => { S.ciProva[S.sel] = el.dataset.v; render(); },
-  copiarCont: () => copiarParaNotion(S.eq.clientes.find(c => c.id === S.sel)),
+  copiarCont: () => copiarParaNotion(clienteSel()),
+  novaTri: () => novaTri(),
+  importarTri: () => importarTri($("#triImport").value),
+  copiarLinkTri: () => copiar(linkTriagem()),
+  abrirTri: el => { S.sel = el.dataset.id; S.view = "triagemItem"; render(); window.scrollTo(0, 0); },
+  apagarTri: () => { if (!confirm("Apagar este cliente da triagem?")) return; gravarTri(lerTri().filter(t => t.id !== S.sel)); delete S.cont[S.sel]; S.view = "triagem"; render(); },
+  pdfOrc: () => pdfOrcamento(triDe(S.sel)),
+  pdfAnalise: el => pdfAnalise(triDe(S.sel), el.dataset.v),
+  copiarMsgOrc: () => { const t = triDe(S.sel); copiar(mensagemOrcamento(t, opcoesTri(t))); },
+  copiarNotionTri: () => copiar(textoNotionTri(triDe(S.sel))),
 };
-app.addEventListener("input", e => { if (e.target.dataset && e.target.dataset.ci) ciInput(e.target); });
+app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 (async () => {
   let s = null; try { s = JSON.parse(sessionStorage.getItem("medeasy")); } catch {}
   const cod = new URLSearchParams(location.search).get("c");
+  const tri = new URLSearchParams(location.search).get("triagem");
+  if (tri !== null){ S.modo = "triagem"; S.triDestino = soDigitos(tri); render(); return; }
   if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo);
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
   else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }

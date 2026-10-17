@@ -25,7 +25,7 @@ function calcProva(itens, reg, teto){
     const manual = r.pts !== undefined && r.pts !== null && r.pts !== "";
     const pts = r2(Math.max(0, Math.min(it.maxN, manual ? num(r.pts) : auto)));
     if (it.artigo) nArt += n; else nCert += n;
-    return { ...it, n, auto:r2(auto), manual, pts, lista };
+    return { ...it, n, auto:r2(auto), manual, pts, lista, com:r.com || "", sit:r.sit || "" };
   });
   for (const x of rows){ if (x.grupo){ g[x.grupo] = (g[x.grupo] || 0) + x.pts; gm[x.grupo] = x.grupoMax ?? Infinity; } else { total += x.pts; max += x.maxN; } }
   for (const k in g){ total += Math.min(g[k], gm[k]); max += isFinite(gm[k]) ? gm[k] : 0; }
@@ -72,8 +72,8 @@ function estimarJS(c){
 /* Contagem: vem do Notion (coluna "Certificados por item") e o rascunho fica no navegador */
 const rascKey = id => "medeasy-rasc-" + id;
 function lerRasc(id){ try { return JSON.parse(localStorage.getItem(rascKey(id)) || "null"); } catch { return null; } }
-function gravarRasc(id){ try { localStorage.setItem(rascKey(id), JSON.stringify({ provas:S.cont[id].provas, em:Date.now() })); } catch {} }
-function apagarRasc(id){ try { localStorage.removeItem(rascKey(id)); } catch {} }
+function gravarRasc(id){ if (String(id).startsWith("t:")){ const t = triDe(id); if (t){ t.cont = S.cont[id].provas; salvarTri(t); } return; } try { localStorage.setItem(rascKey(id), JSON.stringify({ provas:S.cont[id].provas, em:Date.now() })); } catch {} }
+function apagarRasc(id){ if (String(id).startsWith("t:")) return; try { localStorage.removeItem(rascKey(id)); } catch {} }
 /* Texto da coluna: uma linha por prova. "PSU-GO: 2=2; 4=3; 9=/0,5" (item=certificados, /pontos quando digitados) */
 function lerTextoCont(t){ const out = {}; for (const ln of String(t || "").split(/\n|\|/)){ const m = ln.match(/^\s*([^:]+):(.*)$/); if (!m) continue; const pr = (out[kP(m[1])] ||= {});
   for (const par of m[2].split(";")){ const x = par.trim().match(/^(\d+)\s*=\s*(\d+)?\s*(?:\/\s*([\d.,]+))?/); if (x) pr[+x[1]] = { n:x[2] ? +x[2] : 0, pts:x[3] != null ? num(x[3]) : "" }; } } return out; }
@@ -81,6 +81,7 @@ function regDoNotion(c, p){ const t = (c.contagem || {})[kP(p.nome)]; if (!t) re
 function carregarCont(c){
   if (S.cont[c.id]) return S.cont[c.id];
   const reg = S.cont[c.id] = { provas:{} };
+  if (c.triagem){ reg.provas = JSON.parse(JSON.stringify(c.triagem.cont || {})); return reg; }
   for (const p of c.provas || []){ const r = regDoNotion(c, p); if (r) reg.provas[kP(p.nome)] = r; }
   const ras = c.id === "cli" ? null : lerRasc(c.id); if (ras && ras.provas && Object.keys(ras.provas).length && ras.texto !== textoCont(c, reg.provas)){ reg.provas = ras.provas; reg.rascunho = true; reg.copiado = !!ras.texto; }
   return reg;
@@ -96,11 +97,11 @@ function juntarContagemCliente(portal){ if (!portal.contagem || !Object.keys(por
   portal.provas = provasComContagem({ id:"cli", provas:portal.provas || [], contagem:portal.contagem }); }
 async function copiarParaNotion(c){ const reg = carregarCont(c); const t = textoCont(c, reg.provas);
   if (!t){ toast("Nada para copiar ainda"); return; }
-  await copiar(t); try { localStorage.setItem(rascKey(c.id), JSON.stringify({ provas:reg.provas, em:Date.now(), texto:t })); } catch {}
+  await copiar(t); if (!c.triagem) try { localStorage.setItem(rascKey(c.id), JSON.stringify({ provas:reg.provas, em:Date.now(), texto:t })); } catch {}
   reg.copiado = true; S.ciCopiado = c.id; render(); }
 
 /* Tela */
-function statusTxt(reg, c){ if (!reg) return ""; if (reg.copiado) return "Copiado. Falta colar no Notion"; return reg.rascunho ? "Rascunho neste navegador. Copie para o Notion para a equipe ver" : textoCont(c, reg.provas) ? "Igual ao que está no Notion" : "Ainda não está no Notion"; }
+function statusTxt(reg, c){ if (!reg) return ""; if (c && c.triagem) return "Guardado neste navegador"; if (reg.copiado) return "Copiado. Falta colar no Notion"; return reg.rascunho ? "Rascunho neste navegador. Copie para o Notion para a equipe ver" : textoCont(c, reg.provas) ? "Igual ao que está no Notion" : "Ainda não está no Notion"; }
 function pintarStatus(c){ const el = document.getElementById("ciStatus"); if (el) el.textContent = statusTxt(S.cont[c.id], c); }
 function valorCard(c){
   const e = estimarJS(c); if (!e) return `<section class="card" id="valorCard" hidden></section>`; const f = fin(c); const dif = r2(f.total - e.total);
@@ -124,7 +125,7 @@ function certItensView(c){
      <div class="kpi"><div class="label">Valor desta prova</div><div class="v gold" id="ciValor">${(() => { const l = (estimarJS(c) || { linhas:[] }).linhas.find(l => l.desc.startsWith(p.nome + ":")); return l && l.valor != null ? brl(l.valor) : "–"; })()}</div><div class="d">Modelo ${modeloDe(p.nome)} Vitae</div></div></div>
    <div class="tbl-wrap"><table class="tbl ci"><thead><tr><th>Item</th><th class="r" style="width:92px">Certificados</th><th class="r" style="width:92px">Pontos</th><th class="r" style="width:64px">Máx</th></tr></thead><tbody>
    ${cp.rows.map((x, i) => `<tr><td class="small"><b>${esc(x.item)}</b>${x.grupo ? ` <span class="pill" style="font-size:10px">${esc(x.grupo)}${x.grupoMax != null ? " até " + d1(x.grupoMax) : ""}</span>` : ""}<div class="xs muted">${esc(x.pontos)}</div>
-       <details style="margin-top:4px"><summary class="xs" style="cursor:pointer">${x.lista.length ? `${x.lista.length} certificados listados` : "Listar certificados"}</summary><textarea class="in" data-ci="lista" data-i="${i}" rows="3" placeholder="Um certificado por linha" style="margin-top:6px;font-size:13px">${esc(x.lista.join("\n"))}</textarea></details></td>
+       <details style="margin-top:4px"><summary class="xs" style="cursor:pointer">${x.lista.length ? `${x.lista.length} certificados listados` : "Listar certificados"}</summary><textarea class="in" data-ci="lista" data-i="${i}" rows="3" placeholder="Um certificado por linha" style="margin-top:6px;font-size:13px">${esc(x.lista.join("\n"))}</textarea>${c.triagem ? `<select class="in" data-ci="sit" data-i="${i}" style="margin-top:6px;font-size:13px"><option value="">Situação automática</option>${["Completo","Parcial","Aumentar agora","Médio prazo","Não se aplica agora"].map(o => `<option ${x.sit === o ? "selected" : ""}>${o}</option>`).join("")}</select><textarea class="in" data-ci="com" data-i="${i}" rows="2" placeholder="Comentário para a análise curricular" style="margin-top:6px;font-size:13px">${esc(x.com)}</textarea>` : ""}</details></td>
      <td class="r"><input class="in num" data-ci="n" data-i="${i}" type="number" min="0" step="1" inputmode="numeric" value="${x.n || ""}" placeholder="0" style="width:76px;text-align:right"></td>
      <td class="r"><input class="in num" data-ci="pts" data-i="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${x.manual ? x.pts : ""}" placeholder="${x.unit != null ? String(x.auto).replace(".", ",") : "–"}" title="${x.unit != null ? "Calculado pelos certificados. Digite só para corrigir" : "Este item não é por certificado. Digite os pontos"}" style="width:76px;text-align:right"><div class="xs ${x.pts >= x.maxN ? "neon" : "muted"}" id="ciP${i}">${d1(x.pts)}</div></td>
      <td class="r num small">${d1(x.maxN)}</td></tr>`).join("")}</tbody></table></div>
@@ -132,16 +133,18 @@ function certItensView(c){
    : `<div class="empty">A ficha desta prova ainda não está no site${p.edital && p.edital.fichaFonte ? ". " + esc(p.edital.fichaFonte) : ""}</div>`}</section>`;
 }
 function ciInput(el){
-  const c = (S.eq.clientes || []).find(x => x.id === S.sel); if (!c) return;
+  const c = clienteSel(); if (!c) return;
   const provas = (c.provas || []).filter(p => p.nome); const pk = S.ciProva[c.id] && provas.some(p => kP(p.nome) === S.ciProva[c.id]) ? S.ciProva[c.id] : kP(provas[0].nome);
   const p = provas.find(p => kP(p.nome) === pk); const itens = itensDaProva(p); const it = itens[+el.dataset.i]; if (!it) return;
   const reg = S.cont[c.id]; const pr = (reg.provas[pk] ||= {}); const r = (pr[it.key] ||= { ...(it.base || {}) });
   if (el.dataset.ci === "n") r.n = el.value === "" ? 0 : Math.max(0, Math.floor(num(el.value)));
   else if (el.dataset.ci === "pts") r.pts = el.value === "" ? "" : num(el.value);
+  else if (el.dataset.ci === "com"){ r.com = el.value; gravarRasc(c.id); return; }
+  else if (el.dataset.ci === "sit"){ r.sit = el.value; gravarRasc(c.id); return; }
   else { r.lista = el.value.split("\n").map(s => s.trim()).filter(Boolean); r.n = r.lista.length; const inp = document.querySelector(`[data-ci="n"][data-i="${el.dataset.i}"]`); if (inp) inp.value = r.n || ""; }
   // Voltou a ficar igual ao Notion: não é mais rascunho
-  const noNotion = {}; for (const q of provas){ const r = regDoNotion(c, q); if (r) noNotion[kP(q.nome)] = r; }
-  if (textoCont(c, reg.provas) === textoCont(c, noNotion)){ reg.rascunho = false; apagarRasc(c.id); } else { reg.rascunho = true; gravarRasc(c.id); }
+  if (c.triagem){ gravarRasc(c.id); } else { const noNotion = {}; for (const q of provas){ const r = regDoNotion(c, q); if (r) noNotion[kP(q.nome)] = r; }
+  if (textoCont(c, reg.provas) === textoCont(c, noNotion)){ reg.rascunho = false; apagarRasc(c.id); } else { reg.rascunho = true; gravarRasc(c.id); } }
   reg.copiado = false; S.ciCopiado = null;
   const cp = calcProva(itens, pr, tetoDe(p)); const x = cp.rows[+el.dataset.i];
   const set = (id, v) => { const e = document.getElementById(id); if (e) e.innerHTML = v; };
