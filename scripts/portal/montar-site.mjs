@@ -4,6 +4,9 @@ import fs from "node:fs"; import path from "node:path";
 const d = path.join(path.dirname(new URL(import.meta.url).pathname), "site");
 const ler = f => fs.readFileSync(path.join(d, f), "utf8");
 let t = ler("index.tpl.html");
-t = t.split("__CSS__").join(ler("base.css")).split("__CERTITENS__").join(ler("certitens.js")).split("__PORTALVIEW__").join(ler("portalview.js"));
+const editais = JSON.parse(fs.readFileSync(path.join(d, "..", "editais.json"), "utf8")); delete editais._fonte;
+// Lista pública de provas para a triagem: só nome e chave
+const provas = JSON.stringify(Object.entries(editais).map(([k, e]) => ({ k, nome: e.nome })));
+t = t.split("__CSS__").join(ler("base.css")).split("__CERTITENS__").join(ler("certitens.js")).split("__PORTALVIEW__").join(ler("portalview.js")).split("__TRIAGEM__").join(ler("triagem.js").replace("__PROVAS__", provas));
 fs.writeFileSync(path.resolve(d, "../../../portal/index.html"), t);
 console.log("portal/index.html montado");
