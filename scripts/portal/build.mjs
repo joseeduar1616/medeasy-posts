@@ -21,7 +21,7 @@ const enc = new TextEncoder();
 const b64 = u8 => Buffer.from(u8).toString("base64");
 const unb64 = s => Uint8Array.from(Buffer.from(s, "base64"));
 
-const SENHA = (process.env.PORTAL_SENHA || "").trim();
+let SENHA = (process.env.PORTAL_SENHA || "").trim();
 if (!SENHA) { console.error("Defina PORTAL_SENHA"); process.exit(1); }
 
 /* ---------- cripto ---------- */
@@ -207,13 +207,7 @@ async function montar(linhas) {
 let EQUIPE = {};
 async function juntarExtras(dados) {
   const arq = path.join(SAIDA, "extras.json"); if (!fs.existsSync(arq)) return;
-  let extras;
-  try { extras = await abrir(JSON.parse(fs.readFileSync(arq, "utf8")), SENHA); }
-  catch {
-    // O site aceita a senha em minúsculas. Se nem assim abrir, o secret PORTAL_SENHA está diferente da senha da equipe.
-    try { extras = await abrir(JSON.parse(fs.readFileSync(arq, "utf8")), SENHA.toLowerCase()); }
-    catch { console.error("PORTAL_SENHA não abre portal/data/extras.json. Confira se o secret é a mesma senha da equipe que os mentores usam no site, sem espaço no fim."); process.exit(1); }
-  }
+  const extras = await abrir(JSON.parse(fs.readFileSync(arq, "utf8")), SENHA);
   EQUIPE = Object.fromEntries(Object.entries(extras.equipe || {}).map(([k, v]) => [pessoa(k), v]));
   for (const c of dados.clientes) {
     const e = extras.clientes.find(x => semAcento(c.nome).includes(semAcento(x.casar)) || semAcento(x.casar).includes(semAcento(c.nome))); if (!e) continue;
@@ -291,6 +285,19 @@ function espelho(c, contato) {
 }
 
 /* ---------- principal ---------- */
+// A senha precisa ser a mesma que cifrou os extras, porque ela também gera os códigos dos clientes.
+// O site aceita a senha em minúsculas, então o secret pode vir com maiúscula: usa a forma que abre os dados.
+{
+  const arq = path.join(SAIDA, "extras.json");
+  if (fs.existsSync(arq)) {
+    const env = JSON.parse(fs.readFileSync(arq, "utf8"));
+    const abre = async s => { try { await abrir(env, s); return true; } catch { return false; } };
+    if (!(await abre(SENHA))) {
+      if (await abre(SENHA.toLowerCase())) SENHA = SENHA.toLowerCase();
+      else { console.error("PORTAL_SENHA não abre portal/data/extras.json. Confira se o secret é a mesma senha da equipe que os mentores usam no site, sem espaço no fim."); process.exit(1); }
+    }
+  }
+}
 const args = process.argv.slice(2);
 const iLin = args.indexOf("--linhas");
 const linhas = iLin >= 0 ? JSON.parse(fs.readFileSync(args[iLin + 1], "utf8")).map(linhaDeExport)
