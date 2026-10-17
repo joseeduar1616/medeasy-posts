@@ -135,7 +135,7 @@ function pdfOrcamento(t){
     <div class="tabela"><img class="marca" src="${LOGO_URL()}" alt=""><table><thead><tr><th>DESCRIÇÃO</th><th>QUANTIDADE</th><th>VALOR</th></tr></thead><tbody>${o.linhas.map(l => `<tr><td>${esc(l.desc.replace(/^([^:]+):/, `$1 ${ANO}:`))}</td><td>${esc(l.conta)}</td><td>${l.valor == null ? "a definir" : "R$" + br2(l.valor)}</td></tr>`).join("")}${o.desconto ? `<tr><td>Desconto de ${o.desconto}%</td><td></td><td>- R$${br2(o.bruto - o.total)}</td></tr>` : ""}</tbody></table></div>
     <div class="total">VALOR TOTAL: R$ ${br2(o.total)}</div>
     <p class="nota">Valor estimado com os certificados recebidos. Pode variar em até 3 certificados para mais ou para menos após a conferência completa de cada edital. Pagamento de 50% na contratação e o restante após a versão para conferência.</p>
-    <div class="rod">(62) 99137-3642 / medeasyy0@gmail.com / Goiânia, Goiás- Brasil</div></section>`;
+    <div class="rod">(62) 99515-5830 / medeasyy0@gmail.com / Goiânia, Goiás- Brasil</div></section>`;
   abrirDoc(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Orçamento ${esc(t.nome)}</title>${FONTES}<style>
     @page{size:A4;margin:0} *{box-sizing:border-box} body{margin:0;background:#888;font-family:Poppins,sans-serif;color:#1b1b1b;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .pg{width:210mm;min-height:297mm;background:#FFF9F5;margin:12px auto;padding:22mm 18mm;position:relative;page-break-after:always;display:flex;flex-direction:column}
@@ -196,5 +196,5 @@ function pdfAnalise(t, pk){
     <div class="card"><div class="lbl" style="margin-bottom:6px">Checklist da inscrição</div><ul><li>Conferir se cada certificado tem nome, período, função e carga horária</li><li>Enviar no formato do edital: ${esc(e.formato || "ver edital")}</li><li>${esc(e.envio || "Conferir a data de envio no edital")}</li>${p.link ? `<li>Edital: ${esc(p.link)}</li>` : ""}</ul></div>
     <div class="card"><div class="lbl" style="margin-bottom:6px">Datas importantes</div><ul>${p.prazoEnvio ? `<li>Fim do envio do currículo: ${dBR(p.prazoEnvio)}</li>` : ""}${p.dataProva ? `<li>Prova: ${dBR(p.dataProva)}</li>` : ""}${e.inscricao ? `<li>Inscrição: ${esc(e.inscricao)}</li>` : ""}${e.resultado ? `<li>Resultado: ${esc(e.resultado)}</li>` : ""}</ul></div>
     <p>A nota é uma estimativa feita a partir dos certificados que você enviou e das regras do edital. Quem decide a pontuação final é a banca. Qualquer dúvida, fale com o seu mentor.</p>
-    <div class="rod">MedEasy · (62) 99137-3642 · medeasyy0@gmail.com · Goiânia, Goiás</div></section></body></html>`);
+    <div class="rod">MedEasy · (62) 99515-5830 · medeasyy0@gmail.com · Goiânia, Goiás</div></section></body></html>`);
 }

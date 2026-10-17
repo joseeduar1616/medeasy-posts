@@ -313,7 +313,7 @@ for (const c of dados.clientes) for (const p of c.provas) {
   if (!p.regras) p.regras = [e.formato, e.envio].filter(Boolean).join(". ");
 }
 for (const c of dados.clientes) c.estimativa = estimar(c);
-const contato = { mentor: "Equipe MedEasy", whats: "5562991373642", texto: "(62) 99137-3642", email: "medeasyy0@gmail.com" };
+const contato = { mentor: "Equipe MedEasy", whats: "5562995155830", texto: "(62) 99515-5830", email: "medeasyy0@gmail.com" };
 
 // Só regrava quando os dados mudam, para não gerar commit a cada hora.
 const marca = Buffer.from(await hmac(JSON.stringify(dados))).toString("hex");
