@@ -26,8 +26,52 @@ function codigoTri(d){ return btoa(unescape(encodeURIComponent(JSON.stringify(d)
 function lerCodigoTri(texto){ const m = String(texto || "").match(/(?:#triagem:|[?&]i=)([A-Za-z0-9+/=_-]+)/); if (!m) return null; try { const b = m[1].replace(/-/g, "+").replace(/_/g, "/"); return JSON.parse(decodeURIComponent(escape(atob(b)))); } catch { return null; } }
 const linkImportar = d => `${location.href.split("#")[0].split("?")[0]}?i=${codigoTri(d)}`;
 function mensagemTri(d){
-  return `Oi! Preenchi a triagem do portal da MedEasy\n\nNome: ${d.nome}\nWhatsApp: ${d.whats}\nProvas: ${(d.provas || []).map(nomeProva).join(", ") || "ainda não sei"}\nEspecialidade: ${d.area || "não informada"}\nServiço: ${SERVICOS_TRI[d.servico] || "ainda não sei"}\nCertificados: ${d.nCert ? "uns " + d.nCert : "não contei"}\nDrive: ${d.links || "vou mandar os PDFs aqui"}\n${d.obs ? "Obs: " + d.obs + "\n" : ""}\nAbrir no painel: ${linkImportar(d)}`;
+  return `Oi! Preenchi a triagem do portal da MedEasy\n\nNome: ${d.nome}\nWhatsApp: ${d.whats}\nProvas: ${(d.provas || []).map(nomeProva).join(", ") || "ainda não sei"}\nEspecialidade: ${d.area || "não informada"}\nPedido: ${d.pedido || "não escreveu"}\nCertificados: ${d.nCert ? "uns " + d.nCert : "não contei"}\nDrive: ${d.links || "vou mandar os PDFs aqui"}\n${d.obs ? "Obs: " + d.obs + "\n" : ""}\nAbrir no painel: ${linkImportar(d)}`;
 }
+/* O site interpreta o pedido escrito pelo cliente: serviço e provas citadas. O mentor pode corrigir. */
+const ALIAS_PROVA = { psu:"psugo", psugo:"psugo", sesgo:"sesgo", psumg:"psumg", usp:"uspsp", usprp:"usprp", ribeirao:"usprp", santacasa:"santacasasp", scmsp:"santacasasp", sirio:"siriolibanes", dante:"dante", puc:"puccamp", cet:"cet", fubog:"fubog", olhos:"fubog" };
+function interpretarPedido(texto){
+  const t = semAcento(texto); const k = kP(texto); const motivos = [];
+  let servico = "vitae";
+  const temLattes = /lattes/.test(t), temVitae = /vitae|curriculo|documento|montar|organiza/.test(t), soAnalise = /\b(so|apenas|somente)\b[^.]*analise|analise[^.]*\b(so|apenas|somente)\b|so quero saber|projecao|quanto (eu )?(faria|faco|pontuo)|quantos pontos/.test(t);
+  if (temLattes && /comprova|documento/.test(t) && !temVitae) { servico = "lattesb"; motivos.push("citou Lattes com documento de comprovação"); }
+  else if (temLattes) { servico = "lattes"; motivos.push("citou o Lattes"); }
+  else if (soAnalise && !temVitae) { servico = "analise"; motivos.push("pediu só a análise ou a projeção da nota"); }
+  else if (temVitae) motivos.push("citou currículo ou documento");
+  else motivos.push("não citou o serviço, ficou o padrão Vitae + análise");
+  const provas = new Set();
+  for (const p of PROVAS){ if (k.includes(p.k) || k.includes(kP(p.nome))) provas.add(p.k); }
+  const palavras = t.split(/[^a-z]+/);
+  for (const [a, pk] of Object.entries(ALIAS_PROVA)){ if (palavras.includes(a) || (a.length > 4 && k.includes(a))) provas.add(pk); }
+  // "psu mg" sozinho não é PSU-GO
+  if (provas.has("psugo") && /psu\s?-?\s?mg/.test(t) && !/psu\s?-?\s?go|psugo/.test(t)) provas.delete("psugo");
+  // "USP" sozinho é a USP-SP. Só vira USP-RP quando cita Ribeirão ou RP
+  if (provas.has("usprp") && !/usp\s?-?\s?sp|uspsp|sao paulo/.test(t)) provas.delete("uspsp");
+  if (/urgen|essa semana|amanha|hoje/.test(t)) motivos.push("parece ter pressa");
+  return { servico, provas:[...provas].filter(x => PROVAS.some(p => p.k === x)), motivos };
+}
+/* Estimativa simples, sem contagem por item: taxa por prova mais certificados vezes o valor do modelo */
+function estimativaSimples(provas, nCert, servico){
+  const n = Math.max(0, Math.floor(num(nCert))); const linhas = []; const taxa = provas.length > 2 ? PRECO.taxaMaisDeDuas : PRECO.taxa;
+  for (const k of provas){ const nome = nomeProva(k); const m = modeloDe(nome);
+    if (servico === "analise") linhas.push({ desc:`${nome}: análise curricular com projeção de nota`, valor:provas.length >= 2 ? PRECO.analise2 : PRECO.analise1 });
+    else if (servico !== "lattesb") linhas.push({ desc:`${nome}: análise curricular + currículo com os certificados (Modelo ${m})`, valor:n ? taxa + n * PRECO.vitae[m][faixaQ(n)] : null }); }
+  if (servico === "lattes" || servico === "lattesb"){ const cat = servico === "lattesb" ? "B" : "A"; linhas.push({ desc:`Atualização do Lattes (Categoria ${cat})`, valor:n ? n * PRECO.lattes[cat][faixaQ(n)] : null }); }
+  const falta = linhas.some(l => l.valor == null); return { linhas, total:r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)), falta };
+}
+function estimativaView(d){
+  const it = interpretarPedido(d.pedido || ""); const provas = [...new Set([...(d.provas || []), ...it.provas])];
+  if (!provas.length) return `<p class="xs muted" style="margin:0">Marque as provas para ver uma estimativa.</p>`;
+  const e = estimativaSimples(provas, d.nCert, it.servico);
+  return `<div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}</td><td class="r num" style="white-space:nowrap">${l.valor == null ? "falta o nº de certificados" : brl(l.valor)}</td></tr>`).join("")}</tbody>${!e.falta ? `<tfoot><tr><td>Estimativa</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot>` : ""}</table></div><p class="xs muted" style="margin:8px 0 0">Estimativa com ${num(d.nCert) || 0} certificados. O valor certo sai depois que o mentor confere os seus certificados no edital.</p>`;
+}
+const TABELA_PRECOS = `<div class="precos">
+  <div class="preco"><div><b>Currículo + análise curricular</b><div class="xs muted">Por prova. Lemos o edital, selecionamos e organizamos os seus certificados e entregamos o documento pronto para anexar, com a projeção da sua nota</div></div><div class="v">R$ 100,00 por prova<div class="xs muted">+ R$ 8,00 a 9,50 por certificado</div></div></div>
+  <div class="preco"><div><b>Só a análise curricular</b><div class="xs muted">Sem o documento. Você recebe a projeção da nota e o que fazer para aumentar</div></div><div class="v">R$ 100,00 por prova<div class="xs muted">R$ 90,00 cada com 2 ou mais</div></div></div>
+  <div class="preco"><div><b>Atualização do Lattes</b><div class="xs muted">Por certificado, uma vez só, vale para todas as provas</div></div><div class="v">R$ 6,00 a 7,00 por certificado</div></div>
+  <div class="preco"><div><b>Artigo completo ou capítulo de livro</b></div><div class="v">R$ 12,50 cada</div></div>
+  <div class="preco"><div><b>Organização dos certificados no drive</b><div class="xs muted">Só se você mandar tudo solto</div></div><div class="v">R$ 75,00</div></div>
+</div><p class="xs muted" style="margin:8px 0 0">Pagamento de 50% na contratação e o restante quando você receber a versão para conferir. Mais de 2 provas: taxa de R$ 90,00 por prova.</p>`;
 function triagemFormView(){
   const d = S.triForm || (S.triForm = { provas:[], servico:"vitae" });
   const chk = (k, nome) => `<label class="chk"><input type="checkbox" data-tri="prova" value="${k}" ${d.provas.includes(k) ? "checked" : ""}><span>${esc(nome)}</span></label>`;
@@ -38,21 +82,23 @@ function triagemFormView(){
       <div class="grid2" style="gap:10px"><label class="f"><span>Seu nome completo</span><input class="in" data-tri="nome" value="${esc(d.nome || "")}" required autocomplete="name"></label>
       <label class="f"><span>Seu WhatsApp</span><input class="in" data-tri="whats" value="${esc(d.whats || "")}" required inputmode="tel" autocomplete="tel" placeholder="(62) 99999-9999"></label></div>
       <div class="f"><span>Para quais provas você vai enviar o currículo?</span><div class="chks">${PROVAS.map(p => chk(p.k, p.nome)).join("")}</div></div>
-      <div class="grid2" style="gap:10px"><label class="f"><span>Especialidade pretendida</span><input class="in" data-tri="area" value="${esc(d.area || "")}" placeholder="Ex.: Clínica Médica"></label>
-      <label class="f"><span>O que você procura</span><select class="in" data-tri="servico">${Object.entries(SERVICOS_TRI).map(([k, t]) => `<option value="${k}" ${d.servico === k ? "selected" : ""}>${t}</option>`).join("")}</select></label></div>
+      <label class="f"><span>Especialidade pretendida</span><input class="in" data-tri="area" value="${esc(d.area || "")}" placeholder="Ex.: Clínica Médica"></label>
+      <label class="f"><span>O que você precisa? Escreva com as suas palavras</span><textarea class="in" data-tri="pedido" rows="3" placeholder="Ex.: Quero o currículo pronto para a PSU-GO e saber quantos pontos eu faço. Também preciso atualizar o Lattes">${esc(d.pedido || "")}</textarea></label>
       <div class="grid2" style="gap:10px"><label class="f"><span>Quantos certificados você tem, mais ou menos?</span><input class="in" data-tri="nCert" type="number" min="0" inputmode="numeric" value="${esc(d.nCert || "")}" placeholder="Pode ser um chute"></label>
       <label class="f"><span>Link do Drive com os certificados (se tiver)</span><input class="in" data-tri="links" value="${esc(d.links || "")}" placeholder="https://drive.google.com/..."></label></div>
-      <label class="f"><span>Alguma observação? Prazo apertado, certificado que ainda vai chegar, dúvida</span><textarea class="in" data-tri="obs" rows="3">${esc(d.obs || "")}</textarea></label>
+      <label class="f"><span>Alguma observação? Prazo apertado, certificado que ainda vai chegar, dúvida</span><textarea class="in" data-tri="obs" rows="2">${esc(d.obs || "")}</textarea></label>
+      <div class="svc"><div class="label" style="margin-bottom:6px">Estimativa para você</div><div id="triEst">${estimativaView(d)}</div></div>
       <p class="xs muted" style="margin:0">Os certificados em PDF você manda direto na conversa do WhatsApp, depois de enviar este formulário. Se estiverem no Drive, deixe o link com acesso para quem tem o link.</p>
       <button class="btn pri" type="submit">Enviar pelo WhatsApp</button>
     </form>
+    <section class="card"><div class="card-h"><h2>Quanto custa</h2></div>${TABELA_PRECOS}</section>
     <p class="xs faint" style="text-align:center">MedEasy · @med_easyy · Goiânia, Goiás</p>
   </main>`;
 }
 function enviarTriagem(){
   const d = S.triForm; if (!d.nome || !d.whats){ toast("Preencha o nome e o WhatsApp"); return; }
   if (!d.provas.length && !confirm("Você não marcou nenhuma prova. Enviar assim mesmo?")) return;
-  const dest = S.triDestino || CONTATO.whats; d.em = Date.now();
+  const dest = S.triDestino || CONTATO.whats; d.em = Date.now(); delete d.servico;
   window.open(waLink(dest, mensagemTri(d)), "_blank");
 }
 
@@ -60,7 +106,8 @@ function enviarTriagem(){
 const linkTriagem = () => { const m = (S.eq.mentores || []).find(x => x.nome === S.mentor.nome); const tel = soDigitos(m?.telefone || "") || CONTATO.whats; return `${location.href.split("#")[0].split("?")[0]}?triagem=${tel}`; };
 function importarTri(texto){
   const d = lerCodigoTri(texto); if (!d){ toast("Não achei o código #triagem na mensagem"); return; }
-  const t = { id:novoIdTri(), em:d.em || Date.now(), nome:(d.nome || "").trim(), whats:d.whats || "", area:d.area || "", provas:(d.provas || []).filter(k => PROVAS.some(p => p.k === k)), servico:SERVICOS_TRI[d.servico] && d.servico !== "naosei" ? d.servico : "vitae", nCert:d.nCert || "", links:d.links || "", obs:d.obs || "", cont:{}, etapa:"novo" };
+  const it = interpretarPedido(d.pedido || "");
+  const t = { id:novoIdTri(), em:d.em || Date.now(), nome:(d.nome || "").trim(), whats:d.whats || "", area:(d.area || "").trim(), provas:[...new Set([...(d.provas || []), ...it.provas])].filter(k => PROVAS.some(p => p.k === k)), servico:SERVICOS_TRI[d.servico] && d.servico !== "naosei" ? d.servico : it.servico, pedido:d.pedido || "", motivos:it.motivos, nCert:d.nCert || "", links:d.links || "", obs:d.obs || "", cont:{}, etapa:"novo" };
   // Mesmo link aberto duas vezes não duplica o cliente
   const igual = lerTri().find(x => x.nome === t.nome && x.whats === t.whats && x.em === t.em); if (igual) t.id = igual.id, t.cont = igual.cont, t.etapa = igual.etapa;
   salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); toast(igual ? "Esse cliente já estava na triagem" : "Cliente importado");
@@ -99,6 +146,7 @@ function triagemItemView(){
   return `<div class="pagehead"><div><button class="btn ghost sm" data-a="nav" data-v="triagem" style="margin-left:-10px">‹ Triagem</button><h1>${esc(t.nome || "Cliente novo")}</h1><div class="row" style="margin-top:6px"><span class="pill ${k}">${et}</span>${t.area ? `<span class="pill ok">${esc(t.area)}</span>` : ""}</div></div>
     <div class="row">${t.whats ? `<a class="btn" href="${waLink(t.whats, "Oi, " + primeiro(t.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}<select class="in" id="triEtapa" style="width:auto">${Object.entries(ETAPAS_TRI).map(([kk, [tt]]) => `<option value="${kk}" ${t.etapa === kk ? "selected" : ""}>${tt}</option>`).join("")}</select><button class="btn sm danger" data-a="apagarTri">Apagar</button></div></div>
    <div class="grid2"><div class="stack">
+    ${t.pedido || t.obs ? `<section class="card"><div class="card-h"><h2>Pedido do cliente</h2></div>${t.pedido ? `<p class="small" style="margin:0 0 8px;white-space:pre-wrap">${esc(t.pedido)}</p>` : ""}${t.obs ? `<p class="small muted" style="margin:0 0 8px;white-space:pre-wrap">Obs: ${esc(t.obs)}</p>` : ""}<div class="xs muted">Entendido como <b>${esc(SERVICOS_TRI[t.servico] || "")}</b>${(t.motivos || []).length ? " (" + esc(t.motivos.join(", ")) + ")" : ""}. Se não for isso, troque o serviço e as provas abaixo.</div></section>` : ""}
     <section class="card"><div class="card-h"><h2>Dados</h2></div><div class="stack" style="gap:10px">
       <div class="grid2" style="gap:10px"><label class="f"><span>Nome</span><input class="in" data-tri="nome" value="${esc(t.nome || "")}"></label><label class="f"><span>WhatsApp</span><input class="in" data-tri="whats" value="${esc(t.whats || "")}" inputmode="tel"></label></div>
       <div class="grid2" style="gap:10px"><label class="f"><span>Especialidade</span><input class="in" data-tri="area" value="${esc(t.area || "")}"></label><label class="f"><span>Serviço</span><select class="in" data-tri="servico">${Object.entries(SERVICOS_TRI).filter(([kk]) => kk !== "naosei").map(([kk, tt]) => `<option value="${kk}" ${t.servico === kk ? "selected" : ""}>${tt}</option>`).join("")}</select></label></div>
@@ -121,7 +169,7 @@ function triInput(el){
   const campo = el.dataset.tri; const t = S.modo === "triagem" ? S.triForm : triDe(S.sel); if (!t) return;
   if (campo === "prova"){ const set = new Set(t.provas || []); el.checked ? set.add(el.value) : set.delete(el.value); t.provas = PROVAS.map(p => p.k).filter(k => set.has(k)); }
   else if (el.type === "checkbox") t[campo] = el.checked; else t[campo] = el.value;
-  if (S.modo === "triagem") return;
+  if (S.modo === "triagem"){ const el2 = document.getElementById("triEst"); if (el2) el2.innerHTML = estimativaView(t); return; }
   salvarTri(t); delete S.cont[t.id];
   if (campo === "prova" || campo === "servico" || campo === "nCert" || campo === "desconto" || campo === "drive") render();
 }
