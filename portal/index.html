@@ -728,7 +728,7 @@ const TRI_KEY = "medeasy-triagem";
 const SERVICOS_TRI = { vitae:"Currículo Vitae + análise curricular", analise:"Só a análise curricular", lattes:"Vitae + análise + Lattes", lattesb:"Lattes com documento de comprovação", naosei:"Ainda não sei" };
 const ANO = "2027";
 /* Formulário do Notion que recebe os PDFs dos certificados (base "Triagem MedEasy"). Vazio enquanto não for compartilhado */
-const FORM_CERT = "__FORM_CERT__";
+const FORM_CERT = "";
 
 function lerTri(){ try { return JSON.parse(localStorage.getItem(TRI_KEY) || "[]"); } catch { return []; } }
 function gravarTri(lista){ try { localStorage.setItem(TRI_KEY, JSON.stringify(lista)); } catch { toast("Não consegui gravar neste navegador"); } }
