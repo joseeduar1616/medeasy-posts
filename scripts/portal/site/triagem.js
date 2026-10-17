@@ -21,10 +21,12 @@ function clienteDaTriagem(t){
 const clienteSel = () => S.sel && String(S.sel).startsWith("t:") ? (triDe(S.sel) ? clienteDaTriagem(triDe(S.sel)) : null) : (S.eq?.clientes || []).find(x => x.id === S.sel);
 
 /* Mensagem que o cliente novo manda pelo WhatsApp. O código no fim serve para importar no painel. */
-function codigoTri(d){ return "#triagem:" + btoa(unescape(encodeURIComponent(JSON.stringify(d)))); }
-function lerCodigoTri(texto){ const m = String(texto || "").match(/#triagem:([A-Za-z0-9+/=]+)/); if (!m) return null; try { return JSON.parse(decodeURIComponent(escape(atob(m[1])))); } catch { return null; } }
+/* Código da triagem em base64 sem + / =, para caber num link */
+function codigoTri(d){ return btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+function lerCodigoTri(texto){ const m = String(texto || "").match(/(?:#triagem:|[?&]i=)([A-Za-z0-9+/=_-]+)/); if (!m) return null; try { const b = m[1].replace(/-/g, "+").replace(/_/g, "/"); return JSON.parse(decodeURIComponent(escape(atob(b)))); } catch { return null; } }
+const linkImportar = d => `${location.href.split("#")[0].split("?")[0]}?i=${codigoTri(d)}`;
 function mensagemTri(d){
-  return `Oi! Preenchi a triagem do portal da MedEasy\n\nNome: ${d.nome}\nWhatsApp: ${d.whats}\nProvas: ${(d.provas || []).map(nomeProva).join(", ") || "ainda não sei"}\nEspecialidade: ${d.area || "não informada"}\nServiço: ${SERVICOS_TRI[d.servico] || "ainda não sei"}\nCertificados: ${d.nCert ? "uns " + d.nCert : "não contei"}\nDrive: ${d.links || "vou mandar os PDFs aqui"}\n${d.obs ? "Obs: " + d.obs + "\n" : ""}\n${codigoTri(d)}`;
+  return `Oi! Preenchi a triagem do portal da MedEasy\n\nNome: ${d.nome}\nWhatsApp: ${d.whats}\nProvas: ${(d.provas || []).map(nomeProva).join(", ") || "ainda não sei"}\nEspecialidade: ${d.area || "não informada"}\nServiço: ${SERVICOS_TRI[d.servico] || "ainda não sei"}\nCertificados: ${d.nCert ? "uns " + d.nCert : "não contei"}\nDrive: ${d.links || "vou mandar os PDFs aqui"}\n${d.obs ? "Obs: " + d.obs + "\n" : ""}\nAbrir no painel: ${linkImportar(d)}`;
 }
 function triagemFormView(){
   const d = S.triForm || (S.triForm = { provas:[], servico:"vitae" });
@@ -58,15 +60,17 @@ function enviarTriagem(){
 const linkTriagem = () => { const m = (S.eq.mentores || []).find(x => x.nome === S.mentor.nome); const tel = soDigitos(m?.telefone || "") || CONTATO.whats; return `${location.href.split("#")[0].split("?")[0]}?triagem=${tel}`; };
 function importarTri(texto){
   const d = lerCodigoTri(texto); if (!d){ toast("Não achei o código #triagem na mensagem"); return; }
-  const t = { id:novoIdTri(), em:Date.now(), nome:d.nome || "", whats:d.whats || "", area:d.area || "", provas:(d.provas || []).filter(k => PROVAS.some(p => p.k === k)), servico:SERVICOS_TRI[d.servico] && d.servico !== "naosei" ? d.servico : "vitae", nCert:d.nCert || "", links:d.links || "", obs:d.obs || "", cont:{}, etapa:"novo" };
-  salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); toast("Cliente importado");
+  const t = { id:novoIdTri(), em:d.em || Date.now(), nome:(d.nome || "").trim(), whats:d.whats || "", area:d.area || "", provas:(d.provas || []).filter(k => PROVAS.some(p => p.k === k)), servico:SERVICOS_TRI[d.servico] && d.servico !== "naosei" ? d.servico : "vitae", nCert:d.nCert || "", links:d.links || "", obs:d.obs || "", cont:{}, etapa:"novo" };
+  // Mesmo link aberto duas vezes não duplica o cliente
+  const igual = lerTri().find(x => x.nome === t.nome && x.whats === t.whats && x.em === t.em); if (igual) t.id = igual.id, t.cont = igual.cont, t.etapa = igual.etapa;
+  salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); toast(igual ? "Esse cliente já estava na triagem" : "Cliente importado");
 }
 function novaTri(){ const t = { id:novoIdTri(), em:Date.now(), nome:"", whats:"", area:"", provas:[], servico:"vitae", nCert:"", links:"", obs:"", cont:{}, etapa:"novo" }; salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); }
 const ETAPAS_TRI = { novo:["Chegou", "info"], orcado:["Orçamento enviado", "gold"], fechado:["Fechou", "ok"], perdido:["Não fechou", ""] };
 function triagemView(){
   const lista = lerTri().sort((a, b) => (b.em || 0) - (a.em || 0));
   return `<div class="pagehead"><div><h1>Triagem</h1><p>Clientes novos antes de entrar no Notion. Fica guardado só neste navegador</p></div><div class="row"><button class="btn sm" data-a="copiarLinkTri">Copiar link de triagem</button><button class="btn sm pri" data-a="novaTri">Novo cliente</button></div></div>
-   <section class="card" style="margin-bottom:16px"><div class="card-h"><h2>Importar da mensagem</h2></div><p class="xs muted" style="margin:0 0 8px">Cole aqui a mensagem que o cliente mandou pelo WhatsApp. O código no fim dela preenche tudo.</p><div class="row"><textarea class="in" id="triImport" rows="2" placeholder="Cole a mensagem inteira" style="flex:1"></textarea><button class="btn" data-a="importarTri">Importar</button></div></section>
+   <section class="card" style="margin-bottom:16px"><div class="card-h"><h2>Importar da mensagem</h2></div><p class="xs muted" style="margin:0 0 8px">A mensagem do cliente traz o link "Abrir no painel". Tocar nele já importa. Se preferir, cole a mensagem ou o link aqui.</p><div class="row"><textarea class="in" id="triImport" rows="2" placeholder="Cole a mensagem inteira" style="flex:1"></textarea><button class="btn" data-a="importarTri">Importar</button></div></section>
    <section class="card" style="padding:4px">${lista.length ? lista.map(t => { const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo; const c = clienteDaTriagem(t); const e = estimarJS(c); return `<div class="crow" data-a="abrirTri" data-id="${t.id}"><div style="min-width:0"><div class="t">${esc(t.nome || "Sem nome")}</div><div class="small muted">${esc((t.provas || []).map(nomeProva).join(", ") || "Sem prova")} · ${esc(SERVICOS_TRI[t.servico] || "")}</div></div><div class="hide-m"><span class="pill ${k}">${et}</span></div><div class="hide-m small num">${e && e.completo ? brl(e.total) : `<span class="faint">sem valor</span>`}</div><div class="xs muted">${dBR(new Date(t.em || 0).toISOString())}</div></div>`; }).join("") : `<div class="empty" style="margin:12px">Nenhum cliente em triagem. Mande o link de triagem ou importe uma mensagem.</div>`}</section>`;
 }
 /* Opções de orçamento, do mais simples ao mais completo */
