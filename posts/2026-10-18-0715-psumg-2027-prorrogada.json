@@ -1,0 +1,59 @@
+{
+ "slug": "2026-10-18-0715-psumg-2027-prorrogada",
+ "pillar": "novidade",
+ "header": ["NOVIDADE", "PSU-MG 2027"],
+ "verified_on": "2026-10-18",
+ "sources": [
+  "https://www.aremg.org.br/detalhes-do-processo/retificacao-n-4-aos-editais-prorrogacao-das-inscricoes--psu-mg-2027/2391 (Retificação nº 4 aos editais do PSU-MG 2027, de 15/10/2026: inscrições até 19/10/2026 às 17h e pagamento até 20/10/2026)",
+  "https://www.grupomedcof.com.br/blog/edital-residencia-medica-psu-mg/ (inscrições de 06 a 19/10, prova 22/11, cita a Retificação nº 4)",
+  "posts/2026-10-13-1800-amrigs-2027-curriculo.json (AMRIGS: inscrições até 19/10 às 17h, edital Fundatec)",
+  "posts/psugo-2027-vagas.json e log/news_seen.md (PSU-GO: inscrições e currículo até 20/10)",
+  "posts/2026-10-14-1200-precisa-curriculo-8-provas.json (SUS-SP: inscrições de 20/10 a 05/11 na Vunesp)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em Minas",
+   "pill": "PRORROGADO",
+   "title": ["PSU-MG 2027:", "<span class='g glow'>INSCRIÇÕES ATÉ 19/10</span>"],
+   "body": "A AREMG publicou a <b>Retificação nº 4</b> e estendeu as inscrições do PSU-MG 2027. O prazo, que era 15/10, agora vai até <b>segunda, 19/10, às 17h</b>.",
+   "bullets": ["Inscrições até <b>19/10, às 17h</b>", "Pagamento até <b>20/10</b>", "Prova mantida em <b>22/11</b>"]
+  },
+  {
+   "type": "rows",
+   "label": "Retificação nº 4",
+   "title": ["O QUE <span class='y'>MUDOU</span>"],
+   "sub": "Novos prazos do PSU-MG 2027",
+   "rows": [
+    {"name": "Inscrições", "sub": "Antes até 15/10. Agora até as 17h", "value": "19/10"},
+    {"name": "Pagamento", "sub": "Último dia para pagar a taxa", "value": "20/10"},
+    {"name": "Taxa", "sub": "Por programa escolhido", "value": "R$ 300"},
+    {"name": "Prova objetiva", "sub": "Data mantida", "value": "22/11"}
+   ],
+   "note": "Precisa de currículo? Sim: vale <b>10% da nota</b> e vai <b>junto com a inscrição</b>, no modelo da AREMG. Depois de enviado, não dá para mudar."
+  },
+  {
+   "type": "rows",
+   "label": "Agenda da semana",
+   "title": ["FECHAM <span class='y'>JUNTO</span>"],
+   "sub": "Prazos de inscrição desta semana",
+   "rows": [
+    {"name": "PSU-MG", "sub": "Site da AREMG, até as 17h", "value": "19/10"},
+    {"name": "AMRIGS", "sub": "RS, SC e MS, até as 17h", "value": "19/10"},
+    {"name": "PSU-GO", "sub": "Inscrição e currículo", "value": "20/10"},
+    {"name": "SUS-SP", "sub": "Abre na Vunesp, vai até 05/11", "value": "20/10"}
+   ],
+   "note": "Vai fazer mais de uma? Deixe os documentos prontos <b>hoje</b> para não perder prazo."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA E", "<span class='g glow'>MANDA HOJE</span>"],
+   "pill": "SALVA",
+   "body": "para quem ia perder<br>o PSU-MG.",
+   "note": "Ainda montando o currículo para o PSU-MG ou o PSU-GO? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fonte: AREMG, Retificação nº 4 aos editais do PSU-MG 2027 (15/10/2026), conferida também no MedCof. AMRIGS, PSU-GO e SUS-SP conforme os editais 2027. Confira o edital do seu programa."
+  }
+ ],
+ "story": {"kicker": "PRORROGADO", "cta": "PSU-MG 2027: <span>inscrições até 19/10, 17h</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "🚨 PSU-MG 2027: INSCRIÇÕES PRORROGADAS ATÉ 19/10\n\nA AREMG publicou a Retificação nº 4 aos editais do PSU-MG 2027. As inscrições, que fechavam em 15/10, agora vão até segunda, 19/10, às 17h. O pagamento da taxa (R$ 300 por programa) pode ser feito até 20/10. A prova continua em 22/11.\n\nPrecisa de currículo? Sim. Ele vale 10% da nota e vai junto com a inscrição, no modelo da AREMG. Depois de enviado, não dá para alterar.\n\nE a semana é cheia: AMRIGS também fecha em 19/10 às 17h, o PSU-GO fecha em 20/10 e o SUS-SP abre inscrições em 20/10.\n\nSalva e manda para quem ia perder o prazo 📌 Você vai fazer o PSU-MG? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#psumg #residenciamedica #residencia2027 #minasgerais #aremg #medicina"
+}
