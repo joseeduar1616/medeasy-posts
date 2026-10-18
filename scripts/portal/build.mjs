@@ -203,7 +203,10 @@ async function montar(linhas) {
       // Mentor recebe 60% do valor total do serviço (PORTAL_PCT_MENTOR muda a regra). Hoje o corretor é o próprio mentor, então a fórmula
       // "Valor para mentor" do Notion, que separa mentor e corretor, não é usada. PORTAL_USAR_FORMULA=1 volta a usar a fórmula.
       const vm = process.env.PORTAL_USAR_FORMULA === "1" && l.valorMentor != null ? l.valorMentor : (l.total != null ? Math.round(l.total * PCT_MENTOR * 100) / 100 : null);
-      if (m) repasses.push({ pessoa: m, papel: "Mentor", servico: l.id, valor: vm, pago: l.mentorPago, data: l.dataPagMentor || "" });
+      // O repasse só fica "a receber" com o serviço concluído e o cliente com pagamento finalizado. Antes disso é valor futuro.
+      const quitado = semAcento(l.pagamento).startsWith("pagamento finalizado");
+      const liberado = etapa === 6 && quitado, motivo = liberado ? "" : etapa < 6 && !quitado ? "falta concluir e o cliente quitar" : etapa < 6 ? "falta concluir o serviço" : "falta o cliente quitar";
+      if (m) repasses.push({ pessoa: m, papel: "Mentor", servico: l.id, valor: vm, pago: l.mentorPago, data: l.dataPagMentor || "", liberado, motivo });
       // Hoje o corretor é o próprio mentor: o repasse é um só, os 60% do mentor. Para voltar a pagar corretor à parte, use PORTAL_CORRETOR_SEPARADO=1.
       if (c && process.env.PORTAL_CORRETOR_SEPARADO === "1") repasses.push({ pessoa: c, papel: "Corretor", servico: l.id, valor: l.valorCorretor, pago: l.corretorPago, data: l.dataPagCorretor || "" });
       if (l.valorMedeasy != null) repasses.push({ pessoa: "MedEasy", papel: "Empresa", servico: l.id, valor: l.valorMedeasy, pago: true, data: "" });
