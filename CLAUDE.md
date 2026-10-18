@@ -40,7 +40,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 - Depois de mexer nos moldes, rode `node scripts/portal/montar-site.mjs`. Ele gera `portal/index.html`, e nunca se edita esse arquivo direto.
 - Workflows:
   - `.github/workflows/portal-pages.yml` publica o site a cada push.
-  - `.github/workflows/portal-notion.yml` sincroniza com o Notion de hora em hora. Precisa dos secrets PORTAL_SENHA, NOTION_TOKEN e NOTION_DB.
+  - `.github/workflows/portal-notion.yml` sincroniza com o Notion a cada 10 minutos. Precisa dos secrets PORTAL_SENHA, NOTION_TOKEN e NOTION_DB.
 
 ## Notion
 
@@ -49,7 +49,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 - A base "Triagem MedEasy", dentro da página Clientes, recebe o formulário "Enviar certificados" (nome, WhatsApp, mentor, provas, pedido, arquivos). O build lê essa base e a aba Triagem do site mostra quem chegou, com botão Importar.
 - "Controle de certificados" é um JSON colado do site (`{certs, aloc, pend}`). O build lê e devolve em `c.controle`, e as pendências do cliente entram no portal dele.
 - "Certificados por item" é preenchida com o botão "Copiar para o Notion" do site. Formato: uma linha por prova, como `PSU-GO: 2=2; 4=3; 9=/0,5`, em que o número antes do = é o número do item na ficha e "/0,5" são pontos digitados.
-- O mentor recebe 60% do valor total. O corretor hoje é o mesmo mentor, então não há repasse separado.
+- O mentor recebe 60% do valor total. O corretor hoje é o mesmo mentor, então não há repasse separado. O build ignora a fórmula "Valor para mentor" do Notion (PORTAL_USAR_FORMULA=1 volta a usá-la).
 - Quem sai da equipe entra em `EX_EQUIPE` no build.mjs (hoje: Ana Eluiza). Some do login e do filtro, e os clientes antigos ficam no histórico.
 
 ## Valores (tabela 2026)
