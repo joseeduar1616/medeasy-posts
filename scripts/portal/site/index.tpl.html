@@ -24,6 +24,7 @@ __CSS__
 .chk{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:5px 10px;font-size:13px;cursor:pointer;background:var(--bg)}
 .chk:has(input:checked){border-color:var(--neon);color:var(--neon);background:var(--neon-soft)}
 .chk input{accent-color:var(--neon);margin:0}
+.tbl.ct td{padding:4px 6px;vertical-align:top} .tbl.ct .in{padding:5px 8px;font-size:13px}
 .preco{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
 .preco > div:first-child{flex:1;min-width:0}
 .preco .v{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;flex:none;max-width:45%}
@@ -120,7 +121,7 @@ const abertos = c => (c.servicos || []).filter(s => (s.etapa || 0) < ULT);
 function progresso(c){ const s = c.servicos || []; if (!s.length) return 0; return Math.round(s.reduce((a, x) => a + (x.etapa || 0) / ULT, 0) / s.length * 100); }
 function nomeServico(c, s){ if (s.nome) return s.nome; const T = { vitae:"Currículo Vitae", analise:"Análise curricular", lattes:"Currículo Lattes" }; const p = (c.provas || []).find(p => p.id === s.provaId); return (T[s.tipo] || "Serviço") + (s.detalhe ? " " + s.detalhe.replace(/Modelo |Categoria /, "") : "") + (p ? " · " + p.nome : ""); }
 function status(c){ const ab = abertos(c); if (!(c.servicos || []).length) return { t:"Novo contato", k:"info" }; if (!ab.length) return { t:"Tudo entregue", k:"ok" }; const m = Math.min(...ab.map(s => s.etapa || 0)); return { t:ETAPAS[m].t, k:ETAPAS[m].cli ? "gold" : "" }; }
-function espelho(c){ const f = fin(c); return { nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:(c.pendencias || []).filter(p => !p.interna), atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
+function espelho(c){ const f = fin(c); return { nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:[...(c.pendencias || []).filter(p => !p.interna), ...pendenciasDoControle(c)], atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
 function eventos(cs){ const ev = []; for (const c of cs){ for (const p of c.provas || []){ if (p.prazoEnvio) ev.push({ d:p.prazoEnvio, t:`Fim do envio ${p.nome}`, c, k:"gold" }); if (p.dataProva) ev.push({ d:p.dataProva, t:`Prova ${p.nome}`, c, k:"info" }); } for (const s of c.servicos || []) if (s.prazo && (s.etapa || 0) < ULT) ev.push({ d:s.prazo, t:`Entrega ${nomeServico(c, s)}`, c, k:"warn" }); } return ev.sort((a, b) => a.d.localeCompare(b.d)); }
 const linkCliente = c => `${location.href.split("#")[0].split("?")[0]}?c=${c.codigo}`;
 function convite(c){ return `Oi, ${primeiro(c.nome)}! Tudo bem? Criei o seu acesso no portal da MedEasy. Por lá você acompanha cada etapa do seu currículo, os prazos das provas e o que ainda falta enviar\n\nLink: ${linkCliente(c)}\nSeu código: ${codFmt(c.codigo)}\n\nGuarde esse código, ele é só seu`; }
@@ -206,6 +207,7 @@ function clienteView(){
       ${reps.some(r => r.valor == null) ? `<p class="xs muted" style="margin:10px 0 0">O repasse é 60% do "Valor total" do serviço. Preencha o valor no Notion para ele aparecer aqui.</p>` : ""}</section>
     ${c.notas ? `<section class="card"><div class="card-h"><h2>Notas internas</h2></div><p class="small" style="margin:0;white-space:pre-wrap">${esc(c.notas)}</p></section>` : ""}
    </div></div>
+   <div style="margin-top:16px">${controleView(c)}</div>
    <div style="margin-top:16px">${certItensView(c)}</div>`;
 }
 function agendaView(){
@@ -252,6 +254,7 @@ __CERTITENS__
 __PORTALVIEW__
 __TRIAGEM__
 __ANALISE__
+__CONTROLE__
 function render(){
   const sy = window.scrollY;
   if (S.modo === "login") app.innerHTML = loginView();
@@ -264,6 +267,7 @@ function render(){
   const b = $("#busca"); if (b){ b.oninput = () => { S.busca = b.value; const pos = b.selectionStart; render(); const nb = $("#busca"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
   const vm = $("#verMentor"); if (vm) vm.onchange = () => { S.verMentor = vm.value; render(); };
   const ft = $("#fTri"); if (ft) ft.onsubmit = e => { e.preventDefault(); enviarTriagem(); };
+  const cf = $("#ctFiltro"); if (cf) cf.onchange = () => { (S.ctFiltro ||= {})[S.sel] = cf.value; render(); };
   const te = $("#triEtapa"); if (te) te.onchange = () => { const t = triDe(S.sel); if (t){ t.etapa = te.value; salvarTri(t); render(); } };
   const be = $("#buscaEd"); if (be){ be.oninput = () => { S.buscaEd = be.value; const pos = be.selectionStart; render(); const nb = $("#buscaEd"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
 }
@@ -294,8 +298,9 @@ const A = {
   apagarAnalise: el => { const c = clienteSel(); apagarAnalise(c, el.dataset.v); delete S.cont[c.id]; if (!c.triagem){ c.provas = (c.provas || []).filter(p => !(p.fonte === "analise" && kP(p.nome) === el.dataset.v && String(p.id).startsWith("a"))); for (const p of c.provas) if (p.fonte === "analise" && kP(p.nome) === el.dataset.v){ delete p.itens; delete p.fonte; delete p.notaEstimada; delete p.notaPossivel; } } render(); },
   importarTriNotion: el => importarTriNotion(el.dataset.v),
 };
-app.addEventListener("change", e => { if (e.target.dataset && e.target.dataset.an) importarAnalise(e.target); });
-app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); });
+Object.assign(A, A_CTRL);
+app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); });
+app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 (async () => {

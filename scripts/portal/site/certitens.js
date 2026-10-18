@@ -81,8 +81,9 @@ function regDoNotion(c, p){ const t = (c.contagem || {})[kP(p.nome)]; if (!t) re
 function carregarCont(c){
   if (S.cont[c.id]) return S.cont[c.id];
   const reg = S.cont[c.id] = { provas:{} };
-  if (c.triagem){ reg.provas = JSON.parse(JSON.stringify(c.triagem.cont || {})); return reg; }
-  for (const p of c.provas || []){ const r = regDoNotion(c, p); if (r) reg.provas[kP(p.nome)] = r; }
+  if (c.triagem){ reg.provas = JSON.parse(JSON.stringify(c.triagem.cont || {})); for (const p of c.provas || []) if (!reg.provas[kP(p.nome)]){ const r = regDoControle(c, p); if (r) reg.provas[kP(p.nome)] = r; } return reg; }
+  // Ordem: contagem digitada (Notion), depois a alocação do controle de certificados
+  for (const p of c.provas || []){ const r = regDoNotion(c, p) || regDoControle(c, p); if (r) reg.provas[kP(p.nome)] = r; }
   const ras = c.id === "cli" ? null : lerRasc(c.id); if (ras && ras.provas && Object.keys(ras.provas).length && ras.texto !== textoCont(c, reg.provas)){ reg.provas = ras.provas; reg.rascunho = true; reg.copiado = !!ras.texto; }
   return reg;
 }
