@@ -1,0 +1,41 @@
+{
+  "slug": "2026-10-18-1200-psugo-2027-fecha-terca",
+  "pillar": "o que diz o edital",
+  "header": ["PRAZO", "PSU-GO 2027"],
+  "verified_on": "2026-10-18",
+  "sources": [
+    "https://www.grupomedcof.com.br/blog/?p=13399",
+    "https://www.medway.com.br/conteudos/residencia-medica-psu-go/",
+    "https://med.estrategia.com/portal/noticias/psu-go-edital-residencia-medica-2027/",
+    "posts/psugo-2027-vagas.json (317 vagas, currículo não pode ser trocado depois, edital Ânima 23/09/2026)",
+    "log/news_seen.md 18/10 07h a 11h (sem prorrogação do PSU-GO)"
+  ],
+  "slides": [
+    {"type": "cover", "label": "Residência médica em Goiás", "pill": "PSU-GO 2027",
+     "title": ["FECHA NA", "<span class='y'>TERÇA</span>, <span class='g glow'>20/10</span>"],
+     "body": "As inscrições do PSU-GO 2027 vão só até terça. E o <b>currículo vai junto</b> com a inscrição.",
+     "bullets": ["Até <b>20/10</b>, das 9h às 18h", "Só pelo site da <b>AREMG</b>", "<b>317</b> vagas em <b>22</b> instituições"]},
+    {"type": "cards", "label": "Precisa de currículo?", "title": ["SIM, E VAI <span class='g'>AGORA</span>"],
+     "sub": "Como a nota final é formada",
+     "cards": [{"num": "1", "h": "Prova objetiva", "tag": "90 pontos", "p": "Prova em <b>29/11/2026</b>. É preciso fazer pelo menos <b>45 pontos</b>."},
+               {"num": "2", "h": "Análise curricular", "tag": "10 pontos", "p": "Enviada <b>junto com a inscrição, até 20/10</b>. Depois do envio, nada pode ser incluído ou trocado."}],
+     "note": "Quem concluiu residência em MFC tem <b>bônus de 10%</b> na nota final."},
+    {"type": "rows", "label": "Antes de terça", "title": ["O QUE <span class='y'>CONFERIR</span>"], "sub": "Inscrição e taxa",
+     "rows": [{"name": "Inscrição e currículo", "sub": "Pelo site da AREMG", "value": "20/10"},
+              {"name": "Horário", "sub": "Das 9h às 18h", "value": "18h"},
+              {"name": "Taxa por programa", "sub": "Cada programa escolhido paga a sua", "value": "R$ 525"}],
+     "note": "Deixe para o último dia só se o currículo já estiver pronto. Ele <b>não pode ser trocado depois</b>."},
+    {"type": "rows", "label": "Depois da inscrição", "title": ["O QUE VEM <span class='g'>DEPOIS</span>"], "sub": "Cronograma do edital",
+     "rows": [{"name": "Prova objetiva e gabarito", "sub": "Gabarito preliminar no mesmo dia", "value": "29/11"},
+              {"name": "Recursos ao gabarito", "sub": "Dois dias", "value": "30/11 e 01/12"},
+              {"name": "Resultado da prova", "sub": "Previsto", "value": "16/12"},
+              {"name": "Resultado do currículo", "sub": "Previsto", "value": "25/01"}],
+     "note": "No mesmo domingo, <b>29/11</b>, também tem a prova da Unifesp."},
+    {"type": "cta", "title": ["NÃO DEIXA", "PARA <span class='g glow'>TERÇA</span>"], "pill": "SALVA",
+     "body": "e manda para quem vai<br>prestar PSU-GO com você.",
+     "note": "Currículo ainda não está pronto? Chama a <b>MedEasy</b> no direct.",
+     "small": "Fontes: edital PSU-GO 2027 (AREMG), conferido no MedCof, Medway e Estratégia MED em 18/10/2026. Datas de resultado são previstas. Confira o edital do seu programa em aremg.org.br."}
+  ],
+  "story": {"kicker": "POST NOVO", "cta": "PSU-GO 2027 <span>fecha terça, 20/10</span>.<br>O currículo vai junto. Veja no feed da @med_easyy."},
+  "caption": "⏰ PSU-GO 2027 FECHA NA TERÇA, 20/10\n\nAs inscrições do PSU-GO 2027 vão até terça, das 9h às 18h, só pelo site da AREMG. A taxa é de R$ 525 por programa escolhido.\n\nPrecisa de currículo? Sim, e ele vai junto com a inscrição. A prova vale 90 pontos e a análise curricular vale 10. Depois do envio, nada pode ser incluído ou trocado.\n\nA prova é no dia 29/11. Arrasta para ver o cronograma até o resultado do currículo. Salva e manda para quem vai prestar com você 📌\n\nJá fez sua inscrição no PSU-GO? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#psugo #residenciamedica #goias #goiania #residencia2027"
+}
