@@ -327,7 +327,7 @@ async function baixar(url){ const r = await fetch(BASE + url + "?t=" + Date.now(
 
 /* ---------- estado ---------- */
 const S = { modo:"login", aba:"cliente", erro:"", carregando:false, eq:null, mentor:null, admin:false, portal:null, view:"painel", sel:null, preview:null, busca:"", filtro:"ativos", verMentor:"", cont:{}, ciProva:{}, ciCopiado:null, todosAlertas:false, filtroRep:"receber" };
-function guardar(tipo, nome, segredo){ try { sessionStorage.setItem("medeasy", JSON.stringify({ tipo, nome, segredo })); } catch {} }
+function guardar(tipo, nome, segredo, admin){ try { sessionStorage.setItem("medeasy", JSON.stringify({ tipo, nome, segredo, admin })); } catch {} }
 function sair(){ try { sessionStorage.removeItem("medeasy"); } catch {} Object.assign(S, { modo:"login", eq:null, portal:null, mentor:null, preview:null, sel:null, erro:"" }); render(); }
 
 async function entrarCliente(codigo){
@@ -337,7 +337,9 @@ async function entrarCliente(codigo){
   catch { S.erro = "Código não encontrado. Confira com o seu mentor"; }
   S.carregando = false; render();
 }
-async function entrarMentor(nome, senha){
+/* Administrador: com o arquivo admin.json no ar, precisa da segunda senha. Sem ela, entra como mentor comum. */
+async function confereAdmin(senhaAdmin){ if (!senhaAdmin) return false; try { const env = await baixar("data/admin.json"); await abrir(env, senhaAdmin.trim()); return true; } catch { return false; } }
+async function entrarMentor(nome, senha, senhaAdmin){
   if (!nome.trim() || !senha){ S.erro = "Preencha o nome e a senha"; render(); return; }
   S.carregando = true; S.erro = ""; render();
   try {
@@ -345,7 +347,13 @@ async function entrarMentor(nome, senha){
     senha = senha.trim(); let eq; try { eq = await abrir(env, senha); } catch { senha = senha.toLowerCase(); eq = await abrir(env, senha); }
     const n = semAcento(nome); const ms = eq.mentores || []; const m = ms.find(x => semAcento(x.nome) === n) || ms.find(x => semAcento(x.nome).startsWith(n)) || ms.find(x => semAcento(x.nome).split(" ")[0] === n.split(" ")[0]);
     if (!m){ S.erro = "Esse nome não está na lista de mentores"; S.carregando = false; render(); return; }
-    S.eq = eq; S.mentor = m; S.admin = !!m.admin; S.modo = "mentor"; guardar("mentor", nome, senha);
+    let admin = !!m.admin;
+    if (admin && eq.senhaAdmin){
+      if (senhaAdmin === undefined){ S.pedirAdmin = { nome, senha }; S.carregando = false; render(); return; }
+      admin = await confereAdmin(senhaAdmin);
+      if (!admin && senhaAdmin){ S.erro = "Senha de administrador incorreta. Deixe em branco para entrar como mentor"; S.carregando = false; render(); return; }
+    }
+    S.pedirAdmin = null; S.eq = eq; S.mentor = m; S.admin = admin; S.modo = "mentor"; guardar("mentor", nome, senha, admin ? senhaAdmin : "");
     if (S.importar){ const d = lerCodigoTri("?i=" + S.importar); S.importar = null; if (d) importarTri("?i=" + codigoTri(d)); }
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
@@ -376,6 +384,7 @@ function loginView(){
     <div class="seg"><button data-a="aba" data-v="cliente" aria-pressed="${cli}">Sou cliente</button><button data-a="aba" data-v="mentor" aria-pressed="${!cli}">Sou mentor</button></div>
     <form id="fLogin" class="stack" autocomplete="on">
       ${cli ? `<label class="f"><span>Seu código de acesso</span><input class="in mono" id="lCodigo" placeholder="XXXXX-XXXXX" autocomplete="one-time-code" autocapitalize="characters" required></label>`
+            : S.pedirAdmin ? `<p class="small" style="margin:0">Olá, ${esc(primeiro(S.pedirAdmin.nome))}. Você é administrador. Digite a senha de administrador, ou deixe em branco para entrar como mentor.</p><label class="f"><span>Senha de administrador</span><input class="in" id="lAdmin" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></label>`
             : `<label class="f"><span>Seu nome</span><input class="in" id="lNome" autocomplete="username" autocorrect="off" spellcheck="false" required></label><label class="f"><span>Senha</span><input class="in" id="lSenha" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>`}
       <div class="err">${esc(S.erro)}</div>
       <button class="btn pri" type="submit" ${S.carregando ? "disabled" : ""}>${S.carregando ? "Abrindo" : "Entrar"}</button>
@@ -387,7 +396,7 @@ function mentorView(){
   const v = S.view === "cliente" ? "clientes" : S.view === "triagemItem" ? "triagem" : S.view; let body = "";
   if (S.view === "painel") body = painelView(); else if (S.view === "clientes") body = clientesView(); else if (S.view === "cliente") body = clienteView(); else if (S.view === "triagem") body = triagemView(); else if (S.view === "triagemItem") body = triagemItemView(); else if (S.view === "agenda") body = agendaView(); else if (S.view === "editais") body = editaisView(); else body = repassesView();
   const mentores = (S.eq.mentores || []).map(m => m.nome);
-  return `<header class="top"><div class="wrap top-in"><img class="logo" src="${LOGO}" alt=""><div class="brand"><b>MED<i>EASY</i></b><span>${esc(S.mentor.nome)}</span></div>
+  return `<header class="top"><div class="wrap top-in"><img class="logo" src="${LOGO}" alt=""><div class="brand"><b>MED<i>EASY</i></b><span>${esc(S.mentor.nome)}${S.admin ? " · admin" : ""}</span></div>
     <nav class="tabs">${ABAS.map(([k, t]) => `<button class="tab" data-a="nav" data-v="${k}" ${v === k ? 'aria-current="page"' : ""}>${t}</button>`).join("")}</nav>
     ${S.admin ? `<select class="in" id="verMentor" style="width:auto"><option value="">Toda a equipe</option>${mentores.map(n => `<option ${S.verMentor === n ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>` : ""}
     <button class="btn sm ghost" data-a="sair">Sair</button></div></header>
@@ -1254,7 +1263,7 @@ function render(){
   else if (S.preview) app.innerHTML = portalView(espelho(S.eq.clientes.find(c => c.id === S.preview)), true);
   else app.innerHTML = mentorView();
   if (S.modo !== "login") window.scrollTo(0, sy);
-  const f = $("#fLogin"); if (f){ f.onsubmit = e => { e.preventDefault(); if (S.aba === "cliente") entrarCliente($("#lCodigo").value); else entrarMentor($("#lNome").value, $("#lSenha").value); }; const first = f.querySelector("input"); if (first && !S.carregando) first.focus(); }
+  const f = $("#fLogin"); if (f){ f.onsubmit = e => { e.preventDefault(); if (S.aba === "cliente") entrarCliente($("#lCodigo").value); else if (S.pedirAdmin) entrarMentor(S.pedirAdmin.nome, S.pedirAdmin.senha, $("#lAdmin").value || ""); else entrarMentor($("#lNome").value, $("#lSenha").value); }; const first = f.querySelector("input"); if (first && !S.carregando) first.focus(); }
   const b = $("#busca"); if (b){ b.oninput = () => { S.busca = b.value; const pos = b.selectionStart; render(); const nb = $("#busca"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
   const vm = $("#verMentor"); if (vm) vm.onchange = () => { S.verMentor = vm.value; render(); };
   const ft = $("#fTri"); if (ft) ft.onsubmit = e => { e.preventDefault(); enviarTriagem(); };
@@ -1263,7 +1272,7 @@ function render(){
   const be = $("#buscaEd"); if (be){ be.oninput = () => { S.buscaEd = be.value; const pos = be.selectionStart; render(); const nb = $("#buscaEd"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
 }
 const A = {
-  aba: el => { S.aba = el.dataset.v; S.erro = ""; render(); },
+  aba: el => { S.aba = el.dataset.v; S.erro = ""; S.pedirAdmin = null; render(); },
   sair: () => sair(),
   nav: el => { S.view = el.dataset.v; S.preview = null; render(); window.scrollTo(0, 0); },
   abrir: el => { S.sel = el.dataset.id; S.view = "cliente"; render(); window.scrollTo(0, 0); },
@@ -1303,7 +1312,7 @@ app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if
   // Link "Abrir no painel" da mensagem de triagem: importa depois que o mentor entrar
   const imp = new URLSearchParams(location.search).get("i");
   if (imp){ S.importar = imp; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
-  if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo);
+  if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo, s.admin || "");
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
   else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }
   else render();

@@ -25,6 +25,7 @@ jobs:
       - name: Gerar dados criptografados
         env:
           PORTAL_SENHA: ${{ secrets.PORTAL_SENHA }}
+          PORTAL_SENHA_ADMIN: ${{ secrets.PORTAL_SENHA_ADMIN }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DB: ${{ secrets.NOTION_DB }}
         run: |
