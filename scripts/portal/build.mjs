@@ -52,6 +52,8 @@ const APELIDOS = { eder: "Éder", leo: "Leonardo", leonardo: "Leonardo", lucas: 
 const pessoa = n => { if (!n) return ""; const k = semAcento(n); return APELIDOS[k] || String(n).trim().replace(/\b\w/g, c => c.toUpperCase()); };
 const PCT_MENTOR = Number(process.env.PORTAL_PCT_MENTOR || 0.6);
 const ADMINS = ["José"]; // todos os mentores têm o mesmo acesso; mantido só para a lista de nomes
+// Quem saiu da equipe: não entra no login nem no filtro de mentores. Os clientes antigos continuam com o nome no histórico.
+const EX_EQUIPE = ["Ana Eluiza"].map(semAcento);
 
 /* ---------- serviços e provas ---------- */
 const SERVICOS = { "vitae": "Currículo Vitae", "lattes": "Currículo Lattes", "analise": "Análise curricular", "certificados": "Organização de certificados", "trabalho escrito": "Trabalho escrito", "slide": "Slides", "emprego": "Vitae emprego", "formatacao de trabalho": "Formatação de trabalho" };
@@ -221,7 +223,7 @@ async function montar(linhas) {
   }
   const nomes = new Set(ADMINS);
   for (const c of clientes) [...c.mentores, ...c.corretores, ...c.trainees].forEach(p => nomes.add(p));
-  return { mentores: [...nomes].sort().map(nome => ({ nome, admin: true })), clientes };
+  return { mentores: [...nomes].filter(n => !EX_EQUIPE.includes(semAcento(n))).sort().map(nome => ({ nome, admin: true })), clientes };
 }
 
 /* Extras: detalhes que não existem no Notion (nota da análise, itens da ficha, pendências).
