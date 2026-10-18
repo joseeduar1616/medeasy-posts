@@ -79,6 +79,7 @@ function linhaDeExport(r) {
     inicio: r["date:Data de início :start"], entrega: r["date:Data da entrega:start"], dataPagMentor: r["date:DATA DE PAGAMENTO  MENTOR:start"] || r["date:Data do Pagamento do Mentor/Corretor:start"], dataPagCorretor: r["date:Data do Pagamento do Mentor/Corretor:start"],
     nCert: n(Object.entries(r).find(([k, v]) => /certificad/i.test(k) && typeof v === "number")?.[1]),
     contTexto: String(r["Certificados por item"] || ""),
+    controleTexto: String(r["Controle de certificados"] || ""),
     nArtigos: n(Object.entries(r).find(([k, v]) => /artigo/i.test(k) && typeof v === "number")?.[1]),
     analises: Object.entries(r).filter(([k, v]) => /an[aá]lise/i.test(k) && Array.isArray(v) && v.length && typeof v[0] === "object").flatMap(([, v]) => v),
     valorMentor: n(r["Valor para mentor"] ?? r["Valor para o mentor"]), valorCorretor: n(r["Valor para corretor"]), valorMedeasy: n(r["Valor para Medeasy"]),
@@ -152,6 +153,12 @@ function juntarProva(provas, pr) {
   if (atual) { const id = atual.id; provas.delete(atual.nome); provas.set(pr.nome, { ...atual, ...pr, id }); }
   else provas.set(pr.nome, { id: "p" + provas.size, ...pr });
 }
+/* Coluna "Controle de certificados": JSON colado do site (certificados, alocação por item e pendências) */
+function lerControle(t) {
+  if (!t) return null;
+  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], v: j.v || 1 }; }
+  catch { console.warn("Controle de certificados com JSON inválido, ignorado"); return null; }
+}
 /* Coluna "Certificados por item": uma linha por prova, "PSU-GO: 2=2; 4=3; 9=/0,5" (item=certificados, /pontos digitados) */
 function lerTextoCont(t) {
   const out = {};
@@ -206,6 +213,7 @@ async function montar(linhas) {
       origem: g.linhas.map(l => l.origem).find(Boolean) || "", desconto: [...new Set(g.linhas.flatMap(l => l.desconto).filter(d => d && d !== "NENHUM"))],
       financeiro: { total, pago, pagamentos }, repasses,
       contagem: lerTextoCont(g.linhas.map(l => l.contTexto).filter(Boolean).join("\n")),
+      controle: lerControle(g.linhas.map(l => l.controleTexto).find(t => t && t.trim())),
       nCert: Math.max(...g.linhas.map(l => l.nCert ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nCert ?? -1)) : null,
       nArtigos: Math.max(...g.linhas.map(l => l.nArtigos ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nArtigos ?? -1)) : null,
       tipos: [...new Set(g.linhas.flatMap(l => l.tipos.map(t => semAcento(t))))],
@@ -288,7 +296,8 @@ function espelho(c, contato) {
     nome: c.nome,
     servicos: c.servicos.map(s => ({ nome: s.nome, etapa: s.etapa, prazo: s.prazo })),
     provas: c.provas.map(p => ({ nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [], edital: p.edital || null })),
-    pendencias: c.pendencias.filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
+    pendencias: [...c.pendencias.filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
+      ...((c.controle && c.controle.pend) || []).filter(x => x.quem === "Cliente" && x.situacao !== "Resolvida").map(x => ({ texto: [x.item, x.texto].filter(Boolean).join(": "), feita: false, prazo: "" }))],
     atualizacoes: c.atualizacoes.filter(a => !a.interna).slice(-40),
     documentos: c.documentos.filter(d => d.link),
     financeiro: { total, pago, saldo: Math.max(0, total - pago), entradaOk: total > 0 && pago >= total / 2 - 0.009 },

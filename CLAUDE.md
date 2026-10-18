@@ -34,6 +34,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
   - `certitens.js`: certificados por item, nota e valor.
   - `portalview.js`: tela do cliente.
   - `triagem.js`: triagem de cliente novo. Formulário público em `portal/?triagem=<whatsapp do mentor>`, aba Triagem do mentor (fica no localStorage), orçamento com opções, mensagem de WhatsApp e PDFs do orçamento e da análise gerados no navegador. O PDF da análise sai no formato que `analise.js` e `analise.mjs` sabem ler.
+  - `controle.js`: controle de certificados na tela do cliente e na triagem. Abas Resumo (projeção real e ideal por prova), Pendências (quem resolve e situação, as do cliente aparecem no portal dele), Certificados (inventário por tipo) e uma por prova (adicionar e remover certificado em cada item, com estado pontuando, com risco, tentativa ou reserva). A alocação alimenta a contagem por item quando não há contagem digitada. Fica no navegador e vai para o Notion pelo botão "Copiar controle para o Notion".
   - `analise.js`: lê a análise curricular (PDF com pdf.js ou triagem.json) no navegador e junta nas provas do cliente ou da triagem.
   - `base.css`: estilo.
 - Depois de mexer nos moldes, rode `node scripts/portal/montar-site.mjs`. Ele gera `portal/index.html`, e nunca se edita esse arquivo direto.
@@ -46,6 +47,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 - A base "Controle cliente" fica em https://app.notion.com/p/Clientes-10e01997062f83fdbe2001c61ce41a4b. Cada linha é um serviço, e as linhas são agrupadas por nome do cliente mais os 8 últimos dígitos do telefone.
 - "Tipo de serviço" mistura serviços (Vitae, Lattes, ANALISE, Certificados) e provas (PSUGO, PSUMG, HPP...). Uma prova escrita no fim do nome do cliente ("Jose Nicolas PSU") também conta.
 - A base "Triagem MedEasy", dentro da página Clientes, recebe o formulário "Enviar certificados" (nome, WhatsApp, mentor, provas, pedido, arquivos). O build lê essa base e a aba Triagem do site mostra quem chegou, com botão Importar.
+- "Controle de certificados" é um JSON colado do site (`{certs, aloc, pend}`). O build lê e devolve em `c.controle`, e as pendências do cliente entram no portal dele.
 - "Certificados por item" é preenchida com o botão "Copiar para o Notion" do site. Formato: uma linha por prova, como `PSU-GO: 2=2; 4=3; 9=/0,5`, em que o número antes do = é o número do item na ficha e "/0,5" são pontos digitados.
 - O mentor recebe 60% do valor total. O corretor hoje é o mesmo mentor, então não há repasse separado.
 

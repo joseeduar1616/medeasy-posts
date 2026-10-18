@@ -176,6 +176,7 @@ function triagemItemView(){
     <section class="card"><div class="card-h"><h2>PDF da análise</h2></div><p class="xs muted" style="margin:0 0 10px">Sai da análise importada ou da contagem por item lá embaixo, com os comentários de cada item. Uma prova por vez.</p><div class="row">${c.provas.map(p => `<button class="btn sm ${calcDe(c, p).tem ? "pri" : ""}" data-a="pdfAnalise" data-v="${kP(p.nome)}">PDF ${esc(p.nome)}</button>`).join("") || `<span class="xs muted">Sem prova</span>`}</div></section>
     <section class="card"><div class="card-h"><h2>Quando fechar</h2></div><p class="xs muted" style="margin:0 0 10px">Crie o cliente no Notion e cole o texto abaixo. Na próxima sincronização ele entra no painel com a contagem e o código de acesso.</p><button class="btn sm" data-a="copiarNotionTri">Copiar dados para o Notion</button></section>
    </div></div>
+   <div style="margin-top:16px">${controleView(c)}</div>
    <div style="margin-top:16px">${certItensView(c)}</div>`;
 }
 function triInput(el){
