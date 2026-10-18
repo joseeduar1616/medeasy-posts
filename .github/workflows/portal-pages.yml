@@ -26,8 +26,13 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Montar o site (só a pasta portal)
-        run: mkdir -p _site && cp -r portal _site/portal && printf '<!doctype html><meta http-equiv="refresh" content="0; url=portal/">' > _site/index.html && touch _site/.nojekyll
+      - name: Montar o site (portal na raiz, /portal/ continua valendo para os links antigos)
+        run: |
+          mkdir -p _site/portal
+          cp -r portal/. _site/
+          rm -f _site/README.md
+          printf '<!doctype html><meta charset="utf-8"><title>Portal MedEasy</title><script>location.replace("../"+location.search+location.hash)</script><meta http-equiv="refresh" content="0; url=../">' > _site/portal/index.html
+          touch _site/.nojekyll
       - uses: actions/configure-pages@v5
         with:
           enablement: true
