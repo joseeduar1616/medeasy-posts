@@ -52,6 +52,8 @@ const APELIDOS = { eder: "Éder", leo: "Leonardo", leonardo: "Leonardo", lucas: 
 const pessoa = n => { if (!n) return ""; const k = semAcento(n); return APELIDOS[k] || String(n).trim().replace(/\b\w/g, c => c.toUpperCase()); };
 const PCT_MENTOR = Number(process.env.PORTAL_PCT_MENTOR || 0.6);
 const ADMINS = ["José"]; // todos os mentores têm o mesmo acesso; mantido só para a lista de nomes
+// Quem saiu da equipe: não entra no login nem no filtro de mentores. Os clientes antigos continuam com o nome no histórico.
+const EX_EQUIPE = ["Ana Eluiza"].map(semAcento);
 
 /* ---------- serviços e provas ---------- */
 const SERVICOS = { "vitae": "Currículo Vitae", "lattes": "Currículo Lattes", "analise": "Análise curricular", "certificados": "Organização de certificados", "trabalho escrito": "Trabalho escrito", "slide": "Slides", "emprego": "Vitae emprego", "formatacao de trabalho": "Formatação de trabalho" };
@@ -198,8 +200,9 @@ async function montar(linhas) {
       servicos.push({ id: l.id, nome: (sv.length ? sv.join(" + ") : "Serviço") + (pv.length ? " · " + pv.join(", ") : ""), etapa, prazo: etapa < 6 ? (l.entrega || "") : "", entregueEm: etapa === 6 ? (l.entrega || "") : "", inicio: l.inicio || "", notion: l.url, mentor: m, corretor: c, trainee: t, status: l.status || "" });
       const tt = l.total || 0, pg = pagoDe(tt, l.pagamento); total += tt; pago += pg;
       if (pg) pagamentos.push({ valor: pg, forma: l.forma || "" });
-      // Mentor recebe 60% do valor total do serviço (PORTAL_PCT_MENTOR muda a regra). A fórmula do Notion, quando vem, tem prioridade.
-      const vm = l.valorMentor ?? (l.total != null ? Math.round(l.total * PCT_MENTOR * 100) / 100 : null);
+      // Mentor recebe 60% do valor total do serviço (PORTAL_PCT_MENTOR muda a regra). Hoje o corretor é o próprio mentor, então a fórmula
+      // "Valor para mentor" do Notion, que separa mentor e corretor, não é usada. PORTAL_USAR_FORMULA=1 volta a usar a fórmula.
+      const vm = process.env.PORTAL_USAR_FORMULA === "1" && l.valorMentor != null ? l.valorMentor : (l.total != null ? Math.round(l.total * PCT_MENTOR * 100) / 100 : null);
       if (m) repasses.push({ pessoa: m, papel: "Mentor", servico: l.id, valor: vm, pago: l.mentorPago, data: l.dataPagMentor || "" });
       // Hoje o corretor é o próprio mentor: o repasse é um só, os 60% do mentor. Para voltar a pagar corretor à parte, use PORTAL_CORRETOR_SEPARADO=1.
       if (c && process.env.PORTAL_CORRETOR_SEPARADO === "1") repasses.push({ pessoa: c, papel: "Corretor", servico: l.id, valor: l.valorCorretor, pago: l.corretorPago, data: l.dataPagCorretor || "" });
@@ -221,7 +224,7 @@ async function montar(linhas) {
   }
   const nomes = new Set(ADMINS);
   for (const c of clientes) [...c.mentores, ...c.corretores, ...c.trainees].forEach(p => nomes.add(p));
-  return { mentores: [...nomes].sort().map(nome => ({ nome, admin: true })), clientes };
+  return { mentores: [...nomes].filter(n => !EX_EQUIPE.includes(semAcento(n))).sort().map(nome => ({ nome, admin: true })), clientes };
 }
 
 /* Extras: detalhes que não existem no Notion (nota da análise, itens da ficha, pendências).

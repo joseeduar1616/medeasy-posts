@@ -2,7 +2,7 @@ name: Portal MedEasy - sincronizar com o Notion
 
 on:
   schedule:
-    - cron: "17 * * * *"   # de hora em hora
+    - cron: "*/10 * * * *"   # a cada 10 minutos (o GitHub pode atrasar alguns minutos)
   workflow_dispatch: {}
 
 permissions:
