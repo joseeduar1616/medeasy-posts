@@ -51,7 +51,9 @@ const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").
 const APELIDOS = { eder: "Éder", leo: "Leonardo", leonardo: "Leonardo", lucas: "Lucas", erick: "Erick", jose: "José", cadu: "Cadu", matheus: "Matheus", eduardo: "Eduardo", caroline: "Caroline", pedro: "Pedro", "joao gabriel": "João Gabriel", "ana eluiza": "Ana Eluiza" };
 const pessoa = n => { if (!n) return ""; const k = semAcento(n); return APELIDOS[k] || String(n).trim().replace(/\b\w/g, c => c.toUpperCase()); };
 const PCT_MENTOR = Number(process.env.PORTAL_PCT_MENTOR || 0.6);
-const ADMINS = ["José"]; // todos os mentores têm o mesmo acesso; mantido só para a lista de nomes
+// Administradores: veem toda a equipe, o filtro por mentor e os repasses de todos. Com o secret PORTAL_SENHA_ADMIN, entram com uma segunda senha.
+const ADMINS = ["José", "Eduardo"];
+const SENHA_ADMIN = (process.env.PORTAL_SENHA_ADMIN || "").trim();
 // Quem saiu da equipe: não entra no login nem no filtro de mentores. Os clientes antigos continuam com o nome no histórico.
 const EX_EQUIPE = ["Ana Eluiza"].map(semAcento);
 
@@ -227,7 +229,7 @@ async function montar(linhas) {
   }
   const nomes = new Set(ADMINS);
   for (const c of clientes) [...c.mentores, ...c.corretores, ...c.trainees].forEach(p => nomes.add(p));
-  return { mentores: [...nomes].filter(n => !EX_EQUIPE.includes(semAcento(n))).sort().map(nome => ({ nome, admin: true })), clientes };
+  return { mentores: [...nomes].filter(n => !EX_EQUIPE.includes(semAcento(n))).sort().map(nome => ({ nome, admin: ADMINS.some(a => semAcento(a) === semAcento(nome)) })), clientes };
 }
 
 /* Extras: detalhes que não existem no Notion (nota da análise, itens da ficha, pendências).
@@ -362,6 +364,8 @@ fs.mkdirSync(path.join(SAIDA, "c"), { recursive: true });
 const agora = Date.now();
 for (const c of dados.clientes) fs.writeFileSync(path.join(SAIDA, "c", await arquivoCliente(c.codigo) + ".json"), JSON.stringify(await cifrar({ ...espelho(c, contato), atualizadoEm: agora }, c.codigo)));
 const semValor = dados.clientes.flatMap(c => c.repasses).filter(r => r.valor == null).length;
-fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, editais: EDITAIS, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, triagem: dados.triagem || [], valoresPendentes: semValor > 0 }, SENHA)));
+// Senha de administrador: um arquivo pequeno cifrado com ela. O site confere abrindo esse arquivo.
+if (SENHA_ADMIN) fs.writeFileSync(path.join(SAIDA, "admin.json"), JSON.stringify(await cifrar({ ok: true, em: agora }, SENHA_ADMIN))); else fs.rmSync(path.join(SAIDA, "admin.json"), { force: true });
+fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, editais: EDITAIS, senhaAdmin: !!SENHA_ADMIN, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, triagem: dados.triagem || [], valoresPendentes: semValor > 0 }, SENHA)));
 fs.writeFileSync(arqMarca, marca + "\n");
 console.log(`OK: ${dados.clientes.length} clientes de ${linhas.length} linhas, ${dados.mentores.length} pessoas na equipe${semValor ? `, ${semValor} repasses sem valor` : ""}`);

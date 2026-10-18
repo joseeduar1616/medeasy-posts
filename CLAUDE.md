@@ -12,7 +12,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
   - `portal/data/equipe.json` abre com a senha da equipe. A senha não fica no repositório, porque ele é público. Peça ao José.
   - `portal/data/c/<hash>.json` guarda os dados de cada cliente e abre com o código de 10 letras dele.
   - `portal/data/extras.json` guarda o que não está no Notion: pendências, especialidade, telefones da equipe e análises. Para abrir: `PORTAL_SENHA=... node scripts/portal/extras.mjs abrir > extras.json` (fora do repositório). Para cifrar de novo: `... extras.mjs cifrar extras.json`.
-- O login do mentor é o nome dele mais a senha da equipe. Todos os mentores veem tudo.
+- O login do mentor é o nome dele mais a senha da equipe. Mentor comum vê só os próprios clientes. José e Eduardo são administradores (`ADMINS` no build.mjs) e veem toda a equipe. Com o secret `PORTAL_SENHA_ADMIN`, o build gera `portal/data/admin.json` e o site pede essa segunda senha para entrar como administrador.
 - O cliente entra com o código pelo link `portal/?c=CODIGO`.
 
 ## Arquivos
