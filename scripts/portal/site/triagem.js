@@ -14,10 +14,14 @@ function salvarTri(t){ const l = lerTri(); const i = l.findIndex(x => x.id === t
 const novoIdTri = () => "t:" + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3);
 function editalJS(nome){ const E = S.eq?.editais || {}; const k = kP(nome); const e = Object.entries(E).find(([kk]) => k.startsWith(kk) || (kk.startsWith(k) && k.length >= 3)); return e ? e[1] : null; }
 const nomeProva = k => (PROVAS.find(p => p.k === k) || {}).nome || k;
+/* Provas digitadas fora da lista. Se o nome bate com uma da lista, vira ela. Senão fica com o nome digitado. */
+const outrasDe = s => String(s || "").split(/[,;\n]+/).map(x => x.trim()).filter(Boolean).map(x => { const k = kP(x); const p = PROVAS.find(p => p.k === k || kP(p.nome) === k); return p ? p.k : x; });
+const provasTri = t => [...new Set([...(t.provas || []), ...outrasDe(t.outras)])];
+const campoOutras = (v, ajuda) => `<label class="f"><span>Outras provas, fora da lista${ajuda ? " (separe por vírgula)" : ""}</span><input class="in" data-tri="outras" value="${esc(v || "")}" placeholder="Ex.: HC Ribeirão, SUS-BA"></label>`;
 const tiposDe = s => ({ vitae:["vitae"], analise:["analise"], lattes:["vitae","lattes"], lattesb:["lattes","certificados"] })[s] || ["vitae"];
 /* Cliente "de mentira" para reaproveitar a contagem por item e o cálculo do valor */
 function clienteDaTriagem(t){
-  const provas = (t.provas || []).map((k, i) => { const e = editalJS(nomeProva(k)); return { id:"p" + i, nome:nomeProva(k), edital:e, prazoEnvio:e?.prazoEnvio || "", dataProva:e?.dataProva || "", link:e?.link || "" }; });
+  const provas = provasTri(t).map((k, i) => { const e = editalJS(nomeProva(k)); return { id:"p" + i, nome:nomeProva(k), edital:e, prazoEnvio:e?.prazoEnvio || "", dataProva:e?.dataProva || "", link:e?.link || "" }; });
   return aplicarAnalises({ id:t.id, nome:t.nome || "Cliente novo", whatsapp:t.whats || "", provas, tipos:tiposDe(t.servico), nCert:t.nCert == null || t.nCert === "" ? null : num(t.nCert), nArtigos:0, servicos:[], contagem:{}, triagem:t });
 }
 const clienteSel = () => S.sel && String(S.sel).startsWith("t:") ? (triDe(S.sel) ? clienteDaTriagem(triDe(S.sel)) : null) : (S.eq?.clientes || []).find(x => x.id === S.sel);
@@ -28,7 +32,7 @@ function codigoTri(d){ return btoa(unescape(encodeURIComponent(JSON.stringify(d)
 function lerCodigoTri(texto){ const m = String(texto || "").match(/(?:#triagem:|[?&]i=)([A-Za-z0-9+/=_-]+)/); if (!m) return null; try { const b = m[1].replace(/-/g, "+").replace(/_/g, "/"); return JSON.parse(decodeURIComponent(escape(atob(b)))); } catch { return null; } }
 const linkImportar = d => `${location.href.split("#")[0].split("?")[0]}?i=${codigoTri(d)}`;
 function mensagemTri(d){
-  return `Oi! Preenchi a triagem do portal da MedEasy\n\nNome: ${d.nome}\nWhatsApp: ${d.whats}\nProvas: ${(d.provas || []).map(nomeProva).join(", ") || "ainda não sei"}\nEspecialidade: ${d.area || "não informada"}\nPedido: ${d.pedido || "não escreveu"}\nCertificados: ${d.nCert ? "uns " + d.nCert : "não contei"}\nDrive: ${d.links || "vou mandar os PDFs aqui"}\n${d.obs ? "Obs: " + d.obs + "\n" : ""}\nAbrir no painel: ${linkImportar(d)}`;
+  return `Oi! Preenchi a triagem do portal da MedEasy\n\nNome: ${d.nome}\nWhatsApp: ${d.whats}\nProvas: ${provasTri(d).map(nomeProva).join(", ") || "ainda não sei"}\nEspecialidade: ${d.area || "não informada"}\nPedido: ${d.pedido || "não escreveu"}\nCertificados: ${d.nCert ? "uns " + d.nCert : "não contei"}\nDrive: ${d.links || "vou mandar os PDFs aqui"}\n${d.obs ? "Obs: " + d.obs + "\n" : ""}\nAbrir no painel: ${linkImportar(d)}`;
 }
 /* O site interpreta o pedido escrito pelo cliente: serviço e provas citadas. O mentor pode corrigir. */
 const ALIAS_PROVA = { psu:"psugo", psugo:"psugo", sesgo:"sesgo", psumg:"psumg", usp:"uspsp", usprp:"usprp", ribeirao:"usprp", santacasa:"santacasasp", scmsp:"santacasasp", sirio:"siriolibanes", dante:"dante", puc:"puccamp", cet:"cet", fubog:"fubog", olhos:"fubog" };
@@ -62,7 +66,7 @@ function estimativaSimples(provas, nCert, servico){
   const falta = linhas.some(l => l.valor == null); return { linhas, total:r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)), falta };
 }
 function estimativaView(d){
-  const it = interpretarPedido(d.pedido || ""); const provas = [...new Set([...(d.provas || []), ...it.provas])];
+  const it = interpretarPedido(d.pedido || ""); const provas = [...new Set([...provasTri(d), ...it.provas])];
   if (!provas.length) return `<p class="xs muted" style="margin:0">Marque as provas para ver uma estimativa.</p>`;
   const e = estimativaSimples(provas, d.nCert, it.servico);
   return `<div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}</td><td class="r num" style="white-space:nowrap">${l.valor == null ? "falta o nº de certificados" : brl(l.valor)}</td></tr>`).join("")}</tbody>${!e.falta ? `<tfoot><tr><td>Estimativa</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot>` : ""}</table></div><p class="xs muted" style="margin:8px 0 0">Estimativa com ${num(d.nCert) || 0} certificados. O valor certo sai depois que o mentor confere os seus certificados no edital.</p>`;
@@ -84,6 +88,7 @@ function triagemFormView(){
       <div class="grid2" style="gap:10px"><label class="f"><span>Seu nome completo</span><input class="in" data-tri="nome" value="${esc(d.nome || "")}" required autocomplete="name"></label>
       <label class="f"><span>Seu WhatsApp</span><input class="in" data-tri="whats" value="${esc(d.whats || "")}" required inputmode="tel" autocomplete="tel" placeholder="(62) 99999-9999"></label></div>
       <div class="f"><span>Para quais provas você vai enviar o currículo?</span><div class="chks">${PROVAS.map(p => chk(p.k, p.nome)).join("")}</div></div>
+      ${campoOutras(d.outras, true)}
       <label class="f"><span>Especialidade pretendida</span><input class="in" data-tri="area" value="${esc(d.area || "")}" placeholder="Ex.: Clínica Médica"></label>
       <label class="f"><span>O que você precisa? Escreva com as suas palavras</span><textarea class="in" data-tri="pedido" rows="3" placeholder="Ex.: Quero o currículo pronto para a PSU-GO e saber quantos pontos eu faço. Também preciso atualizar o Lattes">${esc(d.pedido || "")}</textarea></label>
       <div class="grid2" style="gap:10px"><label class="f"><span>Quantos certificados você tem, mais ou menos?</span><input class="in" data-tri="nCert" type="number" min="0" inputmode="numeric" value="${esc(d.nCert || "")}" placeholder="Pode ser um chute"></label>
@@ -99,7 +104,7 @@ function triagemFormView(){
 }
 function enviarTriagem(){
   const d = S.triForm; if (!d.nome || !d.whats){ toast("Preencha o nome e o WhatsApp"); return; }
-  if (!d.provas.length && !confirm("Você não marcou nenhuma prova. Enviar assim mesmo?")) return;
+  if (!provasTri(d).length && !confirm("Você não marcou nenhuma prova. Enviar assim mesmo?")) return;
   const dest = S.triDestino || CONTATO.whats; d.em = Date.now(); delete d.servico;
   window.open(waLink(dest, mensagemTri(d)), "_blank");
 }
@@ -109,7 +114,7 @@ const linkTriagem = () => { const m = (S.eq.mentores || []).find(x => x.nome ===
 function importarTri(texto){
   const d = lerCodigoTri(texto); if (!d){ toast("Não achei o código #triagem na mensagem"); return; }
   const it = interpretarPedido(d.pedido || "");
-  const t = { id:novoIdTri(), em:d.em || Date.now(), nome:(d.nome || "").trim(), whats:d.whats || "", area:(d.area || "").trim(), provas:[...new Set([...(d.provas || []), ...it.provas])].filter(k => PROVAS.some(p => p.k === k)), servico:SERVICOS_TRI[d.servico] && d.servico !== "naosei" ? d.servico : it.servico, pedido:d.pedido || "", motivos:it.motivos, nCert:d.nCert || "", links:d.links || "", obs:d.obs || "", cont:{}, etapa:"novo" };
+  const t = { id:novoIdTri(), em:d.em || Date.now(), nome:(d.nome || "").trim(), whats:d.whats || "", area:(d.area || "").trim(), provas:[...new Set([...(d.provas || []), ...it.provas])].filter(k => PROVAS.some(p => p.k === k)), outras:d.outras || "", servico:SERVICOS_TRI[d.servico] && d.servico !== "naosei" ? d.servico : it.servico, pedido:d.pedido || "", motivos:it.motivos, nCert:d.nCert || "", links:d.links || "", obs:d.obs || "", cont:{}, etapa:"novo" };
   // Mesmo link aberto duas vezes não duplica o cliente
   const igual = lerTri().find(x => x.nome === t.nome && x.whats === t.whats && x.em === t.em); if (igual) t.id = igual.id, t.cont = igual.cont, t.etapa = igual.etapa;
   salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); toast(igual ? "Esse cliente já estava na triagem" : "Cliente importado");
@@ -120,8 +125,10 @@ const ETAPAS_TRI = { novo:["Chegou", "info"], orcado:["Orçamento enviado", "gol
 function importarTriNotion(url){
   const n = (S.eq.triagem || []).find(x => x.url === url); if (!n) return;
   const it = interpretarPedido(n.pedido || "");
-  const provas = [...new Set([...(n.provas || []).map(nome => (PROVAS.find(p => p.nome === nome) || {}).k).filter(Boolean), ...it.provas])];
-  const t = { id:novoIdTri(), em:n.em || Date.now(), nome:n.nome || "", whats:n.whats || "", area:n.area || "", provas, servico:it.servico, pedido:n.pedido || "", motivos:it.motivos, nCert:n.nCert || "", links:n.drive || "", obs:n.obs || "", cont:{}, etapa:"novo", notion:n.url, arquivos:n.arquivos || 0 };
+  const daLista = nome => (PROVAS.find(p => p.nome === nome || kP(p.nome) === kP(nome)) || {}).k;
+  const provas = [...new Set([...(n.provas || []).map(daLista).filter(Boolean), ...it.provas])];
+  const outras = (n.provas || []).filter(nome => !daLista(nome)).join(", ");
+  const t = { id:novoIdTri(), em:n.em || Date.now(), nome:n.nome || "", whats:n.whats || "", area:n.area || "", provas, outras, servico:it.servico, pedido:n.pedido || "", motivos:it.motivos, nCert:n.nCert || "", links:n.drive || "", obs:n.obs || "", cont:{}, etapa:"novo", notion:n.url, arquivos:n.arquivos || 0 };
   salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); toast("Cliente importado do Notion");
 }
 function triagemView(){
@@ -130,7 +137,7 @@ function triagemView(){
   return `<div class="pagehead"><div><h1>Triagem</h1><p>Clientes novos antes de entrar no Notion. Fica guardado só neste navegador</p></div><div class="row"><button class="btn sm" data-a="copiarLinkTri">Copiar link de triagem</button><button class="btn sm pri" data-a="novaTri">Novo cliente</button></div></div>
    ${doNotion.length ? `<section class="card" style="margin-bottom:16px"><div class="card-h"><h2>Chegaram pelo formulário</h2><span class="pill info">${doNotion.length}</span></div><div class="list">${doNotion.map(n => `<div class="li"><div class="grow"><div class="t">${esc(n.nome)}</div><div class="small muted">${esc((n.provas || []).join(", ") || "sem prova")}${n.mentor ? " · mentor " + esc(n.mentor) : ""}${n.arquivos ? ` · ${n.arquivos} ${n.arquivos === 1 ? "arquivo" : "arquivos"}` : ""} · ${dBR(n.em ? new Date(n.em).toISOString() : "")}</div></div><a class="btn sm ghost" href="${esc(n.url)}" target="_blank" rel="noopener">Notion</a><button class="btn sm pri" data-a="importarTriNotion" data-v="${esc(n.url)}">Importar</button></div>`).join("")}</div></section>` : ""}
    <section class="card" style="margin-bottom:16px"><div class="card-h"><h2>Importar da mensagem</h2></div><p class="xs muted" style="margin:0 0 8px">A mensagem do cliente traz o link "Abrir no painel". Tocar nele já importa. Se preferir, cole a mensagem ou o link aqui.</p><div class="row"><textarea class="in" id="triImport" rows="2" placeholder="Cole a mensagem inteira" style="flex:1"></textarea><button class="btn" data-a="importarTri">Importar</button></div></section>
-   <section class="card" style="padding:4px">${lista.length ? lista.map(t => { const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo; const c = clienteDaTriagem(t); const e = estimarJS(c); return `<div class="crow" data-a="abrirTri" data-id="${t.id}"><div style="min-width:0"><div class="t">${esc(t.nome || "Sem nome")}</div><div class="small muted">${esc((t.provas || []).map(nomeProva).join(", ") || "Sem prova")} · ${esc(SERVICOS_TRI[t.servico] || "")}</div></div><div class="hide-m"><span class="pill ${k}">${et}</span></div><div class="hide-m small num">${e && e.completo ? brl(e.total) : `<span class="faint">sem valor</span>`}</div><div class="xs muted">${dBR(new Date(t.em || 0).toISOString())}</div></div>`; }).join("") : `<div class="empty" style="margin:12px">Nenhum cliente em triagem. Mande o link de triagem ou importe uma mensagem.</div>`}</section>`;
+   <section class="card" style="padding:4px">${lista.length ? lista.map(t => { const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo; const c = clienteDaTriagem(t); const e = estimarJS(c); return `<div class="crow" data-a="abrirTri" data-id="${t.id}"><div style="min-width:0"><div class="t">${esc(t.nome || "Sem nome")}</div><div class="small muted">${esc(provasTri(t).map(nomeProva).join(", ") || "Sem prova")} · ${esc(SERVICOS_TRI[t.servico] || "")}</div></div><div class="hide-m"><span class="pill ${k}">${et}</span></div><div class="hide-m small num">${e && e.completo ? brl(e.total) : `<span class="faint">sem valor</span>`}</div><div class="xs muted">${dBR(new Date(t.em || 0).toISOString())}</div></div>`; }).join("") : `<div class="empty" style="margin:12px">Nenhum cliente em triagem. Mande o link de triagem ou importe uma mensagem.</div>`}</section>`;
 }
 /* Opções de orçamento, do mais simples ao mais completo */
 function opcoesTri(t){
@@ -163,6 +170,7 @@ function triagemItemView(){
       <div class="grid2" style="gap:10px"><label class="f"><span>Nome</span><input class="in" data-tri="nome" value="${esc(t.nome || "")}"></label><label class="f"><span>WhatsApp</span><input class="in" data-tri="whats" value="${esc(t.whats || "")}" inputmode="tel"></label></div>
       <div class="grid2" style="gap:10px"><label class="f"><span>Especialidade</span><input class="in" data-tri="area" value="${esc(t.area || "")}"></label><label class="f"><span>Serviço</span><select class="in" data-tri="servico">${Object.entries(SERVICOS_TRI).filter(([kk]) => kk !== "naosei").map(([kk, tt]) => `<option value="${kk}" ${t.servico === kk ? "selected" : ""}>${tt}</option>`).join("")}</select></label></div>
       <div class="f"><span>Provas</span><div class="chks">${PROVAS.map(p => chk(p.k, p.nome)).join("")}</div></div>
+      ${campoOutras(t.outras, true)}
       <div class="grid2" style="gap:10px"><label class="f"><span>Certificados (quando não contou por item)</span><input class="in" data-tri="nCert" type="number" min="0" value="${esc(t.nCert || "")}"></label><label class="f"><span>Desconto (%)</span><input class="in" data-tri="desconto" type="number" min="0" max="10" value="${esc(t.desconto || "")}" placeholder="0"></label></div>
       <label class="chk"><input type="checkbox" data-tri="drive" ${t.drive ? "checked" : ""}><span>Cobrar organização do drive (R$ 75,00)</span></label>
       <label class="f"><span>Links do Drive</span><input class="in" data-tri="links" value="${esc(t.links || "")}"></label>
