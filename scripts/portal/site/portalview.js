@@ -34,6 +34,7 @@ function portalView(p, preview){
         ${pv.regras ? `<p class="small" style="margin:12px 0 0;color:var(--muted)">${esc(pv.regras)}</p>` : ""}
         ${pv.edital ? `<details style="margin-top:12px"><summary class="small" style="cursor:pointer;font-weight:600">Como o currículo conta nesta prova</summary><div class="small" style="margin-top:8px"><p style="margin:0 0 6px"><b>Peso:</b> ${esc(pv.edital.peso || "")}</p><p style="margin:0 0 6px"><b>Envio:</b> ${esc(pv.edital.envio || "")}</p><p style="margin:0 0 6px"><b>Formato:</b> ${esc(pv.edital.formato || "")}</p>${pv.edital.obs ? `<p style="margin:0 0 6px"><b>Atenção:</b> ${esc(pv.edital.obs)}</p>` : ""}${typeof fichaTabela === "function" ? fichaTabela(pv.edital) : ""}</div></details>` : ""}
         ${it.length ? itensView(it) : ""}
+        ${!preview && typeof marcacaoView === "function" ? marcacaoView(pv) : ""}
       </section>`; }).join("")}
 
     ${(p.documentos || []).length ? `<section class="card"><div class="card-h"><h2>Seus documentos</h2></div><div class="list">${p.documentos.map(d => `<div class="li"><div class="grow"><div class="t">${esc(d.nome)}</div></div>${d.link ? `<a class="btn sm pri" href="${esc(d.link)}" target="_blank" rel="noopener">Abrir</a>` : ""}</div>`).join("")}</div></section>` : ""}
