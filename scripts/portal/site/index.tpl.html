@@ -321,7 +321,7 @@ const A = {
   importarTriNotion: el => importarTriNotion(el.dataset.v),
 };
 Object.assign(A, A_CTRL);
-app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); });
+app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); });
 app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
