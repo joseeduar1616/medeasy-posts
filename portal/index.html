@@ -1182,7 +1182,7 @@ function controleView(c){
   else if (aba === "certs") corpo = ctCerts(c, ct, provas);
   else { const p = provas.find(p => "p:" + kP(p.nome) === aba); corpo = p ? ctProva(c, ct, p) : ""; }
   return `<section class="card" id="ctrlCard"><div class="card-h"><div><h2>Controle de certificados</h2><div class="sub">Todos os certificados do cliente, o que entra em cada item do edital, pendências e projeção</div></div>
-    <div class="row"><span class="xs muted">${ct.em ? "Guardado " + dataHora(ct.em) : ""}</span><button class="btn sm pri" data-a="copiarCtrl" ${temCtrl(ct) ? "" : "disabled"}>${!c.triagem && typeof temPonte === "function" && temPonte() ? "Salvar no Notion" : "Copiar controle para o Notion"}</button><label class="btn sm" style="cursor:pointer">Importar<input type="file" accept=".json,application/json" hidden data-ctimp="1"></label><button class="btn sm ghost" data-a="baixarCtrl" ${temCtrl(ct) ? "" : "disabled"}>Baixar</button></div></div>
+    <div class="row"><span class="xs muted">${ct.em ? "Guardado " + dataHora(ct.em) : ""}</span><button class="btn sm pri" data-a="copiarCtrl" ${temCtrl(ct) ? "" : "disabled"}>${!c.triagem && typeof temPonte === "function" && temPonte() ? "Salvar no Notion" : "Copiar controle para o Notion"}</button><label class="btn sm" style="cursor:pointer" title="PDFs ou fotos dos certificados, ou o arquivo .json de um controle baixado">Adicionar arquivos<input type="file" accept=".pdf,application/pdf,image/*,.json,application/json" multiple hidden data-ctimp="1"></label><button class="btn sm ghost" data-a="baixarCtrl" ${temCtrl(ct) ? "" : "disabled"}>Baixar</button></div></div>
    ${S.ctCopiado === c.id ? `<div class="wait small" style="margin-bottom:12px"><b>Copiado.</b> Abra o cliente no Notion e cole na coluna "Controle de certificados". Na próxima sincronização a equipe toda vê.${notionDe(c) ? ` <a class="btn sm pri" style="margin-left:8px" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Abrir no Notion</a>` : ""}</div>` : ""}
    <div class="row" style="gap:6px;margin-bottom:12px">${abas.map(([k, t]) => `<button class="btn sm ${aba === k ? "pri" : ""}" data-a="ctAba" data-v="${k}">${esc(t)}</button>`).join("")}</div>
    ${corpo}</section>`;
@@ -1222,7 +1222,7 @@ function ctCerts(c, ct, provas){
       <td class="small">${u.length ? u.map(esc).join("<br>") : `<span class="faint">Não usado</span>`}</td>
       <td><input class="in" data-ct="cert" data-id="${x.id}" data-k="obs" value="${esc(x.obs || "")}" placeholder="Ex.: não pontua neste edital" style="min-width:160px"></td>
       <td><input class="in" data-ct="cert" data-id="${x.id}" data-k="arquivo" value="${esc(x.arquivo || "")}" placeholder="nome do PDF ou link" style="min-width:140px"></td>
-      <td><button class="btn sm ghost" data-a="ctApagarCert" data-id="${x.id}" title="Apagar">×</button></td></tr>`; }).join("")}</tbody></table></div>`).join("") : `<div class="empty">Nenhum certificado cadastrado. Adicione um por um ou cole vários de uma vez.</div>`}`;
+      <td><button class="btn sm ghost" data-a="ctApagarCert" data-id="${x.id}" title="Apagar">×</button></td></tr>`; }).join("")}</tbody></table></div>`).join("") : `<div class="empty">Nenhum certificado cadastrado. Use "Adicionar arquivos" para escolher os PDFs ou fotos, adicione um por um ou cole vários de uma vez.</div>`}`;
 }
 function ctProva(c, ct, p){
   const pk = kP(p.nome); const itens = itensDaProva(p); const r = resumoProva(c, p, ct);
@@ -1246,10 +1246,59 @@ function ctInput(el){
   if (t === "estado" || t === "add" || (t === "pend" && (el.dataset.k === "situacao" || el.dataset.k === "edital")) || (t === "cert" && el.dataset.k === "tipo")) render();
   else { const el2 = document.getElementById("valorCard"); if (el2) el2.outerHTML = valorCard(c); }
 }
+/* Lê PDFs e fotos de certificados. Cada PDF vira um certificado, ou um por página quando o PDF junta vários. */
+const TIPO_POR_TEXTO = [
+  [/suporte (avan[cç]ado|b[aá]sico) de vida|\b(acls|bls|atls|pals|phtls|aphls)\b/i, "Suporte à vida"],
+  [/monitor/i, "Monitoria"],
+  [/inicia[cç][aã]o cient/i, "Iniciação científica"],
+  [/liga acad|liga de /i, "Liga"],
+  [/apresent(ou|a[cç][aã]o d[eo] trabalho)|p[oô]ster|tema livre|e-?p[oô]ster|comunica[cç][aã]o oral/i, "Trabalho apresentado"],
+  [/\bartigo\b|cap[ií]tulo|publica[cç][aã]o|\bdoi\b/i, "Artigo ou capítulo"],
+  [/est[aá]gio|internato/i, "Estágio"],
+  [/extens[aã]o/i, "Extensão"],
+  [/representa|diret[oó]rio acad|centro acad|atl[eé]tica|colegiado/i, "Representação"],
+  [/ingl[eê]s|espanhol|toefl|ielts|cambridge|profici[eê]ncia/i, "Idioma"],
+  [/diploma|hist[oó]rico escolar/i, "Histórico ou diploma"],
+  [/congresso|simp[oó]sio|jornada|semin[aá]rio|encontro|f[oó]rum|confer[eê]ncia/i, "Congresso"],
+  [/curso|workshop|minicurso|capacita|treinamento|webin/i, "Curso"],
+];
+const nomeGenerico = n => /^(img|wa\d|whatsapp|scan|doc(ument)?o?|arquivo|cert(ificado)?s?|pdf|image|foto|captura|screenshot)?[\s_-]*[\d\s_()-]*$/i.test(n) || /^(img|wa|whatsapp)[\s_-]/i.test(n);
+function certDoTexto(texto, arquivo){
+  const nome = arquivo.replace(/\.[a-z0-9]{2,5}$/i, "").replace(/[_]+/g, " ").replace(/\s+/g, " ").trim();
+  const txt = String(texto || "").replace(/\s+/g, " ").trim(); const base = (txt + " " + nome);
+  const tipo = (TIPO_POR_TEXTO.find(([re]) => re.test(base)) || [0, "Outro"])[1];
+  const anoMax = new Date().getFullYear() + 1; const anos = (base.match(/\b(19[89]\d|20\d\d)\b/g) || []).map(Number).filter(a => a <= anoMax);
+  const ch = (txt.match(/carga hor[aá]ria(?: total)?(?: de)?\s*:?\s*(\d{1,4})/i) || txt.match(/\b(\d{1,4})\s*(?:h\b|hs\b|horas)/i) || [])[1] || "";
+  let desc = "";
+  const m = txt.match(/(?:participou|concluiu|apresentou|realizou|atuou|cursou|frequentou)\s+(?:como\s+\S+\s+)?(?:(?:d[oa]s?|n[oa]s?|o|a|em)\s+)?(.{6,140}?)(?=,|\.|;|\s+(?:realizad|promovid|ocorrid|com carga|no per[ií]odo|nos dias|no dia|de \d|em \d|entre))/i);
+  if (m) desc = m[1];
+  if (!desc && !nomeGenerico(nome)) desc = nome;
+  if (!desc && txt) desc = (String(texto).split("\n").map(l => l.trim()).find(l => /[a-zà-ú]{3}/i.test(l) && l.length >= 12 && !/^certifica/i.test(l)) || "");
+  if (!desc) desc = nome;
+  return { id:novoIdC(), desc:desc.replace(/\s+/g, " ").trim().slice(0, 140), tipo, ano:anos.length ? String(Math.max(...anos)) : "", ch, obs:txt ? "" : "Sem texto no arquivo, conferir", arquivo };
+}
+async function certsDoArquivo(f){
+  if (!/pdf$/i.test(f.type) && !/\.pdf$/i.test(f.name)) return [certDoTexto("", f.name)];
+  let texto = ""; try { texto = await textoDoPdf(f); } catch { return [certDoTexto("", f.name)]; }
+  const paginas = texto.split("\f").map(s => s.trim()); const comCert = paginas.filter(p => /certific|declara|atesta/i.test(p));
+  if (paginas.length > 1 && paginas.length <= 60 && comCert.length >= Math.max(2, paginas.length * 0.6)) return paginas.map((p, i) => certDoTexto(p, `${f.name} p.${i + 1}`)).filter(x => x.desc);
+  return [certDoTexto(texto, f.name)];
+}
 async function importarCtrl(input){
-  const c = clienteSel(); const f = input.files && input.files[0]; if (!c || !f) return;
-  try { const j = JSON.parse(await f.text()); if (!Array.isArray(j.certs)) throw new Error(); S.ctrl[c.id] = { ...ctrlVazio(), ...j }; salvarCtrl(c); delete S.cont[c.id]; render(); toast(`Controle importado: ${j.certs.length} certificados`); }
-  catch { toast("Esse arquivo não é um controle do portal"); }
+  const c = clienteSel(); const fs = [...(input.files || [])]; input.value = ""; if (!c || !fs.length) return;
+  const jsons = fs.filter(f => /json$/i.test(f.type) || /\.json$/i.test(f.name)); const docs = fs.filter(f => !jsons.includes(f));
+  for (const f of jsons){
+    try { const j = JSON.parse(await f.text()); if (!Array.isArray(j.certs)) throw new Error(); S.ctrl[c.id] = { ...ctrlVazio(), ...j }; salvarCtrl(c); delete S.cont[c.id]; toast(`Controle importado: ${j.certs.length} certificados`); }
+    catch { toast("Esse arquivo não é um controle do portal"); }
+  }
+  if (docs.length){
+    const ct = ctrlDe(c); const ja = new Set(ct.certs.map(x => x.arquivo).filter(Boolean)); let n = 0, rep = 0;
+    toast(`Lendo ${docs.length} ${docs.length === 1 ? "arquivo" : "arquivos"}`);
+    for (const f of docs){ for (const x of await certsDoArquivo(f)){ if (ja.has(x.arquivo)){ rep++; continue; } ja.add(x.arquivo); ct.certs.push(x); n++; } }
+    salvarCtrl(c); delete S.cont[c.id]; (S.ctAba ||= {})[c.id] = "certs";
+    toast(n ? `${n} ${n === 1 ? "certificado adicionado" : "certificados adicionados"}${rep ? `, ${rep} já ${rep === 1 ? "estava" : "estavam"}` : ""}. Confira o tipo e a carga horária` : `Nenhum certificado novo. ${rep === 1 ? "Esse arquivo já estava" : "Esses arquivos já estavam"} na lista`);
+  }
+  render();
 }
 function baixarCtrl(c){ const ct = ctrlDe(c); const u = URL.createObjectURL(new Blob([JSON.stringify(ct, null, 1)], { type:"application/json" })); const a = document.createElement("a"); a.href = u; a.download = `controle-${semAcento(c.nome).replace(/[^a-z0-9]+/g, "-")}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(u), 5000); }
 const A_CTRL = {
