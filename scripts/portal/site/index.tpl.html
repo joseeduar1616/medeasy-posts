@@ -115,6 +115,7 @@ async function entrarMentor(nome, senha, senhaAdmin){
     S.pedirAdmin = null; S.eq = eq; S.mentor = m; S.admin = admin; S.modo = "mentor"; S.senha = senha; S.senhaAdmin = admin ? senhaAdmin : ""; guardar("mentor", nome, senha, admin ? senhaAdmin : "");
     if (S.importar){ const d = lerCodigoTri("?i=" + S.importar); S.importar = null; if (d) importarTri("?i=" + codigoTri(d)); }
     if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
+    if (S.importarCerts){ const k = S.importarCerts; S.importarCerts = null; importarCertsDoLink(k); }
     if (typeof pedirSincronizacao === "function") pedirSincronizacao();
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
@@ -150,7 +151,7 @@ function loginView(){
       <div class="err">${esc(S.erro)}</div>
       <button class="btn pri" type="submit" ${S.carregando ? "disabled" : ""}>${S.carregando ? "Abrindo" : "Entrar"}</button>
     </form>
-    <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : S.importar ? "Entre para abrir a triagem do cliente no seu painel." : S.importarMarc ? "Entre para importar o que o cliente marcou." : "Acesso da equipe MedEasy."}</p></div>`);
+    <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : S.importar ? "Entre para abrir a triagem do cliente no seu painel." : S.importarMarc ? "Entre para importar o que o cliente marcou." : S.importarCerts ? "Entre para colocar a lista de certificados do cliente no controle." : "Acesso da equipe MedEasy."}</p></div>`);
 }
 const ABAS = [["painel","Painel"],["clientes","Clientes"],["triagem","Triagem"],["agenda","Agenda"],["editais","Editais"],["repasses","Repasses"]];
 function mentorView(){
@@ -315,13 +316,13 @@ const A = {
   apagarTri: () => { if (!confirm("Apagar este cliente da triagem?")) return; gravarTri(lerTri().filter(t => t.id !== S.sel)); delete S.cont[S.sel]; S.view = "triagem"; render(); },
   pdfOrc: () => pdfOrcamento(triDe(S.sel)),
   pdfAnalise: el => pdfAnalise(triDe(S.sel), el.dataset.v),
-  copiarMsgOrc: () => { const t = triDe(S.sel); copiar(mensagemOrcamento(t, opcoesTri(t))); },
+  copiarMsgOrc: () => { const t = triDe(S.sel); copiar(msgOrc(t, opcoesTri(t))); },
   copiarNotionTri: () => copiar(textoNotionTri(triDe(S.sel))),
   apagarAnalise: el => { const c = clienteSel(); apagarAnalise(c, el.dataset.v); delete S.cont[c.id]; if (!c.triagem){ c.provas = (c.provas || []).filter(p => !(p.fonte === "analise" && kP(p.nome) === el.dataset.v && String(p.id).startsWith("a"))); for (const p of c.provas) if (p.fonte === "analise" && kP(p.nome) === el.dataset.v){ delete p.itens; delete p.fonte; delete p.notaEstimada; delete p.notaPossivel; } } render(); },
   importarTriNotion: el => importarTriNotion(el.dataset.v),
 };
-Object.assign(A, A_CTRL);
-app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); });
+Object.assign(A, A_CTRL, A_ORC, A_CERTCLI);
+app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); });
 app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
@@ -336,6 +337,9 @@ app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if
   // Link "Abrir no painel" da marcação do cliente
   const marc = new URLSearchParams(location.search).get("m");
   if (marc){ S.importarMarc = marc; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
+  // Link da lista de certificados que o cliente montou no portal
+  const certs = new URLSearchParams(location.search).get("k");
+  if (certs){ S.importarCerts = certs; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
   if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo, s.admin || "");
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
   else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }
