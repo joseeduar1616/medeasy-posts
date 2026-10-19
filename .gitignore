@@ -1,4 +1,5 @@
-out/
 __pycache__/
-portal-dados/
 dados.json
+out/
+portal-dados/
+scripts/portal/ponte.txt

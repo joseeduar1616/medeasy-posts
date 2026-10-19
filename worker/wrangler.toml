@@ -1,0 +1,8 @@
+name = "medeasy-ponte"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Variáveis sem segredo. As chaves vão em secrets (wrangler secret put NOME).
+[vars]
+GITHUB_REPO = "joseeduar1616/medeasy-posts"
+ORIGEM = "https://curriculosmedeasy.com.br,https://www.curriculosmedeasy.com.br,https://joseeduar1616.github.io"

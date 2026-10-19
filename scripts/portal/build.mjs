@@ -199,7 +199,7 @@ async function montar(linhas) {
       const etapa = etapaDe(l.status, l.pagamento);
       const m = pessoa(l.mentor), c = pessoa(l.corretor), t = pessoa(l.trainee);
       if (m) mentores.add(m); if (c) corretores.add(c); if (t) trainees.add(t);
-      servicos.push({ id: l.id, nome: (sv.length ? sv.join(" + ") : "Serviço") + (pv.length ? " · " + pv.join(", ") : ""), etapa, prazo: etapa < 6 ? (l.entrega || "") : "", entregueEm: etapa === 6 ? (l.entrega || "") : "", inicio: l.inicio || "", notion: l.url, mentor: m, corretor: c, trainee: t, status: l.status || "" });
+      servicos.push({ id: l.id, pagamento: l.pagamento || "", total: l.total || 0, pago: pagoDe(l.total || 0, l.pagamento), nome: (sv.length ? sv.join(" + ") : "Serviço") + (pv.length ? " · " + pv.join(", ") : ""), etapa, prazo: etapa < 6 ? (l.entrega || "") : "", entregueEm: etapa === 6 ? (l.entrega || "") : "", inicio: l.inicio || "", notion: l.url, mentor: m, corretor: c, trainee: t, status: l.status || "" });
       const tt = l.total || 0, pg = pagoDe(tt, l.pagamento); total += tt; pago += pg;
       if (pg) pagamentos.push({ valor: pg, forma: l.forma || "" });
       // Mentor recebe 60% do valor total do serviço (PORTAL_PCT_MENTOR muda a regra). Hoje o corretor é o próprio mentor, então a fórmula
