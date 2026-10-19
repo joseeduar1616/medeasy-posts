@@ -125,10 +125,20 @@ async function idDaBase(entrada) {
   console.log("Base encontrada pela busca: " + (db.title || []).map(t => t.plain_text).join(""));
   return db.id.replace(/-/g, "");
 }
+/* Texto longo: a lista de páginas pode cortar a coluna em 25 pedaços. Nesse caso busca a coluna inteira. */
+async function completarTextos(pagina) {
+  for (const [k, p] of Object.entries(pagina.properties || {})) {
+    if (p.type !== "rich_text" || (p.rich_text || []).length < 25) continue;
+    try { const partes = []; let cursor; do { const j = await api(`pages/${pagina.id}/properties/${encodeURIComponent(p.id)}?page_size=100${cursor ? "&start_cursor=" + cursor : ""}`); partes.push(...(j.results || []).map(x => x.rich_text).filter(Boolean)); cursor = j.has_more ? j.next_cursor : null; } while (cursor); if (partes.length) p.rich_text = partes; }
+    catch (e) { console.warn(`Não li a coluna ${k} inteira: ${e.message}`); }
+  }
+  return pagina;
+}
 async function lerNotion() {
   const db = await idDaBase(process.env.NOTION_DB); const linhas = []; let cursor;
   do { const j = await api(`databases/${db}/query`, cursor ? { start_cursor: cursor, page_size: 100 } : { page_size: 100 }); linhas.push(...j.results); cursor = j.has_more ? j.next_cursor : null; } while (cursor);
-  return linhas.filter(l => !l.archived && !l.in_trash).map(l => {
+  const vivas = linhas.filter(l => !l.archived && !l.in_trash); for (const l of vivas) await completarTextos(l);
+  return vivas.map(l => {
     const r = { id: l.id, url: l.url }; for (const [k, p] of Object.entries(l.properties)) {
       const v = valorProp(p);
       if (p.type === "date") r[`date:${k}:start`] = v; else if (p.type === "checkbox") r[k] = v ? "__YES__" : "__NO__"; else r[k] = v;
@@ -145,8 +155,10 @@ async function lerTriagemNotion() {
     const db = (busca.results || []).find(d => /triagem medeasy/i.test((d.title || []).map(t => t.plain_text).join(""))); if (!db) return [];
     const linhas = []; let cursor;
     do { const j = await api(`databases/${db.id}/query`, cursor ? { start_cursor: cursor, page_size: 100 } : { page_size: 100 }); linhas.push(...j.results); cursor = j.has_more ? j.next_cursor : null; } while (cursor);
-    return linhas.filter(l => !l.archived && !l.in_trash).map(l => { const v = k => valorProp(l.properties[k]); return {
-      url: l.url, em: Date.parse(l.created_time) || 0, nome: v("Nome") || "", whats: v("WhatsApp") || "", mentor: v("Mentor") || "", provas: v("Provas") || [], area: v("Especialidade") || "", pedido: v("Pedido") || "",
+    const vivas = linhas.filter(l => !l.archived && !l.in_trash); for (const l of vivas) await completarTextos(l);
+    const dadosDe = s => { if (!s) return null; try { const j = JSON.parse(s); return j && typeof j === "object" && j.id ? j : null; } catch { console.warn("Dados do site com JSON inválido na triagem"); return null; } };
+    return vivas.map(l => { const v = k => valorProp(l.properties[k]); return {
+      id: l.id.replace(/-/g, ""), url: l.url, dados: dadosDe(v("Dados do site")), outras: v("Outras provas") || "", servico: v("Serviço") || "", valor: v("Valor do orçamento"), em: Date.parse(l.created_time) || 0, nome: v("Nome") || "", whats: v("WhatsApp") || "", mentor: v("Mentor") || "", provas: v("Provas") || [], area: v("Especialidade") || "", pedido: v("Pedido") || "",
       nCert: v("Certificados"), drive: v("Drive") || "", arquivos: (v("Arquivos") || []).length, obs: v("Observações") || "", situacao: v("Situação") || "" }; });
   } catch (e) { console.warn("Não li a base Triagem MedEasy: " + e.message); return []; }
 }

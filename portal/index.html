@@ -358,6 +358,7 @@ async function entrarMentor(nome, senha, senhaAdmin){
     if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
     if (S.importarCerts){ const k = S.importarCerts; S.importarCerts = null; importarCertsDoLink(k); }
     if (typeof pedirSincronizacao === "function") pedirSincronizacao();
+    if (typeof juntarTriagemNotion === "function") juntarTriagemNotion();
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
 }
@@ -758,7 +759,76 @@ const FORM_CERT = "https://twilight-daisy-27e.notion.site/24257e4b30834043adae1d
 function lerTri(){ try { return JSON.parse(localStorage.getItem(TRI_KEY) || "[]"); } catch { return []; } }
 function gravarTri(lista){ try { localStorage.setItem(TRI_KEY, JSON.stringify(lista)); } catch { toast("Não consegui gravar neste navegador"); } }
 const triDe = id => lerTri().find(t => t.id === id);
-function salvarTri(t){ const l = lerTri(); const i = l.findIndex(x => x.id === t.id); if (i >= 0) l[i] = t; else l.unshift(t); gravarTri(l); }
+function salvarTri(t, semNotion){ if (!semNotion) t.salvoEm = Date.now(); const l = lerTri(); const i = l.findIndex(x => x.id === t.id); if (i >= 0) l[i] = t; else l.unshift(t); gravarTri(l); if (!semNotion) agendarTriNotion(t); }
+
+/* ---------- triagem no Notion (base "Triagem MedEasy"), pela ponte ---------- */
+/* Cada mudança vai para o Notion uns segundos depois. Os dados do site inteiros vão na coluna "Dados do site",
+   e o build devolve para os outros aparelhos. Sem a ponte, fica só neste navegador. */
+const idDeUrl = u => { const m = String(u || "").split("?")[0].replace(/-/g, "").match(/[0-9a-f]{32}$/i); return m ? m[0].toLowerCase() : ""; };
+const _triTimer = {}; const _triFila = {};
+const triNoNotion = () => typeof temPonte === "function" && temPonte();
+function agendarTriNotion(t){
+  if (!triNoNotion() || !String(t.nome || "").trim()) return;
+  clearTimeout(_triTimer[t.id]); (S.triSync ||= {})[t.id] = "pendente"; mostrarSyncTri(t.id);
+  _triTimer[t.id] = setTimeout(() => { _triFila[t.id] = (_triFila[t.id] || Promise.resolve()).then(() => enviarTriNotion(t.id)); }, 2500);
+}
+function propsTriagemNotion(t){
+  const ops = opcoesTri(t); const todas = provasTri(t);
+  const daLista = todas.filter(k => PROVAS.some(p => p.k === k)).map(nomeProva); const fora = todas.filter(k => !PROVAS.some(p => p.k === k));
+  const drive = (String(t.links || "").match(/https?:\/\/\S+/) || [""])[0];
+  return { "Nome":t.nome || "Sem nome", "WhatsApp":t.whats || "", "Especialidade":t.area || "", "Pedido":t.pedido || "", "Observações":t.obs || "", "Outras provas":fora.join(", "), "Drive":drive,
+    "Mentor":t.mentor || S.mentor?.nome || "", "Provas":daLista, "Certificados":t.nCert === "" || t.nCert == null ? null : num(t.nCert), "Situação":(ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo)[0],
+    "Serviço":SERVICOS_TRI[t.servico] || "", "Valor do orçamento":ops[0] ? ops[0].total : null, "Dados do site":JSON.stringify(t) };
+}
+async function enviarTriNotion(id){
+  const t = triDe(id); if (!t || !triNoNotion()) return;
+  if (!t.mentor && S.mentor) t.mentor = S.mentor.nome;
+  S.triSync[id] = "gravando"; mostrarSyncTri(id);
+  try {
+    const j = await pontePedido("/triagem", { id:t.notionId || idDeUrl(t.notion), props:propsTriagemNotion(t) });
+    const t2 = triDe(id); if (t2){ t2.notionId = String(j.id || "").replace(/-/g, ""); t2.notion = j.url || t2.notion; t2.mentor = t2.mentor || t.mentor; t2.noNotionEm = Date.now(); salvarTri(t2, true); }
+    S.triSync[id] = "ok";
+  } catch (e) { S.triSync[id] = "erro:" + e.message; }
+  mostrarSyncTri(id);
+}
+function syncTriTexto(id){
+  const t = triDe(id); const s = (S.triSync || {})[id];
+  if (!triNoNotion()) return `<span class="pill">Só neste navegador</span>`;
+  if (s === "pendente" || s === "gravando") return `<span class="pill gold">Gravando no Notion</span>`;
+  if (s && s.startsWith("erro:")) return `<span class="pill" title="${esc(s.slice(5))}" style="color:var(--bad,#ff6b6b)">Não gravou no Notion</span>`;
+  if (t && (t.notionId || t.notion)) return `<a class="pill ok" href="${esc(t.notion || "#")}" target="_blank" rel="noopener">Salvo no Notion</a>`;
+  return `<span class="pill">Ainda não está no Notion</span>`;
+}
+function mostrarSyncTri(id){ const el = document.getElementById("triSync"); if (el && S.sel === id) el.innerHTML = syncTriTexto(id); }
+/* Depois do login: traz as triagens gravadas no Notion por outros aparelhos. Fica a versão mais nova. */
+function juntarTriagemNotion(){
+  const locais = lerTri(); let mudou = false;
+  for (const n of S.eq?.triagem || []){ if (!n.dados || !n.dados.id) continue;
+    const dono = n.dados.mentor || n.mentor || "";
+    if (!S.admin && dono && semAcento(dono).split(" ")[0] !== semAcento(S.mentor?.nome || "").split(" ")[0]) continue;
+    const i = locais.findIndex(t => t.id === n.dados.id || (t.notionId && t.notionId === n.id));
+    const vindo = { ...n.dados, notionId:n.id, notion:n.url };
+    if (i < 0){ locais.push(vindo); mudou = true; }
+    else if ((n.dados.salvoEm || 0) > (locais[i].salvoEm || 0)){ locais[i] = vindo; mudou = true; } }
+  if (mudou) gravarTri(locais);
+  // O que ficou só neste navegador (feito antes da ponte) sobe agora
+  if (triNoNotion()) for (const t of lerTri()) if (!t.notionId && String(t.nome || "").trim()) agendarTriNotion(t);
+}
+/* Cliente fechou: cria a linha no "Controle cliente" */
+const SERVICO_NOTION = { vitae:"Vitae", analise:"ANALISE", lattes:"Lattes", certificados:"Certificados" };
+async function criarClienteNotion(){
+  const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t);
+  const letra = document.getElementById("triOpFechar")?.value || "A"; const o = ops.find(x => x.letra === letra) || ops[0];
+  if (!String(t.nome || "").trim() || !t.whats){ toast("Preencha o nome e o WhatsApp antes"); return; }
+  if (t.clienteNotion && !confirm("Esse cliente já foi criado no Notion. Criar outra linha?")) return;
+  const c = clienteDaTriagem(t); const ct = ctrlDe(c);
+  const tipos = (o?.tipos || tiposDe(t.servico)).map(x => SERVICO_NOTION[x]).filter(Boolean);
+  const props = { "Cliente":t.nome.trim(), "Telefone":t.whats, "Tipo de serviço":[...tipos, ...c.provas.map(p => p.nome)], "Mentor":S.mentor?.nome || "", "Status":"Não iniciada", "Pagamento":"Não pago",
+    "Valor total":o ? o.total : null, "Data de início ":isoLocal(), "Certificados por item":textoCont(c, carregarCont(c).provas) || "", "Controle de certificados":temCtrl(ct) ? textoCtrl(ct) : "" };
+  toast("Criando o cliente no Notion");
+  try { const j = await pontePedido("/cliente", { props }); t.clienteNotion = j.url; t.etapa = "fechado"; salvarTri(t); render(); toast("Cliente criado no Notion. Entra no painel com o código de acesso em 1 ou 2 minutos"); }
+  catch (e) { toast("Não criou: " + e.message); }
+}
 const novoIdTri = () => "t:" + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3);
 function editalJS(nome){ const E = S.eq?.editais || {}; const k = kP(nome); const e = Object.entries(E).find(([kk]) => k.startsWith(kk) || (kk.startsWith(k) && k.length >= 3)); return e ? e[1] : null; }
 const nomeProva = k => (PROVAS.find(p => p.k === k) || {}).nome || k;
@@ -876,13 +946,13 @@ function importarTriNotion(url){
   const daLista = nome => (PROVAS.find(p => p.nome === nome || kP(p.nome) === kP(nome)) || {}).k;
   const provas = [...new Set([...(n.provas || []).map(daLista).filter(Boolean), ...it.provas])];
   const outras = (n.provas || []).filter(nome => !daLista(nome)).join(", ");
-  const t = { id:novoIdTri(), em:n.em || Date.now(), nome:n.nome || "", whats:n.whats || "", area:n.area || "", provas, outras, servico:it.servico, pedido:n.pedido || "", motivos:it.motivos, nCert:n.nCert || "", links:n.drive || "", obs:n.obs || "", cont:{}, etapa:"novo", notion:n.url, arquivos:n.arquivos || 0 };
+  const t = { id:novoIdTri(), em:n.em || Date.now(), nome:n.nome || "", whats:n.whats || "", area:n.area || "", provas, outras, servico:it.servico, pedido:n.pedido || "", motivos:it.motivos, nCert:n.nCert || "", links:n.drive || "", obs:n.obs || "", cont:{}, etapa:"novo", notion:n.url, notionId:n.id || idDeUrl(n.url), mentor:n.mentor || S.mentor?.nome || "", arquivos:n.arquivos || 0 };
   salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); toast("Cliente importado do Notion");
 }
 function triagemView(){
   const lista = lerTri().sort((a, b) => (b.em || 0) - (a.em || 0));
-  const doNotion = (S.eq.triagem || []).filter(n => !lista.some(t => t.notion === n.url) && (!alvo() || !n.mentor || semAcento(n.mentor).split(" ")[0] === semAcento(alvo()).split(" ")[0]));
-  return `<div class="pagehead"><div><h1>Triagem</h1><p>Clientes novos antes de entrar no Notion. Fica guardado só neste navegador</p></div><div class="row"><button class="btn sm" data-a="copiarLinkTri">Copiar link de triagem</button><button class="btn sm pri" data-a="novaTri">Novo cliente</button></div></div>
+  const doNotion = (S.eq.triagem || []).filter(n => !n.dados && !lista.some(t => t.notion === n.url || (t.notionId && t.notionId === n.id)) && (!alvo() || !n.mentor || semAcento(n.mentor).split(" ")[0] === semAcento(alvo()).split(" ")[0]));
+  return `<div class="pagehead"><div><h1>Triagem</h1><p>${triNoNotion() ? "Clientes novos. Cada triagem fica salva no Notion, na base Triagem MedEasy, e aparece em qualquer aparelho" : "Clientes novos antes de entrar no Notion. Fica guardado só neste navegador"}</p></div><div class="row"><button class="btn sm" data-a="copiarLinkTri">Copiar link de triagem</button><button class="btn sm pri" data-a="novaTri">Novo cliente</button></div></div>
    ${doNotion.length ? `<section class="card" style="margin-bottom:16px"><div class="card-h"><h2>Chegaram pelo formulário</h2><span class="pill info">${doNotion.length}</span></div><div class="list">${doNotion.map(n => `<div class="li"><div class="grow"><div class="t">${esc(n.nome)}</div><div class="small muted">${esc((n.provas || []).join(", ") || "sem prova")}${n.mentor ? " · mentor " + esc(n.mentor) : ""}${n.arquivos ? ` · ${n.arquivos} ${n.arquivos === 1 ? "arquivo" : "arquivos"}` : ""} · ${dBR(n.em ? new Date(n.em).toISOString() : "")}</div></div><a class="btn sm ghost" href="${esc(n.url)}" target="_blank" rel="noopener">Notion</a><button class="btn sm pri" data-a="importarTriNotion" data-v="${esc(n.url)}">Importar</button></div>`).join("")}</div></section>` : ""}
    <section class="card" style="margin-bottom:16px"><div class="card-h"><h2>Importar da mensagem</h2></div><p class="xs muted" style="margin:0 0 8px">A mensagem do cliente traz o link "Abrir no painel". Tocar nele já importa. Se preferir, cole a mensagem ou o link aqui.</p><div class="row"><textarea class="in" id="triImport" rows="2" placeholder="Cole a mensagem inteira" style="flex:1"></textarea><button class="btn" data-a="importarTri">Importar</button></div></section>
    <section class="card" style="padding:4px">${lista.length ? lista.map(t => { const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo; const c = clienteDaTriagem(t); const e = estimarJS(c); return `<div class="crow" data-a="abrirTri" data-id="${t.id}"><div style="min-width:0"><div class="t">${esc(t.nome || "Sem nome")}</div><div class="small muted">${esc(provasTri(t).map(nomeProva).join(", ") || "Sem prova")} · ${esc(SERVICOS_TRI[t.servico] || "")}</div></div><div class="hide-m"><span class="pill ${k}">${et}</span></div><div class="hide-m small num">${e && e.completo ? brl(e.total) : `<span class="faint">sem valor</span>`}</div><div class="xs muted">${dBR(new Date(t.em || 0).toISOString())}</div></div>`; }).join("") : `<div class="empty" style="margin:12px">Nenhum cliente em triagem. Mande o link de triagem ou importe uma mensagem.</div>`}</section>`;
@@ -891,7 +961,7 @@ function triagemView(){
 function opcoesTri(t){
   const c = clienteDaTriagem(t); const ops = [];
   const extra = []; if (t.drive) extra.push({ desc:"Organização dos certificados no drive", conta:"1", valor:75 });
-  const montar = (letra, titulo, tipos) => { const e = estimarJS({ ...c, tipos }); if (!e) return; const linhas = [...e.linhas, ...extra]; const bruto = r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)); const desc = Math.min(10, Math.max(0, num(t.desconto))); ops.push({ letra, titulo, linhas, bruto, desconto:desc, total:r2(bruto * (1 - desc / 100)), completo:e.completo }); };
+  const montar = (letra, titulo, tipos) => { const e = estimarJS({ ...c, tipos }); if (!e) return; const linhas = [...e.linhas, ...extra]; const bruto = r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)); const desc = Math.min(10, Math.max(0, num(t.desconto))); ops.push({ letra, titulo, tipos, linhas, bruto, desconto:desc, total:r2(bruto * (1 - desc / 100)), completo:e.completo }); };
   const pedeLattes = c.provas.some(p => /unifesp/i.test(p.nome)); const quem = c.provas.filter(p => /unifesp/i.test(p.nome)).map(p => p.nome).join(", ");
   if (t.servico === "analise"){ montar("A", "ANÁLISE CURRICULAR", ["analise"]); montar("B", "CURRÍCULO VITAE + ANÁLISE CURRICULAR", ["vitae"]); }
   else if (t.servico === "lattesb"){ montar("A", "LATTES COM DOCUMENTO DE COMPROVAÇÃO", ["lattes","certificados"]); }
@@ -951,7 +1021,7 @@ function triagemItemView(){
   const t = triDe(S.sel); if (!t) return triagemView();
   const c = clienteDaTriagem(t); const ops = opcoesTri(t); const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo;
   const chk = (kk, nome) => `<label class="chk"><input type="checkbox" data-tri="prova" value="${kk}" ${(t.provas || []).includes(kk) ? "checked" : ""}><span>${esc(nome)}</span></label>`;
-  return `<div class="pagehead"><div><button class="btn ghost sm" data-a="nav" data-v="triagem" style="margin-left:-10px">‹ Triagem</button><h1>${esc(t.nome || "Cliente novo")}</h1><div class="row" style="margin-top:6px"><span class="pill ${k}">${et}</span>${t.area ? `<span class="pill ok">${esc(t.area)}</span>` : ""}</div></div>
+  return `<div class="pagehead"><div><button class="btn ghost sm" data-a="nav" data-v="triagem" style="margin-left:-10px">‹ Triagem</button><h1>${esc(t.nome || "Cliente novo")}</h1><div class="row" style="margin-top:6px"><span class="pill ${k}">${et}</span>${t.area ? `<span class="pill ok">${esc(t.area)}</span>` : ""}<span id="triSync">${syncTriTexto(t.id)}</span></div></div>
     <div class="row">${t.whats ? `<a class="btn" href="${waLink(t.whats, "Oi, " + primeiro(t.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}${t.notion ? `<a class="btn" href="${esc(t.notion)}" target="_blank" rel="noopener">Arquivos no Notion${t.arquivos ? ` (${t.arquivos})` : ""}</a>` : ""}<select class="in" id="triEtapa" style="width:auto">${Object.entries(ETAPAS_TRI).map(([kk, [tt]]) => `<option value="${kk}" ${t.etapa === kk ? "selected" : ""}>${tt}</option>`).join("")}</select><button class="btn sm danger" data-a="apagarTri">Apagar</button></div></div>
    <div class="grid2"><div class="stack">
     ${t.pedido || t.obs ? `<section class="card"><div class="card-h"><h2>Pedido do cliente</h2></div>${t.pedido ? `<p class="small" style="margin:0 0 8px;white-space:pre-wrap">${esc(t.pedido)}</p>` : ""}${t.obs ? `<p class="small muted" style="margin:0 0 8px;white-space:pre-wrap">Obs: ${esc(t.obs)}</p>` : ""}<div class="xs muted">Entendido como <b>${esc(SERVICOS_TRI[t.servico] || "")}</b>${(t.motivos || []).length ? " (" + esc(t.motivos.join(", ")) + ")" : ""}. Se não for isso, troque o serviço e as provas abaixo.</div></section>` : ""}
@@ -971,7 +1041,10 @@ function triagemItemView(){
       <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, msgOrc(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
     ${analiseCard(c)}
     <section class="card"><div class="card-h"><h2>PDF da análise</h2></div><p class="xs muted" style="margin:0 0 10px">Sai da análise importada ou da contagem por item lá embaixo, com os comentários de cada item. Uma prova por vez.</p><div class="row">${c.provas.map(p => `<button class="btn sm ${calcDe(c, p).tem ? "pri" : ""}" data-a="pdfAnalise" data-v="${kP(p.nome)}">PDF ${esc(p.nome)}</button>`).join("") || `<span class="xs muted">Sem prova</span>`}</div></section>
-    <section class="card"><div class="card-h"><h2>Quando fechar</h2></div><p class="xs muted" style="margin:0 0 10px">Crie o cliente no Notion e cole o texto abaixo. Na próxima sincronização ele entra no painel com a contagem e o código de acesso.</p><button class="btn sm" data-a="copiarNotionTri">Copiar dados para o Notion</button></section>
+    <section class="card"><div class="card-h"><h2>Quando fechar</h2>${t.clienteNotion ? `<a class="pill ok" href="${esc(t.clienteNotion)}" target="_blank" rel="noopener">Cliente no Notion</a>` : ""}</div>
+      ${triNoNotion() ? `<p class="xs muted" style="margin:0 0 10px">Cria a linha do cliente no Controle cliente, com serviço, provas, valor, contagem por item e controle de certificados. Ele entra no painel com o código de acesso em 1 ou 2 minutos.</p>
+      <div class="row">${ops.length > 1 ? `<select class="in" id="triOpFechar" style="width:auto">${ops.map(o => `<option value="${o.letra}">Opção ${o.letra}: ${brl(o.total)}</option>`).join("")}</select>` : ""}<button class="btn sm pri" data-a="criarClienteNotion" ${t.nome && t.whats ? "" : "disabled"}>Criar cliente no Notion</button><button class="btn sm ghost" data-a="copiarNotionTri">Copiar texto</button></div>`
+      : `<p class="xs muted" style="margin:0 0 10px">Crie o cliente no Notion e cole o texto abaixo. Na próxima sincronização ele entra no painel com a contagem e o código de acesso.</p><button class="btn sm" data-a="copiarNotionTri">Copiar dados para o Notion</button>`}</section>
    </div></div>
    <div style="margin-top:16px">${controleView(c)}</div>
    <div style="margin-top:16px">${certItensView(c)}</div>`;
@@ -1090,35 +1163,141 @@ async function textoDoPdf(arquivo){
 const numA = s => { const n = parseFloat(String(s || "").replace(/\s/g, "").replace("+", "").replace(",", ".")); return isFinite(n) ? n : 0; };
 const isoDeA = s => { const m = String(s || "").match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}` : ""; };
 const limpaA = s => String(s || "").replace(/\s+/g, " ").trim();
-const ROTULO_A = /^\s*([+-]?\d+(?:,\d+)?)\s+(PONTUAÇÃO MÁXIMA|POR ATIVIDADE|PONTUAÇÃO PESSOAL|GANHO POSSÍVEL)\b/;
-function lerTextoAnalise(texto){
-  const linhas = texto.replace(/\f/g, "\n").split("\n").filter(l => !/^\s*MEDEASY ANÁLISE CURRICULAR/i.test(l));
-  const corpo = linhas.join("\n"); const naoVazias = linhas.map(l => l.trim()).filter(Boolean);
-  const sigla = naoVazias[0] || "", subtitulo = naoVazias[1] || "";
-  const iNome = naoVazias.findIndex(l => /^análise curricular$/i.test(l)); const cliente = iNome >= 0 ? naoVazias[iNome + 1] || "" : "";
-  const nota = corpo.match(/(\d+(?:,\d+)?)\s*\/\s*(\d+(?:,\d+)?)\s*\n\s*PONTUAÇÃO ESTIMADA/i);
-  let possivel = null; { const iP = linhas.findIndex(l => /POSSÍVEL ATÉ\s*\d{2}\/\d{2}\/\d{4}/i.test(l)); if (iP >= 0){ const data = linhas[iP].match(/POSSÍVEL ATÉ\s*(\d{2}\/\d{2}\/\d{4})/i)[1]; for (let i = iP - 1; i >= Math.max(0, iP - 6); i--){ const m = linhas[i].trim().match(/^(\d+(?:,\d+)?)$/); if (m){ possivel = [null, m[1], data]; break; } } if (!possivel) possivel = [null, "", data]; } }
-  const regras = (corpo.match(/Regras do edital que você precisa saber\s*\n([\s\S]*?)(?=\n\s*ITEM \d+\s|\n{3,})/i) || [])[1];
-  const anoM = (sigla + " " + subtitulo).match(/20\d\d/) || corpo.match(/ANÁLISE CURRICULAR\s+\S+\s+(20\d\d)/i);
-  const itens = []; const partes = corpo.split(/\n(?=\s*ITEM \d+\s)/).slice(1);
-  for (const parte of partes){
-    const cab = parte.match(/^\s*ITEM (\d+)\s+(.*)$/m); if (!cab) continue;
-    const [antes, depois = ""] = parte.split(/\n\s*Análise curricular\s+COMPROVANTES NO CURRÍCULO/i);
-    const topo = antes.split("\n").slice(1).map(l => l.trim()).filter(Boolean);
-    let t = 1; const tit = [topo[0] || ""]; while (t < topo.length && /^[a-zà-ú(]/.test(topo[t])){ tit.push(topo[t]); t++; }
-    const regra = limpaA(topo.slice(t).join(" "));
-    let [lista, coment = ""] = depois.split(/\n\s*Comentário:\s*/i); coment = coment.split(/\n\s*\n/)[0];
-    const v = { max:0, porAtividade:0, pontos:0, ganho:0 }; const comprovantes = []; let atual = null;
-    for (const l of (lista || "").split("\n").slice(1)){
-      let resto = l; const r = l.match(ROTULO_A);
-      if (r){ v[{ "PONTUAÇÃO MÁXIMA":"max", "POR ATIVIDADE":"porAtividade", "PONTUAÇÃO PESSOAL":"pontos", "GANHO POSSÍVEL":"ganho" }[r[2]]] = numA(r[1]); resto = l.slice(r[0].length); }
-      const s = resto.trim(); if (!s) continue; const m = s.match(/^(\d+)\.\s+(.*)$/);
-      if (m){ atual = m[2]; comprovantes.push(atual); } else if (atual !== null) comprovantes[comprovantes.length - 1] += " " + s;
-    }
-    itens.push({ n:+cab[1], nome:`${cab[1]}. ${limpaA(tit.join(" "))}`, situacao:limpaA(cab[2]), regra, max:v.max, porAtividade:v.porAtividade, pontos:v.pontos, ganho:v.ganho, comprovantes:comprovantes.map(limpaA), comentario:limpaA(coment) });
-  }
-  return { nome:sigla.replace(/\s*20\d\d\s*$/, ""), ano:anoM ? (anoM[1] || anoM[0]) : "", area:subtitulo, cliente, notaEstimada:nota ? numA(nota[1]) : itens.reduce((a, i) => a + i.pontos, 0), notaMax:nota ? numA(nota[2]) : itens.reduce((a, i) => a + i.max, 0), notaPossivel:possivel && possivel[1] ? numA(possivel[1]) : "", prazoEnvio:possivel ? isoDeA(possivel[2]) : "", regras:regras ? limpaA(regras) : "", itens, fonte:"analise" };
+/* Leitor do texto da análise: vem de scripts/portal/leitor-analise.mjs na montagem (o mesmo do build) */
+// Leitor da análise curricular MedEasy em texto (PDF já convertido).
+// Usado pelo build (analise.mjs importa) e pelo site (montar-site.mjs injeta este arquivo sem os "export").
+// Aceita variações do PDF: "ITEM 1" ou "01" ou "Item 1 -", número antes ou depois do rótulo,
+// comprovantes numerados ou com marcador e, como reserva, a tabela "Análise resumida".
+
+const NUM_L = "[+-]?\\d+(?:,\\d+)?";
+const numL = s => { const n = parseFloat(String(s || "").replace(/\s/g, "").replace("+", "").replace(",", ".")); return isFinite(n) ? n : 0; };
+const isoL = s => { const m = String(s || "").match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}` : ""; };
+const limpaL = s => String(s || "").replace(/\s+/g, " ").trim();
+const semAcL = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const SELOS_L = ["Não se aplica agora", "Aumentar agora", "Médio prazo", "Longo prazo", "Completo", "Parcial", "A avaliar", "Não se aplica", "Não pontua", "Zerado"];
+const ROT_L = [
+  ["max", "PONTUA[CÇ][AÃ]O\\s+M[AÁ]XIMA|M[AÁ]XIMO\\s+DO\\s+ITEM"],
+  ["porAtividade", "POR\\s+ATIVIDADE"],
+  ["pontos", "PONTUA[CÇ][AÃ]O\\s+PESSOAL|SUA\\s+PONTUA[CÇ][AÃ]O"],
+  ["ganho", "GANHO\\s+POSS[IÍ]VEL"],
+];
+const QUALQUER_ROT_L = new RegExp(ROT_L.map(r => r[1]).join("|"), "i");
+const SECAO_L = /^\s*(COMO AUMENTAR|AN[AÁ]LISE RESUMIDA|CONSIDERA[CÇ][OÕ]ES FINAIS|PRIORIDADES|CHECKLIST|DATAS IMPORTANTES|VIS[AÃ]O GERAL|OBSERVA[CÇ][OÕ]ES GERAIS)\b/i;
+
+function seloL(texto) {
+  const t = semAcL(texto);
+  for (const s of SELOS_L) if (new RegExp("(^|[^a-z])" + semAcL(s) + "($|[^a-z])").test(t)) return s;
+  return "";
 }
+function cabItemL(l) {
+  let m = l.match(/^\s*ITEM\s*0?(\d{1,2}[a-z]?)\b\s*[-–:.]?\s*(.*)$/i); if (m) return { n: m[1], resto: m[2], forte: true };
+  m = l.match(/^\s*0?(\d{1,2}[a-z]?)(?:\s*[.)\-–:]\s*|\s{2,}|\s*$)(.*)$/); if (m && !/^\d/.test(m[2])) return { n: m[1], resto: m[2], forte: false };
+  return null;
+}
+// Acha o número de cada rótulo. Se a linha começa pelo número, cada rótulo pega o número de antes. Se começa pelo rótulo, pega o de depois.
+function rotulosDaLinha(l) {
+  const achados = [];
+  for (const [k, re] of ROT_L) { const g = new RegExp(re, "gi"); let m; while ((m = g.exec(l))) achados.push({ k, i: m.index, fim: m.index + m[0].length }); }
+  if (!achados.length) return achados;
+  achados.sort((a, b) => a.i - b.i);
+  const nums = []; { const g = new RegExp("(^|\\s)(" + NUM_L + ")(?=\\s|$)", "g"); let m; while ((m = g.exec(l))) nums.push({ v: m[2], i: m.index + m[1].length }); }
+  const numPrimeiro = nums.length && nums[0].i < achados[0].i;
+  achados.forEach((r, j) => {
+    if (numPrimeiro) { const lim = j ? achados[j - 1].fim : -1; const n = nums.filter(x => x.i > lim && x.i < r.i).pop(); r.n = n ? n.v : null; }
+    else { const lim = j + 1 < achados.length ? achados[j + 1].i : Infinity; const n = nums.find(x => x.i > r.fim && x.i < lim); r.n = n ? n.v : null; }
+    r.depois = !numPrimeiro;
+  });
+  return achados;
+}
+function tiraRotulosL(l) {
+  let s = l;
+  for (const [, re] of ROT_L) s = s.replace(new RegExp("(" + NUM_L + ")\\s+(?:" + re + ")", "gi"), " ").replace(new RegExp("(?:" + re + ")\\s*:?\\s*(" + NUM_L + ")?", "gi"), " ");
+  return s;
+}
+
+function lerTextoAnalise(texto) {
+  const linhas = String(texto || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n").map(l => l.replace(/\s+$/, "")).filter(l => !/^\s*MEDEASY\s+AN[AÁ]LISE CURRICULAR\b/i.test(l));
+  const corpo = linhas.join("\n"); const naoVazias = linhas.map(l => l.trim()).filter(Boolean);
+
+  // Capa
+  let sigla = (naoVazias[0] || "").replace(/\s*AN[AÁ]LISE CURRICULAR\s*/i, " ").trim();
+  const iTit = naoVazias.findIndex(l => /^an[aá]lise curricular$/i.test(l));
+  const area = naoVazias[1] && !/^an[aá]lise curricular$/i.test(naoVazias[1]) ? naoVazias[1] : "";
+  const cliente = iTit >= 0 ? naoVazias[iTit + 1] || "" : "";
+  const nota = corpo.match(new RegExp("(" + NUM_L + ")\\s*(?:\\/|de)\\s*(" + NUM_L + ")\\s*\\n?\\s*PONTUA[CÇ][AÃ]O\\s+ESTIMADA", "i"))
+    || corpo.match(new RegExp("PONTUA[CÇ][AÃ]O\\s+ESTIMADA\\s*:?\\s*\\n?\\s*(" + NUM_L + ")\\s*(?:\\/|de)\\s*(" + NUM_L + ")", "i"))
+    || corpo.match(new RegExp("NOTA\\s+ATUAL\\s*:?[ \\t]*(" + NUM_L + ")(?:\\s*(?:\\/|de)\\s*(" + NUM_L + "))?", "i"));
+  let possivel = "", prazo = "";
+  { const iP = linhas.findIndex(l => /POSS[IÍ]VEL AT[EÉ]\s*\d{2}\/\d{2}\/\d{4}/i.test(l) && !/GANHO/i.test(l));
+    if (iP >= 0) { prazo = linhas[iP].match(/AT[EÉ]\s*(\d{2}\/\d{2}\/\d{4})/i)[1]; const mesma = linhas[iP].match(new RegExp("\\d{4}\\s*:?\\s*(" + NUM_L + ")\\s*$")); if (mesma) possivel = mesma[1]; else for (let i = iP - 1; i >= Math.max(0, iP - 6); i--) { const m = linhas[i].trim().match(new RegExp("^(" + NUM_L + ")$")); if (m) { possivel = m[1]; break; } } }
+    if (!possivel) { const m = corpo.match(new RegExp("(?<!GANHO\\s{0,5})(?:NOTA\\s+)?POSS[IÍ]VEL(?:\\s+AT[EÉ]\\s+(?:O\\s+PRAZO|\\d{2}\\/\\d{2}\\/\\d{4}))?[ \\t]*:?[ \\t]*(" + NUM_L + ")", "i")); if (m) possivel = m[1]; } }
+  const regras = (corpo.match(/Regras (?:principais )?do edital(?: que você precisa saber)?\s*\n([\s\S]*?)(?=\n\s*ITEM \d+\s|\n\s*0?1\s|\n{3,})/i) || [])[1];
+  const anoM = (sigla + " " + area).match(/20\d\d/) || corpo.match(/AN[AÁ]LISE CURRICULAR\s+\S+\s+(20\d\d)/i);
+
+  // Cabeçalhos dos itens. Com "ITEM n" no documento, só eles contam. Sem isso, um número sozinho só vira item se tiver rótulo de pontuação antes do próximo número.
+  const cands = []; linhas.forEach((l, i) => { const c = cabItemL(l); if (c) cands.push({ ...c, i }); });
+  let cabs = cands.filter(c => c.forte);
+  if (!cabs.length) {
+    cabs = cands.filter((c, j) => { const fim = j + 1 < cands.length ? cands[j + 1].i : Math.min(linhas.length, c.i + 25); return linhas.slice(c.i, fim).some(l => QUALQUER_ROT_L.test(l)); });
+    // tira os números de comprovantes numerados que caíram entre o rótulo e o comentário
+    const ok = []; for (const c of cabs) { const ant = ok[ok.length - 1]; if (ant) { const entre = linhas.slice(ant.i, c.i); const iComp = entre.findIndex(l => /COMPROVANTES/i.test(l)); const iCom = entre.findIndex(l => /COMENT[AÁ]RIO/i.test(l)); if (iComp >= 0 && (iCom < 0 || iCom < iComp) && entre.slice(iComp).every(l => !QUALQUER_ROT_L.test(l)) && !linhas.slice(c.i, c.i + 12).some(l => QUALQUER_ROT_L.test(l))) continue; } ok.push(c); }
+    cabs = ok;
+  }
+
+  const temGanho = ROT_L[3] && new RegExp(ROT_L[3][1], "i").test(corpo);
+
+  const itens = [];
+  cabs.forEach((c, j) => {
+    let fim = j + 1 < cabs.length ? cabs[j + 1].i : linhas.length;
+    for (let i = c.i + 1; i < fim; i++) if (SECAO_L.test(linhas[i])) { fim = i; break; }
+    const bloco = linhas.slice(c.i, fim);
+    const situacao = seloL(c.resto) || seloL(bloco.slice(0, 4).join(" ")) || "";
+    // título
+    let resto = c.resto; if (situacao) resto = resto.replace(new RegExp(situacao.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), "");
+    resto = limpaL(resto.replace(/^[-–:.]\s*/, ""));
+    let k = 1; const tit = []; if (resto) tit.push(resto); else { while (k < bloco.length && !bloco[k].trim()) k++; if (k < bloco.length && !QUALQUER_ROT_L.test(bloco[k])) { tit.push(limpaL(bloco[k].replace(new RegExp(situacao, "i"), ""))); k++; } }
+    const abertos = s => (s.match(/\(/g) || []).length - (s.match(/\)/g) || []).length;
+    while (k < bloco.length && bloco[k].trim() && !QUALQUER_ROT_L.test(bloco[k]) && (/^\s*[a-zà-ú(]/.test(bloco[k]) || /[,(]$/.test(tit.join(" ")) || abertos(tit.join(" ")) > 0)) { tit.push(limpaL(bloco[k])); k++; }
+    // regra: linhas até o primeiro rótulo ou o título dos comprovantes
+    const regraL = []; for (; k < bloco.length; k++) { const l = bloco[k]; if (!l.trim()) { if (regraL.length) break; continue; } if (QUALQUER_ROT_L.test(l) || /COMPROVANTES|AN[AÁ]LISE CURRICULAR|COMENT[AÁ]RIO/i.test(l)) break; if (seloL(l) && limpaL(l).length < 25) continue; regraL.push(limpaL(l)); }
+    // valores
+    const v = { max: 0, porAtividade: 0, pontos: 0, ganho: null };
+    bloco.forEach((l, i) => { for (const r of rotulosDaLinha(l)) {
+      let n = r.n;
+      if (n == null) { const ant = (bloco[i - 1] || "").trim(), prox = (bloco[i + 1] || "").trim(); const so = s => (s.match(new RegExp("^(" + NUM_L + ")$")) || [])[1]; n = r.depois ? (so(prox) ?? so(ant)) : (so(ant) ?? so(prox)); }
+      if (n != null) v[r.k] = numL(n); } });
+    if (v.ganho == null) v.ganho = temGanho ? 0 : Math.max(0, Math.round((v.max - v.pontos) * 100) / 100);
+    // comprovantes
+    const comprovantes = []; const iComp = bloco.findIndex(l => /COMPROVANTES/i.test(l));
+    if (iComp >= 0) { let atual = false;
+      for (const l of bloco.slice(iComp + 1)) { if (/COMENT[AÁ]RIO/i.test(l)) break; const s = limpaL(tiraRotulosL(l)); if (!s) continue;
+        const m = s.match(/^(?:\d{1,3}[.)]|[•●▪◦‣\-–])\s*(.+)$/);
+        if (m) { comprovantes.push(m[1]); atual = true; } else if (/^nenhum/i.test(s) || (seloL(s) && s.length < 25)) { atual = false; } else if (atual) comprovantes[comprovantes.length - 1] += " " + s; } }
+    // comentário
+    let comentario = ""; const iCom = bloco.findIndex(l => /COMENT[AÁ]RIO\s*:?/i.test(l));
+    if (iCom >= 0) { const partes = [bloco[iCom].replace(/^[\s\S]*?COMENT[AÁ]RIO\s*:?\s*/i, "")]; for (const l of bloco.slice(iCom + 1)) { if (!l.trim()) { if (limpaL(partes.join(" "))) break; continue; } partes.push(l); } comentario = limpaL(partes.join(" ")).slice(0, 1500); }
+    const nome = limpaL(tit.join(" "));
+    itens.push({ n: /^\d+$/.test(c.n) ? +c.n : c.n, nome: `${c.n}. ${nome}`, situacao, regra: limpaL(regraL.join(" ")), max: v.max, porAtividade: v.porAtividade, pontos: v.pontos, ganho: v.ganho, comprovantes: comprovantes.map(limpaL), comentario });
+  });
+
+  // Reserva: tabela "Análise resumida" (número, item, nota / máximo, situação)
+  const iRes = linhas.findIndex(l => /AN[AÁ]LISE RESUMIDA/i.test(l));
+  if (iRes >= 0) {
+    const reTab = new RegExp("^\\s*0?(\\d{1,2}[a-z]?)[.)]?\\s+(.+?)\\s{2,}(" + NUM_L + ")\\s*(?:\\/|de)\\s*(" + NUM_L + ")(?:\\s{2,}(.+))?$");
+    for (const l of linhas.slice(iRes + 1)) { const m = l.match(reTab); if (!m) continue;
+      const ja = itens.find(x => String(x.n) === m[1]);
+      if (ja) { if (!ja.max && !ja.pontos) { ja.pontos = numL(m[3]); ja.max = numL(m[4]); ja.ganho = ja.ganho || Math.max(0, ja.max - ja.pontos); } if (!ja.situacao) ja.situacao = seloL(m[5] || ""); }
+      else itens.push({ n: /^\d+$/.test(m[1]) ? +m[1] : m[1], nome: `${m[1]}. ${limpaL(m[2])}`, situacao: seloL(m[5] || ""), regra: "", max: numL(m[4]), porAtividade: 0, pontos: numL(m[3]), ganho: Math.max(0, Math.round((numL(m[4]) - numL(m[3])) * 100) / 100), comprovantes: [], comentario: "" }); }
+  }
+
+  const soma = k => Math.round(itens.reduce((a, i) => a + (i[k] || 0), 0) * 100) / 100;
+  return {
+    nome: sigla.replace(/\s*20\d\d\s*$/, "").trim(), ano: anoM ? (anoM[1] || anoM[0]) : "", area, cliente,
+    notaEstimada: nota ? numL(nota[1]) : soma("pontos"), notaMax: nota && nota[2] ? numL(nota[2]) : soma("max"),
+    notaPossivel: possivel ? numL(possivel) : "", prazoEnvio: isoL(prazo), regras: regras ? limpaL(regras) : "", itens, fonte: "analise",
+  };
+}
+
 function lerTriagemJson(j){
   return { nome:j.sigla || j.prova || "Prova", ano:(String(j.prova || j.edital || "").match(/20\d\d/) || [""])[0], area:j.area || "", cliente:j.cliente || "", notaEstimada:numA(j.nota_total), notaPossivel:j.nota_possivel ? numA(j.nota_possivel) : "", notaMax:(j.itens || []).reduce((a, i) => a + numA(i.maximo), 0), prazoEnvio:isoDeA(j.envio && j.envio.prazo) || (j.envio && j.envio.prazo) || "",
     regras:[j.envio?.formato, j.envio?.tamanho_max ? "até " + j.envio.tamanho_max : "", j.envio?.ordem].filter(Boolean).join(". "),
@@ -1127,7 +1306,7 @@ function lerTriagemJson(j){
 async function lerArquivoAnaliseSite(arquivo){
   if (/\.json$/i.test(arquivo.name)) return lerTriagemJson(JSON.parse(await arquivo.text()));
   const pr = lerTextoAnalise(await textoDoPdf(arquivo));
-  if (!pr.itens.length) throw new Error("Não achei os itens nesse PDF. Ele precisa ser a análise curricular MedEasy, com ITEM 1, ITEM 2 e assim por diante");
+  if (!pr.itens.length) throw new Error("Não achei os itens nesse PDF. Ele precisa ser a análise curricular MedEasy, com um card por item e a pontuação de cada um");
   return pr;
 }
 /* Guardar: cliente do Notion fica neste navegador, triagem fica no registro dela */
@@ -1160,7 +1339,8 @@ async function importarAnalise(input){
 function analiseCard(c){
   const tudo = analisesDe(c); const ks = Object.keys(tudo);
   return `<section class="card"><div class="card-h"><div><h2>Análise curricular em arquivo</h2><div class="sub">PDF da análise MedEasy ou triagem.json. O site lê a nota, os itens, o que falta e como conseguir</div></div><label class="btn sm pri" style="cursor:pointer">Importar arquivo<input type="file" accept=".pdf,.json,application/pdf,application/json" hidden data-an="1"></label></div>
-   ${ks.length ? `<div class="list">${ks.map(k => { const pr = tudo[k]; const falta = (pr.itens || []).filter(i => i.ganho > 0).length; return `<div class="li"><div class="grow"><div class="t">${esc(pr.nome)} ${esc(pr.ano || "")}</div><div class="small muted">${d1(pr.notaEstimada)} / ${d1(pr.notaMax)}${pr.notaPossivel !== "" && pr.notaPossivel != null ? ` · possível ${d1(pr.notaPossivel)}` : ""} · ${pr.itens.length} itens · ${falta} com espaço para crescer${pr.em ? " · lida em " + dBR(new Date(pr.em).toISOString()) : ""}</div></div><button class="btn sm ghost" data-a="apagarAnalise" data-v="${k}">Tirar</button></div>`; }).join("")}</div>
+   ${ks.length ? `<div class="list">${ks.map(k => { const pr = tudo[k]; const falta = (pr.itens || []).filter(i => i.ganho > 0).length; return `<div class="li" style="flex-wrap:wrap"><div class="grow"><div class="t">${esc(pr.nome)} ${esc(pr.ano || "")}</div><div class="small muted">${d1(pr.notaEstimada)} / ${d1(pr.notaMax)}${pr.notaPossivel !== "" && pr.notaPossivel != null ? ` · possível ${d1(pr.notaPossivel)}` : ""} · ${pr.itens.length} itens · ${falta} com espaço para crescer${pr.em ? " · lida em " + dBR(new Date(pr.em).toISOString()) : ""}</div></div><button class="btn sm ghost" data-a="apagarAnalise" data-v="${k}">Tirar</button>
+     <details style="width:100%;margin-top:6px"><summary class="small" style="cursor:pointer;font-weight:600">Ver o que foi analisado</summary><div class="stack" style="gap:8px;margin-top:8px">${(pr.itens || []).map(i => `<div class="svc" style="padding:10px 12px"><div class="row between" style="gap:8px"><b class="small">${esc(i.nome)}</b><span class="row" style="gap:6px">${i.situacao ? `<span class="pill ${/complet/i.test(i.situacao) ? "ok" : /parcial/i.test(i.situacao) ? "info" : /aumentar/i.test(i.situacao) ? "gold" : ""}">${esc(i.situacao)}</span>` : ""}<b class="num">${d1(i.pontos)} / ${d1(i.max)}</b></span></div>${i.regra ? `<div class="xs muted">${esc(i.regra)}</div>` : ""}${i.ganho > 0 ? `<div class="xs gold">Pode ganhar mais ${d1(i.ganho)}</div>` : ""}${(i.comprovantes || []).length ? `<ul class="xs" style="margin:6px 0 0;padding-left:18px">${i.comprovantes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${i.comentario ? `<p class="xs" style="margin:6px 0 0">${esc(i.comentario)}</p>` : ""}</div>`).join("")}</div></details></div>`; }).join("")}</div>
    <p class="xs muted" style="margin:10px 0 0">${c.triagem ? "Fica guardada junto com a triagem neste navegador." : "Fica só neste navegador. Para o cliente ver no portal dele e a equipe toda ver, anexe o mesmo PDF na coluna Análise do cliente no Notion. Na próxima sincronização entra para todos."}</p>` : `<div class="empty">Nenhuma análise importada${c.provas.some(p => p.fonte === "analise" && !ks.length) ? ". As provas abaixo já vieram com análise do Notion" : ""}</div>`}</section>`;
 }
 
@@ -1564,7 +1744,8 @@ const A = {
   importarTri: () => importarTri($("#triImport").value),
   copiarLinkTri: () => copiar(linkTriagem()),
   abrirTri: el => { S.sel = el.dataset.id; S.view = "triagemItem"; render(); window.scrollTo(0, 0); },
-  apagarTri: () => { if (!confirm("Apagar este cliente da triagem?")) return; gravarTri(lerTri().filter(t => t.id !== S.sel)); delete S.cont[S.sel]; S.view = "triagem"; render(); },
+  criarClienteNotion: () => criarClienteNotion(),
+  apagarTri: () => { if (!confirm("Apagar este cliente da triagem?")) return; const ta = triDe(S.sel); if (ta && (ta.notionId || ta.notion) && triNoNotion()) pontePedido("/triagem", { id:ta.notionId || idDeUrl(ta.notion), arquivar:true }).catch(e => toast("Não tirou do Notion: " + e.message)); gravarTri(lerTri().filter(t => t.id !== S.sel)); delete S.cont[S.sel]; S.view = "triagem"; render(); },
   pdfOrc: () => pdfOrcamento(triDe(S.sel)),
   pdfAnalise: el => pdfAnalise(triDe(S.sel), el.dataset.v),
   copiarMsgOrc: () => { const t = triDe(S.sel); copiar(msgOrc(t, opcoesTri(t))); },
