@@ -74,10 +74,12 @@ const n = v => (v === null || v === undefined || v === "" || isNaN(Number(v))) ?
 const sim = v => v === true || v === "__YES__";
 const arr = v => Array.isArray(v) ? v : (typeof v === "string" && v.startsWith("[") ? JSON.parse(v) : v ? [v] : []);
 
+/* Id da página no Notion: os 32 caracteres do fim do link, sem o nome que vem antes ("MARIA-CLARA-...-28d0..."). */
+const idNotion = v => { const t = String(v || "").split("?")[0].split("#")[0].replace(/-/g, ""); const m = t.match(/[0-9a-f]{32}$/i); return m ? m[0].toLowerCase() : ""; };
 /* Linha no formato comum, vinda da API do Notion ou do export local. */
 function linhaDeExport(r) {
   return {
-    id: String(r.url || "").split("/").pop().replace(/-/g, ""), url: r.url, cliente: r["Cliente"], telefone: r["Telefone"], tipos: arr(r["Tipo de serviço"]),
+    id: idNotion(r.id || r.url), url: r.url, cliente: r["Cliente"], telefone: r["Telefone"], tipos: arr(r["Tipo de serviço"]),
     mentor: r["Mentor"], corretor: r["Corretor"], trainee: r["Trainee"], status: r["Status"], pagamento: r["Pagamento"], total: n(r["Valor total"]),
     mentorPago: sim(r["Mentor pago"]), corretorPago: sim(r["corretor  pago "]), desconto: arr(r["DESCONTO APLICADO "]), forma: r["FORMA DE PAGAMENTO "], origem: r["ORIGEM DO CLIENTE "],
     inicio: r["date:Data de início :start"], entrega: r["date:Data da entrega:start"], dataPagMentor: r["date:DATA DE PAGAMENTO  MENTOR:start"] || r["date:Data do Pagamento do Mentor/Corretor:start"], dataPagCorretor: r["date:Data do Pagamento do Mentor/Corretor:start"],
@@ -127,7 +129,7 @@ async function lerNotion() {
   const db = await idDaBase(process.env.NOTION_DB); const linhas = []; let cursor;
   do { const j = await api(`databases/${db}/query`, cursor ? { start_cursor: cursor, page_size: 100 } : { page_size: 100 }); linhas.push(...j.results); cursor = j.has_more ? j.next_cursor : null; } while (cursor);
   return linhas.filter(l => !l.archived && !l.in_trash).map(l => {
-    const r = { url: l.url }; for (const [k, p] of Object.entries(l.properties)) {
+    const r = { id: l.id, url: l.url }; for (const [k, p] of Object.entries(l.properties)) {
       const v = valorProp(p);
       if (p.type === "date") r[`date:${k}:start`] = v; else if (p.type === "checkbox") r[k] = v ? "__YES__" : "__NO__"; else r[k] = v;
     }
