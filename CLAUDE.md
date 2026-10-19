@@ -39,6 +39,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
   - `analise.js`: lê a análise curricular (PDF com pdf.js ou triagem.json) no navegador e junta nas provas do cliente ou da triagem.
   - `base.css`: estilo.
 - Depois de mexer nos moldes, rode `node scripts/portal/montar-site.mjs`. Ele gera `portal/index.html`, e nunca se edita esse arquivo direto.
+- `worker/` tem a ponte: Cloudflare Worker que grava no Notion o que o mentor muda pelo site e dispara a sincronização no GitHub. Instruções em `worker/README.md`. O endereço dela vai em `scripts/portal/ponte.txt` (opcional). Com a ponte, "Copiar para o Notion" vira "Salvar no Notion", e a tela do cliente tem Status, Pagamento e Mentor pago (só admin) editáveis. Sem a ponte, o site só copia o texto.
 - Workflows:
   - `.github/workflows/portal-pages.yml` publica o site a cada push.
   - `.github/workflows/portal-notion.yml` sincroniza com o Notion a cada 10 minutos. Precisa dos secrets PORTAL_SENHA, NOTION_TOKEN e NOTION_DB.

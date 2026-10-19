@@ -60,7 +60,7 @@ function controleView(c){
   else if (aba === "certs") corpo = ctCerts(c, ct, provas);
   else { const p = provas.find(p => "p:" + kP(p.nome) === aba); corpo = p ? ctProva(c, ct, p) : ""; }
   return `<section class="card" id="ctrlCard"><div class="card-h"><div><h2>Controle de certificados</h2><div class="sub">Todos os certificados do cliente, o que entra em cada item do edital, pendências e projeção</div></div>
-    <div class="row"><span class="xs muted">${ct.em ? "Guardado " + dataHora(ct.em) : ""}</span><button class="btn sm pri" data-a="copiarCtrl" ${temCtrl(ct) ? "" : "disabled"}>Copiar controle para o Notion</button><label class="btn sm" style="cursor:pointer">Importar<input type="file" accept=".json,application/json" hidden data-ctimp="1"></label><button class="btn sm ghost" data-a="baixarCtrl" ${temCtrl(ct) ? "" : "disabled"}>Baixar</button></div></div>
+    <div class="row"><span class="xs muted">${ct.em ? "Guardado " + dataHora(ct.em) : ""}</span><button class="btn sm pri" data-a="copiarCtrl" ${temCtrl(ct) ? "" : "disabled"}>${!c.triagem && typeof temPonte === "function" && temPonte() ? "Salvar no Notion" : "Copiar controle para o Notion"}</button><label class="btn sm" style="cursor:pointer">Importar<input type="file" accept=".json,application/json" hidden data-ctimp="1"></label><button class="btn sm ghost" data-a="baixarCtrl" ${temCtrl(ct) ? "" : "disabled"}>Baixar</button></div></div>
    ${S.ctCopiado === c.id ? `<div class="wait small" style="margin-bottom:12px"><b>Copiado.</b> Abra o cliente no Notion e cole na coluna "Controle de certificados". Na próxima sincronização a equipe toda vê.${notionDe(c) ? ` <a class="btn sm pri" style="margin-left:8px" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Abrir no Notion</a>` : ""}</div>` : ""}
    <div class="row" style="gap:6px;margin-bottom:12px">${abas.map(([k, t]) => `<button class="btn sm ${aba === k ? "pri" : ""}" data-a="ctAba" data-v="${k}">${esc(t)}</button>`).join("")}</div>
    ${corpo}</section>`;
@@ -140,7 +140,9 @@ const A_CTRL = {
   ctNovaPend: () => { const c = clienteSel(); const ct = ctrlDe(c); ct.pend.unshift({ id:novoIdC(), data:hoje(), edital:"", item:"", texto:"", quem:"Cliente", situacao:"Aberta", resposta:"" }); salvarCtrl(c); (S.ctAba ||= {})[c.id] = "pend"; render(); setTimeout(() => document.querySelector('[data-ct="pend"][data-k="texto"]')?.focus(), 0); },
   ctApagarPend: el => { const c = clienteSel(); const ct = ctrlDe(c); ct.pend = ct.pend.filter(x => x.id !== el.dataset.id); salvarCtrl(c); render(); },
   ctRemover: el => { const c = clienteSel(); const ct = ctrlDe(c); const l = alocDe(ct, el.dataset.pk, el.dataset.key); const i = l.findIndex(a => a.id === el.dataset.id); if (i >= 0) l.splice(i, 1); salvarCtrl(c); delete S.cont[c.id]; render(); },
-  copiarCtrl: async () => { const c = clienteSel(); const ct = ctrlDe(c); await copiar(textoCtrl(ct)); ct.notion = textoCtrl(ct); salvarCtrl(c); S.ctCopiado = c.id; render(); },
+  copiarCtrl: async () => { const c = clienteSel(); const ct = ctrlDe(c);
+    if (!c.triagem && typeof temPonte === "function" && temPonte() && paginaDoCliente(c)){ try { await salvarNotion(paginaDoCliente(c), { "Controle de certificados": textoCtrl(ct) }, "Controle gravado no Notion"); ct.notion = textoCtrl(ct); c.controle = JSON.parse(textoCtrl(ct)); salvarCtrl(c); render(); } catch (e) { toast("Não gravou: " + e.message); } return; }
+    await copiar(textoCtrl(ct)); ct.notion = textoCtrl(ct); salvarCtrl(c); S.ctCopiado = c.id; render(); },
   baixarCtrl: () => baixarCtrl(clienteSel()),
 };
 /* Pendências do controle que o cliente vê no portal dele */

@@ -98,6 +98,8 @@ function juntarContagemCliente(portal){ if (!portal.contagem || !Object.keys(por
   portal.provas = provasComContagem({ id:"cli", provas:portal.provas || [], contagem:portal.contagem }); }
 async function copiarParaNotion(c){ const reg = carregarCont(c); const t = textoCont(c, reg.provas);
   if (!t){ toast("Nada para copiar ainda"); return; }
+  if (!c.triagem && typeof temPonte === "function" && temPonte() && paginaDoCliente(c)){
+    try { await salvarNotion(paginaDoCliente(c), { "Certificados por item": t }, "Contagem gravada no Notion"); c.contagem = lerTextoCont(t); apagarRasc(c.id); delete S.cont[c.id]; S.ciCopiado = null; render(); } catch (e) { toast("Não gravou: " + e.message); } return; }
   await copiar(t); if (!c.triagem) try { localStorage.setItem(rascKey(c.id), JSON.stringify({ provas:reg.provas, em:Date.now(), texto:t })); } catch {}
   reg.copiado = true; S.ciCopiado = c.id; render(); }
 
@@ -118,7 +120,7 @@ function certItensView(c){
   const tabs = provas.map(x => { const k = kP(x.nome), cx = calcDe(c, x); return `<button class="btn sm ${k === pk ? "pri" : ""}" data-a="ciProva" data-v="${k}">${esc(x.nome)}${cx.tem ? ` · ${d1(cx.total)}` : ""}</button>`; }).join("");
   const grupos = [...new Set(itens.filter(i => i.grupo).map(i => i.grupo))];
   return `<section class="card" id="certItens"><div class="card-h"><div><h2>Certificados por item</h2><div class="sub">Digite quantos certificados o cliente tem em cada item. A nota e o valor se atualizam na hora</div></div>
-    <div class="row"><span class="xs muted" id="ciStatus">${esc(statusTxt(reg, c))}</span><button class="btn sm pri" data-a="copiarCont">Copiar para o Notion</button></div></div>
+    <div class="row"><span class="xs muted" id="ciStatus">${esc(statusTxt(reg, c))}</span><button class="btn sm pri" data-a="copiarCont">${!c.triagem && typeof temPonte === "function" && temPonte() ? "Salvar no Notion" : "Copiar para o Notion"}</button></div></div>
    ${S.ciCopiado === c.id ? `<div class="wait small" style="margin-bottom:12px"><b>Copiado.</b> Abra o cliente no Notion e cole na coluna "Certificados por item". Na próxima sincronização a nota e o valor aparecem para toda a equipe e no portal do cliente.${notionDe(c) ? `<div style="margin-top:8px"><a class="btn sm pri" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Abrir no Notion</a></div>` : ""}</div>` : ""}
    <div class="row" style="gap:6px;margin-bottom:12px">${tabs}</div>
    ${itens.length ? `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Nota ${esc(p.nome)}</div><div class="v"><span id="ciNota">${d1(cp.total)}</span><small class="muted" style="font-size:16px"> / ${d1(cp.max)}</small></div><div class="d">${esc((p.edital && p.edital.peso) || "")}</div></div>

@@ -112,7 +112,7 @@ async function entrarMentor(nome, senha, senhaAdmin){
       admin = await confereAdmin(senhaAdmin);
       if (!admin && senhaAdmin){ S.erro = "Senha de administrador incorreta. Deixe em branco para entrar como mentor"; S.carregando = false; render(); return; }
     }
-    S.pedirAdmin = null; S.eq = eq; S.mentor = m; S.admin = admin; S.modo = "mentor"; guardar("mentor", nome, senha, admin ? senhaAdmin : "");
+    S.pedirAdmin = null; S.eq = eq; S.mentor = m; S.admin = admin; S.modo = "mentor"; S.senha = senha; S.senhaAdmin = admin ? senhaAdmin : ""; guardar("mentor", nome, senha, admin ? senhaAdmin : "");
     if (S.importar){ const d = lerCodigoTri("?i=" + S.importar); S.importar = null; if (d) importarTri("?i=" + codigoTri(d)); }
     if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
@@ -160,7 +160,7 @@ function mentorView(){
     <nav class="tabs">${ABAS.map(([k, t]) => `<button class="tab" data-a="nav" data-v="${k}" ${v === k ? 'aria-current="page"' : ""}>${t}</button>`).join("")}</nav>
     ${S.admin ? `<select class="in" id="verMentor" style="width:auto"><option value="">Toda a equipe</option>${mentores.map(n => `<option ${S.verMentor === n ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>` : ""}
     <button class="btn sm ghost" data-a="sair">Sair</button></div></header>
-    <main class="wrap">${body}<p class="xs faint" style="margin-top:24px">Dados de ${esc(dataHora(S.eq.geradoEm))}. Para mudar algo, edite no Notion. O portal atualiza sozinho.</p></main>`;
+    <main class="wrap">${body}<p class="xs faint" style="margin-top:24px">Dados de ${esc(dataHora(S.eq.geradoEm))}. ${typeof temPonte === "function" && temPonte() ? "O que você salvar aqui vai para o Notion na hora, e o site atualiza em 1 ou 2 minutos." : "Para mudar algo, edite no Notion. O portal atualiza sozinho."}</p></main>`;
 }
 const SEM_PROVA_OK = /trabalho escrito|slides|vitae emprego|formatação/i;
 function precisaProva(c){ return !(c.provas || []).length && abertos(c).length && (c.servicos || []).some(s => !SEM_PROVA_OK.test(s.nome)); }
@@ -207,7 +207,7 @@ function clienteView(){
   return `<div class="pagehead"><div><button class="btn ghost sm" data-a="nav" data-v="clientes" style="margin-left:-10px">‹ Clientes</button><h1>${esc(c.nome)}</h1><div class="row" style="margin-top:6px"><span class="pill ${st.k}">${esc(st.t)}</span>${c.area ? `<span class="pill ok">${esc(c.area)}</span>` : ""}${c.origem ? `<span class="pill">${esc(c.origem)}</span>` : ""}${(c.desconto || []).map(d => `<span class="pill gold">${esc(d)}</span>`).join("")}</div></div>
     <div class="row"><button class="btn" data-a="preview">Ver como cliente</button>${c.whatsapp ? `<a class="btn" href="${waLink(c.whatsapp, "Oi, " + primeiro(c.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}</div></div>
    <div class="grid2"><div class="stack">
-    <section class="card"><div class="card-h"><h2>Serviços</h2></div>${(c.servicos || []).length ? `<div class="stack">${c.servicos.map(s => `<div class="svc"><div class="row between"><b>${esc(s.nome)}</b>${s.notion ? `<a class="btn sm ghost" href="${esc(s.notion)}" target="_blank" rel="noopener">Notion</a>` : ""}</div><div class="small ${ETAPAS[s.etapa || 0].cli ? "gold" : "muted"}">${esc(s.status || ETAPAS[s.etapa || 0].t)}${s.inicio ? " · início " + dBR(s.inicio) : ""}${s.prazo ? " · entrega " + dBR(s.prazo) : ""}${s.entregueEm ? " · entregue " + dBR(s.entregueEm) : ""}</div><div class="steps ro">${ETAPAS.map((e, j) => `<button class="${j < (s.etapa || 0) ? "done" : j === (s.etapa || 0) ? "cur" : ""}" title="${esc(e.t)}" tabindex="-1"></button>`).join("")}</div><div class="xs muted" style="margin-top:8px">${[s.mentor && "Mentor " + s.mentor, s.corretor && "Corretor " + s.corretor, s.trainee && "Trainee " + s.trainee].filter(Boolean).map(esc).join(" · ")}</div></div>`).join("")}</div>` : `<div class="empty">Sem serviço</div>`}</section>
+    <section class="card"><div class="card-h"><h2>Serviços</h2></div>${(c.servicos || []).length ? `<div class="stack">${c.servicos.map(s => `<div class="svc"><div class="row between"><b>${esc(s.nome)}</b>${s.notion ? `<a class="btn sm ghost" href="${esc(s.notion)}" target="_blank" rel="noopener">Notion</a>` : ""}</div><div class="small ${ETAPAS[s.etapa || 0].cli ? "gold" : "muted"}">${esc(s.status || ETAPAS[s.etapa || 0].t)}${s.inicio ? " · início " + dBR(s.inicio) : ""}${s.prazo ? " · entrega " + dBR(s.prazo) : ""}${s.entregueEm ? " · entregue " + dBR(s.entregueEm) : ""}</div><div class="steps ro">${ETAPAS.map((e, j) => `<button class="${j < (s.etapa || 0) ? "done" : j === (s.etapa || 0) ? "cur" : ""}" title="${esc(e.t)}" tabindex="-1"></button>`).join("")}</div>${typeof servicoEditor === "function" ? servicoEditor(c, s) : ""}<div class="xs muted" style="margin-top:8px">${[s.mentor && "Mentor " + s.mentor, s.corretor && "Corretor " + s.corretor, s.trainee && "Trainee " + s.trainee].filter(Boolean).map(esc).join(" · ")}</div></div>`).join("")}</div>` : `<div class="empty">Sem serviço</div>`}</section>
     <section class="card"><div class="card-h"><h2>Provas</h2></div>${(c.provas || []).length ? `<div class="list">${c.provas.map(p => `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${esc(p.ano || "")}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}${p.fonte === "analise" ? ` · <span class="neon">análise curricular lida</span>` : ""}</div>${p.edital ? `<div class="xs muted" style="margin-top:2px">${esc(p.edital.peso || "")}. ${esc(p.edital.formato || "")}</div>` : ""}</div>${(() => { const cp = calcDe(c, p); return cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : p.notaEstimada !== "" && p.notaEstimada != null ? `<b class="num">${d1(p.notaEstimada)} / ${d1(p.notaMax || 100)}</b>` : ""; })()}</div>`).join("")}</div>` : `<div class="empty">Nenhuma prova marcada no Notion${notionDe(c) ? `<div style="margin-top:8px"><a class="btn sm ghost" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Marcar a prova no Notion</a></div>` : ""}</div>`}</section>
     ${analiseCard(c)}
     ${(c.pendencias || []).length ? `<section class="card"><div class="card-h"><h2>Pendências</h2></div>${c.pendencias.map(p => `<div class="pend ${p.feita ? "feita" : ""}">${esc(p.texto)}</div>`).join("")}</section>` : ""}
@@ -271,6 +271,7 @@ __TRIAGEM__
 __ANALISE__
 __CONTROLE__
 __MARCACAO__
+__PONTE__
 function render(){
   const sy = window.scrollY;
   if (S.modo === "login") app.innerHTML = loginView();
@@ -305,6 +306,7 @@ const A = {
   limparMarc: el => { if (!confirm("Limpar o que você marcou nesta prova?")) return; const all = lerMarc(); delete all[el.dataset.pk]; gravarMarc(all); render(); },
   ciProva: el => { S.ciProva[S.sel] = el.dataset.v; render(); },
   copiarCont: () => copiarParaNotion(clienteSel()),
+  salvarServico: el => salvarServico(el.dataset.id),
   novaTri: () => novaTri(),
   importarTri: () => importarTri($("#triImport").value),
   copiarLinkTri: () => copiar(linkTriagem()),
