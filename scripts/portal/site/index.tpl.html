@@ -114,6 +114,7 @@ async function entrarMentor(nome, senha, senhaAdmin){
     }
     S.pedirAdmin = null; S.eq = eq; S.mentor = m; S.admin = admin; S.modo = "mentor"; guardar("mentor", nome, senha, admin ? senhaAdmin : "");
     if (S.importar){ const d = lerCodigoTri("?i=" + S.importar); S.importar = null; if (d) importarTri("?i=" + codigoTri(d)); }
+    if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
 }
@@ -130,7 +131,7 @@ const abertos = c => (c.servicos || []).filter(s => (s.etapa || 0) < ULT);
 function progresso(c){ const s = c.servicos || []; if (!s.length) return 0; return Math.round(s.reduce((a, x) => a + (x.etapa || 0) / ULT, 0) / s.length * 100); }
 function nomeServico(c, s){ if (s.nome) return s.nome; const T = { vitae:"Currículo Vitae", analise:"Análise curricular", lattes:"Currículo Lattes" }; const p = (c.provas || []).find(p => p.id === s.provaId); return (T[s.tipo] || "Serviço") + (s.detalhe ? " " + s.detalhe.replace(/Modelo |Categoria /, "") : "") + (p ? " · " + p.nome : ""); }
 function status(c){ const ab = abertos(c); if (!(c.servicos || []).length) return { t:"Novo contato", k:"info" }; if (!ab.length) return { t:"Tudo entregue", k:"ok" }; const m = Math.min(...ab.map(s => s.etapa || 0)); return { t:ETAPAS[m].t, k:ETAPAS[m].cli ? "gold" : "" }; }
-function espelho(c){ const f = fin(c); return { nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:[...(c.pendencias || []).filter(p => !p.interna), ...pendenciasDoControle(c)], atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
+function espelho(c){ const f = fin(c); return { id:c.id, nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:[...(c.pendencias || []).filter(p => !p.interna), ...pendenciasDoControle(c)], atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
 function eventos(cs){ const ev = []; for (const c of cs){ for (const p of c.provas || []){ if (p.prazoEnvio) ev.push({ d:p.prazoEnvio, t:`Fim do envio ${p.nome}`, c, k:"gold" }); if (p.dataProva) ev.push({ d:p.dataProva, t:`Prova ${p.nome}`, c, k:"info" }); } for (const s of c.servicos || []) if (s.prazo && (s.etapa || 0) < ULT) ev.push({ d:s.prazo, t:`Entrega ${nomeServico(c, s)}`, c, k:"warn" }); } return ev.sort((a, b) => a.d.localeCompare(b.d)); }
 const linkCliente = c => `${location.href.split("#")[0].split("?")[0]}?c=${c.codigo}`;
 function convite(c){ return `Oi, ${primeiro(c.nome)}! Tudo bem? Criei o seu acesso no portal da MedEasy. Por lá você acompanha cada etapa do seu currículo, os prazos das provas e o que ainda falta enviar\n\nLink: ${linkCliente(c)}\nSeu código: ${codFmt(c.codigo)}\n\nGuarde esse código, ele é só seu`; }
@@ -148,7 +149,7 @@ function loginView(){
       <div class="err">${esc(S.erro)}</div>
       <button class="btn pri" type="submit" ${S.carregando ? "disabled" : ""}>${S.carregando ? "Abrindo" : "Entrar"}</button>
     </form>
-    <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : S.importar ? "Entre para abrir a triagem do cliente no seu painel." : "Acesso da equipe MedEasy."}</p></div>`);
+    <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : S.importar ? "Entre para abrir a triagem do cliente no seu painel." : S.importarMarc ? "Entre para importar o que o cliente marcou." : "Acesso da equipe MedEasy."}</p></div>`);
 }
 const ABAS = [["painel","Painel"],["clientes","Clientes"],["triagem","Triagem"],["agenda","Agenda"],["editais","Editais"],["repasses","Repasses"]];
 function mentorView(){
@@ -269,6 +270,7 @@ __PORTALVIEW__
 __TRIAGEM__
 __ANALISE__
 __CONTROLE__
+__MARCACAO__
 function render(){
   const sy = window.scrollY;
   if (S.modo === "login") app.innerHTML = loginView();
@@ -299,6 +301,8 @@ const A = {
   verDevem: () => { S.verDevem = !S.verDevem; render(); },
   filtroRep: el => { S.filtroRep = el.dataset.v; render(); },
   copiarRep: el => copiar(textoRepasses(el.dataset.v)),
+  enviarMarc: el => enviarMarc(el.dataset.pk),
+  limparMarc: el => { if (!confirm("Limpar o que você marcou nesta prova?")) return; const all = lerMarc(); delete all[el.dataset.pk]; gravarMarc(all); render(); },
   ciProva: el => { S.ciProva[S.sel] = el.dataset.v; render(); },
   copiarCont: () => copiarParaNotion(clienteSel()),
   novaTri: () => novaTri(),
@@ -315,7 +319,7 @@ const A = {
 };
 Object.assign(A, A_CTRL);
 app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); });
-app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); });
+app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 (async () => {
@@ -326,6 +330,9 @@ app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if
   // Link "Abrir no painel" da mensagem de triagem: importa depois que o mentor entrar
   const imp = new URLSearchParams(location.search).get("i");
   if (imp){ S.importar = imp; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
+  // Link "Abrir no painel" da marcação do cliente
+  const marc = new URLSearchParams(location.search).get("m");
+  if (marc){ S.importarMarc = marc; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
   if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo, s.admin || "");
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
   else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }

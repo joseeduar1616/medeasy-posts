@@ -355,6 +355,7 @@ async function entrarMentor(nome, senha, senhaAdmin){
     }
     S.pedirAdmin = null; S.eq = eq; S.mentor = m; S.admin = admin; S.modo = "mentor"; guardar("mentor", nome, senha, admin ? senhaAdmin : "");
     if (S.importar){ const d = lerCodigoTri("?i=" + S.importar); S.importar = null; if (d) importarTri("?i=" + codigoTri(d)); }
+    if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
 }
@@ -371,7 +372,7 @@ const abertos = c => (c.servicos || []).filter(s => (s.etapa || 0) < ULT);
 function progresso(c){ const s = c.servicos || []; if (!s.length) return 0; return Math.round(s.reduce((a, x) => a + (x.etapa || 0) / ULT, 0) / s.length * 100); }
 function nomeServico(c, s){ if (s.nome) return s.nome; const T = { vitae:"Currículo Vitae", analise:"Análise curricular", lattes:"Currículo Lattes" }; const p = (c.provas || []).find(p => p.id === s.provaId); return (T[s.tipo] || "Serviço") + (s.detalhe ? " " + s.detalhe.replace(/Modelo |Categoria /, "") : "") + (p ? " · " + p.nome : ""); }
 function status(c){ const ab = abertos(c); if (!(c.servicos || []).length) return { t:"Novo contato", k:"info" }; if (!ab.length) return { t:"Tudo entregue", k:"ok" }; const m = Math.min(...ab.map(s => s.etapa || 0)); return { t:ETAPAS[m].t, k:ETAPAS[m].cli ? "gold" : "" }; }
-function espelho(c){ const f = fin(c); return { nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:[...(c.pendencias || []).filter(p => !p.interna), ...pendenciasDoControle(c)], atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
+function espelho(c){ const f = fin(c); return { id:c.id, nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:[...(c.pendencias || []).filter(p => !p.interna), ...pendenciasDoControle(c)], atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
 function eventos(cs){ const ev = []; for (const c of cs){ for (const p of c.provas || []){ if (p.prazoEnvio) ev.push({ d:p.prazoEnvio, t:`Fim do envio ${p.nome}`, c, k:"gold" }); if (p.dataProva) ev.push({ d:p.dataProva, t:`Prova ${p.nome}`, c, k:"info" }); } for (const s of c.servicos || []) if (s.prazo && (s.etapa || 0) < ULT) ev.push({ d:s.prazo, t:`Entrega ${nomeServico(c, s)}`, c, k:"warn" }); } return ev.sort((a, b) => a.d.localeCompare(b.d)); }
 const linkCliente = c => `${location.href.split("#")[0].split("?")[0]}?c=${c.codigo}`;
 function convite(c){ return `Oi, ${primeiro(c.nome)}! Tudo bem? Criei o seu acesso no portal da MedEasy. Por lá você acompanha cada etapa do seu currículo, os prazos das provas e o que ainda falta enviar\n\nLink: ${linkCliente(c)}\nSeu código: ${codFmt(c.codigo)}\n\nGuarde esse código, ele é só seu`; }
@@ -389,7 +390,7 @@ function loginView(){
       <div class="err">${esc(S.erro)}</div>
       <button class="btn pri" type="submit" ${S.carregando ? "disabled" : ""}>${S.carregando ? "Abrindo" : "Entrar"}</button>
     </form>
-    <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : S.importar ? "Entre para abrir a triagem do cliente no seu painel." : "Acesso da equipe MedEasy."}</p></div>`);
+    <p class="xs muted" style="text-align:center">${cli ? "O código chega pelo WhatsApp quando o seu serviço começa." : S.importar ? "Entre para abrir a triagem do cliente no seu painel." : S.importarMarc ? "Entre para importar o que o cliente marcou." : "Acesso da equipe MedEasy."}</p></div>`);
 }
 const ABAS = [["painel","Painel"],["clientes","Clientes"],["triagem","Triagem"],["agenda","Agenda"],["editais","Editais"],["repasses","Repasses"]];
 function mentorView(){
@@ -699,6 +700,7 @@ function portalView(p, preview){
         ${pv.regras ? `<p class="small" style="margin:12px 0 0;color:var(--muted)">${esc(pv.regras)}</p>` : ""}
         ${pv.edital ? `<details style="margin-top:12px"><summary class="small" style="cursor:pointer;font-weight:600">Como o currículo conta nesta prova</summary><div class="small" style="margin-top:8px"><p style="margin:0 0 6px"><b>Peso:</b> ${esc(pv.edital.peso || "")}</p><p style="margin:0 0 6px"><b>Envio:</b> ${esc(pv.edital.envio || "")}</p><p style="margin:0 0 6px"><b>Formato:</b> ${esc(pv.edital.formato || "")}</p>${pv.edital.obs ? `<p style="margin:0 0 6px"><b>Atenção:</b> ${esc(pv.edital.obs)}</p>` : ""}${typeof fichaTabela === "function" ? fichaTabela(pv.edital) : ""}</div></details>` : ""}
         ${it.length ? itensView(it) : ""}
+        ${!preview && typeof marcacaoView === "function" ? marcacaoView(pv) : ""}
       </section>`; }).join("")}
 
     ${(p.documentos || []).length ? `<section class="card"><div class="card-h"><h2>Seus documentos</h2></div><div class="list">${p.documentos.map(d => `<div class="li"><div class="grow"><div class="t">${esc(d.nome)}</div></div>${d.link ? `<a class="btn sm pri" href="${esc(d.link)}" target="_blank" rel="noopener">Abrir</a>` : ""}</div>`).join("")}</div></section>` : ""}
@@ -1255,6 +1257,66 @@ const A_CTRL = {
 /* Pendências do controle que o cliente vê no portal dele */
 function pendenciasDoControle(c){ const ct = ctrlDe(c); return ct.pend.filter(x => x.quem === "Cliente" && x.situacao !== "Resolvida").map(x => ({ id:"c" + x.id, texto:[x.item, x.texto].filter(Boolean).join(": "), feita:false, prazo:"" })); }
 
+/* ---------- marcação do cliente: o que ele já tem em cada item do edital ---------- */
+/* Fica no navegador do cliente. O botão Enviar para o mentor manda pelo WhatsApp um link que importa no painel. */
+const MARC_ST = { nao:"Não tenho", andamento:"Em andamento", tenho:"Já tenho", na:"Não se aplica" };
+const marcKey = () => "medeasy-marc-" + (S.portal?.id || "x");
+function lerMarc(){ try { return JSON.parse(localStorage.getItem(marcKey()) || "{}"); } catch { return {}; } }
+function gravarMarc(m){ try { localStorage.setItem(marcKey(), JSON.stringify(m)); } catch {} }
+/* Conta a partir da marcação: atual só com "Já tenho", meta também com "Em andamento" */
+function calcMarc(p, m){
+  const itens = itensDaProva(p); const reg = {}, regMeta = {};
+  for (const it of itens){ const x = (m || {})[it.key]; if (!x) continue;
+    const n = it.unit != null ? Math.max(0, Math.floor(num(x.n))) : 0; const pts = it.unit == null && x.st === "tenho" ? (x.pts === "" || x.pts == null ? it.maxN : num(x.pts)) : "";
+    if (x.st === "tenho"){ reg[it.key] = { n, pts }; regMeta[it.key] = { n, pts }; }
+    else if (x.st === "andamento"){ regMeta[it.key] = { n:Math.max(1, n), pts:it.unit == null ? it.maxN : "" }; } }
+  const atual = calcProva(itens, reg, tetoDe(p)), meta = calcProva(itens, regMeta, tetoDe(p));
+  const faltam = atual.rows.map((x, i) => { const st = ((m || {})[x.key] || {}).st || "nao"; const mx = x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN; return { x, st, falta:r2(mx - x.pts) }; }).filter(f => f.falta > 0.001 && f.st !== "na").sort((a, b) => b.falta - a.falta);
+  return { itens, atual, meta, faltam };
+}
+function marcacaoView(pv){
+  const p = pv; if (!p.edital || !(p.edital.ficha || []).length || p.fonte === "analise") return "";
+  const m = lerMarc()[kP(p.nome)] || {}; const r = calcMarc(p, m); const pk = kP(p.nome);
+  const marcou = Object.keys(m).length;
+  return `<div class="hr"></div>
+   <div class="row between"><div><div class="label gold">Marque o que você já tem</div><div class="small muted">A nota se atualiza na hora. Isso fica só no seu celular até você enviar para o mentor.</div></div>
+    ${marcou ? `<div style="text-align:right"><div class="score" style="font-size:28px">${d1(r.atual.total)}<small> / ${d1(r.atual.max)}</small></div><div class="xs gold">meta ${d1(r.meta.total)} com o que está em andamento</div></div>` : ""}</div>
+   <div class="bar" style="margin-top:10px;height:8px;position:relative"><i style="width:${r.atual.max ? r.atual.total / r.atual.max * 100 : 0}%"></i><i style="position:absolute;left:${r.atual.max ? r.atual.total / r.atual.max * 100 : 0}%;width:${r.atual.max ? (r.meta.total - r.atual.total) / r.atual.max * 100 : 0}%;background:var(--gold);opacity:.6"></i></div>
+   <div class="stack" style="gap:8px;margin-top:12px">${r.itens.map((it, i) => { const x = m[it.key] || {}; const st = x.st || "nao"; const row = r.atual.rows[i];
+     return `<div class="svc" style="padding:10px 12px"><div class="row between" style="gap:8px"><div style="min-width:0"><div class="small" style="font-weight:600">${esc(it.item)}</div><div class="xs muted">${esc(it.pontos || "")}</div></div><b class="num ${row.pts >= it.maxN ? "neon" : "muted"}" style="white-space:nowrap">${d1(row.pts)} / ${d1(it.maxN)}</b></div>
+       <div class="row" style="margin-top:8px;gap:6px"><select class="in" data-marc="st" data-pk="${pk}" data-key="${esc(it.key)}" style="width:auto;flex:1;min-width:140px">${Object.entries(MARC_ST).map(([k, t]) => `<option value="${k}" ${st === k ? "selected" : ""}>${t}</option>`).join("")}</select>
+       ${it.unit != null && (st === "tenho" || st === "andamento") ? `<input class="in num" type="number" min="0" step="1" inputmode="numeric" data-marc="n" data-pk="${pk}" data-key="${esc(it.key)}" value="${x.n || ""}" placeholder="quantos" style="width:92px">` : ""}
+       ${it.unit == null && st === "tenho" ? `<input class="in num" type="number" min="0" step="0.01" inputmode="decimal" data-marc="pts" data-pk="${pk}" data-key="${esc(it.key)}" value="${x.pts ?? ""}" placeholder="pontos" title="Se não souber, deixe em branco que conta o máximo" style="width:92px">` : ""}</div></div>`; }).join("")}</div>
+   ${r.faltam.length && marcou ? `<div class="label" style="margin:14px 0 6px">O que falta, do que vale mais</div><div class="stack" style="gap:6px">${r.faltam.slice(0, 6).map(f => `<div class="pend" style="padding:8px 12px"><div class="grow small"><b>${esc(f.x.item)}</b>${f.st === "andamento" ? ` <span class="pill gold">em andamento</span>` : ""}<div class="xs muted">${esc(f.x.pontos || "")}</div></div><b class="num gold">+${d1(f.falta)}</b></div>`).join("")}</div>` : ""}
+   <div class="row" style="margin-top:12px"><button class="btn sm pri" data-a="enviarMarc" data-pk="${pk}" ${marcou ? "" : "disabled"}>Enviar para o mentor</button><button class="btn sm ghost" data-a="limparMarc" data-pk="${pk}" ${marcou ? "" : "disabled"}>Limpar</button></div>`;
+}
+function marcInput(el){
+  const all = lerMarc(); const m = (all[el.dataset.pk] ||= {}); const x = (m[el.dataset.key] ||= { st:"nao" });
+  if (el.dataset.marc === "st") x.st = el.value; else if (el.dataset.marc === "n") x.n = el.value; else x.pts = el.value;
+  if (x.st === "nao" && !x.n && (x.pts === undefined || x.pts === "")) delete m[el.dataset.key];
+  gravarMarc(all); render();
+}
+const codigoMarc = d => btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+function enviarMarc(pk){
+  const p = (S.portal.provas || []).find(x => kP(x.nome) === pk); if (!p) return; const m = lerMarc()[pk] || {}; const r = calcMarc(p, m); const ct = S.portal.contato || CONTATO;
+  const link = `${location.href.split("#")[0].split("?")[0]}?m=${codigoMarc({ id:S.portal.id, nome:S.portal.nome, prova:p.nome, m, em:Date.now() })}`;
+  const txt = `Oi, ${ct.mentor.split(" ")[0]}! Marquei no portal o que já tenho para ${p.nome}\n\nNota atual: ${d1(r.atual.total)} de ${d1(r.atual.max)}\nMeta com o que está em andamento: ${d1(r.meta.total)}\n${Object.values(m).filter(x => x.st === "tenho").length} itens já tenho, ${Object.values(m).filter(x => x.st === "andamento").length} em andamento\n\nAbrir no painel: ${link}`;
+  window.open(waLink(ct.whats, txt), "_blank");
+}
+/* No painel do mentor: o link ?m= vira a contagem por item do cliente (rascunho) */
+function importarMarc(codigo){
+  let d; try { d = JSON.parse(decodeURIComponent(escape(atob(codigo.replace(/-/g, "+").replace(/_/g, "/"))))); } catch { toast("Link de marcação inválido"); return; }
+  const c = (S.eq.clientes || []).find(x => x.id === d.id); if (!c){ toast(`Não achei o cliente ${d.nome || ""} no painel`); return; }
+  const p = (c.provas || []).find(x => kP(x.nome) === kP(d.prova)); if (!p){ toast(`${c.nome} não tem a prova ${d.prova} no Notion`); return; }
+  const reg = carregarCont(c); const pk = kP(p.nome); const itens = itensDaProva(p); const pr = (reg.provas[pk] ||= {});
+  for (const it of itens){ const x = (d.m || {})[it.key]; if (!x) continue; const r = (pr[it.key] ||= { ...(it.base || {}) });
+    if (x.st === "tenho"){ r.n = it.unit != null ? Math.max(0, Math.floor(num(x.n))) : 0; r.pts = it.unit == null ? (x.pts === "" || x.pts == null ? it.maxN : num(x.pts)) : ""; r.sit = ""; }
+    else if (x.st === "andamento"){ r.sit = "Aumentar agora"; r.com = r.com || `Cliente marcou em andamento${x.n ? ` (${x.n})` : ""}`; }
+    else if (x.st === "na"){ r.sit = "Não se aplica agora"; } }
+  reg.rascunho = true; reg.copiado = false; gravarRasc(c.id);
+  S.sel = c.id; S.view = "cliente"; (S.ciProva ||= {})[c.id] = pk; render(); window.scrollTo(0, 0); toast(`Marcação de ${primeiro(c.nome)} para ${p.nome} importada como rascunho. Confira e copie para o Notion`);
+}
+
 function render(){
   const sy = window.scrollY;
   if (S.modo === "login") app.innerHTML = loginView();
@@ -1285,6 +1347,8 @@ const A = {
   verDevem: () => { S.verDevem = !S.verDevem; render(); },
   filtroRep: el => { S.filtroRep = el.dataset.v; render(); },
   copiarRep: el => copiar(textoRepasses(el.dataset.v)),
+  enviarMarc: el => enviarMarc(el.dataset.pk),
+  limparMarc: el => { if (!confirm("Limpar o que você marcou nesta prova?")) return; const all = lerMarc(); delete all[el.dataset.pk]; gravarMarc(all); render(); },
   ciProva: el => { S.ciProva[S.sel] = el.dataset.v; render(); },
   copiarCont: () => copiarParaNotion(clienteSel()),
   novaTri: () => novaTri(),
@@ -1301,7 +1365,7 @@ const A = {
 };
 Object.assign(A, A_CTRL);
 app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); });
-app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); });
+app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 (async () => {
@@ -1312,6 +1376,9 @@ app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if
   // Link "Abrir no painel" da mensagem de triagem: importa depois que o mentor entrar
   const imp = new URLSearchParams(location.search).get("i");
   if (imp){ S.importar = imp; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
+  // Link "Abrir no painel" da marcação do cliente
+  const marc = new URLSearchParams(location.search).get("m");
+  if (marc){ S.importarMarc = marc; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
   if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo, s.admin || "");
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
   else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }

@@ -9,6 +9,6 @@ const editais = JSON.parse(fs.readFileSync(path.join(d, "..", "editais.json"), "
 // Link público do formulário do Notion que recebe os certificados (scripts/portal/form-cert.txt). Opcional.
 const formCert = fs.existsSync(path.join(d, "..", "form-cert.txt")) ? fs.readFileSync(path.join(d, "..", "form-cert.txt"), "utf8").trim() : "";
 const provas = JSON.stringify(Object.entries(editais).map(([k, e]) => ({ k, nome: e.nome })));
-t = t.split("__CSS__").join(ler("base.css")).split("__CERTITENS__").join(ler("certitens.js")).split("__PORTALVIEW__").join(ler("portalview.js")).split("__TRIAGEM__").join(ler("triagem.js").replace("__PROVAS__", provas).replace("__FORM_CERT__", formCert)).split("__ANALISE__").join(ler("analise.js")).split("__CONTROLE__").join(ler("controle.js"));
+t = t.split("__CSS__").join(ler("base.css")).split("__CERTITENS__").join(ler("certitens.js")).split("__PORTALVIEW__").join(ler("portalview.js")).split("__TRIAGEM__").join(ler("triagem.js").replace("__PROVAS__", provas).replace("__FORM_CERT__", formCert)).split("__ANALISE__").join(ler("analise.js")).split("__CONTROLE__").join(ler("controle.js")).split("__MARCACAO__").join(ler("marcacao.js"));
 fs.writeFileSync(path.resolve(d, "../../../portal/index.html"), t);
 console.log("portal/index.html montado");
