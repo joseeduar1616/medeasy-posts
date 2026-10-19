@@ -1323,7 +1323,7 @@ function importarMarc(codigo){
 
 /* ---------- ponte: grava no Notion pelo site (Cloudflare Worker em worker/) ---------- */
 /* PONTE vem de scripts/portal/ponte.txt na montagem. Vazio: o site volta a só copiar o texto para colar no Notion. */
-const PONTE = "";
+const PONTE = "https://medeasy-ponte.medeasy.workers.dev";
 const temPonte = () => !!PONTE && S.modo === "mentor" && !!S.senha;
 async function pontePedido(rota, corpo){
   const h = { "Content-Type":"application/json", Authorization:"Bearer " + S.senha }; if (S.admin && S.senhaAdmin) h["X-Admin"] = S.senhaAdmin;
