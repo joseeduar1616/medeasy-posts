@@ -21,35 +21,8 @@ async function textoDoPdf(arquivo){
 const numA = s => { const n = parseFloat(String(s || "").replace(/\s/g, "").replace("+", "").replace(",", ".")); return isFinite(n) ? n : 0; };
 const isoDeA = s => { const m = String(s || "").match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}` : ""; };
 const limpaA = s => String(s || "").replace(/\s+/g, " ").trim();
-const ROTULO_A = /^\s*([+-]?\d+(?:,\d+)?)\s+(PONTUAÇÃO MÁXIMA|POR ATIVIDADE|PONTUAÇÃO PESSOAL|GANHO POSSÍVEL)\b/;
-function lerTextoAnalise(texto){
-  const linhas = texto.replace(/\f/g, "\n").split("\n").filter(l => !/^\s*MEDEASY ANÁLISE CURRICULAR/i.test(l));
-  const corpo = linhas.join("\n"); const naoVazias = linhas.map(l => l.trim()).filter(Boolean);
-  const sigla = naoVazias[0] || "", subtitulo = naoVazias[1] || "";
-  const iNome = naoVazias.findIndex(l => /^análise curricular$/i.test(l)); const cliente = iNome >= 0 ? naoVazias[iNome + 1] || "" : "";
-  const nota = corpo.match(/(\d+(?:,\d+)?)\s*\/\s*(\d+(?:,\d+)?)\s*\n\s*PONTUAÇÃO ESTIMADA/i);
-  let possivel = null; { const iP = linhas.findIndex(l => /POSSÍVEL ATÉ\s*\d{2}\/\d{2}\/\d{4}/i.test(l)); if (iP >= 0){ const data = linhas[iP].match(/POSSÍVEL ATÉ\s*(\d{2}\/\d{2}\/\d{4})/i)[1]; for (let i = iP - 1; i >= Math.max(0, iP - 6); i--){ const m = linhas[i].trim().match(/^(\d+(?:,\d+)?)$/); if (m){ possivel = [null, m[1], data]; break; } } if (!possivel) possivel = [null, "", data]; } }
-  const regras = (corpo.match(/Regras do edital que você precisa saber\s*\n([\s\S]*?)(?=\n\s*ITEM \d+\s|\n{3,})/i) || [])[1];
-  const anoM = (sigla + " " + subtitulo).match(/20\d\d/) || corpo.match(/ANÁLISE CURRICULAR\s+\S+\s+(20\d\d)/i);
-  const itens = []; const partes = corpo.split(/\n(?=\s*ITEM \d+\s)/).slice(1);
-  for (const parte of partes){
-    const cab = parte.match(/^\s*ITEM (\d+)\s+(.*)$/m); if (!cab) continue;
-    const [antes, depois = ""] = parte.split(/\n\s*Análise curricular\s+COMPROVANTES NO CURRÍCULO/i);
-    const topo = antes.split("\n").slice(1).map(l => l.trim()).filter(Boolean);
-    let t = 1; const tit = [topo[0] || ""]; while (t < topo.length && /^[a-zà-ú(]/.test(topo[t])){ tit.push(topo[t]); t++; }
-    const regra = limpaA(topo.slice(t).join(" "));
-    let [lista, coment = ""] = depois.split(/\n\s*Comentário:\s*/i); coment = coment.split(/\n\s*\n/)[0];
-    const v = { max:0, porAtividade:0, pontos:0, ganho:0 }; const comprovantes = []; let atual = null;
-    for (const l of (lista || "").split("\n").slice(1)){
-      let resto = l; const r = l.match(ROTULO_A);
-      if (r){ v[{ "PONTUAÇÃO MÁXIMA":"max", "POR ATIVIDADE":"porAtividade", "PONTUAÇÃO PESSOAL":"pontos", "GANHO POSSÍVEL":"ganho" }[r[2]]] = numA(r[1]); resto = l.slice(r[0].length); }
-      const s = resto.trim(); if (!s) continue; const m = s.match(/^(\d+)\.\s+(.*)$/);
-      if (m){ atual = m[2]; comprovantes.push(atual); } else if (atual !== null) comprovantes[comprovantes.length - 1] += " " + s;
-    }
-    itens.push({ n:+cab[1], nome:`${cab[1]}. ${limpaA(tit.join(" "))}`, situacao:limpaA(cab[2]), regra, max:v.max, porAtividade:v.porAtividade, pontos:v.pontos, ganho:v.ganho, comprovantes:comprovantes.map(limpaA), comentario:limpaA(coment) });
-  }
-  return { nome:sigla.replace(/\s*20\d\d\s*$/, ""), ano:anoM ? (anoM[1] || anoM[0]) : "", area:subtitulo, cliente, notaEstimada:nota ? numA(nota[1]) : itens.reduce((a, i) => a + i.pontos, 0), notaMax:nota ? numA(nota[2]) : itens.reduce((a, i) => a + i.max, 0), notaPossivel:possivel && possivel[1] ? numA(possivel[1]) : "", prazoEnvio:possivel ? isoDeA(possivel[2]) : "", regras:regras ? limpaA(regras) : "", itens, fonte:"analise" };
-}
+/* Leitor do texto da análise: vem de scripts/portal/leitor-analise.mjs na montagem (o mesmo do build) */
+__LEITOR_ANALISE__
 function lerTriagemJson(j){
   return { nome:j.sigla || j.prova || "Prova", ano:(String(j.prova || j.edital || "").match(/20\d\d/) || [""])[0], area:j.area || "", cliente:j.cliente || "", notaEstimada:numA(j.nota_total), notaPossivel:j.nota_possivel ? numA(j.nota_possivel) : "", notaMax:(j.itens || []).reduce((a, i) => a + numA(i.maximo), 0), prazoEnvio:isoDeA(j.envio && j.envio.prazo) || (j.envio && j.envio.prazo) || "",
     regras:[j.envio?.formato, j.envio?.tamanho_max ? "até " + j.envio.tamanho_max : "", j.envio?.ordem].filter(Boolean).join(". "),
@@ -58,7 +31,7 @@ function lerTriagemJson(j){
 async function lerArquivoAnaliseSite(arquivo){
   if (/\.json$/i.test(arquivo.name)) return lerTriagemJson(JSON.parse(await arquivo.text()));
   const pr = lerTextoAnalise(await textoDoPdf(arquivo));
-  if (!pr.itens.length) throw new Error("Não achei os itens nesse PDF. Ele precisa ser a análise curricular MedEasy, com ITEM 1, ITEM 2 e assim por diante");
+  if (!pr.itens.length) throw new Error("Não achei os itens nesse PDF. Ele precisa ser a análise curricular MedEasy, com um card por item e a pontuação de cada um");
   return pr;
 }
 /* Guardar: cliente do Notion fica neste navegador, triagem fica no registro dela */
@@ -91,6 +64,7 @@ async function importarAnalise(input){
 function analiseCard(c){
   const tudo = analisesDe(c); const ks = Object.keys(tudo);
   return `<section class="card"><div class="card-h"><div><h2>Análise curricular em arquivo</h2><div class="sub">PDF da análise MedEasy ou triagem.json. O site lê a nota, os itens, o que falta e como conseguir</div></div><label class="btn sm pri" style="cursor:pointer">Importar arquivo<input type="file" accept=".pdf,.json,application/pdf,application/json" hidden data-an="1"></label></div>
-   ${ks.length ? `<div class="list">${ks.map(k => { const pr = tudo[k]; const falta = (pr.itens || []).filter(i => i.ganho > 0).length; return `<div class="li"><div class="grow"><div class="t">${esc(pr.nome)} ${esc(pr.ano || "")}</div><div class="small muted">${d1(pr.notaEstimada)} / ${d1(pr.notaMax)}${pr.notaPossivel !== "" && pr.notaPossivel != null ? ` · possível ${d1(pr.notaPossivel)}` : ""} · ${pr.itens.length} itens · ${falta} com espaço para crescer${pr.em ? " · lida em " + dBR(new Date(pr.em).toISOString()) : ""}</div></div><button class="btn sm ghost" data-a="apagarAnalise" data-v="${k}">Tirar</button></div>`; }).join("")}</div>
+   ${ks.length ? `<div class="list">${ks.map(k => { const pr = tudo[k]; const falta = (pr.itens || []).filter(i => i.ganho > 0).length; return `<div class="li" style="flex-wrap:wrap"><div class="grow"><div class="t">${esc(pr.nome)} ${esc(pr.ano || "")}</div><div class="small muted">${d1(pr.notaEstimada)} / ${d1(pr.notaMax)}${pr.notaPossivel !== "" && pr.notaPossivel != null ? ` · possível ${d1(pr.notaPossivel)}` : ""} · ${pr.itens.length} itens · ${falta} com espaço para crescer${pr.em ? " · lida em " + dBR(new Date(pr.em).toISOString()) : ""}</div></div><button class="btn sm ghost" data-a="apagarAnalise" data-v="${k}">Tirar</button>
+     <details style="width:100%;margin-top:6px"><summary class="small" style="cursor:pointer;font-weight:600">Ver o que foi analisado</summary><div class="stack" style="gap:8px;margin-top:8px">${(pr.itens || []).map(i => `<div class="svc" style="padding:10px 12px"><div class="row between" style="gap:8px"><b class="small">${esc(i.nome)}</b><span class="row" style="gap:6px">${i.situacao ? `<span class="pill ${/complet/i.test(i.situacao) ? "ok" : /parcial/i.test(i.situacao) ? "info" : /aumentar/i.test(i.situacao) ? "gold" : ""}">${esc(i.situacao)}</span>` : ""}<b class="num">${d1(i.pontos)} / ${d1(i.max)}</b></span></div>${i.regra ? `<div class="xs muted">${esc(i.regra)}</div>` : ""}${i.ganho > 0 ? `<div class="xs gold">Pode ganhar mais ${d1(i.ganho)}</div>` : ""}${(i.comprovantes || []).length ? `<ul class="xs" style="margin:6px 0 0;padding-left:18px">${i.comprovantes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${i.comentario ? `<p class="xs" style="margin:6px 0 0">${esc(i.comentario)}</p>` : ""}</div>`).join("")}</div></details></div>`; }).join("")}</div>
    <p class="xs muted" style="margin:10px 0 0">${c.triagem ? "Fica guardada junto com a triagem neste navegador." : "Fica só neste navegador. Para o cliente ver no portal dele e a equipe toda ver, anexe o mesmo PDF na coluna Análise do cliente no Notion. Na próxima sincronização entra para todos."}</p>` : `<div class="empty">Nenhuma análise importada${c.provas.some(p => p.fonte === "analise" && !ks.length) ? ". As provas abaixo já vieram com análise do Notion" : ""}</div>`}</section>`;
 }
