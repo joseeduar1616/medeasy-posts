@@ -1,0 +1,57 @@
+{
+ "slug": "2026-10-19-1715-amrigs-2027-prorrogada",
+ "urgent": true,
+ "pillar": "novidade",
+ "header": ["NOVIDADE", "AMRIGS 2027"],
+ "verified_on": "2026-10-19",
+ "sources": [
+  "https://ipmeducacao.com.br/wp-content/uploads/2026/10/1111-Edital08-2026_Adendo-ProrrogainscriAAes_6ad63c10dd1f0.pdf (Edital nº 08/2026, Prorrogação das Inscrições, Prova AMB, AMRIGS, ACM e AMMS 01/2026, Fundatec, assinado em Porto Alegre em 19/10/2026 por Dr. Antônio Carlos Weston: inscrições de 09/09 a 26/10/2026 em fundatec.org.br; demais datas inalteradas)",
+  "https://ipmeducacao.com.br/portal/amrigs-residencia-medica/ (atualizado em 19/10/2026: inscrições prorrogadas até 26/10, boleto e currículo online até 27/10, prova 22/11 às 9h)",
+  "https://www.grupomedcof.com.br/blog/wp-content/uploads/2026/08/1111_EditalAbertura_Rev4_6a99eedaa2720.pdf (edital de abertura: boleto até 27/10, currículo online 09/09 a 27/10, prova 22/11 às 9h, análise curricular de 10% nas instituições que adotam)",
+  "posts/2026-10-13-1800-amrigs-2027-curriculo.json (dados do edital já conferidos em 13/10)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência no Sul e no MS",
+   "pill": "PRORROGADO",
+   "title": ["AMRIGS 2027:", "<span class='g glow'>INSCRIÇÕES ATÉ 26/10</span>"],
+   "body": "A banca publicou o <b>Edital nº 08/2026</b> e estendeu as inscrições da prova unificada AMRIGS, ACM e AMMS. O prazo, que acabava hoje, agora vai até <b>segunda, 26/10</b>.",
+   "bullets": ["Inscrições até <b>26/10</b>", "Boleto até <b>27/10</b>", "Prova mantida em <b>22/11, às 9h</b>"]
+  },
+  {
+   "type": "rows",
+   "label": "Edital nº 08/2026",
+   "title": ["O QUE <span class='y'>MUDOU</span>"],
+   "sub": "Novo prazo da AMRIGS 2027",
+   "rows": [
+    {"name": "Inscrições", "sub": "Antes até 19/10. Agora vai até", "value": "26/10"},
+    {"name": "Boleto", "sub": "Último dia para pagar, sem mudança", "value": "27/10"},
+    {"name": "Currículo Online", "sub": "Prazo de cadastro, sem mudança", "value": "27/10"},
+    {"name": "Prova objetiva", "sub": "Data mantida, às 9h de Brasília", "value": "22/11"}
+   ],
+   "note": "As inscrições são feitas pela internet, no site da <b>Fundatec</b>. O edital diz que as demais datas continuam iguais."
+  },
+  {
+   "type": "cards",
+   "label": "Precisa de currículo?",
+   "title": ["DEPENDE DA <span class='y'>INSTITUIÇÃO</span>"],
+   "sub": "A prova é a mesma para todos. A análise curricular é de cada programa",
+   "cards": [
+    {"num": "1", "h": "Prova objetiva", "tag": "90%", "p": "Vale para todos os candidatos. Em programa <b>sem</b> análise curricular, a prova decide sozinha."},
+    {"num": "2", "h": "Análise curricular", "tag": "10%", "p": "Só nas instituições que adotam a etapa. O <b>Currículo Online</b> é cadastrado até <b>27/10</b>."}
+   ],
+   "note": "Ganhou uma semana? Use para conferir os certificados e o critério do edital da sua instituição."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA E", "<span class='g glow'>MANDA HOJE</span>"],
+   "pill": "SALVA",
+   "body": "para quem ia perder<br>a AMRIGS.",
+   "note": "Ainda montando o currículo para a AMRIGS? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fonte: Edital nº 08/2026 (Prorrogação das Inscrições), Prova AMB, AMRIGS, ACM e AMMS 01/2026, Fundatec, 19/10/2026, e edital de abertura. Confira o edital do seu programa."
+  }
+ ],
+ "story": {"kicker": "PRORROGADO", "cta": "AMRIGS 2027: <span>inscrições até 26/10</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "🚨 AMRIGS 2027: INSCRIÇÕES PRORROGADAS ATÉ 26/10\n\nA banca publicou hoje o Edital nº 08/2026 e estendeu as inscrições da prova unificada AMRIGS, ACM e AMMS (RS, SC e MS). O prazo, que acabava em 19/10, agora vai até segunda, 26/10, pelo site da Fundatec. As demais datas continuam iguais: boleto até 27/10 e prova em 22/11, às 9h.\n\nPrecisa de currículo? Depende da instituição. A prova objetiva vale 90% e a análise curricular, 10%, só nos programas que adotam essa etapa. O Currículo Online é cadastrado até 27/10.\n\nSalva e manda para quem ia perder o prazo 📌 Você vai fazer a AMRIGS? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#amrigs #residenciamedica #residencia2027 #riograndedosul #santacatarina #medicina"
+}
