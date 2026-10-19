@@ -148,8 +148,49 @@ function opcoesTri(t){
   if (t.servico === "analise"){ montar("A", "ANÁLISE CURRICULAR", ["analise"]); montar("B", "CURRÍCULO VITAE + ANÁLISE CURRICULAR", ["vitae"]); }
   else if (t.servico === "lattesb"){ montar("A", "LATTES COM DOCUMENTO DE COMPROVAÇÃO", ["lattes","certificados"]); }
   else { montar("A", "CURRÍCULO VITAE + ANÁLISE CURRICULAR", ["vitae"]); if (t.servico === "lattes" || pedeLattes) montar("B", `VITAE + ANÁLISE CURRICULAR + LATTES${quem ? ` (${quem})` : ""}`, ["vitae","lattes"]); }
-  return ops;
+  return ops.map(o => ajustarOpcao(o, (t.ajuste || {})[o.letra]));
 }
+/* Ajustes feitos à mão no orçamento: título, cada linha (pela descrição automática), linhas a mais e valor final */
+function ajustarOpcao(o, a){
+  if (!a) return { ...o, linhas:o.linhas.map(l => ({ ...l, orig:l.desc })) };
+  const linhas = o.linhas.map(l => { const x = (a.linhas || {})[l.desc]; if (!x) return { ...l, orig:l.desc };
+    return { ...l, orig:l.desc, desc:x.desc != null && x.desc !== "" ? x.desc : l.desc, conta:x.conta != null && x.conta !== "" ? x.conta : l.conta, valor:x.valor != null && x.valor !== "" ? num(x.valor) : l.valor, manual:true }; }).filter(l => !(a.linhas || {})[l.orig]?.fora);
+  (a.extras || []).forEach((x, i) => linhas.push({ desc:x.desc || "", conta:x.conta || "1", valor:x.valor === "" || x.valor == null ? null : num(x.valor), extra:i, manual:true }));
+  const bruto = r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)); const total = a.total != null && a.total !== "" ? num(a.total) : r2(bruto * (1 - o.desconto / 100));
+  return { ...o, titulo:a.titulo || o.titulo, linhas, bruto, total, totalManual:a.total != null && a.total !== "", manual:true, completo:linhas.every(l => l.valor != null) };
+}
+const NOTA_ORC = "Valor estimado com os certificados recebidos. Pode variar em até 3 certificados para mais ou para menos após a conferência completa de cada edital. Pagamento de 50% na contratação e o restante após a versão para conferência.";
+const msgOrc = (t, ops) => t.msgOrc || mensagemOrcamento(t, ops);
+/* Editor do orçamento. Os campos gravam quando o mentor sai deles. */
+function orcEditor(t, ops){
+  const a = t.ajuste || {}; const inp = (attrs, v, ph, w) => `<input class="in" ${attrs} value="${esc(v ?? "")}" placeholder="${esc(ph ?? "")}" style="padding:5px 8px;font-size:13px;${w ? "width:" + w : ""}">`;
+  return ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between" style="gap:8px"><b>Opção ${o.letra}</b>${inp(`data-orc="titulo" data-l="${o.letra}"`, (a[o.letra] || {}).titulo, o.titulo, "auto;flex:1")}</div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Descrição</th><th>Quantidade</th><th class="r">Valor</th><th></th></tr></thead><tbody>${o.linhas.map(l => { const k = l.extra != null ? `data-x="${l.extra}"` : `data-k="${esc(l.orig)}"`; const x = l.extra != null ? (a[o.letra].extras[l.extra]) : ((a[o.letra] || {}).linhas || {})[l.orig] || {};
+      return `<tr><td>${inp(`data-orc="desc" data-l="${o.letra}" ${k}`, x.desc, l.extra != null ? "Descrição" : l.orig, "100%")}</td><td>${inp(`data-orc="conta" data-l="${o.letra}" ${k}`, x.conta, l.extra != null ? "1" : l.conta, "120px")}</td><td class="r">${inp(`data-orc="valor" data-l="${o.letra}" ${k} type="number" step="0.01" inputmode="decimal"`, x.valor, l.extra != null ? "0,00" : l.valor == null ? "a definir" : br2(l.valor), "100px")}</td><td><button class="btn sm ghost" data-a="orcTirar" data-l="${o.letra}" ${k} title="Tirar esta linha">×</button></td></tr>`; }).join("")}</tbody></table></div>
+    <div class="row between" style="margin-top:8px;gap:8px"><button class="btn sm" data-a="orcLinha" data-l="${o.letra}">+ Linha</button><label class="row small" style="gap:6px">Valor final ${inp(`data-orc="total" data-l="${o.letra}" type="number" step="0.01" inputmode="decimal"`, (a[o.letra] || {}).total, br2(r2(o.bruto * (1 - o.desconto / 100))), "120px")}</label></div></div>`).join("")
+  + `<label class="f"><span>Nota no fim do PDF</span><textarea class="in" data-orc="nota" rows="3" style="font-size:13px">${esc(t.notaOrc || NOTA_ORC)}</textarea></label>
+    <label class="f" style="margin-top:8px"><span>Mensagem do WhatsApp${t.msgOrc ? " (editada à mão)" : ""}</span><textarea class="in" data-orc="msg" rows="9" style="font-size:13px">${esc(msgOrc(t, ops))}</textarea></label>
+    <div class="row" style="margin-top:8px">${t.msgOrc ? `<button class="btn sm" data-a="orcRefazerMsg">Refazer texto com os valores</button>` : ""}<button class="btn sm ghost" data-a="orcAutomatico">Voltar tudo ao automático</button></div>`;
+}
+function orcInput(el){
+  const t = triDe(S.sel); if (!t) return; const campo = el.dataset.orc; const v = el.value;
+  if (campo === "msg"){ t.msgOrc = v.trim() && v !== mensagemOrcamento(t, opcoesTri({ ...t, msgOrc:"" })) ? v : ""; }
+  else if (campo === "nota"){ t.notaOrc = v.trim() && v.trim() !== NOTA_ORC ? v : ""; }
+  else { const a = ((t.ajuste ||= {})[el.dataset.l] ||= {});
+    if (campo === "titulo" || campo === "total") a[campo] = v;
+    else if (el.dataset.x != null) (a.extras ||= [])[+el.dataset.x][campo] = v;
+    else ((a.linhas ||= {})[el.dataset.k] ||= {})[campo] = v; }
+  salvarTri(t);
+  // Redesenha depois que o foco passou para o próximo campo, e devolve o foco a ele
+  setTimeout(() => { const Q = "input, textarea, select, button"; const i = [...document.querySelectorAll(Q)].indexOf(document.activeElement); render(); if (i >= 0){ const novo = document.querySelectorAll(Q)[i]; if (novo){ novo.focus(); if (novo.select && novo.tagName === "INPUT") try { novo.select(); } catch {} } } }, 0);
+}
+const A_ORC = {
+  orcEditar: () => { S.orcEdit = !S.orcEdit; render(); },
+  orcLinha: el => { const t = triDe(S.sel); const a = ((t.ajuste ||= {})[el.dataset.l] ||= {}); (a.extras ||= []).push({ desc:"", conta:"1", valor:"" }); salvarTri(t); render(); },
+  orcTirar: el => { const t = triDe(S.sel); const a = ((t.ajuste ||= {})[el.dataset.l] ||= {}); if (el.dataset.x != null) a.extras.splice(+el.dataset.x, 1); else ((a.linhas ||= {})[el.dataset.k] ||= {}).fora = true; salvarTri(t); render(); },
+  orcRefazerMsg: () => { const t = triDe(S.sel); t.msgOrc = ""; salvarTri(t); render(); },
+  orcAutomatico: () => { if (!confirm("Voltar o orçamento todo ao cálculo automático?")) return; const t = triDe(S.sel); delete t.ajuste; t.msgOrc = ""; t.notaOrc = ""; salvarTri(t); render(); },
+};
 function mensagemOrcamento(t, ops){
   const c = clienteDaTriagem(t); const provas = c.provas.map(p => p.nome);
   const porProva = o => o.linhas.filter(l => l.valor != null && /:/.test(l.desc)).map(l => `${l.desc.split(":")[0]} ${brl(l.valor)}`).join(", ");
@@ -177,9 +218,9 @@ function triagemItemView(){
       <label class="f"><span>Observações</span><textarea class="in" data-tri="obs" rows="2">${esc(t.obs || "")}</textarea></label></div></section>
     <section class="card"><div class="card-h"><h2>Provas</h2></div>${c.provas.length ? `<div class="list">${c.provas.map(p => { const cp = calcDe(c, p); return `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${ANO}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) + " (" + quando(p.prazoEnvio) + ")" : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div></div>${cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : ""}</div>`; }).join("")}</div>` : `<div class="empty">Marque as provas acima</div>`}</section>
    </div><div class="stack">
-    <section class="card"><div class="card-h"><h2>Orçamento</h2>${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}</div>
-      ${ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
-      <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, mensagemOrcamento(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
+    <section class="card"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
+      ${ops.length && S.orcEdit ? orcEditor(t, ops) : ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
+      <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, msgOrc(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
     ${analiseCard(c)}
     <section class="card"><div class="card-h"><h2>PDF da análise</h2></div><p class="xs muted" style="margin:0 0 10px">Sai da análise importada ou da contagem por item lá embaixo, com os comentários de cada item. Uma prova por vez.</p><div class="row">${c.provas.map(p => `<button class="btn sm ${calcDe(c, p).tem ? "pri" : ""}" data-a="pdfAnalise" data-v="${kP(p.nome)}">PDF ${esc(p.nome)}</button>`).join("") || `<span class="xs muted">Sem prova</span>`}</div></section>
     <section class="card"><div class="card-h"><h2>Quando fechar</h2></div><p class="xs muted" style="margin:0 0 10px">Crie o cliente no Notion e cole o texto abaixo. Na próxima sincronização ele entra no painel com a contagem e o código de acesso.</p><button class="btn sm" data-a="copiarNotionTri">Copiar dados para o Notion</button></section>
@@ -206,9 +247,9 @@ function pdfOrcamento(t){
   const ops = opcoesTri(t); if (!ops.length) return; const c = clienteDaTriagem(t);
   const pag = o => `<section class="pg"><div class="cab"><div><h1>ORÇAMENTO - OPÇÃO ${o.letra}</h1><div class="sub">${esc(o.titulo)}</div></div><div class="data">DATA: <u>${hoje_br()}</u></div></div>
     <div class="linhas"><div><b>CLIENTE:</b> ${esc((t.nome || "").toUpperCase())}</div><div><b>CPF:</b> </div><div><b>MENTOR:</b> ${esc((S.mentor?.nome || "JOSÉ EDUARDO").toUpperCase())}</div></div>
-    <div class="tabela"><img class="marca" src="${LOGO_URL()}" alt=""><table><thead><tr><th>DESCRIÇÃO</th><th>QUANTIDADE</th><th>VALOR</th></tr></thead><tbody>${o.linhas.map(l => `<tr><td>${esc(l.desc.replace(/^([^:]+):/, `$1 ${ANO}:`))}</td><td>${esc(l.conta)}</td><td>${l.valor == null ? "a definir" : "R$" + br2(l.valor)}</td></tr>`).join("")}${o.desconto ? `<tr><td>Desconto de ${o.desconto}%</td><td></td><td>- R$${br2(o.bruto - o.total)}</td></tr>` : ""}</tbody></table></div>
+    <div class="tabela"><img class="marca" src="${LOGO_URL()}" alt=""><table><thead><tr><th>DESCRIÇÃO</th><th>QUANTIDADE</th><th>VALOR</th></tr></thead><tbody>${o.linhas.map(l => `<tr><td>${esc(l.desc.replace(/^([^:]+):/, `$1 ${ANO}:`))}</td><td>${esc(l.conta)}</td><td>${l.valor == null ? "a definir" : "R$" + br2(l.valor)}</td></tr>`).join("")}${o.bruto - o.total > 0.004 ? `<tr><td>${o.desconto && !o.totalManual ? `Desconto de ${o.desconto}%` : "Desconto"}</td><td></td><td>- R$${br2(o.bruto - o.total)}</td></tr>` : ""}</tbody></table></div>
     <div class="total">VALOR TOTAL: R$ ${br2(o.total)}</div>
-    <p class="nota">Valor estimado com os certificados recebidos. Pode variar em até 3 certificados para mais ou para menos após a conferência completa de cada edital. Pagamento de 50% na contratação e o restante após a versão para conferência.</p>
+    <p class="nota">${esc(t.notaOrc || NOTA_ORC).replace(/\n/g, "<br>")}</p>
     <div class="rod">(62) 99515-5830 / medeasyy0@gmail.com / Goiânia, Goiás- Brasil</div></section>`;
   abrirDoc(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Orçamento ${esc(t.nome)}</title>${FONTES}<style>
     @page{size:A4;margin:0} *{box-sizing:border-box} body{margin:0;background:#888;font-family:Poppins,sans-serif;color:#1b1b1b;-webkit-print-color-adjust:exact;print-color-adjust:exact}

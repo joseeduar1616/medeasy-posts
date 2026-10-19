@@ -37,6 +37,8 @@ function portalView(p, preview){
         ${!preview && typeof marcacaoView === "function" ? marcacaoView(pv) : ""}
       </section>`; }).join("")}
 
+    ${!preview && typeof certsClienteView === "function" ? certsClienteView() : ""}
+
     ${(p.documentos || []).length ? `<section class="card"><div class="card-h"><h2>Seus documentos</h2></div><div class="list">${p.documentos.map(d => `<div class="li"><div class="grow"><div class="t">${esc(d.nome)}</div></div>${d.link ? `<a class="btn sm pri" href="${esc(d.link)}" target="_blank" rel="noopener">Abrir</a>` : ""}</div>`).join("")}</div></section>` : ""}
 
     ${(p.atualizacoes || []).length ? `<section class="card"><div class="card-h"><h2>Novidades</h2></div><div class="tl">${[...p.atualizacoes].reverse().slice(0, 12).map(a => `<div class="tl-i"><div class="xs muted">${esc(dataHora(a.em))}</div><div class="small">${esc(a.texto)}</div></div>`).join("")}</div></section>` : ""}

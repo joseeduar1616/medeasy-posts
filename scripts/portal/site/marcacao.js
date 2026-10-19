@@ -57,3 +57,47 @@ function importarMarc(codigo){
   reg.rascunho = true; reg.copiado = false; gravarRasc(c.id);
   S.sel = c.id; S.view = "cliente"; (S.ciProva ||= {})[c.id] = pk; render(); window.scrollTo(0, 0); toast(`Marcação de ${primeiro(c.nome)} para ${p.nome} importada como rascunho. Confira e copie para o Notion`);
 }
+
+/* ---------- certificados do cliente: ele escolhe os PDFs no celular e manda a lista ao mentor ---------- */
+/* Os arquivos são lidos no aparelho dele e não sobem. Vai só a lista, num link ?k= que entra no controle do mentor. */
+const certsCliKey = () => "medeasy-certs-" + (S.portal?.id || "x");
+const lerCertsCli = () => { try { return JSON.parse(localStorage.getItem(certsCliKey()) || "[]"); } catch { return []; } };
+const gravarCertsCli = l => { try { localStorage.setItem(certsCliKey(), JSON.stringify(l)); } catch {} };
+function certsClienteView(){
+  const l = lerCertsCli();
+  return `<section class="card"><div class="card-h"><h2>Seus certificados</h2>${l.length ? `<span class="pill info">${l.length}</span>` : ""}</div>
+   <p class="small muted" style="margin:0 0 10px">Escolha os PDFs ou as fotos dos seus certificados. O site lê aqui no seu aparelho e monta a lista para o seu mentor. Os arquivos não saem do seu celular.</p>
+   <div class="row"><label class="btn sm pri" style="cursor:pointer">Escolher arquivos<input type="file" accept=".pdf,application/pdf,image/*" multiple hidden data-cliarq="1"></label>${l.length ? `<button class="btn sm" data-a="enviarCertsCli">Enviar lista para o mentor</button><button class="btn sm ghost" data-a="limparCertsCli">Limpar</button>` : ""}</div>
+   ${l.length ? `<div class="list" style="margin-top:12px">${l.map((x, i) => `<div class="li"><div class="grow" style="min-width:0"><div class="t">${esc(x.desc)}</div><div class="xs muted">${esc([x.tipo, x.ano, x.ch ? x.ch + "h" : "", x.arquivo].filter(Boolean).join(" · "))}</div></div><button class="btn sm ghost" data-a="apagarCertCli" data-i="${i}" title="Tirar da lista">×</button></div>`).join("")}</div>
+   <p class="xs muted" style="margin:10px 0 0">A lista vai pelo WhatsApp. Os PDFs você ${FORM_CERT ? "manda pelo botão abaixo" : "manda na mesma conversa"}, para o mentor conferir.</p>${FORM_CERT ? `<a class="btn sm" style="margin-top:8px" href="${FORM_CERT}" target="_blank" rel="noopener">Enviar os PDFs</a>` : ""}` : ""}
+  </section>`;
+}
+async function importarCertsCli(input){
+  const fs = [...(input.files || [])]; input.value = ""; if (!fs.length) return;
+  const l = lerCertsCli(); const ja = new Set(l.map(x => x.arquivo)); let n = 0, rep = 0;
+  toast(`Lendo ${fs.length} ${fs.length === 1 ? "arquivo" : "arquivos"}`);
+  for (const f of fs){ for (const x of await certsDoArquivo(f)){ if (ja.has(x.arquivo)){ rep++; continue; } ja.add(x.arquivo); l.push({ desc:x.desc, tipo:x.tipo, ano:x.ano, ch:x.ch, arquivo:x.arquivo }); n++; } }
+  gravarCertsCli(l); render();
+  toast(n ? `${n} ${n === 1 ? "certificado na lista" : "certificados na lista"}${rep ? `, ${rep} já ${rep === 1 ? "estava" : "estavam"}` : ""}` : "Esses arquivos já estavam na lista");
+}
+function enviarCertsCli(){
+  const l = lerCertsCli(); if (!l.length) return; const ct = S.portal.contato || CONTATO;
+  const link = `${location.href.split("#")[0].split("?")[0]}?k=${codigoMarc({ id:S.portal.id, nome:S.portal.nome, em:Date.now(), l:l.map(x => [x.desc, x.tipo, x.ano, x.ch, x.arquivo]) })}`;
+  const porTipo = {}; l.forEach(x => porTipo[x.tipo] = (porTipo[x.tipo] || 0) + 1);
+  const txt = `Oi, ${ct.mentor.split(" ")[0]}! Montei no portal a lista dos meus certificados\n\nTotal: ${l.length}\n${Object.entries(porTipo).sort((a, b) => b[1] - a[1]).map(([t, n]) => `${t}: ${n}`).join("\n")}\n\nAbrir no painel: ${link}`;
+  window.open(waLink(ct.whats, txt), "_blank");
+}
+/* No painel do mentor: o link ?k= entra no controle de certificados do cliente */
+function importarCertsDoLink(codigo){
+  let d; try { d = JSON.parse(decodeURIComponent(escape(atob(codigo.replace(/-/g, "+").replace(/_/g, "/"))))); } catch { toast("Link de certificados inválido"); return; }
+  const c = (S.eq.clientes || []).find(x => x.id === d.id); if (!c){ toast(`Não achei o cliente ${d.nome || ""} no painel`); return; }
+  const ct = ctrlDe(c); const ja = new Set(ct.certs.map(x => semAcento(x.arquivo || "") + "|" + semAcento(x.desc))); let n = 0;
+  for (const [desc, tipo, ano, ch, arquivo] of d.l || []){ const k = semAcento(arquivo || "") + "|" + semAcento(desc); if (ja.has(k)) continue; ja.add(k); ct.certs.push({ id:novoIdC(), desc:desc || "", tipo:TIPOS_CERT.includes(tipo) ? tipo : "Outro", ano:ano || "", ch:ch || "", obs:"Enviado pelo cliente", arquivo:arquivo || "" }); n++; }
+  salvarCtrl(c); delete S.cont[c.id]; S.sel = c.id; S.view = "cliente"; (S.ctAba ||= {})[c.id] = "certs"; render(); window.scrollTo(0, 0);
+  toast(n ? `${n} ${n === 1 ? "certificado" : "certificados"} de ${primeiro(c.nome)} no controle. Confira e salve no Notion` : `A lista de ${primeiro(c.nome)} já estava no controle`);
+}
+const A_CERTCLI = {
+  enviarCertsCli: () => enviarCertsCli(),
+  apagarCertCli: el => { const l = lerCertsCli(); l.splice(+el.dataset.i, 1); gravarCertsCli(l); render(); },
+  limparCertsCli: () => { if (!confirm("Limpar a lista de certificados?")) return; gravarCertsCli([]); render(); },
+};
