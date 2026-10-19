@@ -1,0 +1,27 @@
+{"slug": "2026-10-19-1200-vagas-5-provas-abertas", "pillar": "mapa de vagas", "header": ["VAGAS", "5 PROVAS 2027"], "verified_on": "2026-10-19",
+"sources": ["PSU-MG: aremg.org.br/processos-atuais e Retificação nº 4 da AREMG (15/10/2026): inscrições até 19/10 17h, prova 22/11, currículo 10% com a inscrição; mais de 1.300 vagas em mais de 90 instituições (Estratégia MED, Medway, MedCof, IPM)", "PSU-GO: edital Ânima 23/09/2026, MedCof, Medway e Estratégia MED: 317 vagas em 22 instituições, inscrições até 20/10 9h às 18h na AREMG, currículo 10 de 100 pontos com a inscrição, prova 29/11", "SES-GO: Edital de Abertura COREME SES-GO 2027 (sistemas.institutoverbena.ufg.br/2027/coreme-ses): 219 vagas, inscrições até 03/11 17h, prova 06/12, currículo 100 pontos na 2ª fase", "SES-DF: Edital RM-1/SES/DF/2027 (IADES): mais de 560 vagas em 74 programas, sem análise curricular, inscrições até 18/11 23h59, prova 12/12", "SUS-SP: vunesp.com.br/SESA2601, Estratégia MED, VestibulandoWeb, BIP: mais de 1.380 vagas em 61 instituições, inscrições 20/10 a 05/11, prova 13/12 como etapa única", "log/news_seen.md 19/10 11h: sem prorrogação ou retificação nova nas 5 provas"],
+"slides": [
+{"type": "cover", "label": "Residência médica 2027", "pill": "INSCRIÇÕES ABERTAS", "title": ["QUANTAS", "<span class='g glow'>VAGAS?</span>"], "body": "As 5 provas do público MedEasy que ainda estão com inscrição aberta ou abrindo: <b>quantas vagas</b>, se <b>precisa de currículo</b> e até quando dá para se inscrever.", "bullets": ["Vagas de cada prova", "Precisa de currículo?", "Último dia de inscrição"]},
+{"type": "rows", "label": "Vagas 2027", "title": ["ONDE TEM MAIS <span class='y'>VAGA</span>"], "sub": "Total de vagas de cada seleção", "rows": [
+ {"name": "SUS-SP", "sub": "61 instituições paulistas", "value": "1.380+"},
+ {"name": "PSU-MG", "sub": "Mais de 90 instituições", "value": "1.300+"},
+ {"name": "SES-DF", "sub": "74 programas", "value": "560+"},
+ {"name": "PSU-GO", "sub": "22 instituições", "value": "317"},
+ {"name": "SES-GO", "sub": "Hospitais estaduais de Goiás", "value": "219"}],
+ "note": "Mais vaga não quer dizer menos disputa. Confira a concorrência do seu programa antes de escolher."},
+{"type": "rows", "label": "Análise curricular", "title": ["PRECISA DE <span class='g'>CURRÍCULO?</span>"], "sub": "Conforme os editais 2027", "rows": [
+ {"name": "SUS-SP", "sub": "A prova objetiva é a etapa única", "value": "NÃO"},
+ {"name": "SES-DF", "sub": "Sem análise curricular", "value": "NÃO"},
+ {"name": "PSU-MG", "sub": "Vale 10% da nota. Vai com a inscrição", "value": "SIM"},
+ {"name": "PSU-GO", "sub": "Vale 10 de 100 pontos. Vai com a inscrição", "value": "SIM"},
+ {"name": "SES-GO", "sub": "Vale 100 pontos na 2ª fase", "value": "SIM"}],
+ "note": "No PSU-MG e no PSU-GO, o currículo enviado <b>não pode ser trocado depois</b>."},
+{"type": "rows", "label": "Inscrições", "title": ["ATÉ <span class='y'>QUANDO</span> DÁ?"], "sub": "Último dia de inscrição, horário de Brasília", "rows": [
+ {"name": "PSU-MG", "sub": "Hoje, até as 17h. Prova em 22/11", "value": "19/10"},
+ {"name": "PSU-GO", "sub": "Amanhã, das 9h às 18h. Prova em 29/11", "value": "20/10"},
+ {"name": "SES-GO", "sub": "Até as 17h. Prova em 06/12", "value": "03/11"},
+ {"name": "SUS-SP", "sub": "Abre amanhã, 20/10. Prova em 13/12", "value": "05/11"},
+ {"name": "SES-DF", "sub": "Até as 23h59. Prova em 12/12", "value": "18/11"}]},
+{"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>NÃO PERDER</span>"], "pill": "SALVA", "body": "e manda para quem vai<br>prestar com você.", "note": "Vai prestar PSU-MG, PSU-GO ou SES-GO? Chama a <b>MedEasy</b> no direct para organizar o seu currículo.", "small": "Fontes: editais 2027 de PSU-MG e PSU-GO (AREMG), SES-GO (Instituto Verbena/UFG), SES-DF (IADES) e SUS-SP (Vunesp), com conferência em Estratégia MED, Medway e MedCof. Totais de PSU-MG e SUS-SP variam entre os levantamentos. Confira o edital do seu programa."}],
+"story": {"kicker": "POST NOVO", "cta": "Quantas vagas? <span>5 provas 2027</span> com inscrição aberta.<br>Veja no feed da @med_easyy."},
+"caption": "📍 QUANTAS VAGAS CADA PROVA TEM\n\nSUS-SP e PSU-MG passam de 1.300 vagas cada. A SES-DF tem mais de 560, o PSU-GO tem 317 e a SES-GO, 219.\n\nPrecisa de currículo? No SUS-SP e na SES-DF, não: só a prova decide. No PSU-MG e no PSU-GO, sim, e ele vai junto com a inscrição. Na SES-GO, o currículo vale 100 pontos na 2ª fase.\n\nE corre: o PSU-MG fecha hoje, às 17h, e o PSU-GO fecha amanhã, 20/10, às 18h. Arrasta para ver todos os prazos e as datas de prova. Salva e manda para quem vai prestar com você 📌\n\nQual dessas está na sua lista? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #residencia2027 #psumg #psugo #sesgo #sesdf"}
