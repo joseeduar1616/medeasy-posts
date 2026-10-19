@@ -15,8 +15,12 @@ Cloudflare Worker que grava no Notion o que o mentor muda pelo site e manda o Gi
    npx wrangler secret put GITHUB_TOKEN         # token fine-grained só com Actions: write em medeasy-posts
    npx wrangler deploy
    ```
-3. O deploy mostra o endereço, tipo `https://medeasy-ponte.SEU-USUARIO.workers.dev`. Cole esse endereço em `scripts/portal/ponte.txt`, rode `node scripts/portal/montar-site.mjs` e publique.
+3. O deploy mostra o endereço, tipo `https://medeasy-ponte.SEU-USUARIO.workers.dev`. Cole esse endereço em `scripts/portal/ponte.txt` (fica no repositório, não é segredo), rode `node scripts/portal/montar-site.mjs` e publique.
 4. No Notion, abra a conexão "Portal MedEasy" e ligue "Atualizar conteúdo" em Funções. Sem isso o Worker só consegue ler.
+
+## Agendamento
+
+O `wrangler.toml` tem um agendamento a cada 10 minutos que dispara a sincronização do Notion no GitHub. Ele só passa a valer depois de `npx wrangler deploy`.
 
 ## O que ele aceita
 

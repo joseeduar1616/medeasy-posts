@@ -115,6 +115,7 @@ async function entrarMentor(nome, senha, senhaAdmin){
     S.pedirAdmin = null; S.eq = eq; S.mentor = m; S.admin = admin; S.modo = "mentor"; S.senha = senha; S.senhaAdmin = admin ? senhaAdmin : ""; guardar("mentor", nome, senha, admin ? senhaAdmin : "");
     if (S.importar){ const d = lerCodigoTri("?i=" + S.importar); S.importar = null; if (d) importarTri("?i=" + codigoTri(d)); }
     if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
+    if (typeof pedirSincronizacao === "function") pedirSincronizacao();
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
 }

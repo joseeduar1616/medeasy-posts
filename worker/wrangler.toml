@@ -6,3 +6,7 @@ compatibility_date = "2026-10-01"
 [vars]
 GITHUB_REPO = "joseeduar1616/medeasy-posts"
 ORIGEM = "https://curriculosmedeasy.com.br,https://www.curriculosmedeasy.com.br,https://joseeduar1616.github.io"
+
+# Pede a sincronização do Notion a cada 10 minutos
+[triggers]
+crons = ["*/10 * * * *"]
