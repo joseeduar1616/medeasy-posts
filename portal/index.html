@@ -356,6 +356,7 @@ async function entrarMentor(nome, senha, senhaAdmin){
     S.pedirAdmin = null; S.eq = eq; S.mentor = m; S.admin = admin; S.modo = "mentor"; S.senha = senha; S.senhaAdmin = admin ? senhaAdmin : ""; guardar("mentor", nome, senha, admin ? senhaAdmin : "");
     if (S.importar){ const d = lerCodigoTri("?i=" + S.importar); S.importar = null; if (d) importarTri("?i=" + codigoTri(d)); }
     if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
+    if (typeof pedirSincronizacao === "function") pedirSincronizacao();
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
 }
@@ -1339,6 +1340,14 @@ async function salvarNotion(pageId, props, mensagem){
   toast(mensagem || (j.sincronizar && j.sincronizar.ok ? "Gravado no Notion. O site atualiza em 1 ou 2 minutos" : "Gravado no Notion"));
   if (j.recusadas && j.recusadas.length) setTimeout(() => toast("Sem permissão para: " + j.recusadas.join(", ")), 2800);
   return j;
+}
+/* Ao entrar, pede ao GitHub para ler o Notion de novo. No máximo uma vez a cada 10 minutos por aparelho. */
+function pedirSincronizacao(){
+  if (!temPonte()) return;
+  let ult = 0; try { ult = Number(localStorage.getItem("medeasy-sync")) || 0; } catch {}
+  if (Date.now() - ult < 10 * 60 * 1000) return;
+  try { localStorage.setItem("medeasy-sync", String(Date.now())); } catch {}
+  pontePedido("/sincronizar").catch(() => {});
 }
 /* Qual linha do Notion recebe os textos do cliente (contagem e controle): o serviço em andamento, ou o primeiro */
 const paginaDoCliente = c => { const s = (c.servicos || []).find(s => s.notion && (s.etapa || 0) < 6) || (c.servicos || []).find(s => s.notion); return s ? s.id : ""; };

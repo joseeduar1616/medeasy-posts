@@ -101,4 +101,6 @@ export default {
     }
     return resposta({ erro: "rota desconhecida" }, 404, h);
   },
+  // Agendamento do Cloudflare (wrangler.toml, [triggers]). O agendamento do GitHub atrasa horas, este não.
+  async scheduled(evento, env, ctx) { ctx.waitUntil(sincronizar(env)); },
 };

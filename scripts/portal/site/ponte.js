@@ -17,6 +17,14 @@ async function salvarNotion(pageId, props, mensagem){
   if (j.recusadas && j.recusadas.length) setTimeout(() => toast("Sem permissão para: " + j.recusadas.join(", ")), 2800);
   return j;
 }
+/* Ao entrar, pede ao GitHub para ler o Notion de novo. No máximo uma vez a cada 10 minutos por aparelho. */
+function pedirSincronizacao(){
+  if (!temPonte()) return;
+  let ult = 0; try { ult = Number(localStorage.getItem("medeasy-sync")) || 0; } catch {}
+  if (Date.now() - ult < 10 * 60 * 1000) return;
+  try { localStorage.setItem("medeasy-sync", String(Date.now())); } catch {}
+  pontePedido("/sincronizar").catch(() => {});
+}
 /* Qual linha do Notion recebe os textos do cliente (contagem e controle): o serviço em andamento, ou o primeiro */
 const paginaDoCliente = c => { const s = (c.servicos || []).find(s => s.notion && (s.etapa || 0) < 6) || (c.servicos || []).find(s => s.notion); return s ? s.id : ""; };
 /* Edição rápida do serviço na tela do cliente */
