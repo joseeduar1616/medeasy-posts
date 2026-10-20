@@ -1,0 +1,34 @@
+{
+ "slug": "2026-10-20-1200-unifesp-2027-guia",
+ "pillar": "o que diz o edital",
+ "header": ["EDITAL", "UNIFESP 2027"],
+ "verified_on": "2026-10-20",
+ "sources": [
+  "https://www.grupomedcof.com.br/blog/edital-unifesp-residencia-medica/ (inscrições 07/10 7h a 30/10 23h59 na Vunesp, taxa R$ 726, 248 vagas de acesso direto, prova 29/11 às 13h, prática do acesso direto 08/01/2027, análise curricular 04 a 21/01/2027, Lattes atualizado até 04/12/2026, 1ª fase 15/12, final 04/02/2027)",
+  "https://portal.estrategia.com/medicina/residencia-medica/edital-unifesp-2027-tudo-sobre-a-residencia-medica/ (conferência: inscrições 07/10 a 30/10, taxa R$ 726, 248 de acesso direto, prova 29/11, prática 08/01, análise curricular 04 a 21/01, 1ª fase 15/12, final 04/02)",
+  "Edital Unifesp 2027 (Vunesp, vunesp.com.br/UFSP2602), já conferido em posts/2026-10-14-1200-precisa-curriculo-8-provas.json: análise curricular peso 1 e Lattes até 04/12"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "UNIFESP", "title": ["UNIFESP 2027:", "<span class='g glow'>O QUE SABER</span>"], "body": "Inscrições abertas até <b>30/10</b> na Vunesp. Veja vagas, taxa, as fases e se a Unifesp <b>precisa de currículo</b>.", "bullets": ["Vagas e inscrição", "Precisa de currículo?", "Cronograma até o resultado"]},
+  {"type": "rows", "label": "Inscrição", "title": ["VAGAS E <span class='y'>INSCRIÇÃO</span>"], "sub": "Escola Paulista de Medicina, banca Vunesp", "rows": [
+    {"name": "Acesso direto", "sub": "Vagas sem pré-requisito", "value": "248"},
+    {"name": "Inscrições", "sub": "Até as 23h59, site da Vunesp", "value": "30/10"},
+    {"name": "Taxa", "sub": "Pix ou cartão de crédito", "value": "R$ 726"},
+    {"name": "Prova objetiva", "sub": "Às 13h, a mesma para todos", "value": "29/11"}
+  ], "note": "Há também vagas em programas com pré-requisito e áreas de atuação. Confira o seu programa no edital."},
+  {"type": "rows", "label": "Currículo", "title": ["PRECISA DE <span class='g'>CURRÍCULO?</span>"], "sub": "Sim, mas só depois da prova objetiva", "rows": [
+    {"name": "Peso", "sub": "Análise curricular na nota final", "value": "1"},
+    {"name": "Lattes", "sub": "Atualizado até esta data", "value": "04/12"},
+    {"name": "Análise", "sub": "Período da análise curricular", "value": "04 a 21/01"}
+  ], "note": "No acesso direto, a nota ainda tem a <b>prova prática</b>. Deixe o Lattes pronto antes de 04/12."},
+  {"type": "rows", "label": "Cronograma", "title": ["DA PROVA AO <span class='y'>RESULTADO</span>"], "sub": "Datas do edital 2027", "rows": [
+    {"name": "Prova objetiva", "sub": "Gabarito no mesmo dia", "value": "29/11"},
+    {"name": "Resultado da 1ª fase", "sub": "A partir desta data", "value": "15/12"},
+    {"name": "Prova prática", "sub": "Acesso direto", "value": "08/01"},
+    {"name": "Resultado final", "sub": "E convocação para matrícula", "value": "04/02"}
+  ]},
+  {"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>NÃO PERDER</span>"], "pill": "SALVA", "body": "e manda para quem vai<br>prestar com você.", "note": "Vai prestar Unifesp? Chama a <b>MedEasy</b> no direct para organizar o seu currículo.", "small": "Fonte: edital de residência médica Unifesp 2027 (Vunesp), conferido com MedCof e Estratégia MED. Confira o edital do seu programa."}
+ ],
+ "story": {"kicker": "UNIFESP 2027", "cta": "Inscrições <span>até 30/10</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "🏥 UNIFESP 2027: O QUE SABER ANTES DE SE INSCREVER\n\nAs inscrições da residência médica da Unifesp vão até 30/10, às 23h59, pelo site da Vunesp. A taxa é de R$ 726 e são 248 vagas de acesso direto. A prova objetiva é no dia 29/11, às 13h.\n\nPrecisa de currículo? Sim, mas só depois da prova. A análise curricular tem peso 1, o Lattes precisa estar atualizado até 04/12 e a análise acontece de 04 a 21/01. No acesso direto, a nota ainda tem a prova prática, em 08/01.\n\nO resultado final sai a partir de 04/02/2027. Arrasta para ver o cronograma completo. Salva e manda para quem vai prestar com você 📌\n\nVai prestar Unifesp? Qual especialidade? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#unifesp #residenciamedica #residencia2027 #saopaulo #vunesp #medicina"
+}
