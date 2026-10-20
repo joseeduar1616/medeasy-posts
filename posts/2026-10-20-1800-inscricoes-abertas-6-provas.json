@@ -1,0 +1,83 @@
+{
+ "slug": "2026-10-20-1800-inscricoes-abertas-6-provas",
+ "pillar": "calendário e prazos",
+ "header": ["INSCRIÇÕES", "6 PROVAS 2027"],
+ "verified_on": "2026-10-20",
+ "sources": [
+  "posts/2026-10-12-1200-usp-2027-enamed-curriculo.json (Edital COREME/FM nº 02/2026: inscrições até 26/10 12h, prova 06/12, currículo peso 1 depois da prova)",
+  "posts/2026-10-19-1715-amrigs-2027-prorrogada.json (Edital nº 08/2026 Fundatec: inscrições até 26/10, prova 22/11 às 9h) e posts/2026-10-13-1800-amrigs-2027-curriculo.json (currículo 10% nas instituições que adotam)",
+  "posts/2026-10-20-1200-unifesp-2027-guia.json e edital Unifesp 2027 Vunesp (inscrições até 30/10 23h59, prova 29/11, currículo peso 1 depois da prova)",
+  "posts/2026-10-09-1800-sesgo-2027-edital.json (Edital nº 24/2026 COREME SES-GO: inscrições até 03/11 17h, prova 06/12, currículo 100 pontos na 2ª fase)",
+  "posts/2026-10-18-1800-sussp-2027-abre-terca.json (vunesp.com.br/SESA2601: inscrições 20/10 a 05/11, prova 13/12 etapa única)",
+  "posts/2026-10-10-1800-sesdf-2027-guia.json (Edital RM-1/SES/DF/2027: inscrições até 18/11 23h59, prova 12/12, sem análise curricular)",
+  "log/news_seen.md, varredura de 20/10 17h: nenhuma retificação ou prorrogação nova nessas 6 provas"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica 2027",
+   "pill": "6 PROVAS",
+   "title": ["AINDA DÁ", "<span class='g glow'>TEMPO</span>"],
+   "body": "Seis provas de 2027 seguem com <b>inscrição aberta</b>. Veja quem fecha primeiro, a data de cada prova e se precisa de currículo.",
+   "bullets": ["Último dia de inscrição", "Data da prova", "Precisa de currículo?"]
+  },
+  {
+   "type": "rows",
+   "label": "Inscrições",
+   "title": ["QUEM FECHA <span class='y'>PRIMEIRO</span>"],
+   "sub": "Último dia de inscrição, horário de Brasília",
+   "rows": [
+    {"name": "USP-SP", "sub": "Até as 12h, FUVEST", "value": "26/10"},
+    {"name": "AMRIGS", "sub": "Prorrogada pela Fundatec", "value": "26/10"},
+    {"name": "Unifesp", "sub": "Até as 23h59, Vunesp", "value": "30/10"},
+    {"name": "SES-GO", "sub": "Até as 17h, Instituto Verbena", "value": "03/11"},
+    {"name": "SUS-SP", "sub": "Vunesp", "value": "05/11"},
+    {"name": "SES-DF", "sub": "Até as 23h59, IADES", "value": "18/11"}
+   ],
+   "note": "Na USP-SP, o prazo acaba ao <b>meio-dia</b> de 26/10."
+  },
+  {
+   "type": "rows",
+   "label": "Provas",
+   "title": ["QUANDO É A <span class='g'>PROVA</span>"],
+   "sub": "Datas previstas nos editais",
+   "rows": [
+    {"name": "AMRIGS", "sub": "Às 9h", "value": "22/11"},
+    {"name": "Unifesp", "sub": "Prova objetiva", "value": "29/11"},
+    {"name": "USP-SP", "sub": "Mesmo dia da SES-GO", "value": "06/12"},
+    {"name": "SES-GO", "sub": "Mesmo dia da USP-SP", "value": "06/12"},
+    {"name": "SES-DF", "sub": "Um dia antes do SUS-SP", "value": "12/12"},
+    {"name": "SUS-SP", "sub": "Prova objetiva em SP", "value": "13/12"}
+   ],
+   "note": "USP-SP e SES-GO caem no <b>mesmo dia</b>. Escolha uma das duas."
+  },
+  {
+   "type": "rows",
+   "label": "Currículo",
+   "title": ["PRECISA DE <span class='y'>CURRÍCULO?</span>"],
+   "sub": "Conforme os editais 2027",
+   "rows": [
+    {"name": "SES-DF", "sub": "Sem análise curricular", "value": "NÃO"},
+    {"name": "SUS-SP", "sub": "A prova objetiva é a etapa única", "value": "NÃO"},
+    {"name": "USP-SP", "sub": "Peso 1, enviado depois da prova", "value": "SIM"},
+    {"name": "Unifesp", "sub": "Peso 1, Lattes atualizado até 04/12", "value": "SIM"},
+    {"name": "SES-GO", "sub": "100 pontos na 2ª fase", "value": "SIM"},
+    {"name": "AMRIGS", "sub": "10%, só nas instituições que adotam", "value": "DEPENDE"}
+   ],
+   "note": "Na AMRIGS, o Currículo Online vai até <b>27/10</b>."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA PARA", "<span class='g glow'>NÃO PERDER</span>"],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: editais 2027 de USP-SP (FMUSP/FUVEST), AMRIGS (Fundatec, Edital nº 08/2026), Unifesp (Vunesp), SES-GO (Instituto Verbena/UFG), SUS-SP (Vunesp) e SES-DF (IADES). Confira o edital do seu programa."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "Ainda dá tempo: <span>6 provas de 2027</span> com inscrição aberta.<br>Veja no feed da @med_easyy."
+ },
+ "caption": "⏰ AINDA DÁ TEMPO: 6 PROVAS COM INSCRIÇÃO ABERTA\n\nUSP-SP e AMRIGS fecham primeiro, em 26/10. Na USP-SP, o prazo acaba ao meio-dia. Depois vêm Unifesp (30/10), SES-GO (03/11), SUS-SP (05/11) e SES-DF (18/11).\n\nAtenção: USP-SP e SES-GO têm prova no mesmo dia, 06/12.\n\nSES-DF e SUS-SP não têm análise curricular. USP-SP, Unifesp e SES-GO avaliam o currículo depois da prova, e na AMRIGS depende da instituição. Arrasta para ver tudo 📌\n\nSalva e manda para quem vai prestar com você. Em qual dessas você ainda vai se inscrever? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #residencia2027 #sesgo #sesdf #usp #amrigs"
+}
