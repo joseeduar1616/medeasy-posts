@@ -1,0 +1,54 @@
+name: Portal MedEasy - ponte (Cloudflare Worker)
+
+# Verifica qual versão da ponte está no ar e, se houver o secret CLOUDFLARE_API_TOKEN,
+# publica a pasta worker/ no Cloudflare. Os secrets do Worker (senhas e tokens) ficam no Cloudflare e não mudam.
+on:
+  push:
+    branches: [main]
+    paths: ["worker/**"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portal-ponte
+  cancel-in-progress: false
+
+jobs:
+  ponte:
+    runs-on: ubuntu-latest
+    env:
+      PONTE: https://medeasy-ponte.medeasy.workers.dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Publicar no Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "Sem o secret CLOUDFLARE_API_TOKEN. Pulei a publicação, só vou verificar a versão no ar."; exit 0
+          fi
+          cd worker && npx --yes wrangler@4 deploy
+
+      - name: Verificar a versão no ar
+        env:
+          SENHA: ${{ secrets.PORTAL_SENHA }}
+        run: |
+          curl -s "$PONTE/saude"; echo
+          # Página que não existe: a versão nova responde com erro do Notion, a antiga com "rota desconhecida". Não grava nada.
+          for s in "$SENHA" "$(printf '%s' "$SENHA" | tr '[:upper:]' '[:lower:]')"; do
+            r=$(curl -s -X POST "$PONTE/triagem" -H "Authorization: Bearer $s" -H "Content-Type: application/json" -d '{"id":"00000000000000000000000000000000","props":{}}')
+            case "$r" in *"senha da equipe"*) continue ;; esac
+            echo "Resposta: $r"
+            case "$r" in
+              *"rota desconhecida"*) echo "::warning::Ponte ANTIGA no ar. Falta publicar a versão nova."; exit 0 ;;
+              *) echo "Ponte NOVA no ar (rotas /triagem e /cliente funcionando)."; exit 0 ;;
+            esac
+          done
+          echo "::warning::Não consegui entrar na ponte com a senha da equipe do GitHub."
