@@ -47,7 +47,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 
 ## Notion
 
-- A base "Controle cliente" fica em https://app.notion.com/p/Clientes-10e01997062f83fdbe2001c61ce41a4b. Cada linha é um serviço, e as linhas são agrupadas por nome do cliente mais os 8 últimos dígitos do telefone.
+- A base "Controle cliente" fica em https://app.notion.com/p/Clientes-2b34d05bd374809a8b54cfb8413a106c (Espaço de MedEasy). Cada linha é um serviço, e as linhas são agrupadas por nome do cliente mais os 8 últimos dígitos do telefone.
 - "Tipo de serviço" mistura serviços (Vitae, Lattes, ANALISE, Certificados) e provas (PSUGO, PSUMG, HPP...). Uma prova escrita no fim do nome do cliente ("Jose Nicolas PSU") também conta.
 - A base "Triagem MedEasy", dentro da página Clientes, recebe o formulário "Enviar certificados" (nome, WhatsApp, mentor, provas, pedido, arquivos) e as triagens feitas no site (colunas Serviço, Valor do orçamento, Situação e "Dados do site", um JSON gravado pela ponte que não se edita à mão). O build lê essa base. As linhas sem "Dados do site" aparecem na aba Triagem como "Chegaram pelo formulário", com botão Importar.
 - "Controle de certificados" é um JSON colado do site (`{certs, aloc, pend}`). O build lê e devolve em `c.controle`, e as pendências do cliente entram no portal dele.
