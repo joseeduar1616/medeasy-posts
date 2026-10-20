@@ -37,8 +37,19 @@ async function lerArquivoAnaliseSite(arquivo){
 /* Guardar: cliente do Notion fica neste navegador, triagem fica no registro dela */
 const anKey = id => "medeasy-analise-" + id;
 function analisesDe(c){ if (c.triagem) return c.triagem.analises || {}; try { return JSON.parse(localStorage.getItem(anKey(c.id)) || "{}"); } catch { return {}; } }
+/* Nome da prova da análise: reconhece pelo título, mesmo nas análises guardadas antes dessa correção */
+const nomeDaAnalise = pr => pr.provaEscolhida || provaDoTitulo([pr.titulo, pr.nome].filter(Boolean).join(" ")) || pr.nome;
+const provaConhecida = nome => PROVAS.some(p => kP(p.nome) === kP(nome));
+/* O mentor diz de qual prova é a análise quando o PDF não deixa claro */
+function escolherProvaAnalise(el){
+  const c = clienteSel(); const tudo = analisesDe(c); const pr = tudo[el.dataset.k]; if (!pr || !el.value) return;
+  delete tudo[el.dataset.k]; pr.provaEscolhida = el.value; pr.titulo = pr.titulo || pr.nome; pr.nome = el.value; tudo[kP(el.value)] = pr;
+  if (c.triagem){ const t = triDe(c.id); t.analises = tudo; if (!(t.provas || []).includes(PROVAS.find(p => p.nome === el.value)?.k)) t.provas = [...(t.provas || []), PROVAS.find(p => p.nome === el.value).k]; salvarTri(t); }
+  else { try { localStorage.setItem(anKey(c.id), JSON.stringify(tudo)); } catch {} c.provas = (c.provas || []).filter(p => !(p.fonte === "analise" && String(p.id).startsWith("a"))); aplicarAnalises(c); }
+  delete S.cont[c.id]; render(); toast(`Análise ligada à prova ${el.value}`);
+}
 function guardarAnalise(c, pr){
-  const k = kP(pr.nome); const tudo = analisesDe(c); tudo[k] = { ...pr, em:Date.now() };
+  pr = { ...pr, nome:nomeDaAnalise(pr) }; const k = kP(pr.nome); const tudo = analisesDe(c); tudo[k] = { ...pr, em:Date.now() };
   if (c.triagem){ const t = triDe(c.id); t.analises = tudo; if (!(t.provas || []).some(x => kP(nomeProva(x)).startsWith(k) || k.startsWith(kP(nomeProva(x))))){ const p = PROVAS.find(p => k.startsWith(p.k) || kP(p.nome).startsWith(k)); if (p) t.provas = [...(t.provas || []), p.k]; } salvarTri(t); }
   else { try { localStorage.setItem(anKey(c.id), JSON.stringify(tudo)); } catch { toast("Não consegui guardar neste navegador"); } }
 }
@@ -47,7 +58,7 @@ function apagarAnalise(c, k){ const tudo = analisesDe(c); delete tudo[k]; if (c.
 function aplicarAnalises(c){
   const tudo = analisesDe(c); if (!Object.keys(tudo).length) return c;
   c.provas = c.provas || [];
-  for (const [k, pr] of Object.entries(tudo)){
+  for (const [k0, pr0] of Object.entries(tudo)){ const pr = { ...pr0, nome:nomeDaAnalise(pr0) }; const k = kP(pr.nome);
     const p = c.provas.find(x => { const kx = kP(x.nome); return k.startsWith(kx) || kx.startsWith(k); });
     const dados = { area:pr.area, notaEstimada:pr.notaEstimada, notaMax:pr.notaMax, notaPossivel:pr.notaPossivel, regras:pr.regras, itens:pr.itens, fonte:"analise", analiseEm:pr.em, ano:pr.ano || "" };
     if (pr.prazoEnvio) dados.prazoEnvio = pr.prazoEnvio;
@@ -64,7 +75,7 @@ async function importarAnalise(input){
 function analiseCard(c){
   const tudo = analisesDe(c); const ks = Object.keys(tudo);
   return `<section class="card"><div class="card-h"><div><h2>Análise curricular em arquivo</h2><div class="sub">PDF da análise MedEasy ou triagem.json. O site lê a nota, os itens, o que falta e como conseguir</div></div><label class="btn sm pri" style="cursor:pointer">Importar arquivo<input type="file" accept=".pdf,.json,application/pdf,application/json" hidden data-an="1"></label></div>
-   ${ks.length ? `<div class="list">${ks.map(k => { const pr = tudo[k]; const falta = (pr.itens || []).filter(i => i.ganho > 0).length; return `<div class="li" style="flex-wrap:wrap"><div class="grow"><div class="t">${esc(pr.nome)} ${esc(pr.ano || "")}</div><div class="small muted">${d1(pr.notaEstimada)} / ${d1(pr.notaMax)}${pr.notaPossivel !== "" && pr.notaPossivel != null ? ` · possível ${d1(pr.notaPossivel)}` : ""} · ${pr.itens.length} itens · ${falta} com espaço para crescer${pr.em ? " · lida em " + dBR(new Date(pr.em).toISOString()) : ""}</div></div><button class="btn sm ghost" data-a="apagarAnalise" data-v="${k}">Tirar</button>
+   ${ks.length ? `<div class="list">${ks.map(k => { const pr = tudo[k]; const falta = (pr.itens || []).filter(i => i.ganho > 0).length; const nomeP = nomeDaAnalise(pr); return `<div class="li" style="flex-wrap:wrap"><div class="grow"><div class="t">${esc(nomeP)} ${esc(pr.ano || "")}${pr.area ? ` <span class="pill">${esc(pr.area)}</span>` : ""}</div>${pr.titulo && kP(pr.titulo) !== kP(nomeP) ? `<div class="xs muted">${esc(pr.titulo)}</div>` : ""}${!provaConhecida(nomeP) ? `<label class="row xs gold" style="gap:6px;margin:4px 0">Não reconheci a prova. É de qual? <select class="in" data-anprova="1" data-k="${k}" style="width:auto;padding:4px 8px;font-size:12px"><option value="">Escolher</option>${PROVAS.map(p => `<option>${esc(p.nome)}</option>`).join("")}</select></label>` : ""}<div class="small muted">${d1(pr.notaEstimada)} / ${d1(pr.notaMax)}${pr.notaPossivel !== "" && pr.notaPossivel != null ? ` · possível ${d1(pr.notaPossivel)}` : ""} · ${pr.itens.length} itens · ${falta} com espaço para crescer${pr.em ? " · lida em " + dBR(new Date(pr.em).toISOString()) : ""}</div></div><button class="btn sm ghost" data-a="apagarAnalise" data-v="${k}">Tirar</button>
      <details style="width:100%;margin-top:6px"><summary class="small" style="cursor:pointer;font-weight:600">Ver o que foi analisado</summary><div class="stack" style="gap:8px;margin-top:8px">${(pr.itens || []).map(i => `<div class="svc" style="padding:10px 12px"><div class="row between" style="gap:8px"><b class="small">${esc(i.nome)}</b><span class="row" style="gap:6px">${i.situacao ? `<span class="pill ${/complet/i.test(i.situacao) ? "ok" : /parcial/i.test(i.situacao) ? "info" : /aumentar/i.test(i.situacao) ? "gold" : ""}">${esc(i.situacao)}</span>` : ""}<b class="num">${d1(i.pontos)} / ${d1(i.max)}</b></span></div>${i.regra ? `<div class="xs muted">${esc(i.regra)}</div>` : ""}${i.ganho > 0 ? `<div class="xs gold">Pode ganhar mais ${d1(i.ganho)}</div>` : ""}${(i.comprovantes || []).length ? `<ul class="xs" style="margin:6px 0 0;padding-left:18px">${i.comprovantes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${i.comentario ? `<p class="xs" style="margin:6px 0 0">${esc(i.comentario)}</p>` : ""}</div>`).join("")}</div></details></div>`; }).join("")}</div>
    <p class="xs muted" style="margin:10px 0 0">${c.triagem ? "Fica guardada junto com a triagem neste navegador." : "Fica só neste navegador. Para o cliente ver no portal dele e a equipe toda ver, anexe o mesmo PDF na coluna Análise do cliente no Notion. Na próxima sincronização entra para todos."}</p>` : `<div class="empty">Nenhuma análise importada${c.provas.some(p => p.fonte === "analise" && !ks.length) ? ". As provas abaixo já vieram com análise do Notion" : ""}</div>`}</section>`;
 }
