@@ -125,28 +125,6 @@ function interpretarPedido(texto){
   if (/urgen|essa semana|amanha|hoje/.test(t)) motivos.push("parece ter pressa");
   return { servico, provas:[...provas].filter(x => PROVAS.some(p => p.k === x)), motivos };
 }
-/* Estimativa simples, sem contagem por item: taxa por prova mais certificados vezes o valor do modelo */
-function estimativaSimples(provas, nCert, servico){
-  const n = Math.max(0, Math.floor(num(nCert))); const linhas = []; const taxa = provas.length > 2 ? PRECO.taxaMaisDeDuas : PRECO.taxa;
-  for (const k of provas){ const nome = nomeProva(k); const m = modeloDe(nome);
-    if (servico === "analise") linhas.push({ desc:`${nome}: análise curricular com projeção de nota`, valor:provas.length >= 2 ? PRECO.analise2 : PRECO.analise1 });
-    else if (servico !== "lattesb") linhas.push({ desc:`${nome}: análise curricular + currículo com os certificados (Modelo ${m})`, valor:n ? taxa + n * PRECO.vitae[m][faixaQ(n)] : null }); }
-  if (servico === "lattes" || servico === "lattesb"){ const cat = servico === "lattesb" ? "B" : "A"; linhas.push({ desc:`Atualização do Lattes (Categoria ${cat})`, valor:n ? n * PRECO.lattes[cat][faixaQ(n)] : null }); }
-  const falta = linhas.some(l => l.valor == null); return { linhas, total:r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)), falta };
-}
-function estimativaView(d){
-  const it = interpretarPedido(d.pedido || ""); const provas = [...new Set([...provasTri(d), ...it.provas])];
-  if (!provas.length) return `<p class="xs muted" style="margin:0">Marque as provas para ver uma estimativa.</p>`;
-  const e = estimativaSimples(provas, d.nCert, it.servico);
-  return `<div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}</td><td class="r num" style="white-space:nowrap">${l.valor == null ? "falta o nº de certificados" : brl(l.valor)}</td></tr>`).join("")}</tbody>${!e.falta ? `<tfoot><tr><td>Estimativa</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot>` : ""}</table></div><p class="xs muted" style="margin:8px 0 0">Estimativa com ${num(d.nCert) || 0} certificados. O valor certo sai depois que o mentor confere os seus certificados no edital.</p>`;
-}
-const TABELA_PRECOS = `<div class="precos">
-  <div class="preco"><div><b>Currículo + análise curricular</b><div class="xs muted">Por prova. Lemos o edital, selecionamos e organizamos os seus certificados e entregamos o documento pronto para anexar, com a projeção da sua nota</div></div><div class="v">R$ 100,00 por prova<div class="xs muted">+ R$ 8,00 a 9,50 por certificado</div></div></div>
-  <div class="preco"><div><b>Só a análise curricular</b><div class="xs muted">Sem o documento. Você recebe a projeção da nota e o que fazer para aumentar</div></div><div class="v">R$ 100,00 por prova<div class="xs muted">R$ 90,00 cada com 2 ou mais</div></div></div>
-  <div class="preco"><div><b>Atualização do Lattes</b><div class="xs muted">Por certificado, uma vez só, vale para todas as provas</div></div><div class="v">R$ 6,00 a 7,00 por certificado</div></div>
-  <div class="preco"><div><b>Artigo completo ou capítulo de livro</b></div><div class="v">R$ 12,50 cada</div></div>
-  <div class="preco"><div><b>Organização dos certificados no drive</b><div class="xs muted">Só se você mandar tudo solto</div></div><div class="v">R$ 75,00</div></div>
-</div><p class="xs muted" style="margin:8px 0 0">Pagamento de 50% na contratação e o restante quando você receber a versão para conferir. Mais de 2 provas: taxa de R$ 90,00 por prova.</p>`;
 function triagemFormView(){
   const d = S.triForm || (S.triForm = { provas:[], servico:"vitae" });
   const chk = (k, nome) => `<label class="chk"><input type="checkbox" data-tri="prova" value="${k}" ${d.provas.includes(k) ? "checked" : ""}><span>${esc(nome)}</span></label>`;
@@ -163,11 +141,10 @@ function triagemFormView(){
       <div class="grid2" style="gap:10px"><label class="f"><span>Quantos certificados você tem, mais ou menos?</span><input class="in" data-tri="nCert" type="number" min="0" inputmode="numeric" value="${esc(d.nCert || "")}" placeholder="Pode ser um chute"></label>
       <label class="f"><span>Link do Drive com os certificados (se tiver)</span><input class="in" data-tri="links" value="${esc(d.links || "")}" placeholder="https://drive.google.com/..."></label></div>
       <label class="f"><span>Alguma observação? Prazo apertado, certificado que ainda vai chegar, dúvida</span><textarea class="in" data-tri="obs" rows="2">${esc(d.obs || "")}</textarea></label>
-      <div class="svc"><div class="label" style="margin-bottom:6px">Estimativa para você</div><div id="triEst">${estimativaView(d)}</div></div>
+      <p class="small muted" style="margin:0">O seu mentor olha os certificados e manda o orçamento pelo WhatsApp.</p>
       ${FORM_CERT ? `<div class="svc"><div class="label" style="margin-bottom:6px">Seus certificados</div><p class="small" style="margin:0 0 8px">Depois de enviar aqui, mande os PDFs dos certificados pelo formulário abaixo. Eles chegam direto para a equipe.</p><a class="btn sm" href="${FORM_CERT}" target="_blank" rel="noopener">Enviar certificados em PDF</a></div>` : `<p class="xs muted" style="margin:0">Os certificados em PDF você manda direto na conversa do WhatsApp, depois de enviar este formulário. Se estiverem no Drive, deixe o link com acesso para quem tem o link.</p>`}
       <button class="btn pri" type="submit">Enviar pelo WhatsApp</button>
     </form>
-    <section class="card"><div class="card-h"><h2>Quanto custa</h2></div>${TABELA_PRECOS}</section>
     <p class="xs faint" style="text-align:center">MedEasy · @med_easyy · Goiânia, Goiás</p>
   </main>`;
 }
@@ -304,7 +281,7 @@ function triInput(el){
   const campo = el.dataset.tri; const t = S.modo === "triagem" ? S.triForm : triDe(S.sel); if (!t) return;
   if (campo === "prova"){ const set = new Set(t.provas || []); el.checked ? set.add(el.value) : set.delete(el.value); t.provas = PROVAS.map(p => p.k).filter(k => set.has(k)); }
   else if (el.type === "checkbox") t[campo] = el.checked; else t[campo] = el.value;
-  if (S.modo === "triagem"){ const el2 = document.getElementById("triEst"); if (el2) el2.innerHTML = estimativaView(t); return; }
+  if (S.modo === "triagem") return;
   salvarTri(t); delete S.cont[t.id];
   if (campo === "prova" || campo === "servico" || campo === "nCert" || campo === "desconto" || campo === "drive") render();
 }
