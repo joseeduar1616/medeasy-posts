@@ -320,7 +320,8 @@ const A = {
   pdfAnalise: el => pdfAnalise(triDe(S.sel), el.dataset.v),
   copiarMsgOrc: () => { const t = triDe(S.sel); copiar(msgOrc(t, opcoesTri(t))); },
   copiarNotionTri: () => copiar(textoNotionTri(triDe(S.sel))),
-  apagarAnalise: el => { const c = clienteSel(); apagarAnalise(c, el.dataset.v); delete S.cont[c.id]; if (!c.triagem){ c.provas = (c.provas || []).filter(p => !(p.fonte === "analise" && kP(p.nome) === el.dataset.v && String(p.id).startsWith("a"))); for (const p of c.provas) if (p.fonte === "analise" && kP(p.nome) === el.dataset.v){ delete p.itens; delete p.fonte; delete p.notaEstimada; delete p.notaPossivel; } } render(); },
+  apagarAnalise: el => { const c = clienteSel(); const pr = analisesDe(c)[el.dataset.v]; if (!pr || !confirm(`Remover a análise ${nomeDaAnalise(pr)}${pr.arquivo ? " (" + pr.arquivo + ")" : ""}?`)) return; apagarAnalise(c, el.dataset.v); render(); toast("Análise removida"); },
+  apagarAnalises: () => { const c = clienteSel(); const ks = Object.keys(analisesDe(c)); if (!ks.length || !confirm(`Remover as ${ks.length} análises lançadas?`)) return; ks.forEach(k => apagarAnalise(c, k)); render(); toast("Análises removidas"); },
   importarTriNotion: el => importarTriNotion(el.dataset.v),
 };
 Object.assign(A, A_CTRL, A_ORC, A_CERTCLI);
