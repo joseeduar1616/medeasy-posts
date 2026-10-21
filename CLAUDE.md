@@ -1,8 +1,9 @@
 # MedEasy
 
-Este repositório tem duas partes:
+Este repositório tem três partes:
 - Posts automáticos do Instagram (@med_easyy). Regras em PLAYBOOK.md.
 - Portal MedEasy: site em que os clientes acompanham o currículo e os mentores acompanham todos os clientes. Publicado no GitHub Pages a partir da pasta `portal/`.
+- Pasta `cadencia/`: posts automáticos do Instagram do Cadência Med (@cadenciamed), outra marca do José. Regras em `cadencia/LEIA-ME.md`. As rotinas da MedEasy não mexem nela.
 
 Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgula decimal. Mensagens de WhatsApp sem emoji.
 

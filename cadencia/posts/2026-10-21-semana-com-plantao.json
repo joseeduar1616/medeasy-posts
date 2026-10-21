@@ -1,0 +1,226 @@
+{
+  "id": "2026-10-21-semana-com-plantao",
+  "legenda": "Plantão de 12h na quarta e a aula de segunda ainda está lá, esperando. 😮‍💨\n\nA maioria dos cronogramas conta com as mesmas horas todo dia. Quando entra um plantão, a semana escorrega e a revisão é a primeira coisa que fica pra depois.\n\nO caminho é montar a semana a partir do plantão: primeiro entram a escala e as aulas da faculdade, e o estudo vai nos espaços que sobram de verdade. No Cadência Med, o mentor de IA faz isso com você, as revisões aparecem no dia certo e a agenda conversa com o Google Agenda.\n\nSalva pra montar a próxima semana e manda pra quem divide plantão com você 📌\n\nQuantos plantões você tem nessa semana? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #plantao",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "SEMANA COM PLANTÃO",
+      "titulo": "PLANTÃO DE 12H E A AULA {g}FICOU PRA DEPOIS{/g}",
+      "texto": "Quem estuda pra residência no internato conhece essa semana. Arrasta pra ver como montar a sua <b>em volta dos plantões</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 410,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "O PLANO DA SEMANA {g}IGNORA O PLANTÃO{/g}",
+      "texto": "A maioria dos cronogramas conta com as mesmas horas todo dia. Aí entra um plantão de 12h na quarta e <b>a semana inteira escorrega</b>.",
+      "ui": {
+        "tipo": "semana",
+        "titulo": "A semana no papel",
+        "dias": [
+          {
+            "d": "SEG",
+            "blocos": [
+              {
+                "t": "Aula",
+                "cor": "#A86BFF"
+              },
+              {
+                "t": "Questões",
+                "cor": "#46D9F5"
+              }
+            ]
+          },
+          {
+            "d": "TER",
+            "blocos": [
+              {
+                "t": "Aula",
+                "cor": "#A86BFF"
+              },
+              {
+                "t": "Revisão",
+                "cor": "#2DD4A0"
+              }
+            ]
+          },
+          {
+            "d": "QUA",
+            "blocos": [
+              {
+                "t": "Plantão 12h",
+                "cor": "#F2557A"
+              }
+            ]
+          },
+          {
+            "d": "QUI",
+            "blocos": [
+              {
+                "t": "Aula",
+                "cor": "#A86BFF"
+              },
+              {
+                "t": "Aula",
+                "cor": "#A86BFF"
+              }
+            ]
+          },
+          {
+            "d": "SEX",
+            "blocos": [
+              {
+                "t": "Aula",
+                "cor": "#A86BFF"
+              },
+              {
+                "t": "Revisão",
+                "cor": "#2DD4A0"
+              }
+            ]
+          },
+          {
+            "d": "SÁB",
+            "blocos": [
+              {
+                "t": "Simulado",
+                "cor": "#46D9F5"
+              }
+            ]
+          },
+          {
+            "d": "DOM",
+            "blocos": [
+              {
+                "t": "Atraso",
+                "cor": "#F5A524"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "O PROBLEMA",
+      "tag": "E AÍ",
+      "titulo": "A REVISÃO É A {g}PRIMEIRA QUE CAI{/g}",
+      "texto": "Quando falta tempo, a aula nova parece mais urgente. A revisão fica pra depois, e o que você estudou no mês passado <b>começa a sumir</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Revisões que ficaram pra trás",
+        "itens": [
+          {
+            "titulo": "Insuficiência cardíaca",
+            "sub": "Cardiologia · 2ª revisão",
+            "selo": "há 3 dias",
+            "cor": "#A86BFF",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Pré-natal de baixo risco",
+            "sub": "Obstetrícia · 1ª revisão",
+            "selo": "há 5 dias",
+            "cor": "#46D9F5",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Vigilância epidemiológica",
+            "sub": "Preventiva · 3ª revisão",
+            "selo": "há 1 semana",
+            "cor": "#F5A524",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "MONTE A SEMANA {g}A PARTIR DO PLANTÃO{/g}",
+      "texto": "Primeiro entram a escala e as aulas da faculdade. O estudo vai nos espaços que <b>sobram de verdade</b>, e cada revisão ganha um dia.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "rotina",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Agenda da semana"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "MENTOR DE IA",
+      "tag": "MENTOR DE IA",
+      "titulo": "VOCÊ CONTA OS PLANTÕES, {g}ELE MONTA A SEMANA{/g}",
+      "texto": "O mentor de IA lê o seu painel: sabe quais revisões venceram, onde você está abaixo da média e <b>encaixa tudo em volta da escala</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Mentor de IA"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "A REVISÃO DO DIA {g}APARECE SOZINHA{/g}",
+      "texto": "Cada aula feita entra numa escada de revisão: 1 semana, 1 mês, 2, 4 e 6 meses. O painel ainda mostra se o seu ritmo <b>fecha o cronograma antes da prova</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Tela Hoje"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "SUA SEMANA, {g}COM PLANTÃO E TUDO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {
+            "titulo": "Mentor de IA",
+            "texto": "monta a semana com os seus plantões"
+          },
+          {
+            "titulo": "Agenda",
+            "texto": "conversa com o Google Agenda"
+          },
+          {
+            "titulo": "Revisões do dia",
+            "texto": "cada assunto volta na hora certa"
+          },
+          {
+            "titulo": "Foco",
+            "texto": "pomodoro que registra cada hora estudada"
+          }
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
