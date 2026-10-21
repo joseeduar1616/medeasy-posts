@@ -1,0 +1,67 @@
+{
+ "slug": "2026-10-21-1800-goias-2027-psugo-sesgo",
+ "pillar": "calendário e prazos",
+ "header": ["GOIÁS", "PSU-GO E SES-GO"],
+ "verified_on": "2026-10-21",
+ "sources": [
+  "https://ipmeducacao.com.br/wp-content/uploads/2026/10/Retificacaon1-Prorrogacaodoperiododeinscircoes-PSUGO2027-20261020174545.pdf (Retificação nº 1 do PSU-GO 2027: inscrições, currículo e boleto até 22/10, das 9h às 18h em dias úteis, prova 29/11 mantida)",
+  "posts/2026-10-18-1200-psugo-2027-fecha-terca.json e posts/psugo-2027-vagas.json (edital PSU-GO 2027 já conferido: R$ 525 por programa, prova 90 e currículo 10 pontos, 317 vagas em 22 instituições)",
+  "https://sistemas.institutoverbena.ufg.br/2027/coreme-ses/sistema/arquivos/editais/EDITAL_DE_ABERTURA_COREME_SES_2027.pdf (Edital nº 24/2026 COREME SES-GO 2027: 219 vagas, inscrições até 03/11 17h, taxa R$ 500, prova 06/12, currículo 100 pontos na 2ª fase)",
+  "log/news_seen.md (varredura de 21/10 17h: nenhuma retificação nova de PSU-GO ou SES-GO)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em Goiás",
+   "pill": "GOIÁS 2027",
+   "title": ["PSU-GO FECHA", "<span class='g glow'>AMANHÃ</span>"],
+   "body": "As duas grandes provas de Goiás estão com inscrição aberta. Uma fecha <b>amanhã</b>, a outra em <b>13 dias</b>.",
+   "bullets": ["PSU-GO: até <b>22/10, às 18h</b>", "SES-GO: até <b>03/11, às 17h</b>", "Juntas: <b>536 vagas</b> em 2027"]
+  },
+  {
+   "type": "rows",
+   "label": "Prazos",
+   "title": ["ANOTA <span class='y'>AÍ</span>"],
+   "sub": "Último dia de inscrição e data da prova",
+   "rows": [
+    {"name": "PSU-GO: inscrição", "sub": "Site da AREMG, das 9h às 18h", "value": "22/10"},
+    {"name": "PSU-GO: prova", "sub": "Taxa de R$ 525 por programa", "value": "29/11"},
+    {"name": "SES-GO: inscrição", "sub": "Instituto Verbena/UFG, até 17h", "value": "03/11"},
+    {"name": "SES-GO: prova", "sub": "Taxa de R$ 500 para 1 programa", "value": "06/12"}
+   ],
+   "note": "No PSU-GO, o <b>pagamento do boleto</b> também vai só até 22/10."
+  },
+  {
+   "type": "grid",
+   "label": "Vagas",
+   "title": ["<span class='y'>536</span> VAGAS EM GOIÁS"],
+   "sub": "Total de cada prova no edital 2027",
+   "cells": [
+    {"v": "317", "k": "PSU-GO, em 22 instituições"},
+    {"v": "219", "k": "SES-GO, rede estadual"}
+   ],
+   "box": {"h": "DICA", "x": "As datas das provas não batem (29/11 e 06/12), então dá para fazer as duas."}
+  },
+  {
+   "type": "cards",
+   "label": "Precisa de currículo?",
+   "title": ["SIM, NAS <span class='g'>DUAS</span>"],
+   "sub": "Muda o momento de enviar",
+   "cards": [
+    {"num": "1", "h": "PSU-GO", "tag": "10 de 100", "p": "Prova vale <b>90 pontos</b> e currículo <b>10</b>. O currículo vai <b>junto com a inscrição, até 22/10</b>, e depois não dá para trocar nada."},
+    {"num": "2", "h": "SES-GO", "tag": "100 pontos", "p": "Prova objetiva na 1ª fase. O currículo vale <b>100 pontos</b> na 2ª fase, só para quem for classificado na prova."}
+   ],
+   "note": "No PSU-GO o prazo do currículo é <b>amanhã</b>. Na SES-GO, deixe os comprovantes prontos antes da convocação."
+  },
+  {
+   "type": "cta",
+   "title": ["VAI PRESTAR EM", "<span class='g glow'>GOIÁS</span>?"],
+   "pill": "SALVA",
+   "body": "e manda para quem<br>ainda não se inscreveu.",
+   "note": "Currículo ainda não está pronto? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: Retificação nº 1 do PSU-GO 2027 (AGRM e AREMG) e edital PSU-GO 2027; Edital nº 24/2026 COREME SES-GO 2027 (Instituto Verbena/UFG). Conferido em 21/10/2026."
+  }
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "Goiás 2027: <span>PSU-GO fecha amanhã</span>, SES-GO até 03/11.<br>Veja no feed da @med_easyy."},
+ "caption": "⏰ GOIÁS 2027: PSU-GO FECHA AMANHÃ\n\nAs duas grandes provas de residência de Goiás estão com inscrição aberta, somando 536 vagas. O PSU-GO (317 vagas em 22 instituições) fecha amanhã, 22/10, às 18h, no site da AREMG, e o boleto também vence nesse dia. A SES-GO (219 vagas na rede estadual) vai até 03/11, às 17h, no Instituto Verbena/UFG.\n\nPrecisa de currículo? Sim, nas duas. No PSU-GO ele vale 10 de 100 pontos e vai junto com a inscrição, sem troca depois. Na SES-GO ele vale 100 pontos na 2ª fase, só para quem passar na prova.\n\nAs provas são em 29/11 (PSU-GO) e 06/12 (SES-GO), então dá para fazer as duas. Salva e manda para quem ainda não se inscreveu 📌\n\nVai fazer as duas ou só uma? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#psugo #sesgo #residenciamedica #goiania #goias #residencia2027"
+}
