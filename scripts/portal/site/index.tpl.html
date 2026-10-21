@@ -92,7 +92,7 @@ function sair(){ try { sessionStorage.removeItem("medeasy"); } catch {} Object.a
 async function entrarCliente(codigo){
   codigo = normCodigo(codigo); if (codigo.length < 8){ S.erro = "Confira o código. Ele tem 10 letras e números"; render(); return; }
   S.carregando = true; S.erro = ""; render();
-  try { const env = await baixar(`data/c/${await arquivoCliente(codigo)}.json`); S.portal = await abrir(env, codigo); juntarContagemCliente(S.portal); S.modo = "cliente"; guardar("cliente", "", codigo); }
+  try { const env = await baixar(`data/c/${await arquivoCliente(codigo)}.json`); S.portal = await abrir(env, codigo); juntarContagemCliente(S.portal); S.portal.orcamento = (S.portal.tipos || []).length ? estimarJS(clienteDoPortal(S.portal)) : null; S.modo = "cliente"; guardar("cliente", "", codigo); }
   catch { S.erro = "Código não encontrado. Confira com o seu mentor"; }
   S.carregando = false; render();
 }
@@ -134,7 +134,7 @@ const abertos = c => (c.servicos || []).filter(s => (s.etapa || 0) < ULT);
 function progresso(c){ const s = c.servicos || []; if (!s.length) return 0; return Math.round(s.reduce((a, x) => a + (x.etapa || 0) / ULT, 0) / s.length * 100); }
 function nomeServico(c, s){ if (s.nome) return s.nome; const T = { vitae:"Currículo Vitae", analise:"Análise curricular", lattes:"Currículo Lattes" }; const p = (c.provas || []).find(p => p.id === s.provaId); return (T[s.tipo] || "Serviço") + (s.detalhe ? " " + s.detalhe.replace(/Modelo |Categoria /, "") : "") + (p ? " · " + p.nome : ""); }
 function status(c){ const ab = abertos(c); if (!(c.servicos || []).length) return { t:"Novo contato", k:"info" }; if (!ab.length) return { t:"Tudo entregue", k:"ok" }; const m = Math.min(...ab.map(s => s.etapa || 0)); return { t:ETAPAS[m].t, k:ETAPAS[m].cli ? "gold" : "" }; }
-function espelho(c){ const f = fin(c); return { id:c.id, nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:[...(c.pendencias || []).filter(p => !p.interna), ...pendenciasDoControle(c)], atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm }; }
+function espelho(c){ const f = fin(c); return { id:c.id, nome:c.nome, servicos:(c.servicos || []).map(s => ({ nome:nomeServico(c, s), etapa:s.etapa || 0, prazo:s.prazo || "" })), provas:provasComContagem(c), pendencias:[...(c.pendencias || []).filter(p => !p.interna), ...pendenciasDoControle(c)], atualizacoes:(c.atualizacoes || []).filter(a => !a.interna), documentos:(c.documentos || []).filter(d => d.link), financeiro:{ ...f }, contato:{ ...(S.eq.contato || CONTATO), mentor:(c.mentores || [])[0] ? c.mentores[0] + " (MedEasy)" : "Equipe MedEasy" }, progresso:progresso(c), atualizadoEm:S.eq.geradoEm, orcamento:estimarJS(c) }; }
 function eventos(cs){ const ev = []; for (const c of cs){ for (const p of c.provas || []){ if (p.prazoEnvio) ev.push({ d:p.prazoEnvio, t:`Fim do envio ${p.nome}`, c, k:"gold" }); if (p.dataProva) ev.push({ d:p.dataProva, t:`Prova ${p.nome}`, c, k:"info" }); } for (const s of c.servicos || []) if (s.prazo && (s.etapa || 0) < ULT) ev.push({ d:s.prazo, t:`Entrega ${nomeServico(c, s)}`, c, k:"warn" }); } return ev.sort((a, b) => a.d.localeCompare(b.d)); }
 const linkCliente = c => `${location.href.split("#")[0].split("?")[0]}?c=${c.codigo}`;
 function convite(c){ return `Oi, ${primeiro(c.nome)}! Tudo bem? Criei o seu acesso no portal da MedEasy. Por lá você acompanha cada etapa do seu currículo, os prazos das provas e o que ainda falta enviar\n\nLink: ${linkCliente(c)}\nSeu código: ${codFmt(c.codigo)}\n\nGuarde esse código, ele é só seu`; }
@@ -269,6 +269,7 @@ function repassesView(){
    ${linhas.map(({ c, r, s }) => `<tr class="clickable" data-a="abrir" data-id="${c.id}"><td><b>${esc(c.nome)}</b></td>${geral ? `<td>${esc(r.pessoa)}</td>` : ""}<td>${esc(r.papel)}</td><td class="small">${esc(s ? s.nome : "")}${s && s.status ? `<div class="xs muted">${esc(s.status)}</div>` : ""}</td><td class="r num">${r.valor == null ? "–" : brl(r.valor)}</td><td>${r.pago ? `<span class="pill ok">Pago${r.data ? " " + dBR(r.data) : ""}</span>` : r.liberado ? `<span class="pill gold">A receber</span>` : `<span class="pill">Futuro</span><div class="xs muted">${esc(r.motivo || "")}</div>`}</td></tr>`).join("") || `<tr><td colspan="6" class="muted">Nenhum repasse</td></tr>`}</tbody></table></div></section>`;
 }
 __CERTITENS__
+__FICHA__
 __PORTALVIEW__
 __TRIAGEM__
 __ANALISE__
@@ -324,9 +325,12 @@ const A = {
   apagarAnalises: () => { const c = clienteSel(); const ks = Object.keys(analisesDe(c)); if (!ks.length || !confirm(`Remover as ${ks.length} análises lançadas?`)) return; ks.forEach(k => apagarAnalise(c, k)); render(); toast("Análises removidas"); },
   importarTriNotion: el => importarTriNotion(el.dataset.v),
 };
-Object.assign(A, A_CTRL, A_ORC, A_CERTCLI);
-app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); });
-app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); });
+Object.assign(A, A_CTRL, A_ORC, A_CERTCLI, A_FICHA, {
+  usarValorNotion: async () => { const c = clienteSel(); const e = estimarJS(c); const id = paginaDoCliente(c); if (!e || !id || !confirm(`Gravar ${brl(e.total)} como Valor total no Notion?`)) return;
+    try { await salvarNotion(id, { "Valor total":e.total }, "Valor gravado no Notion"); const s = (c.servicos || []).find(x => x.id === id); if (s){ s.total = e.total; c.financeiro.total = (c.servicos || []).reduce((a, x) => a + (x.total || 0), 0); } render(); } catch (er) { toast("Não gravou: " + er.message); } },
+});
+app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
+app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); else if (e.target.dataset.fe) feInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 (async () => {

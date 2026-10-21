@@ -174,7 +174,7 @@ function juntarProva(provas, pr) {
 /* Coluna "Controle de certificados": JSON colado do site (certificados, alocação por item e pendências) */
 function lerControle(t) {
   if (!t) return null;
-  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], v: j.v || 1 }; }
+  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], fichas: j.fichas || {}, v: j.v || 1 }; }
   catch { console.warn("Controle de certificados com JSON inválido, ignorado"); return null; }
 }
 /* Coluna "Certificados por item": uma linha por prova, "PSU-GO: 2=2; 4=3; 9=/0,5" (item=certificados, /pontos digitados) */
@@ -325,6 +325,9 @@ function espelho(c, contato) {
     financeiro: { total, pago, saldo: Math.max(0, total - pago), entradaOk: total > 0 && pago >= total / 2 - 0.009 },
     contato: (() => { const m = c.mentores.find(x => EQUIPE[x]) || c.mentores[0]; const tel = m && EQUIPE[m]; return tel ? { ...contato, mentor: `${m} (MedEasy)`, whats: tel.replace(/\D/g, ""), texto: tel.replace(/^\+55\s*/, "") } : { ...contato, mentor: m ? `${m} (MedEasy)` : "Equipe MedEasy" }; })(),
     contagem: c.contagem || {},
+    // Para o orçamento do cliente se atualizar no portal: plano (tipos), contagem e certificados do controle (sem as observações internas)
+    tipos: c.tipos || [], nCert: c.nCert ?? null, nArtigos: c.nArtigos ?? null,
+    controle: c.controle ? { certs: (c.controle.certs || []).map(({ obs, ...x }) => x), aloc: c.controle.aloc || {}, pend: [] } : null,
     progresso: c.servicos.length ? Math.round(c.servicos.reduce((a, s) => a + s.etapa / 6, 0) / c.servicos.length * 100) : 0,
   };
 }
@@ -357,9 +360,23 @@ await juntarExtras(dados);
 // Ficha de cada edital (parte do currículo), com datas e regras. Completa o que a prova do cliente ainda não tem.
 const EDITAIS = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), "editais.json"), "utf8")); delete EDITAIS._fonte;
 const editalDe = nome => { const k = kProva(nome); const e = Object.entries(EDITAIS).find(([kk]) => k.startsWith(kk) || (kk.startsWith(k) && k.length >= 3)); return e ? e[1] : null; };
+// Fichas montadas pelo mentor no site (PDF do edital ou à mão). Ficam no controle do cliente ou na triagem.
+// A mais nova de cada prova vale para todos os clientes daquela prova quando o editais.json não tem ficha.
+const fichasGerais = {};
+const somaFicha = (k, f) => { if (!f || !Array.isArray(f.ficha) || !f.ficha.length) return; if (!fichasGerais[k] || (f.em || 0) > (fichasGerais[k].em || 0)) fichasGerais[k] = f; };
+for (const c of dados.clientes) for (const [k, f] of Object.entries((c.controle && c.controle.fichas) || {})) somaFicha(k, f);
+for (const n of dados.triagem || []) for (const [k, f] of Object.entries((n.dados && n.dados.fichas) || {})) somaFicha(k, f);
+for (const [k, f] of Object.entries(fichasGerais)) {
+  const e = editalDe(f.prova || k);
+  if (e && !(e.ficha || []).length) Object.assign(e, { ficha: f.ficha, maximo: e.maximo || f.maximo || null, fichaFonte: (f.fonte || "Ficha montada pelo mentor") + " (portal)" });
+  else if (!e) EDITAIS[k] = { nome: f.prova || k, ficha: f.ficha, maximo: f.maximo || null, fichaFonte: (f.fonte || "Ficha montada pelo mentor") + " (portal)" };
+}
 for (const c of dados.clientes) for (const p of c.provas) {
-  const e = editalDe(p.nome); if (!e) continue;
-  p.edital = e;
+  const propria = ((c.controle && c.controle.fichas) || {})[kProva(p.nome)];
+  const e = editalDe(p.nome);
+  if (propria && (propria.ficha || []).length) { p.edital = { ...(e || { nome: p.nome }), ficha: propria.ficha, maximo: propria.maximo || (e && e.maximo) || null, fichaFonte: propria.fonte || "Ficha montada pelo mentor", fichaPropria: true }; if (!e) continue; }
+  if (!e) continue;
+  if (!p.edital) p.edital = e;
   if (!p.prazoEnvio && e.prazoEnvio) p.prazoEnvio = e.prazoEnvio;
   if (!p.dataProva && e.dataProva) p.dataProva = e.dataProva;
   if (!p.link && e.link) p.link = e.link;
