@@ -1,0 +1,55 @@
+{
+ "slug": "2026-10-20-2115-psugo-2027-prorrogada",
+ "pillar": "novidade",
+ "header": ["NOVIDADE", "PSU-GO 2027"],
+ "verified_on": "2026-10-20",
+ "sources": [
+  "https://ipmeducacao.com.br/wp-content/uploads/2026/10/Retificacaon1-Prorrogacaodoperiododeinscircoes-PSUGO2027-20261020174545.pdf (Retificação nº 1 do PSU-GO 2027, AGRM e AREMG: inscrições, envio do currículo e pagamento do boleto de 07 a 22/10/2026, sistema das 9h às 18h em dias úteis, demais fases inalteradas)",
+  "https://ipmeducacao.com.br/portal/psu-go-residencia-medica/ (atualizada em 20/10/2026: inscrições prorrogadas até 22/10, pagamento até 22/10, currículo enviado no ato da inscrição sem troca depois)",
+  "posts/2026-10-18-1200-psugo-2027-fecha-terca.json (edital PSU-GO 2027 já conferido: taxa R$ 525 por programa, prova 29/11, prova 90 e currículo 10 pontos)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em Goiás",
+   "pill": "PRORROGADO",
+   "title": ["PSU-GO 2027:", "<span class='g glow'>INSCRIÇÕES ATÉ 22/10</span>"],
+   "body": "Saiu a <b>Retificação nº 1</b> do PSU-GO 2027. As inscrições, que fechavam hoje, agora vão até <b>quinta, 22/10</b>.",
+   "bullets": ["Inscrição e currículo até <b>22/10</b>", "Das <b>9h às 18h</b>, em dia útil", "Pagamento do boleto até <b>22/10</b>"]
+  },
+  {
+   "type": "rows",
+   "label": "Retificação nº 1",
+   "title": ["O QUE <span class='y'>MUDOU</span>"],
+   "sub": "Novos prazos do PSU-GO 2027",
+   "rows": [
+    {"name": "Inscrições", "sub": "Antes até 20/10. Agora das 9h às 18h", "value": "22/10"},
+    {"name": "Envio do currículo", "sub": "Junto com a inscrição", "value": "22/10"},
+    {"name": "Pagamento do boleto", "sub": "Último dia para pagar", "value": "22/10"},
+    {"name": "Prova objetiva", "sub": "Demais datas mantidas", "value": "29/11"}
+   ],
+   "note": "Taxa de <b>R$ 525</b> por programa, só pelo site da <b>AREMG</b>."
+  },
+  {
+   "type": "cards",
+   "label": "Precisa de currículo?",
+   "title": ["SIM, E VAI <span class='g'>AGORA</span>"],
+   "sub": "Como a nota final é formada",
+   "cards": [
+    {"num": "1", "h": "Prova objetiva", "tag": "90 pontos", "p": "Prova em <b>29/11/2026</b>. Data mantida pela retificação."},
+    {"num": "2", "h": "Análise curricular", "tag": "10 pontos", "p": "Enviada <b>junto com a inscrição, até 22/10</b>. Depois do envio, nada pode ser incluído ou trocado."}
+   ],
+   "note": "Use os dois dias extras para <b>conferir cada comprovante</b> antes de enviar."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA E", "<span class='g glow'>MANDA HOJE</span>"],
+   "pill": "SALVA",
+   "body": "para quem ia perder<br>o PSU-GO.",
+   "note": "Currículo do PSU-GO ainda não está pronto? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fonte: Retificação nº 1 do PSU-GO 2027 (AGRM e AREMG), conferida em 20/10/2026. Taxa e pontos conforme o edital PSU-GO 2027. Confira o edital do seu programa em aremg.org.br."
+  }
+ ],
+ "story": {"kicker": "PRORROGADO", "cta": "PSU-GO 2027: <span>inscrições até 22/10, 18h</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "🚨 PSU-GO 2027: INSCRIÇÕES PRORROGADAS ATÉ 22/10\n\nSaiu a Retificação nº 1 do PSU-GO 2027. As inscrições, que fechavam hoje, 20/10, agora vão até quinta, 22/10. O sistema funciona das 9h às 18h, em dias úteis, só pelo site da AREMG. O pagamento do boleto também vai até 22/10. As demais datas continuam, e a prova segue em 29/11.\n\nPrecisa de currículo? Sim. A prova vale 90 pontos e a análise curricular vale 10. O currículo vai junto com a inscrição e, depois do envio, nada pode ser incluído ou trocado. Use os dois dias extras para conferir cada comprovante.\n\nSalva e manda para quem ia perder o prazo 📌 Você vai fazer o PSU-GO? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#psugo #residenciamedica #residencia2027 #goias #goiania #aremg"
+}
