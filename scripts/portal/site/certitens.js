@@ -90,12 +90,15 @@ function carregarCont(c){
 function textoCont(c, provasReg){ return (c.provas || []).filter(p => p.nome).map(p => { const itens = itensDaProva(p), reg = (provasReg || {})[kP(p.nome)]; if (!reg) return "";
   const cp = calcProva(itens, reg); const pares = cp.rows.map((x, i) => (x.n || x.manual) ? `${i + 1}=${x.n || ""}${x.manual ? "/" + String(x.pts).replace(".", ",") : ""}` : "").filter(Boolean);
   return pares.length ? `${p.nome}: ${pares.join("; ")}` : ""; }).filter(Boolean).join("\n"); }
-function itensParaCliente(cp){ return cp.rows.map(x => ({ nome:x.item, regra:x.pontos, max:x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN, pontos:x.pts, ganho:x.ganhoBase || 0,
+function itensParaCliente(cp){ return cp.rows.map(x => ({ nome:x.item, regra:x.pontos, max:x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN, pontos:x.pts, ganho:x.ganhoBase || r2(Math.max(0, (x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN) - x.pts)),
   situacao:x.sit || (x.maxN && x.pts >= x.maxN ? "Completo" : x.pts > 0 ? "Parcial" : ""), comprovantes:x.lista.length ? x.lista : Array.from({ length:x.n }, (_, i) => `Certificado ${i + 1}`), comentario:x.com || "" })); }
 function provasComContagem(c){ carregarCont(c); return (c.provas || []).map(p => { const cp = calcDe(c, p); if (!cp.tem || (p.fonte === "analise" && !regDe(c, p))) return p; return { ...p, itens:itensParaCliente(cp), notaEstimada:cp.total, notaMax:cp.max || num(p.notaMax) || 100, fonte:"contagem" }; }); }
 /* No portal do cliente: monta os itens a partir da contagem que veio do Notion */
-function juntarContagemCliente(portal){ if (!portal.contagem || !Object.keys(portal.contagem).length) return; delete S.cont.cli;
-  portal.provas = provasComContagem({ id:"cli", provas:portal.provas || [], contagem:portal.contagem }); }
+function juntarContagemCliente(portal){ const temCont = portal.contagem && Object.keys(portal.contagem).length, temCtrl = portal.controle && (portal.controle.certs || []).length;
+  if (!temCont && !temCtrl) return; delete S.cont.cli; if (S.ctrl) delete S.ctrl.cli;
+  portal.provas = provasComContagem({ id:"cli", provas:portal.provas || [], contagem:portal.contagem || {}, controle:portal.controle || null }); }
+/* Cliente "de mentira" a partir dos dados do portal, para calcular o orçamento com as mesmas regras do mentor */
+const clienteDoPortal = p => ({ id:"cli", provas:p.provas || [], contagem:p.contagem || {}, controle:p.controle || null, tipos:p.tipos || [], nCert:p.nCert ?? null, nArtigos:p.nArtigos ?? null });
 async function copiarParaNotion(c){ const reg = carregarCont(c); const t = textoCont(c, reg.provas);
   if (!t){ toast("Nada para copiar ainda"); return; }
   if (!c.triagem && typeof temPonte === "function" && temPonte() && paginaDoCliente(c)){
@@ -110,7 +113,7 @@ function valorCard(c){
   const e = estimarJS(c); if (!e) return `<section class="card" id="valorCard" hidden></section>`; const f = fin(c); const dif = r2(f.total - e.total);
   return `<section class="card" id="valorCard"><div class="card-h"><h2>Valor pelos certificados</h2>${e.completo ? (Math.abs(dif) < 1 ? `<span class="pill ok">Bate com o Notion</span>` : `<span class="pill warn">Diferente do Notion</span>`) : `<span class="pill">Falta contagem</span>`}</div>
    <div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${l.fonte ? " · certificados da " + esc(l.fonte) : ""}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody><tfoot><tr><td>Total calculado</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot></table></div>
-   <p class="xs muted" style="margin:8px 0 0">No Notion: ${brl(f.total)}${e.completo && Math.abs(dif) >= 1 ? ` (diferença de ${brl(Math.abs(dif))} ${dif > 0 ? "a mais no Notion" : "a menos no Notion"})` : ""}. Descontos e cortesias não entram nesta conta.</p></section>`;
+   <p class="xs muted" style="margin:8px 0 0">No Notion: ${brl(f.total)}${e.completo && Math.abs(dif) >= 1 ? ` (diferença de ${brl(Math.abs(dif))} ${dif > 0 ? "a mais no Notion" : "a menos no Notion"})` : ""}. Descontos e cortesias não entram nesta conta.</p>${e.completo && S.admin && !c.triagem && typeof temPonte === "function" && temPonte() && paginaDoCliente(c) && Math.abs(dif) >= 1 ? `<button class="btn sm" style="margin-top:8px" data-a="usarValorNotion">Usar ${brl(e.total)} como Valor total no Notion</button>` : ""}</section>`;
 }
 function certItensView(c){
   const provas = (c.provas || []).filter(p => p.nome); if (!provas.length) return "";
@@ -123,6 +126,7 @@ function certItensView(c){
     <div class="row"><span class="xs muted" id="ciStatus">${esc(statusTxt(reg, c))}</span><button class="btn sm pri" data-a="copiarCont">${!c.triagem && typeof temPonte === "function" && temPonte() ? "Salvar no Notion" : "Copiar para o Notion"}</button></div></div>
    ${S.ciCopiado === c.id ? `<div class="wait small" style="margin-bottom:12px"><b>Copiado.</b> Abra o cliente no Notion e cole na coluna "Certificados por item". Na próxima sincronização a nota e o valor aparecem para toda a equipe e no portal do cliente.${notionDe(c) ? `<div style="margin-top:8px"><a class="btn sm pri" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Abrir no Notion</a></div>` : ""}</div>` : ""}
    <div class="row" style="gap:6px;margin-bottom:12px">${tabs}</div>
+   ${typeof fichaAcoesView === "function" ? fichaEditorView(c, p) + (S.fichaEd && S.fichaEd.cid === c.id && S.fichaEd.pk === kP(p.nome) ? "" : fichaAcoesView(c, p, itens)) : ""}
    ${itens.length ? `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Nota ${esc(p.nome)}</div><div class="v"><span id="ciNota">${d1(cp.total)}</span><small class="muted" style="font-size:16px"> / ${d1(cp.max)}</small></div><div class="d">${esc((p.edital && p.edital.peso) || "")}</div></div>
      <div class="kpi"><div class="label">Certificados</div><div class="v" id="ciCert">${cp.nCert}</div><div class="d" id="ciArt">${cp.nArt ? cp.nArt + " artigos ou capítulos" : "sem artigo"}</div></div>
      <div class="kpi"><div class="label">Valor desta prova</div><div class="v gold" id="ciValor">${(() => { const l = (estimarJS(c) || { linhas:[] }).linhas.find(l => l.desc.startsWith(p.nome + ":")); return l && l.valor != null ? brl(l.valor) : "–"; })()}</div><div class="d">Modelo ${modeloDe(p.nome)} Vitae</div></div></div>
@@ -133,7 +137,7 @@ function certItensView(c){
      <td class="r"><input class="in num" data-ci="pts" data-i="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${x.manual ? x.pts : ""}" placeholder="${x.unit != null ? String(x.auto).replace(".", ",") : "–"}" title="${x.unit != null ? "Calculado pelos certificados. Digite só para corrigir" : "Este item não é por certificado. Digite os pontos"}" style="width:76px;text-align:right"><div class="xs ${x.pts >= x.maxN ? "neon" : "muted"}" id="ciP${i}">${d1(x.pts)}</div></td>
      <td class="r num small">${d1(x.maxN)}</td></tr>`).join("")}</tbody></table></div>
    <p class="xs muted" style="margin:10px 0 0">Itens marcados com grupo dividem o mesmo teto.${grupos.length ? "" : ""} Quando o item não é por certificado (histórico, ENADE, faixa), digite os pontos direto. Ficha: ${esc((p.edital && p.edital.fichaFonte) || (p.itens && p.itens.length ? "análise curricular do cliente" : ""))}</p>`
-   : `<div class="empty">A ficha desta prova ainda não está no site${p.edital && p.edital.fichaFonte ? ". " + esc(p.edital.fichaFonte) : ""}</div>`}</section>`;
+   : S.fichaEd && S.fichaEd.cid === c.id ? "" : `<div class="empty">Sem a ficha, a nota desta prova não aparece${p.edital && p.edital.fichaFonte ? ". " + esc(p.edital.fichaFonte) : ""}</div>`}</section>`;
 }
 function ciInput(el){
   const c = clienteSel(); if (!c) return;

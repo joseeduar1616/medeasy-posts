@@ -91,9 +91,10 @@ const tiposDe = s => ({ vitae:["vitae"], analise:["analise"], lattes:["vitae","l
 /* Cliente "de mentira" para reaproveitar a contagem por item e o cálculo do valor */
 function clienteDaTriagem(t){
   const provas = provasTri(t).map((k, i) => { const e = editalJS(nomeProva(k)); return { id:"p" + i, nome:nomeProva(k), edital:e, prazoEnvio:e?.prazoEnvio || "", dataProva:e?.dataProva || "", link:e?.link || "" }; });
-  return aplicarAnalises({ id:t.id, nome:t.nome || "Cliente novo", whatsapp:t.whats || "", provas, tipos:tiposDe(t.servico), nCert:t.nCert == null || t.nCert === "" ? null : num(t.nCert), nArtigos:0, servicos:[], contagem:{}, triagem:t });
+  const c = aplicarAnalises({ id:t.id, nome:t.nome || "Cliente novo", whatsapp:t.whats || "", provas, tipos:tiposDe(t.servico), nCert:t.nCert == null || t.nCert === "" ? null : num(t.nCert), nArtigos:0, servicos:[], contagem:{}, triagem:t });
+  return typeof aplicarFichas === "function" ? aplicarFichas(c) : c;
 }
-const clienteSel = () => S.sel && String(S.sel).startsWith("t:") ? (triDe(S.sel) ? clienteDaTriagem(triDe(S.sel)) : null) : (S.eq?.clientes || []).find(x => x.id === S.sel);
+const clienteSel = () => S.sel && String(S.sel).startsWith("t:") ? (triDe(S.sel) ? clienteDaTriagem(triDe(S.sel)) : null) : (typeof aplicarFichas === "function" ? aplicarFichas : x => x)((S.eq?.clientes || []).find(x => x.id === S.sel));
 
 /* Mensagem que o cliente novo manda pelo WhatsApp. O código no fim serve para importar no painel. */
 /* Código da triagem em base64 sem + / =, para caber num link */

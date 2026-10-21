@@ -26,6 +26,8 @@ function portalView(p, preview){
       ${(p.servicos || []).length ? `<div class="stack" style="gap:18px">${p.servicos.map(s => `<div><div class="row between" style="margin-bottom:10px"><b>${esc(s.nome)}</b>${s.etapa === ULT ? `<span class="pill ok">Entregue</span>` : ETAPAS[s.etapa].cli ? `<span class="pill gold">Depende de você</span>` : `<span class="pill">Com a MedEasy</span>`}</div>
         <div>${ETAPAS.map((e, j) => `<div class="pstep ${j < s.etapa || s.etapa === ULT ? "done" : j === s.etapa ? "cur" : "todo"}"><span class="b">${j < s.etapa || s.etapa === ULT ? "✓" : ""}</span><div><div class="tt">${e.t}</div>${j === s.etapa && s.etapa < ULT ? `<div class="small muted">${e.c}</div>` : ""}</div></div>`).join("")}</div></div>`).join(`<div class="hr"></div>`)}</div>` : `<div class="empty">O seu mentor está cadastrando os serviços</div>`}</section>
 
+    ${resumoNotasView(p)}
+
     ${(p.provas || []).map(pv => { const it = pv.itens || []; const temNota = pv.notaEstimada !== "" && pv.notaEstimada != null;
       return `<section class="card"><div class="card-h"><div><h2>${esc(pv.nome)} ${esc(pv.ano || "")}</h2>${pv.area ? `<div class="sub">${esc(pv.area)}</div>` : ""}</div>${pv.link ? `<a class="btn sm" href="${esc(pv.link)}" target="_blank" rel="noopener">Edital</a>` : ""}</div>
         ${temNota ? `<div class="row" style="gap:24px;align-items:flex-end"><div><div class="label">Nota estimada</div><div class="score">${d1(num(pv.notaEstimada))}<small> / ${d1(num(pv.notaMax) || 100)}</small></div></div>${num(pv.notaPossivel) > num(pv.notaEstimada) ? `<div><div class="label gold">Possível até o prazo</div><div class="score gold" style="font-size:30px">${d1(num(pv.notaPossivel))}</div></div>` : ""}</div>
@@ -38,6 +40,8 @@ function portalView(p, preview){
       </section>`; }).join("")}
 
     ${!preview && typeof certsClienteView === "function" ? certsClienteView() : ""}
+
+    ${orcamentoClienteView(p)}
 
     ${(p.documentos || []).length ? `<section class="card"><div class="card-h"><h2>Seus documentos</h2></div><div class="list">${p.documentos.map(d => `<div class="li"><div class="grow"><div class="t">${esc(d.nome)}</div></div>${d.link ? `<a class="btn sm pri" href="${esc(d.link)}" target="_blank" rel="noopener">Abrir</a>` : ""}</div>`).join("")}</div></section>` : ""}
 
@@ -74,4 +78,22 @@ function itensView(it){
        <div class="small" style="margin-top:8px">${x.regra ? `<p class="muted" style="margin:0 0 8px">${esc(x.regra)}</p>` : ""}
         ${tem ? `<div class="label" style="margin-bottom:4px">O que você já tem</div><ol style="margin:0 0 8px;padding-left:20px">${x.comprovantes.map(c => `<li>${esc(c)}</li>`).join("")}</ol>` : `<p class="faint" style="margin:0 0 8px">Nenhum comprovante neste item ainda</p>`}
         ${x.comentario ? `<div class="label" style="margin-bottom:4px">${x.ganho > 0 ? "Como conseguir" : "Comentário do mentor"}</div><p style="margin:0">${esc(x.comentario)}</p>` : ""}</div></details>`; }).join("")}</div>`;
+}
+
+/* Resumo das notas: uma linha por prova, com o que falta para o máximo */
+function resumoNotasView(p){
+  const pv = (p.provas || []).filter(x => x.notaEstimada !== "" && x.notaEstimada != null); if (!pv.length) return "";
+  return `<section class="card"><div class="card-h"><h2>Suas notas no currículo</h2></div><div class="list">${pv.map(x => {
+    const max = num(x.notaMax) || 100, n = num(x.notaEstimada), falta = Math.max(0, Math.round((max - n) * 100) / 100); const abertos = (x.itens || []).filter(i => i.max && i.pontos < i.max - 0.001).length;
+    return `<div class="li"><div class="grow"><div class="t">${esc(x.nome)}</div><div class="small muted">${falta > 0 ? `Faltam ${d1(falta)} pontos para o máximo${abertos ? ` · ${abertos} ${abertos === 1 ? "item ainda pode subir" : "itens ainda podem subir"}` : ""}` : "Nota máxima no currículo"}</div><div class="bar" style="margin-top:6px"><i style="width:${Math.min(100, n / max * 100)}%"></i></div></div><b class="num" style="white-space:nowrap">${d1(n)} <span class="muted">/ ${d1(max)}</span></b></div>`; }).join("")}</div></section>`;
+}
+/* Orçamento do cliente: o plano que ele escolheu vezes os certificados e artigos que já entraram. Atualiza sozinho. */
+function orcamentoClienteView(p){
+  const e = p.orcamento !== undefined ? p.orcamento : (typeof estimarJS === "function" && (p.tipos || []).length ? estimarJS(clienteDoPortal(p)) : null);
+  if (!e || !(e.linhas || []).length) return ""; const f = p.financeiro || {};
+  return `<section class="card"><div class="card-h"><h2>Seu orçamento</h2>${e.completo ? `<span class="pill ok">Atualizado</span>` : `<span class="pill">Aguardando a contagem</span>`}</div>
+   <p class="small muted" style="margin:0 0 10px">É o plano que você escolheu, calculado com os certificados e artigos que já entraram no seu currículo. Se entrar certificado novo, o valor se atualiza aqui.</p>
+   <div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody>
+   <tfoot><tr><td>${e.completo ? "Total com os certificados de hoje" : "Total até agora"}</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot></table></div>
+   <p class="xs muted" style="margin:8px 0 0">Cada certificado a mais soma o valor por certificado da prova, e cada artigo ou capítulo soma ${brl(12.5)}.${f.total ? ` Valor combinado com o seu mentor: ${brl(f.total)}.` : ""} Descontos combinados não entram nesta conta. O valor final é confirmado pelo mentor.</p></section>`;
 }

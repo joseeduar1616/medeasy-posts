@@ -116,7 +116,7 @@ textarea.in{resize:vertical;min-height:80px;line-height:1.45}
 .list{display:flex;flex-direction:column}
 .li{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line);min-width:0}
 .li:first-child{border-top:0}
-.li .grow{flex:1;min-width:0}
+.li .grow,.pend .grow{flex:1;min-width:0}
 .li .t{font-weight:600;overflow-wrap:anywhere}
 .clickable{cursor:pointer;border-radius:8px}
 .clickable:hover .t{color:var(--neon)}
