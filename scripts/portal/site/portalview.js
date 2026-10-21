@@ -1,20 +1,22 @@
 function anel(p){ const r = 46, c = 2 * Math.PI * r; return `<svg class="ring" viewBox="0 0 110 110" role="img" aria-label="${p}% concluído"><circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--line)" stroke-width="9"/><circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--neon)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - p / 100)}" transform="rotate(-90 55 55)"/><text x="55" y="58" text-anchor="middle" font-size="24">${p}%</text><text x="55" y="76" text-anchor="middle" font-size="9" fill="var(--muted)" style="fill:var(--muted);font-family:var(--f-body);font-weight:600;letter-spacing:.08em">CONCLUÍDO</text></svg>`; }
 function portalView(p, preview){
   const ct = p.contato || CONTATO; const nome = primeiro(p.nome);
+  // Mentoria mensal não tem etapas, prazo de entrega nem parcelas: tem a própria tela
+  const mensal = (p.servicos || []).filter(s => s.mensal), outros = (p.servicos || []).filter(s => !s.mensal); const soMentoria = mensal.length > 0 && !outros.length;
   const pend = (p.pendencias || []).filter(x => !x.feita); const feitas = (p.pendencias || []).filter(x => x.feita);
   const prazos = [];
   (p.provas || []).forEach(x => { if (x.prazoEnvio) prazos.push({ d:x.prazoEnvio, t:`Fim do envio do currículo ${x.nome}` }); if (x.dataProva) prazos.push({ d:x.dataProva, t:`Prova ${x.nome}` }); });
-  (p.servicos || []).forEach(s => { if (s.prazo && s.etapa < ULT) prazos.push({ d:s.prazo, t:`Entrega prevista: ${s.nome}` }); });
+  outros.forEach(s => { if (s.prazo && s.etapa < ULT) prazos.push({ d:s.prazo, t:`Entrega prevista: ${s.nome}` }); });
   prazos.sort((a, b) => a.d.localeCompare(b.d)); const futuros = prazos.filter(x => dias(x.d) >= 0);
   const f = p.financeiro || {};
-  const svcAtual = (p.servicos || []).filter(s => s.etapa < ULT).sort((a, b) => a.etapa - b.etapa)[0];
-  const subt = !p.servicos?.length ? "Assim que o seu serviço começar, cada etapa aparece aqui" : svcAtual ? ETAPAS[svcAtual.etapa].c : "Tudo pronto. Agora é anexar na inscrição e focar na prova";
+  const svcAtual = outros.filter(s => s.etapa < ULT).sort((a, b) => a.etapa - b.etapa)[0];
+  const subt = !outros.length ? "Assim que o seu serviço começar, cada etapa aparece aqui" : svcAtual ? ETAPAS[svcAtual.etapa].c : "Tudo pronto. Agora é anexar na inscrição e focar na prova";
   const waTxt = `Oi, ${ct.mentor.split(" ")[0]}! Aqui é ${p.nome || ""}. `;
   return `${preview ? `<div class="preview-bar"><div class="wrap"><span>Prévia do que ${esc(nome)} vê</span><button class="btn sm" data-a="sairPreview">Voltar ao painel</button></div></div>` : ""}
   <header class="top"><div class="wrap top-in"><img class="logo" src="${LOGO}" alt=""><div class="brand"><b>MED<i>EASY</i></b><span>Seu currículo para a residência</span></div><span style="flex:1"></span><a class="btn sm" target="_blank" rel="noopener" href="${waLink(ct.whats, waTxt)}">Falar com o mentor</a></div></header>
   <main class="wrap portal stack" style="gap:16px">
-    <section class="hero"><div><div class="label gold">Olá${nome ? ", " + esc(nome) : ""}</div><h1>${p.servicos?.length && !svcAtual ? "Seu currículo está pronto" : "Seu currículo está andando"}</h1><p>${esc(subt)}</p>
-      <p class="xs faint" style="margin-top:10px">Atualizado ${esc(dataHora(p.atualizadoEm))}</p></div>${anel(p.progresso || 0)}</section>
+    <section class="hero"><div><div class="label gold">Olá${nome ? ", " + esc(nome) : ""}</div><h1>${soMentoria ? "Sua mentoria" : outros.length && !svcAtual ? "Seu currículo está pronto" : "Seu currículo está andando"}</h1><p>${soMentoria ? "Acompanhamento mês a mês do seu currículo para a residência. Aqui você vê as suas notas, o que falta e as próximas provas." : esc(subt)}</p>
+      <p class="xs faint" style="margin-top:10px">Atualizado ${esc(dataHora(p.atualizadoEm))}</p></div>${soMentoria ? "" : anel(p.progresso || 0)}</section>
 
     ${pend.length ? `<section class="card"><div class="card-h"><h2>O que falta você enviar</h2><span class="pill gold">${pend.length}</span></div>
       ${pend.map(x => `<div class="pend"><span class="dot gold" style="margin-top:7px;flex:none"></span><div class="grow"><div style="font-weight:600">${esc(x.texto)}</div>${x.prazo ? `<div class="xs muted">até ${dBR(x.prazo)}</div>` : ""}</div><a class="btn sm" target="_blank" rel="noopener" href="${waLink(ct.whats, waTxt + "Sobre a pendência: " + x.texto)}">Avisar</a></div>`).join("")}
@@ -22,9 +24,11 @@ function portalView(p, preview){
 
     ${futuros.length ? `<section class="card"><div class="card-h"><h2>Próximas datas</h2></div><div class="list">${futuros.slice(0, 5).map(x => { const d = dias(x.d); return `<div class="li"><div class="countdown"><b class="num">${d}</b><span>${d === 1 ? "dia" : "dias"}</span></div><div class="grow"><div class="t">${esc(x.t)}</div><div class="small muted">${dBR(x.d)}</div></div></div>`; }).join("")}</div></section>` : ""}
 
-    <section class="card"><div class="card-h"><h2>${(p.servicos || []).length > 1 ? "Seus serviços" : "Seu serviço"}</h2></div>
-      ${(p.servicos || []).length ? `<div class="stack" style="gap:18px">${p.servicos.map(s => `<div><div class="row between" style="margin-bottom:10px"><b>${esc(s.nome)}</b>${s.etapa === ULT ? `<span class="pill ok">Entregue</span>` : ETAPAS[s.etapa].cli ? `<span class="pill gold">Depende de você</span>` : `<span class="pill">Com a MedEasy</span>`}</div>
-        <div>${ETAPAS.map((e, j) => `<div class="pstep ${j < s.etapa || s.etapa === ULT ? "done" : j === s.etapa ? "cur" : "todo"}"><span class="b">${j < s.etapa || s.etapa === ULT ? "✓" : ""}</span><div><div class="tt">${e.t}</div>${j === s.etapa && s.etapa < ULT ? `<div class="small muted">${e.c}</div>` : ""}</div></div>`).join("")}</div></div>`).join(`<div class="hr"></div>`)}</div>` : `<div class="empty">O seu mentor está cadastrando os serviços</div>`}</section>
+    ${mensal.length ? mentoriaCardView(p, ct, waTxt) : ""}
+
+    ${soMentoria ? "" : `<section class="card"><div class="card-h"><h2>${outros.length > 1 ? "Seus serviços" : "Seu serviço"}</h2></div>
+      ${outros.length ? `<div class="stack" style="gap:18px">${outros.map(s => `<div><div class="row between" style="margin-bottom:10px"><b>${esc(s.nome)}</b>${s.etapa === ULT ? `<span class="pill ok">Entregue</span>` : ETAPAS[s.etapa].cli ? `<span class="pill gold">Depende de você</span>` : `<span class="pill">Com a MedEasy</span>`}</div>
+        <div>${ETAPAS.map((e, j) => `<div class="pstep ${j < s.etapa || s.etapa === ULT ? "done" : j === s.etapa ? "cur" : "todo"}"><span class="b">${j < s.etapa || s.etapa === ULT ? "✓" : ""}</span><div><div class="tt">${e.t}</div>${j === s.etapa && s.etapa < ULT ? `<div class="small muted">${e.c}</div>` : ""}</div></div>`).join("")}</div></div>`).join(`<div class="hr"></div>`)}</div>` : `<div class="empty">O seu mentor está cadastrando os serviços</div>`}</section>`}
 
     ${resumoNotasView(p)}
 
@@ -55,12 +59,12 @@ function portalView(p, preview){
 
     ${typeof feedbackCardView === "function" ? feedbackCardView(p, preview) : ""}
 
-    <section class="card"><div class="card-h"><h2>Como funciona</h2></div>
-      <details class="faq"><summary>Quanto tempo leva?</summary><p>A análise curricular sai em até 3 dias úteis. O Vitae e o Lattes, em até 7 dias úteis. Se precisar antes, fale com o mentor sobre a taxa de urgência.</p></details>
+    ${soMentoria ? "" : `<section class="card"><div class="card-h"><h2>Como funciona</h2></div>
+      <details class="faq"><summary>Quanto tempo leva?</summary><p>A análise curricular sai em até 3 dias úteis. O Currículo Vitae/currículo com certificados comprovados e o Lattes, em até 7 dias úteis. Se precisar antes, fale com o mentor sobre a taxa de urgência.</p></details>
       <details class="faq"><summary>Como confiro o documento?</summary><p>Quando o serviço chegar na etapa de conferência, o link aparece em Seus documentos. Confira tudo e mande os ajustes pelo WhatsApp. Alterações depois de 2 dias do envio têm taxa adicional.</p></details>
       <details class="faq"><summary>Vocês enviam o currículo no site da prova?</summary><p>Não. Entregamos tudo pronto, do jeito que o edital pede, para você só anexar na inscrição.</p></details>
       <details class="faq"><summary>Posso mandar mais certificados depois?</summary><p>Pode. Avise o mentor. Certificados novos podem mudar a nota e o valor do serviço.</p></details>
-      <details class="faq"><summary>Quem cuida dos certificados?</summary><p>A MedEasy organiza os certificados que você envia. Não produzimos certificados nem declarações, e a origem dos documentos é responsabilidade de quem envia.</p></details></section>
+      <details class="faq"><summary>Quem cuida dos certificados?</summary><p>A MedEasy organiza os certificados que você envia. Não produzimos certificados nem declarações, e a origem dos documentos é responsabilidade de quem envia.</p></details></section>`}
 
     <section class="card"><div class="row between"><div><div class="label">Seu mentor</div><b style="font-size:17px">${esc(ct.mentor)}</b><div class="small muted">${esc(ct.texto)} · ${esc(ct.email)}</div></div><a class="btn pri" target="_blank" rel="noopener" href="${waLink(ct.whats, waTxt)}">Chamar no WhatsApp</a></div></section>
     <p class="xs faint" style="text-align:center">MedEasy · @med_easyy · Goiânia, Goiás</p>
@@ -95,7 +99,17 @@ function orcamentoClienteView(p){
   if (!e || !(e.linhas || []).length) return ""; const f = p.financeiro || {};
   return `<section class="card"><div class="card-h"><h2>Seu orçamento</h2>${e.completo ? `<span class="pill ok">Atualizado</span>` : `<span class="pill">Aguardando a contagem</span>`}</div>
    <p class="small muted" style="margin:0 0 10px">É o plano que você escolheu, calculado com os certificados e artigos que já entraram no seu currículo. Se entrar certificado novo, o valor se atualiza aqui.</p>
-   <div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody>
+   <div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${esc(typeof foraTxt === "function" ? foraTxt(l) : "")}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody>
    <tfoot><tr><td>${e.completo ? "Total com os certificados de hoje" : "Total até agora"}</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot></table></div>
    <p class="xs muted" style="margin:8px 0 0">Cada certificado a mais soma o valor por certificado da prova, e cada artigo ou capítulo soma ${brl(12.5)}.${f.total ? ` Valor combinado com o seu mentor: ${brl(f.total)}.` : ""} Descontos combinados não entram nesta conta. O valor final é confirmado pelo mentor.</p></section>`;
+}
+
+/* Mentoria mensal: sem prazo de entrega e sem parcelas. Mostra o plano e o contato do mentor. */
+function mentoriaCardView(p, ct, waTxt){
+  const m = p.mentoria || {}; const nProvas = (p.provas || []).length;
+  return `<section class="card"><div class="card-h"><h2>Mentoria mensal</h2><span class="pill ok">Ativa</span></div>
+   <div class="row between small"><span>Plano</span><b>${nProvas ? `${nProvas} ${nProvas === 1 ? "prova" : "provas"}` : "Mensal"}</b></div>
+   ${m.valor ? `<div class="row between small" style="margin-top:4px"><span>Mensalidade</span><b class="num">${brl(m.valor)} por mês</b></div>` : ""}
+   <p class="small muted" style="margin:10px 0 12px">Não tem prazo de entrega: o acompanhamento segue mês a mês com ${esc(ct.mentor)}. As suas notas, o que falta e as próximas datas aparecem aqui embaixo.</p>
+   <a class="btn sm pri" target="_blank" rel="noopener" href="${waLink(ct.whats, waTxt)}">Falar com o mentor</a></section>`;
 }

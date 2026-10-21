@@ -2,6 +2,7 @@
 const kP = s => semAcento(s).replace(/[^a-z0-9]/g, "");
 const r2 = n => Math.round((Number(n) || 0) * 100) / 100;
 const PRECO = { taxa:100, taxaMaisDeDuas:90, artigo:12.5, analise1:100, analise2:90,
+  mentoria:{ ate2:250, extra:150 },
   vitae:{ A:[9, 8.5, 8], B:[9.5, 9, 8.5], C:[8, 7.5, 7], D:[9, 8.5, 8], E:[9, 8.5, 8] }, lattes:{ A:[7, 6.5, 6], B:[12, 11.5, 11] } };
 const MODELO = { psugo:"D", psumg:"D", hpp:"C", santacasasp:"C", scmsp:"C", fmabc:"C", unitau:"C", idor:"C", puccamp:"C", hcpa:"C", enare:"C", sesdf:"C", cet:"E" };
 const faixaQ = q => q >= 50 ? 2 : q >= 31 ? 1 : 0;
@@ -17,21 +18,23 @@ function itensDaProva(p){
   return ((p.edital && p.edital.ficha) || []).filter(x => x.maxN != null).map(x => ({ key:x.item, item:x.item, pontos:x.pontos || "", maxN:num(x.maxN), unit:x.unit == null ? null : num(x.unit), artigo:!!x.artigo, grupo:x.grupo || "", grupoMax:x.grupoMax == null ? null : num(x.grupoMax) }));
 }
 function calcProva(itens, reg, teto){
-  reg = reg || {}; let nCert = 0, nArt = 0, total = 0, max = 0; const g = {}, gm = {};
+  reg = reg || {}; let nCert = 0, nArt = 0, nCertVal = 0, nArtVal = 0, total = 0, max = 0; const g = {}, gm = {};
   const rows = itens.map(it => {
     const r = reg[it.key] || it.base || {}; const lista = (r.lista || []).filter(Boolean);
     const n = Math.max(0, Math.floor(num(r.n)));
     const auto = it.unit != null ? Math.min(it.maxN, n * it.unit) : 0;
     const manual = r.pts !== undefined && r.pts !== null && r.pts !== "";
     const pts = r2(Math.max(0, Math.min(it.maxN, manual ? num(r.pts) : auto)));
-    if (it.artigo) nArt += n; else nCert += n;
-    return { ...it, n, auto:r2(auto), manual, pts, lista, com:r.com || it.com || "", sit:r.sit || it.sit || "" };
+    // Válidos para a prova: no item por certificado, só até o número que ainda soma ponto (o resto passa do máximo do item)
+    const val = !manual && it.unit > 0 ? Math.min(n, Math.ceil(it.maxN / it.unit - 1e-9)) : n;
+    if (it.artigo){ nArt += n; nArtVal += val; } else { nCert += n; nCertVal += val; }
+    return { ...it, n, val, auto:r2(auto), manual, pts, lista, com:r.com || it.com || "", sit:r.sit || it.sit || "" };
   });
   for (const x of rows){ if (x.grupo){ g[x.grupo] = (g[x.grupo] || 0) + x.pts; gm[x.grupo] = x.grupoMax ?? Infinity; } else { total += x.pts; max += x.maxN; } }
   for (const k in g){ total += Math.min(g[k], gm[k]); max += isFinite(gm[k]) ? gm[k] : 0; }
   // Teto geral do edital (campo "maximo"), quando a soma dos itens passa dele
   if (teto > 0 && max > teto){ total = Math.min(total, teto); max = teto; }
-  return { rows, total:r2(total), max:r2(max), nCert, nArt, tem:rows.some(x => x.n || x.manual) };
+  return { rows, total:r2(total), max:r2(max), nCert, nArt, nCertVal, nArtVal, tem:rows.some(x => x.n || x.manual) };
 }
 const regDe = (c, p) => (carregarCont(c).provas || {})[kP(p.nome)];
 const tetoDe = p => num(p.edital && p.edital.maximo);
@@ -40,6 +43,8 @@ const calcDe = (c, p) => calcProva(itensDaProva(p), regDe(c, p), tetoDe(p));
 /* Orçamento pela contagem (mesmas regras do build e da skill de orçamento) */
 function estimarJS(c){
   const tipos = c.tipos || []; const linhas = []; let falta = false;
+  // Só mentoria: não tem cobrança por certificado (o valor da mentoria fica na triagem)
+  if (tipos.some(t => /^mentoria/.test(t)) && !tipos.some(t => ["vitae", "lattes", "analise", "certificados"].includes(t))) return null;
   const temLattes = tipos.includes("lattes"), temCert = tipos.includes("certificados");
   const lattesB = temLattes && temCert && !tipos.includes("vitae");
   const temVitae = tipos.includes("vitae") || (temCert && !lattesB), temAnalise = tipos.includes("analise") || lattesB;
@@ -47,18 +52,20 @@ function estimarJS(c){
   let maxCert = c.nCert ?? null;
   for (const p of provas){
     const cp = calcDe(c, p); let n = c.nCert, a = c.nArtigos || 0, fonte = c.nCert != null ? "Notion" : "";
-    if (cp.tem){ n = cp.nCert; a = cp.nArt; fonte = "contagem"; maxCert = Math.max(maxCert ?? 0, n + a); }
+    // Pela contagem, entram só os certificados válidos para esta prova (os que passam do máximo do item ficam de fora)
+    let fora = 0;
+    if (cp.tem){ n = cp.nCertVal; a = cp.nArtVal; fora = cp.nCert + cp.nArt - n - a; fonte = "contagem"; maxCert = Math.max(maxCert ?? 0, n + a); }
     const m = modeloDe(p.nome);
     if (temVitae || (!temAnalise && !lattesB)){
       const desc = `${p.nome}: análise curricular + seleção dos certificados (Modelo ${m} Vitae)`;
       if (n == null){ falta = true; linhas.push({ desc, conta:"falta o número de certificados", valor:null }); continue; }
       const u = PRECO.vitae[m][faixaQ(n)];
-      linhas.push({ desc, conta:`${br2(taxa)} + ${n} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor:taxa + n * u + a * PRECO.artigo, fonte });
+      linhas.push({ desc, conta:`${br2(taxa)} + ${n} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor:taxa + n * u + a * PRECO.artigo, fonte, fora });
     } else linhas.push({ desc:`${p.nome}: análise curricular`, conta:"1", valor:provas.length >= 2 ? PRECO.analise2 : PRECO.analise1 });
   }
   if (!provas.length && temVitae){
-    if (c.nCert == null){ falta = true; linhas.push({ desc:"Currículo Vitae", conta:"falta o número de certificados", valor:null }); }
-    else { const u = PRECO.vitae.A[faixaQ(c.nCert)], a = c.nArtigos || 0; linhas.push({ desc:"Currículo Vitae (Modelo A)", conta:`${br2(PRECO.taxa)} + ${c.nCert} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor:PRECO.taxa + c.nCert * u + a * PRECO.artigo, fonte:"Notion" }); }
+    if (c.nCert == null){ falta = true; linhas.push({ desc:"Currículo Vitae/currículo com certificados comprovados", conta:"falta o número de certificados", valor:null }); }
+    else { const u = PRECO.vitae.A[faixaQ(c.nCert)], a = c.nArtigos || 0; linhas.push({ desc:"Currículo Vitae/currículo com certificados comprovados (Modelo A)", conta:`${br2(PRECO.taxa)} + ${c.nCert} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor:PRECO.taxa + c.nCert * u + a * PRECO.artigo, fonte:"Notion" }); }
   }
   if (temLattes){
     const cat = lattesB ? "B" : "A", desc = `Atualização do Currículo Lattes (Categoria ${cat}${lattesB ? ", com o documento de comprovação" : ""})`;
@@ -68,6 +75,9 @@ function estimarJS(c){
   if (!linhas.length) return null;
   return { linhas, total:r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)), completo:!falta };
 }
+
+/* Certificados que passam do máximo do item não somam ponto, então não entram no orçamento daquela prova */
+const foraTxt = l => l.fora > 0 ? ` · ${l.fora} ${l.fora === 1 ? "certificado passa do máximo do item e não entra" : "certificados passam do máximo do item e não entram"}` : "";
 
 /* Contagem: vem do Notion (coluna "Certificados por item") e o rascunho fica no navegador */
 const rascKey = id => "medeasy-rasc-" + id;
@@ -112,7 +122,7 @@ function pintarStatus(c){ const el = document.getElementById("ciStatus"); if (el
 function valorCard(c){
   const e = estimarJS(c); if (!e) return `<section class="card" id="valorCard" hidden></section>`; const f = fin(c); const dif = r2(f.total - e.total);
   return `<section class="card" id="valorCard"><div class="card-h"><h2>Valor pelos certificados</h2>${e.completo ? (Math.abs(dif) < 1 ? `<span class="pill ok">Bate com o Notion</span>` : `<span class="pill warn">Diferente do Notion</span>`) : `<span class="pill">Falta contagem</span>`}</div>
-   <div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${l.fonte ? " · certificados da " + esc(l.fonte) : ""}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody><tfoot><tr><td>Total calculado</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot></table></div>
+   <div class="tbl-wrap"><table class="tbl"><tbody>${e.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${l.fonte ? " · certificados da " + esc(l.fonte) : ""}${esc(foraTxt(l))}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody><tfoot><tr><td>Total calculado</td><td class="r num" style="white-space:nowrap">${brl(e.total)}</td></tr></tfoot></table></div>
    <p class="xs muted" style="margin:8px 0 0">No Notion: ${brl(f.total)}${e.completo && Math.abs(dif) >= 1 ? ` (diferença de ${brl(Math.abs(dif))} ${dif > 0 ? "a mais no Notion" : "a menos no Notion"})` : ""}. Descontos e cortesias não entram nesta conta.</p>${e.completo && S.admin && !c.triagem && typeof temPonte === "function" && temPonte() && paginaDoCliente(c) && Math.abs(dif) >= 1 ? `<button class="btn sm" style="margin-top:8px" data-a="usarValorNotion">Usar ${brl(e.total)} como Valor total no Notion</button>` : ""}</section>`;
 }
 function certItensView(c){
