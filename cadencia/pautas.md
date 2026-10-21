@@ -9,7 +9,7 @@ uma dor ou situação que o estudante reconhece, e não com a dica.
 Formato: capa com dor + print, problema, consequência, virada, duas telas da solução, final.
 
 1. ~~Atrasou o cronograma? 4 passos pra recuperar~~ *(saiu em 16/10, formato antigo de dica)*
-2. Plantão de 12h e a aula ficou pra depois *(pronto em `posts/2026-10-21-semana-com-plantao.json`)*. Prints: cronograma, rotina, assistente, hoje
+2. ~~Plantão de 12h e a aula ficou pra depois~~ *(saiu em 21/10)*. Prints: cronograma, rotina, assistente, hoje
 3. "Estudei isso mês passado e não lembro nada" e a escada de revisão. Prints: revisoes, hoje
 4. Errou a mesma questão pela terceira vez e o caderno de erros que vira revisão. Prints: revisoes, hoje
 5. 23h, cansado, montando flashcard na mão e a IA montando do PDF. Prints: cartoes_ia, revisoes
