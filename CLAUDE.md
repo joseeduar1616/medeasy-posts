@@ -59,6 +59,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 - "Controle de certificados" é um JSON gravado pelo site (`{certs, aloc, pend, fichas}`). O build lê e devolve em `c.controle`, e as pendências do cliente entram no portal dele. `fichas` são as fichas montadas pelo mentor (prova, itens, fonte, data). O build aplica a ficha ao cliente dela e usa a mais nova de cada prova para todos os clientes quando o editais.json não tem ficha daquela prova.
 - O portal do cliente recebe também o plano (tipos), a contagem e os certificados do controle (sem as observações). Com isso mostra "Suas notas no currículo" (nota e quanto falta por prova) e "Seu orçamento", calculado com as mesmas regras do mentor e atualizado quando entram certificados ou artigos. O valor combinado (Valor total do Notion) aparece junto. O administrador pode gravar o valor calculado no Notion pelo cartão "Valor pelos certificados".
 - "Certificados por item" é preenchida com o botão "Copiar para o Notion" do site. Formato: uma linha por prova, como `PSU-GO: 2=2; 4=3; 9=/0,5`, em que o número antes do = é o número do item na ficha e "/0,5" são pontos digitados.
+- Cliente só de mentoria mensal tem um portal próprio: sem etapas, prazo de entrega, parcelas nem orçamento, com o cartão da mentoria e a mensalidade. A mensalidade fica fora do pagamento parcelado, e o repasse dela libera quando o cliente paga o mês (Pagamento finalizado na linha do mês).
 - O mentor recebe 60% do valor total, e o repasse só fica "a receber" quando o serviço está Concluído e o cliente com Pagamento finalizado. Antes disso o site mostra como "valor futuro". O corretor hoje é o mesmo mentor, então não há repasse separado. O build ignora a fórmula "Valor para mentor" do Notion (PORTAL_USAR_FORMULA=1 volta a usá-la).
 - Quem sai da equipe entra em `EX_EQUIPE` no build.mjs (hoje: Ana Eluiza). Some do login e do filtro, e os clientes antigos ficam no histórico.
 
@@ -71,6 +72,10 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
   - Modelo D: 9 / 8,5 / 8
   - Modelo E: 9 / 8,5 / 8
 - Artigo: 12,50 cada.
+- No orçamento de cada prova entram só os certificados válidos para ela: no item por certificado, até o número que ainda soma ponto. O que passa do máximo do item fica de fora, e a tela avisa quantos.
+- O serviço Vitae aparece como "Currículo Vitae/currículo com certificados comprovados".
+- Mentoria mensal: 250 por mês para até 2 provas, mais 150 por prova a mais (PRECO.mentoria no certitens.js). Na triagem é uma opção à parte, com o valor "por mês". No Notion entra como "Mentoria" no Tipo de serviço.
+- Mentoria individual: paga uma vez, com o valor digitado pelo mentor na triagem. No Notion entra como "Mentoria individual".
 - Lattes: Categoria A 7 / 6,5 / 6. Categoria B 12 / 11,5 / 11.
 - Lattes com Certificados e sem Vitae equivale ao plano B: o documento já está incluso e a prova cobra só a análise (100, ou 90 cada com 2 ou mais).
 - Modelo por prova:

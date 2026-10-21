@@ -2,7 +2,7 @@
 /* PROVAS vem de editais.json na montagem do site (só nome e chave, nada de cliente) */
 const PROVAS = __PROVAS__;
 const TRI_KEY = "medeasy-triagem";
-const SERVICOS_TRI = { vitae:"Currículo Vitae + análise curricular", analise:"Só a análise curricular", lattes:"Vitae + análise + Lattes", lattesb:"Lattes com documento de comprovação", naosei:"Ainda não sei" };
+const SERVICOS_TRI = { vitae:"Currículo Vitae/currículo com certificados comprovados + análise curricular", analise:"Só a análise curricular", lattes:"Currículo Vitae/currículo com certificados comprovados + análise + Lattes", lattesb:"Lattes com documento de comprovação", naosei:"Ainda não sei" };
 const ANO = "2027";
 /* Formulário do Notion que recebe os PDFs dos certificados (base "Triagem MedEasy"). Vazio enquanto não for compartilhado */
 const FORM_CERT = "__FORM_CERT__";
@@ -29,7 +29,7 @@ function propsTriagemNotion(t){
   const drive = (String(t.links || "").match(/https?:\/\/\S+/) || [""])[0];
   return { "Nome":t.nome || "Sem nome", "WhatsApp":t.whats || "", "Especialidade":t.area || "", "Pedido":t.pedido || "", "Observações":t.obs || "", "Outras provas":fora.join(", "), "Drive":drive,
     "Mentor":t.mentor || S.mentor?.nome || "", "Provas":daLista, "Certificados":t.nCert === "" || t.nCert == null ? null : num(t.nCert), "Situação":(ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo)[0],
-    "Serviço":SERVICOS_TRI[t.servico] || "", "Valor do orçamento":ops[0] ? ops[0].total : null, "Dados do site":JSON.stringify(t) };
+    "Serviço":[SERVICOS_TRI[t.servico] || "", t.mentoria ? "Mentoria mensal" : "", t.mentoriaInd ? "Mentoria individual" : ""].filter(Boolean).join(" + "), "Valor do orçamento":ops[0] ? ops[0].total : null, "Dados do site":JSON.stringify(t) };
 }
 async function enviarTriNotion(id){
   const t = triDe(id); if (!t || !triNoNotion()) return;
@@ -66,7 +66,7 @@ function juntarTriagemNotion(){
   if (triNoNotion()) for (const t of lerTri()) if (!t.notionId && String(t.nome || "").trim()) agendarTriNotion(t);
 }
 /* Cliente fechou: cria a linha no "Controle cliente" */
-const SERVICO_NOTION = { vitae:"Vitae", analise:"ANALISE", lattes:"Lattes", certificados:"Certificados" };
+const SERVICO_NOTION = { vitae:"Vitae", analise:"ANALISE", lattes:"Lattes", certificados:"Certificados", mentoria:"Mentoria", mentoriaInd:"Mentoria individual" };
 async function criarClienteNotion(){
   const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t);
   const letra = document.getElementById("triOpFechar")?.value || "A"; const o = ops.find(x => x.letra === letra) || ops[0];
@@ -115,6 +115,8 @@ function interpretarPedido(texto){
   else if (soAnalise && !temVitae) { servico = "analise"; motivos.push("pediu só a análise ou a projeção da nota"); }
   else if (temVitae) motivos.push("citou currículo ou documento");
   else motivos.push("não citou o serviço, ficou o padrão Vitae + análise");
+  const mentoria = /mentoria/.test(t) ? (/individual|avuls|uma (so )?vez|pontual/.test(t) ? "individual" : "mensal") : "";
+  if (mentoria) motivos.push("citou mentoria" + (mentoria === "individual" ? " individual" : ""));
   const provas = new Set();
   for (const p of PROVAS){ if (k.includes(p.k) || k.includes(kP(p.nome))) provas.add(p.k); }
   const palavras = t.split(/[^a-z]+/);
@@ -124,7 +126,7 @@ function interpretarPedido(texto){
   // "USP" sozinho é a USP-SP. Só vira USP-RP quando cita Ribeirão ou RP
   if (provas.has("usprp") && !/usp\s?-?\s?sp|uspsp|sao paulo/.test(t)) provas.delete("uspsp");
   if (/urgen|essa semana|amanha|hoje/.test(t)) motivos.push("parece ter pressa");
-  return { servico, provas:[...provas].filter(x => PROVAS.some(p => p.k === x)), motivos };
+  return { servico, mentoria, provas:[...provas].filter(x => PROVAS.some(p => p.k === x)), motivos };
 }
 function triagemFormView(){
   const d = S.triForm || (S.triForm = { provas:[], servico:"vitae" });
@@ -161,7 +163,7 @@ const linkTriagem = () => { const m = (S.eq.mentores || []).find(x => x.nome ===
 function importarTri(texto){
   const d = lerCodigoTri(texto); if (!d){ toast("Não achei o código #triagem na mensagem"); return; }
   const it = interpretarPedido(d.pedido || "");
-  const t = { id:novoIdTri(), em:d.em || Date.now(), nome:(d.nome || "").trim(), whats:d.whats || "", area:(d.area || "").trim(), provas:[...new Set([...(d.provas || []), ...it.provas])].filter(k => PROVAS.some(p => p.k === k)), outras:d.outras || "", servico:SERVICOS_TRI[d.servico] && d.servico !== "naosei" ? d.servico : it.servico, pedido:d.pedido || "", motivos:it.motivos, nCert:d.nCert || "", links:d.links || "", obs:d.obs || "", cont:{}, etapa:"novo" };
+  const t = { id:novoIdTri(), em:d.em || Date.now(), nome:(d.nome || "").trim(), whats:d.whats || "", area:(d.area || "").trim(), provas:[...new Set([...(d.provas || []), ...it.provas])].filter(k => PROVAS.some(p => p.k === k)), outras:d.outras || "", servico:SERVICOS_TRI[d.servico] && d.servico !== "naosei" ? d.servico : it.servico, pedido:d.pedido || "", motivos:it.motivos, mentoria:it.mentoria === "mensal", mentoriaInd:it.mentoria === "individual", nCert:d.nCert || "", links:d.links || "", obs:d.obs || "", cont:{}, etapa:"novo" };
   // Mesmo link aberto duas vezes não duplica o cliente
   const igual = lerTri().find(x => x.nome === t.nome && x.whats === t.whats && x.em === t.em); if (igual) t.id = igual.id, t.cont = igual.cont, t.etapa = igual.etapa;
   salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); toast(igual ? "Esse cliente já estava na triagem" : "Cliente importado");
@@ -175,7 +177,7 @@ function importarTriNotion(url){
   const daLista = nome => (PROVAS.find(p => p.nome === nome || kP(p.nome) === kP(nome)) || {}).k;
   const provas = [...new Set([...(n.provas || []).map(daLista).filter(Boolean), ...it.provas])];
   const outras = (n.provas || []).filter(nome => !daLista(nome)).join(", ");
-  const t = { id:novoIdTri(), em:n.em || Date.now(), nome:n.nome || "", whats:n.whats || "", area:n.area || "", provas, outras, servico:it.servico, pedido:n.pedido || "", motivos:it.motivos, nCert:n.nCert || "", links:n.drive || "", obs:n.obs || "", cont:{}, etapa:"novo", notion:n.url, notionId:n.id || idDeUrl(n.url), mentor:n.mentor || S.mentor?.nome || "", arquivos:n.arquivos || 0 };
+  const t = { id:novoIdTri(), em:n.em || Date.now(), nome:n.nome || "", whats:n.whats || "", area:n.area || "", provas, outras, servico:it.servico, pedido:n.pedido || "", motivos:it.motivos, mentoria:it.mentoria === "mensal", mentoriaInd:it.mentoria === "individual", nCert:n.nCert || "", links:n.drive || "", obs:n.obs || "", cont:{}, etapa:"novo", notion:n.url, notionId:n.id || idDeUrl(n.url), mentor:n.mentor || S.mentor?.nome || "", arquivos:n.arquivos || 0 };
   salvarTri(t); S.sel = t.id; S.view = "triagemItem"; render(); toast("Cliente importado do Notion");
 }
 function triagemView(){
@@ -192,9 +194,16 @@ function opcoesTri(t){
   const extra = []; if (t.drive) extra.push({ desc:"Organização dos certificados no drive", conta:"1", valor:75 });
   const montar = (letra, titulo, tipos) => { const e = estimarJS({ ...c, tipos }); if (!e) return; const linhas = [...e.linhas, ...extra]; const bruto = r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)); const desc = Math.min(10, Math.max(0, num(t.desconto))); ops.push({ letra, titulo, tipos, linhas, bruto, desconto:desc, total:r2(bruto * (1 - desc / 100)), completo:e.completo }); };
   const pedeLattes = c.provas.some(p => /unifesp/i.test(p.nome)); const quem = c.provas.filter(p => /unifesp/i.test(p.nome)).map(p => p.nome).join(", ");
-  if (t.servico === "analise"){ montar("A", "ANÁLISE CURRICULAR", ["analise"]); montar("B", "CURRÍCULO VITAE + ANÁLISE CURRICULAR", ["vitae"]); }
+  const VITAE = "CURRÍCULO VITAE/CURRÍCULO COM CERTIFICADOS COMPROVADOS";
+  if (t.servico === "analise"){ montar("A", "ANÁLISE CURRICULAR", ["analise"]); montar("B", `${VITAE} + ANÁLISE CURRICULAR`, ["vitae"]); }
   else if (t.servico === "lattesb"){ montar("A", "LATTES COM DOCUMENTO DE COMPROVAÇÃO", ["lattes","certificados"]); }
-  else { montar("A", "CURRÍCULO VITAE + ANÁLISE CURRICULAR", ["vitae"]); if (t.servico === "lattes" || pedeLattes) montar("B", `VITAE + ANÁLISE CURRICULAR + LATTES${quem ? ` (${quem})` : ""}`, ["vitae","lattes"]); }
+  else { montar("A", `${VITAE} + ANÁLISE CURRICULAR`, ["vitae"]); if (t.servico === "lattes" || pedeLattes) montar("B", `${VITAE} + ANÁLISE CURRICULAR + LATTES${quem ? ` (${quem})` : ""}`, ["vitae","lattes"]); }
+  // Mentoria mensal: 250 por mês até 2 provas e mais 150 por prova a mais. Mentoria individual: valor único que o mentor digita.
+  const letra = () => String.fromCharCode(65 + ops.length), nP = c.provas.length;
+  if (t.mentoria){ const extra = Math.max(0, nP - 2), v = PRECO.mentoria.ate2 + extra * PRECO.mentoria.extra;
+    ops.push({ letra:letra(), titulo:"MENTORIA MENSAL", tipos:["mentoria"], mensal:true, linhas:[{ desc:`Mentoria mensal (${extra ? nP + " provas" : "até 2 provas"})`, conta:extra ? `${br2(PRECO.mentoria.ate2)} + ${extra} X ${br2(PRECO.mentoria.extra)}` : "1 mês", valor:v }], bruto:v, desconto:0, total:v, completo:true }); }
+  if (t.mentoriaInd){ const v = t.valorMentoriaInd === "" || t.valorMentoriaInd == null ? null : num(t.valorMentoriaInd);
+    ops.push({ letra:letra(), titulo:"MENTORIA INDIVIDUAL", tipos:["mentoriaInd"], linhas:[{ desc:"Mentoria individual", conta:"1", valor:v }], bruto:v || 0, desconto:0, total:v || 0, completo:v != null }); }
   return ops.map(o => ajustarOpcao(o, (t.ajuste || {})[o.letra]));
 }
 /* Ajustes feitos à mão no orçamento: título, cada linha (pela descrição automática), linhas a mais e valor final */
@@ -207,6 +216,7 @@ function ajustarOpcao(o, a){
   return { ...o, titulo:a.titulo || o.titulo, linhas, bruto, total, totalManual:a.total != null && a.total !== "", manual:true, completo:linhas.every(l => l.valor != null) };
 }
 const NOTA_ORC = "Valor estimado com os certificados recebidos. Pode variar em até 3 certificados para mais ou para menos após a conferência completa de cada edital. Pagamento de 50% na contratação e o restante após a versão para conferência.";
+const NOTA_MENTORIA = "Mentoria mensal, paga todo mês. Não tem prazo de entrega: o acompanhamento do currículo segue mês a mês com o mentor, até a prova.";
 const msgOrc = (t, ops) => t.msgOrc || mensagemOrcamento(t, ops);
 /* Editor do orçamento. Os campos gravam quando o mentor sai deles. */
 function orcEditor(t, ops){
@@ -241,9 +251,11 @@ const A_ORC = {
 function mensagemOrcamento(t, ops){
   const c = clienteDaTriagem(t); const provas = c.provas.map(p => p.nome);
   const porProva = o => o.linhas.filter(l => l.valor != null && /:/.test(l.desc)).map(l => `${l.desc.split(":")[0]} ${brl(l.valor)}`).join(", ");
-  const blocos = ops.map((o, i) => `OPÇÃO ${o.letra}: ${brl(o.total)}\n${i === 0 ? `${/ANÁLISE CURRICULAR$/.test(o.titulo) && !/VITAE/.test(o.titulo) ? "Análise curricular" : "Currículo e análise curricular"} ${provas.length === 1 ? "da prova" : `das ${provas.length} provas`} (${porProva(o)})` : `Tudo da opção ${ops[i - 1].letra} + ${/LATTES/.test(o.titulo) ? "a atualização do seu Currículo Lattes" : "o documento pronto para envio"}`}${o.desconto ? `\nJá com ${o.desconto}% de desconto` : ""}`).join("\n\n");
+  const desc = (o, i) => o.mensal ? `Mentoria mensal: acompanhamento mês a mês do seu currículo para ${provas.length > 2 ? `as ${provas.length} provas` : "até 2 provas"}, sem prazo de entrega` : (o.tipos || []).includes("mentoriaInd") ? "Mentoria individual com o seu mentor" : null;
+  const curr = ops.filter(o => !o.mensal && !(o.tipos || []).includes("mentoriaInd"));
+  const blocos = ops.map(o => { const d = desc(o); const i = curr.indexOf(o); return `OPÇÃO ${o.letra}: ${brl(o.total)}${o.mensal ? " por mês" : ""}\n${d ? d : i === 0 ? `${/ANÁLISE CURRICULAR$/.test(o.titulo) && !/VITAE/.test(o.titulo) ? "Análise curricular" : "Currículo Vitae/currículo com certificados comprovados e análise curricular"} ${provas.length === 1 ? "da prova" : `das ${provas.length} provas`} (${porProva(o)})` : `Tudo da opção ${curr[i - 1].letra} + ${/LATTES/.test(o.titulo) ? "a atualização do seu Currículo Lattes" : "o documento pronto para envio"}`}${o.desconto ? `\nJá com ${o.desconto}% de desconto` : ""}`; }).join("\n\n");
   const prox = c.provas.filter(p => p.prazoEnvio && dias(p.prazoEnvio) >= 0).sort((a, b) => a.prazoEnvio.localeCompare(b.prazoEnvio))[0];
-  return `Oi, ${primeiro(t.nome)}! Tudo bem? Segue o seu orçamento para ${provas.join(", ") || "a sua prova"} ${ANO}\n\nEm cada prova fazemos a análise curricular com projeção de nota e a seleção dos certificados que pontuam no edital, e deixamos o documento pronto para envio\n\n${blocos}${prox ? `\n\nAtenção ao ${prox.nome}: o envio do currículo termina em ${dBR(prox.prazoEnvio)}` : ""}\n\nO pagamento é 50% na contratação e o restante depois da versão para conferência`;
+  return `Oi, ${primeiro(t.nome)}! Tudo bem? Segue o seu orçamento para ${provas.join(", ") || "a sua prova"} ${ANO}\n\nEm cada prova fazemos a análise curricular com projeção de nota e a seleção dos certificados que pontuam no edital, e deixamos o documento pronto para envio\n\n${blocos}${prox ? `\n\nAtenção ao ${prox.nome}: o envio do currículo termina em ${dBR(prox.prazoEnvio)}` : ""}\n\n${curr.length ? "O pagamento é 50% na contratação e o restante depois da versão para conferência" : ""}${ops.some(o => o.mensal) ? `${curr.length ? "\n" : ""}A mentoria mensal é paga todo mês` : ""}`.replace(/\n+$/, "");
 }
 function textoNotionTri(t){ const c = clienteDaTriagem(t); const cont = textoCont(c, (carregarCont(c).provas) || {}); return `${t.nome}\nTelefone: ${t.whats}\nTipo de serviço: ${tiposDe(t.servico).join(", ")}, ${c.provas.map(p => p.nome).join(", ")}\n${t.area ? "Especialidade: " + t.area + "\n" : ""}${t.links ? "Drive: " + t.links + "\n" : ""}${cont ? "\nCertificados por item:\n" + cont : ""}`; }
 function triagemItemView(){
@@ -261,18 +273,20 @@ function triagemItemView(){
       ${campoOutras(t.outras, true)}
       <div class="grid2" style="gap:10px"><label class="f"><span>Certificados (quando não contou por item)</span><input class="in" data-tri="nCert" type="number" min="0" value="${esc(t.nCert || "")}"></label><label class="f"><span>Desconto (%)</span><input class="in" data-tri="desconto" type="number" min="0" max="10" value="${esc(t.desconto || "")}" placeholder="0"></label></div>
       <label class="chk"><input type="checkbox" data-tri="drive" ${t.drive ? "checked" : ""}><span>Cobrar organização do drive (R$ 75,00)</span></label>
+      <label class="chk"><input type="checkbox" data-tri="mentoria" ${t.mentoria ? "checked" : ""}><span>Oferecer mentoria mensal (${brl(PRECO.mentoria.ate2)} por mês até 2 provas, mais ${brl(PRECO.mentoria.extra)} por prova a mais)</span></label>
+      <div class="row" style="gap:8px"><label class="chk"><input type="checkbox" data-tri="mentoriaInd" ${t.mentoriaInd ? "checked" : ""}><span>Oferecer mentoria individual</span></label>${t.mentoriaInd ? `<input class="in" data-tri="valorMentoriaInd" type="number" min="0" step="0.01" value="${esc(t.valorMentoriaInd ?? "")}" placeholder="Valor" style="width:120px">` : ""}</div>
       <label class="f"><span>Links do Drive</span><input class="in" data-tri="links" value="${esc(t.links || "")}"></label>
       <label class="f"><span>Observações</span><textarea class="in" data-tri="obs" rows="2">${esc(t.obs || "")}</textarea></label></div></section>
     <section class="card"><div class="card-h"><h2>Provas</h2></div>${c.provas.length ? `<div class="list">${c.provas.map(p => { const cp = calcDe(c, p); return `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${ANO}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) + " (" + quando(p.prazoEnvio) + ")" : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div></div>${cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : ""}</div>`; }).join("")}</div>` : `<div class="empty">Marque as provas acima</div>`}</section>
    </div><div class="stack">
     <section class="card"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
-      ${ops.length && S.orcEdit ? orcEditor(t, ops) : ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
+      ${ops.length && S.orcEdit ? orcEditor(t, ops) : ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}${o.mensal ? " por mês" : ""}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${esc(foraTxt(l))}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
       <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, msgOrc(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
     ${analiseCard(c)}
     <section class="card"><div class="card-h"><h2>PDF da análise</h2></div><p class="xs muted" style="margin:0 0 10px">Sai da análise importada ou da contagem por item lá embaixo, com os comentários de cada item. Uma prova por vez.</p><div class="row">${c.provas.map(p => `<button class="btn sm ${calcDe(c, p).tem ? "pri" : ""}" data-a="pdfAnalise" data-v="${kP(p.nome)}">PDF ${esc(p.nome)}</button>`).join("") || `<span class="xs muted">Sem prova</span>`}</div></section>
     <section class="card"><div class="card-h"><h2>Quando fechar</h2>${t.clienteNotion ? `<a class="pill ok" href="${esc(t.clienteNotion)}" target="_blank" rel="noopener">Cliente no Notion</a>` : ""}</div>
       ${triNoNotion() ? `<p class="xs muted" style="margin:0 0 10px">Cria a linha do cliente no Controle cliente, com serviço, provas, valor, contagem por item e controle de certificados. Ele entra no painel com o código de acesso em 1 ou 2 minutos.</p>
-      <div class="row">${ops.length > 1 ? `<select class="in" id="triOpFechar" style="width:auto">${ops.map(o => `<option value="${o.letra}">Opção ${o.letra}: ${brl(o.total)}</option>`).join("")}</select>` : ""}<button class="btn sm pri" data-a="criarClienteNotion" ${t.nome && t.whats ? "" : "disabled"}>Criar cliente no Notion</button><button class="btn sm ghost" data-a="copiarNotionTri">Copiar texto</button></div>`
+      <div class="row">${ops.length > 1 ? `<select class="in" id="triOpFechar" style="width:auto">${ops.map(o => `<option value="${o.letra}">Opção ${o.letra}: ${brl(o.total)}${o.mensal ? " por mês" : ""}</option>`).join("")}</select>` : ""}<button class="btn sm pri" data-a="criarClienteNotion" ${t.nome && t.whats ? "" : "disabled"}>Criar cliente no Notion</button><button class="btn sm ghost" data-a="copiarNotionTri">Copiar texto</button></div>`
       : `<p class="xs muted" style="margin:0 0 10px">Crie o cliente no Notion e cole o texto abaixo. Na próxima sincronização ele entra no painel com a contagem e o código de acesso.</p><button class="btn sm" data-a="copiarNotionTri">Copiar dados para o Notion</button>`}</section>
    </div></div>
    <div style="margin-top:16px">${controleView(c)}</div>
@@ -284,7 +298,8 @@ function triInput(el){
   else if (el.type === "checkbox") t[campo] = el.checked; else t[campo] = el.value;
   if (S.modo === "triagem") return;
   salvarTri(t); delete S.cont[t.id];
-  if (campo === "prova" || campo === "servico" || campo === "nCert" || campo === "desconto" || campo === "drive") render();
+  if (campo === "prova" || campo === "servico" || campo === "nCert" || campo === "desconto" || campo === "drive" || campo === "mentoria" || campo === "mentoriaInd") render();
+  else if (campo === "valorMentoriaInd"){ const pos = el.selectionStart; render(); const nv = document.querySelector('[data-tri="valorMentoriaInd"]'); if (nv){ nv.focus(); try { nv.setSelectionRange(pos, pos); } catch {} } }
 }
 
 /* ---------- PDFs no navegador ---------- */
@@ -298,8 +313,8 @@ function pdfOrcamento(t){
   const pag = o => `<section class="pg"><div class="cab"><div><h1>ORÇAMENTO - OPÇÃO ${o.letra}</h1><div class="sub">${esc(o.titulo)}</div></div><div class="data">DATA: <u>${hoje_br()}</u></div></div>
     <div class="linhas"><div><b>CLIENTE:</b> ${esc((t.nome || "").toUpperCase())}</div><div><b>CPF:</b> </div><div><b>MENTOR:</b> ${esc((S.mentor?.nome || "JOSÉ EDUARDO").toUpperCase())}</div></div>
     <div class="tabela"><img class="marca" src="${LOGO_URL()}" alt=""><table><thead><tr><th>DESCRIÇÃO</th><th>QUANTIDADE</th><th>VALOR</th></tr></thead><tbody>${o.linhas.map(l => `<tr><td>${esc(l.desc.replace(/^([^:]+):/, `$1 ${ANO}:`))}</td><td>${esc(l.conta)}</td><td>${l.valor == null ? "a definir" : "R$" + br2(l.valor)}</td></tr>`).join("")}${o.bruto - o.total > 0.004 ? `<tr><td>${o.desconto && !o.totalManual ? `Desconto de ${o.desconto}%` : "Desconto"}</td><td></td><td>- R$${br2(o.bruto - o.total)}</td></tr>` : ""}</tbody></table></div>
-    <div class="total">VALOR TOTAL: R$ ${br2(o.total)}</div>
-    <p class="nota">${esc(t.notaOrc || NOTA_ORC).replace(/\n/g, "<br>")}</p>
+    <div class="total">VALOR TOTAL: R$ ${br2(o.total)}${o.mensal ? " POR MÊS" : ""}</div>
+    <p class="nota">${esc(o.mensal ? NOTA_MENTORIA : t.notaOrc || NOTA_ORC).replace(/\n/g, "<br>")}</p>
     <div class="rod">(62) 99515-5830 / medeasyy0@gmail.com / Goiânia, Goiás- Brasil</div></section>`;
   abrirDoc(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Orçamento ${esc(t.nome)}</title>${FONTES}<style>
     @page{size:A4;margin:0} *{box-sizing:border-box} body{margin:0;background:#888;font-family:Poppins,sans-serif;color:#1b1b1b;-webkit-print-color-adjust:exact;print-color-adjust:exact}

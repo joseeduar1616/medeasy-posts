@@ -58,7 +58,7 @@ const SENHA_ADMIN = (process.env.PORTAL_SENHA_ADMIN || "").trim();
 const EX_EQUIPE = ["Ana Eluiza"].map(semAcento);
 
 /* ---------- serviços e provas ---------- */
-const SERVICOS = { "vitae": "Currículo Vitae", "lattes": "Currículo Lattes", "analise": "Análise curricular", "certificados": "Organização de certificados", "trabalho escrito": "Trabalho escrito", "slide": "Slides", "emprego": "Vitae emprego", "formatacao de trabalho": "Formatação de trabalho" };
+const SERVICOS = { "vitae": "Currículo Vitae/currículo com certificados comprovados", "mentoria": "Mentoria mensal", "mentoria mensal": "Mentoria mensal", "mentoria individual": "Mentoria individual", "lattes": "Currículo Lattes", "analise": "Análise curricular", "certificados": "Organização de certificados", "trabalho escrito": "Trabalho escrito", "slide": "Slides", "emprego": "Vitae emprego", "formatacao de trabalho": "Formatação de trabalho" };
 const PROVA_NOME = { "USP SP": "USP-SP", "AMIRGS": "AMRIGS", "PSUGO": "PSU-GO", "PSUMG": "PSU-MG", "SESGO": "SES-GO", "SANTA CASA DE SP": "Santa Casa SP", "SIRIO LIBANES": "Sírio-Libanês", "EINSTEIN": "Einstein", "DANTE": "Dante Pazzanese" };
 // Prova escrita no fim do nome do cliente no Notion ("Jose Nicolas PSU", "Jose Nicolas fubog")
 const PROVA_NO_NOME = { psu: "PSUGO", psugo: "PSUGO", psumg: "PSUMG", sesgo: "SESGO", fubog: "FUBOG", hpp: "HPP", uel: "UEL", amrigs: "AMIRGS", amirgs: "AMIRGS" };
@@ -216,7 +216,7 @@ async function montar(linhas) {
   const clientes = [];
   for (const g of grupos.values()) {
     const servicos = [], provas = new Map(), repasses = [], mentores = new Set(), corretores = new Set(), trainees = new Set();
-    let total = 0, pago = 0; const pagamentos = [];
+    let total = 0, pago = 0, mensalidade = 0, temMensal = false; const pagamentos = [];
     for (const l of g.linhas) {
       const tipos = l.tipos.map(t => [t, semAcento(t)]);
       const sv = tipos.filter(([, k]) => SERVICOS[k]).map(([, k]) => SERVICOS[k]);
@@ -229,15 +229,19 @@ async function montar(linhas) {
       const etapa = etapaDe(l.status, l.pagamento);
       const m = pessoa(l.mentor), c = pessoa(l.corretor), t = pessoa(l.trainee);
       if (m) mentores.add(m); if (c) corretores.add(c); if (t) trainees.add(t);
-      servicos.push({ id: l.id, pagamento: l.pagamento || "", total: l.total || 0, pago: pagoDe(l.total || 0, l.pagamento), nome: (sv.length ? sv.join(" + ") : "Serviço") + (pv.length ? " · " + pv.join(", ") : ""), etapa, prazo: etapa < 6 ? (l.entrega || "") : "", entregueEm: etapa === 6 ? (l.entrega || "") : "", inicio: l.inicio || "", notion: l.url, mentor: m, corretor: c, trainee: t, status: l.status || "" });
-      const tt = l.total || 0, pg = pagoDe(tt, l.pagamento); total += tt; pago += pg;
+      // Mentoria mensal: paga por mês, sem prazo de entrega e fora do pagamento em 2 parcelas dos outros serviços
+      const mensal = sv.length > 0 && sv.every(x => x === "Mentoria mensal");
+      if (mensal) { temMensal = true; mensalidade += l.total || 0; }
+      servicos.push({ id: l.id, pagamento: l.pagamento || "", total: l.total || 0, pago: mensal ? 0 : pagoDe(l.total || 0, l.pagamento), nome: (sv.length ? sv.join(" + ") : "Serviço") + (pv.length ? " · " + pv.join(", ") : ""), etapa, prazo: etapa < 6 && !mensal ? (l.entrega || "") : "", mensal, entregueEm: etapa === 6 ? (l.entrega || "") : "", inicio: l.inicio || "", notion: l.url, mentor: m, corretor: c, trainee: t, status: l.status || "" });
+      const tt = mensal ? 0 : l.total || 0, pg = pagoDe(tt, l.pagamento); total += tt; pago += pg;
       if (pg) pagamentos.push({ valor: pg, forma: l.forma || "" });
       // Mentor recebe 60% do valor total do serviço (PORTAL_PCT_MENTOR muda a regra). Hoje o corretor é o próprio mentor, então a fórmula
       // "Valor para mentor" do Notion, que separa mentor e corretor, não é usada. PORTAL_USAR_FORMULA=1 volta a usar a fórmula.
       const vm = process.env.PORTAL_USAR_FORMULA === "1" && l.valorMentor != null ? l.valorMentor : (l.total != null ? Math.round(l.total * PCT_MENTOR * 100) / 100 : null);
       // O repasse só fica "a receber" com o serviço concluído e o cliente com pagamento finalizado. Antes disso é valor futuro.
       const quitado = semAcento(l.pagamento).startsWith("pagamento finalizado");
-      const liberado = etapa === 6 && quitado, motivo = liberado ? "" : etapa < 6 && !quitado ? "falta concluir e o cliente quitar" : etapa < 6 ? "falta concluir o serviço" : "falta o cliente quitar";
+      // Na mentoria mensal não há conclusão: o repasse do mês libera quando o cliente paga o mês
+      const liberado = mensal ? quitado : etapa === 6 && quitado, motivo = liberado ? "" : mensal ? "falta o cliente pagar o mês" : etapa < 6 && !quitado ? "falta concluir e o cliente quitar" : etapa < 6 ? "falta concluir o serviço" : "falta o cliente quitar";
       if (m) repasses.push({ pessoa: m, papel: "Mentor", servico: l.id, valor: vm, pago: l.mentorPago, data: l.dataPagMentor || "", liberado, motivo });
       // Hoje o corretor é o próprio mentor: o repasse é um só, os 60% do mentor. Para voltar a pagar corretor à parte, use PORTAL_CORRETOR_SEPARADO=1.
       if (c && process.env.PORTAL_CORRETOR_SEPARADO === "1") repasses.push({ pessoa: c, papel: "Corretor", servico: l.id, valor: l.valorCorretor, pago: l.corretorPago, data: l.dataPagCorretor || "" });
@@ -249,7 +253,7 @@ async function montar(linhas) {
       mentores: [...mentores], corretores: [...corretores], trainees: [...trainees], mentor: [...mentores][0] || "",
       servicos, provas: [...provas.values()], pendencias: [], atualizacoes: [], documentos: [], notas: "",
       origem: g.linhas.map(l => l.origem).find(Boolean) || "", desconto: [...new Set(g.linhas.flatMap(l => l.desconto).filter(d => d && d !== "NENHUM"))],
-      financeiro: { total, pago, pagamentos }, repasses,
+      financeiro: { total, pago, pagamentos }, repasses, mentoria: temMensal ? { mensal: true, valor: mensalidade } : null,
       contagem: lerTextoCont(g.linhas.map(l => l.contTexto).filter(Boolean).join("\n")),
       controle: lerControle(g.linhas.map(l => l.controleTexto).find(t => t && t.trim())),
       nCert: Math.max(...g.linhas.map(l => l.nCert ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nCert ?? -1)) : null,
@@ -290,6 +294,8 @@ const br2 = v => v.toFixed(2).replace(".", ",");
 const ehArtigo = t => /artigo|cap[ií]tulo|publica/i.test(t || "");
 function estimar(c) {
   const linhas = []; let faltaContagem = false;
+  // Só mentoria: não tem cobrança por certificado
+  if (c.tipos.some(t => /^mentoria/.test(t)) && !c.tipos.some(t => ["vitae", "lattes", "analise", "certificados"].includes(t))) return null;
   const temLattes = c.tipos.includes("lattes"), temCert = c.tipos.includes("certificados");
   // Lattes + Certificados = plano B do Lattes: o documento de comprovação já está incluso, a prova cobra só a análise.
   const lattesB = temLattes && temCert && !c.tipos.includes("vitae");
@@ -299,7 +305,9 @@ function estimar(c) {
   let maxCert = c.nCert ?? null;
   for (const p of provas) {
     const itens = p.itens || [];
-    const comp = itens.flatMap(i => (i.comprovantes || []).map(t => ({ t, item: i.nome })));
+    // Só os certificados válidos para esta prova: no item por atividade, até o número que ainda soma ponto
+    const comp = itens.flatMap(i => { const u = Number(i.porAtividade) || 0, mx = Number(i.max) || 0; const l = (i.comprovantes || []).map(t => ({ t, item: i.nome }));
+      return u > 0 && mx > 0 ? l.slice(0, Math.ceil(mx / u - 1e-9)) : l; });
     let n = comp.length ? comp.filter(x => !ehArtigo(x.item) || !/na íntegra|completo/i.test(x.t)).length : c.nCert;
     let a = comp.length ? comp.filter(x => ehArtigo(x.item) && /artigo completo|cap[ií]tulo/i.test(x.item)).length : (c.nArtigos || 0);
     if (comp.length) maxCert = Math.max(maxCert ?? 0, n);
@@ -314,8 +322,8 @@ function estimar(c) {
     }
   }
   if (!provas.length && temVitae) {
-    if (c.nCert == null) { faltaContagem = true; linhas.push({ desc: "Currículo Vitae", conta: "falta o número de certificados", valor: null }); }
-    else { const u = PRECO.vitae.A[faixa(c.nCert)]; const a = c.nArtigos || 0; linhas.push({ desc: "Currículo Vitae (Modelo A)", conta: `${br2(PRECO.taxa)} + ${c.nCert} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor: PRECO.taxa + c.nCert * u + a * PRECO.artigo, fonte: "Notion" }); }
+    if (c.nCert == null) { faltaContagem = true; linhas.push({ desc: "Currículo Vitae/currículo com certificados comprovados", conta: "falta o número de certificados", valor: null }); }
+    else { const u = PRECO.vitae.A[faixa(c.nCert)]; const a = c.nArtigos || 0; linhas.push({ desc: "Currículo Vitae/currículo com certificados comprovados (Modelo A)", conta: `${br2(PRECO.taxa)} + ${c.nCert} X ${br2(u)}${a ? ` + ${a} X ${br2(PRECO.artigo)}` : ""}`, valor: PRECO.taxa + c.nCert * u + a * PRECO.artigo, fonte: "Notion" }); }
   }
   if (temLattes) {
     const cat = lattesB ? "B" : "A", nome = `Atualização do Currículo Lattes (Categoria ${cat}${lattesB ? ", com o documento de comprovação" : ""})`;
@@ -332,7 +340,7 @@ function espelho(c, contato) {
   const pago = c.financeiro.pago, total = c.financeiro.total;
   return {
     id: c.id, nome: c.nome, mentores: c.mentores || [],
-    servicos: c.servicos.map(s => ({ nome: s.nome, etapa: s.etapa, prazo: s.prazo })),
+    servicos: c.servicos.map(s => ({ nome: s.nome, etapa: s.etapa, prazo: s.prazo, mensal: !!s.mensal })), mentoria: c.mentoria || null,
     provas: c.provas.map(p => ({ nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [], edital: p.edital || null })),
     pendencias: [...c.pendencias.filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
       ...((c.controle && c.controle.pend) || []).filter(x => x.quem === "Cliente" && x.situacao !== "Resolvida").map(x => ({ texto: [x.item, x.texto].filter(Boolean).join(": "), feita: false, prazo: "" }))],
