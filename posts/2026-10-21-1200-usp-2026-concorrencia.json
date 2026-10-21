@@ -1,0 +1,54 @@
+{
+ "slug": "2026-10-21-1200-usp-2026-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "header": ["CONCORRÊNCIA", "USP-SP"],
+ "verified_on": "2026-10-21",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/usp-sp-libera-concorrencia-do-processo-seletivo-para-residencia-medica-2026/",
+  "https://www.grupomedcof.com.br/blog/?p=31498",
+  "Edital COREME/FM nº 02/2026 (USP-SP 2027), já conferido no post de 12/10"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica USP-SP", "pill": "CONCORRÊNCIA 2026",
+   "title": ["QUANTOS DISPUTAM", "<span class='y glow'>CADA VAGA</span>"],
+   "body": "Na seleção de 2026 da USP-SP foram <b>11.082 inscritos</b> para <b>834 vagas</b>: média de <b>13,3 candidatos por vaga</b>.",
+   "bullets": ["As especialidades mais disputadas", "As outras especialidades", "O que vale para 2027"]},
+  {"type": "rows", "label": "Acesso direto", "title": ["AS MAIS <span class='y'>DISPUTADAS</span>"],
+   "sub": "Candidatos por vaga na USP-SP 2026",
+   "rows": [
+    {"name": "Otorrinolaringologia", "sub": "283 inscritos para 4 vagas", "value": "70,8"},
+    {"name": "Neurocirurgia", "sub": "303 inscritos para 6 vagas", "value": "50,5"},
+    {"name": "Dermatologia", "sub": "486 inscritos para 10 vagas", "value": "48,6"},
+    {"name": "Cirurgia Geral", "sub": "931 inscritos para 22 vagas", "value": "42,3"},
+    {"name": "Psiquiatria", "sub": "731 inscritos para 18 vagas", "value": "40,6"},
+    {"name": "Ginecologia e Obstetrícia", "sub": "614 inscritos para 16 vagas", "value": "38,4"}
+   ],
+   "note": "Cirurgia Geral teve 931 inscritos para só 22 vagas."},
+  {"type": "rows", "label": "Outras especialidades", "title": ["E AS <span class='y'>OUTRAS</span>"],
+   "sub": "Candidatos por vaga na USP-SP 2026",
+   "rows": [
+    {"name": "Oftalmologia", "sub": "482 inscritos para 13 vagas", "value": "37,1"},
+    {"name": "Ortopedia e Traumatologia", "sub": "443 inscritos para 18 vagas", "value": "24,6"},
+    {"name": "Clínica Médica", "sub": "1.192 inscritos para 57 vagas", "value": "20,9"},
+    {"name": "Anestesiologia", "sub": "690 inscritos para 33 vagas", "value": "20,9"},
+    {"name": "Pediatria", "sub": "536 inscritos para 40 vagas", "value": "13,4"},
+    {"name": "Medicina de Família", "sub": "115 inscritos para 10 vagas", "value": "11,5"},
+    {"name": "Medicina de Emergência", "sub": "157 inscritos para 24 vagas", "value": "6,5"}
+   ],
+   "note": "Clínica Médica tem mais inscritos, mas também é a que mais oferece vagas."},
+  {"type": "cards", "label": "Para 2027", "title": ["E EM <span class='g'>2027</span>?"],
+   "sub": "O que já está no edital da USP-SP 2027",
+   "cards": [
+    {"num": "1", "h": "Até 26/10, 12h", "tag": "Inscrições na FUVEST", "p": "Taxa de <b>R$ 620</b>. O prazo acaba <b>ao meio-dia</b>."},
+    {"num": "2", "h": "06/12, 13h", "tag": "Prova objetiva", "p": "<b>100 questões</b>, peso 9. Quem não acertar pelo menos <b>50%</b> está eliminado."},
+    {"num": "3", "h": "Precisa de currículo?", "tag": "Sim, depois da prova", "p": "Peso 1, com envio de <b>04 a 12/01</b>. No acesso direto, a nota é multiplicada pelo <b>conceito ENAMED</b> da faculdade."}
+   ],
+   "note": "A concorrência de 2026 é uma referência, não uma previsão: as vagas mudam todo ano."},
+  {"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>ESCOLHER</span>"], "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar USP com você.",
+   "note": "O currículo também entra na nota da USP. Precisa organizar o seu? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: relação candidato/vaga da USP-SP 2026 divulgada pela FMUSP, com levantamentos de Estratégia MED e MedCof (números iguais nos dois). Edital COREME/FM nº 02/2026 (USP-SP 2027, FUVEST)."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "USP-SP 2026: <span>11.082 inscritos</span> para 834 vagas.<br>Veja as mais disputadas no feed da @med_easyy."},
+ "caption": "📊 QUANTOS DISPUTAM CADA VAGA NA USP-SP\n\nNa seleção de residência médica 2026 da USP-SP foram 11.082 inscritos para 834 vagas, uma média de 13,3 candidatos por vaga.\n\nNo acesso direto, Otorrinolaringologia foi a mais disputada, com 70,8 candidatos por vaga (283 inscritos para 4 vagas). Depois vêm Neurocirurgia (50,5), Dermatologia (48,6) e Cirurgia Geral (42,3). Clínica Médica teve 20,9 por vaga e Pediatria, 13,4.\n\nPara 2027, as inscrições vão até segunda, 26/10, ao meio-dia, no site da FUVEST. E sim, precisa de currículo: ele tem peso 1 e é enviado depois da prova, de 04 a 12/01. Arrasta para ver a lista completa e salva para decidir com calma 📌\n\nQual especialidade você vai prestar na USP? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #usp #fmusp #fuvest #concorrencia #residencia2027"
+}
