@@ -239,3 +239,4 @@ details.faq p{margin:8px 0 0;color:var(--muted)}
 .drop-list button:hover{background:var(--line)}
 .drop-list img{width:24px;height:24px;border-radius:50%}
 .av{width:28px;height:28px;border-radius:50%;flex:none}
+.stars{display:inline-flex;gap:2px}.stars button{background:none;border:0;padding:2px 3px;font-size:30px;line-height:1;color:var(--line);cursor:pointer;font-family:inherit}.stars button.on{color:var(--gold)}.stars button:focus-visible{outline:2px solid var(--neon);border-radius:6px}

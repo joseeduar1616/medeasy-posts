@@ -7,6 +7,7 @@ compatibility_date = "2026-10-01"
 GITHUB_REPO = "joseeduar1616/medeasy-posts"
 TRIAGEM_DB = "3ff4d05bd3748087bb30c8f54fb85883"
 CLIENTES_DB = "2b34d05bd3748014997bd1798f9047ea"
+SITE = "https://curriculosmedeasy.com.br"
 ORIGEM = "https://curriculosmedeasy.com.br,https://www.curriculosmedeasy.com.br,https://joseeduar1616.github.io"
 
 # Pede a sincronização do Notion a cada 10 minutos

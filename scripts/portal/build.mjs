@@ -163,6 +163,22 @@ async function lerTriagemNotion() {
   } catch (e) { console.warn("Não li a base Triagem MedEasy: " + e.message); return []; }
 }
 
+/* Base "Feedback MedEasy": o que os clientes mandam pela página de feedback (a ponte grava).
+   Público e com Publicar marcado vira depoimento no site. O resto só a administração vê. null = não li. */
+async function lerFeedbackNotion() {
+  if (!process.env.NOTION_TOKEN) return null;
+  try {
+    const busca = await api("search", { query: "Feedback MedEasy", filter: { property: "object", value: "database" }, page_size: 20 });
+    const db = (busca.results || []).find(d => /feedback medeasy/i.test((d.title || []).map(t => t.plain_text).join("")) && !d.archived && !d.in_trash); if (!db) return [];
+    const linhas = []; let cursor;
+    do { const j = await api(`databases/${db.id}/query`, cursor ? { start_cursor: cursor, page_size: 100 } : { page_size: 100 }); linhas.push(...j.results); cursor = j.has_more ? j.next_cursor : null; } while (cursor);
+    return linhas.filter(l => !l.archived && !l.in_trash).map(l => { const v = k => l.properties[k] ? valorProp(l.properties[k]) : null; return {
+      id: l.id.replace(/-/g, ""), tipo: /part/i.test(v("Tipo") || "") ? "particular" : "publico", nome: v("Nome") || "", nota: v("Nota"), notaMentor: v("Nota do mentor"), notaMedEasy: v("Nota da MedEasy"),
+      indicaria: v("Indicaria") || "", texto: v("Texto") || "", mentor: v("Mentor") || "", provas: v("Provas") || "", publicar: !!v("Publicar"), em: Date.parse(l.created_time) || 0 }; })
+      .sort((a, b) => b.em - a.em);
+  } catch (e) { console.warn("Não li a base Feedback MedEasy: " + e.message); return null; }
+}
+
 /* ---------- montar clientes ---------- */
 const kProva = s => semAcento(s).replace(/[^a-z0-9]/g, "");
 function juntarProva(provas, pr) {
@@ -315,7 +331,7 @@ function estimar(c) {
 function espelho(c, contato) {
   const pago = c.financeiro.pago, total = c.financeiro.total;
   return {
-    id: c.id, nome: c.nome,
+    id: c.id, nome: c.nome, mentores: c.mentores || [],
     servicos: c.servicos.map(s => ({ nome: s.nome, etapa: s.etapa, prazo: s.prazo })),
     provas: c.provas.map(p => ({ nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [], edital: p.edital || null })),
     pendencias: [...c.pendencias.filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
@@ -356,6 +372,9 @@ const linhas = iLin >= 0 ? JSON.parse(fs.readFileSync(args[iLin + 1], "utf8")).m
 args.forEach((a, i) => { if (a !== "--analise") return; const [nome, arq] = args[i + 1].split("="); const l = linhas.find(x => semAcento(x.cliente) === semAcento(nome)); if (l) (l.analises ||= []).push({ arquivo: arq, nome: path.basename(arq) }); else console.warn("Cliente não encontrado: " + nome); });
 const dados = await montar(linhas);
 dados.triagem = await lerTriagemNotion();
+dados.feedbacks = await lerFeedbackNotion();
+// Sem ler o Notion agora, mantém os feedbacks que já estavam no admin.json
+if (dados.feedbacks === null && SENHA_ADMIN) { try { dados.feedbacks = (await abrir(JSON.parse(fs.readFileSync(path.join(SAIDA, "admin.json"), "utf8")), SENHA_ADMIN)).feedbacks || null; } catch {} }
 await juntarExtras(dados);
 // Ficha de cada edital (parte do currículo), com datas e regras. Completa o que a prova do cliente ainda não tem.
 const EDITAIS = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), "editais.json"), "utf8")); delete EDITAIS._fonte;
@@ -396,7 +415,11 @@ const agora = Date.now();
 for (const c of dados.clientes) fs.writeFileSync(path.join(SAIDA, "c", await arquivoCliente(c.codigo) + ".json"), JSON.stringify(await cifrar({ ...espelho(c, contato), atualizadoEm: agora }, c.codigo)));
 const semValor = dados.clientes.flatMap(c => c.repasses).filter(r => r.valor == null).length;
 // Senha de administrador: um arquivo pequeno cifrado com ela. O site confere abrindo esse arquivo.
-if (SENHA_ADMIN) fs.writeFileSync(path.join(SAIDA, "admin.json"), JSON.stringify(await cifrar({ ok: true, em: agora }, SENHA_ADMIN))); else fs.rmSync(path.join(SAIDA, "admin.json"), { force: true });
+// Leva também os feedbacks (os particulares só a administração vê).
+if (SENHA_ADMIN) fs.writeFileSync(path.join(SAIDA, "admin.json"), JSON.stringify(await cifrar({ ok: true, em: agora, feedbacks: dados.feedbacks || [] }, SENHA_ADMIN))); else fs.rmSync(path.join(SAIDA, "admin.json"), { force: true });
 fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, editais: EDITAIS, senhaAdmin: !!SENHA_ADMIN, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, triagem: dados.triagem || [], valoresPendentes: semValor > 0 }, SENHA)));
+// Depoimentos aprovados pela administração: públicos de propósito, com a assinatura que o cliente escolheu
+if (dados.feedbacks) fs.writeFileSync(path.join(SAIDA, "depoimentos.json"), JSON.stringify(dados.feedbacks.filter(f => f.tipo === "publico" && f.publicar && f.texto.trim())
+  .map(f => ({ nome: f.nome || "Cliente MedEasy", nota: f.nota, texto: f.texto, provas: f.provas, mentor: String(f.mentor || "").split(",")[0].trim(), mes: new Date(f.em).toISOString().slice(0, 7) }))));
 fs.writeFileSync(arqMarca, marca + "\n");
 console.log(`OK: ${dados.clientes.length} clientes de ${linhas.length} linhas, ${dados.mentores.length} pessoas na equipe${semValor ? `, ${semValor} repasses sem valor` : ""}`);

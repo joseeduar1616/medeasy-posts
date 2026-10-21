@@ -8,6 +8,8 @@
 //   ORIGEM              origens permitidas, separadas por vírgula. Ex.: https://curriculosmedeasy.com.br,https://joseeduar1616.github.io
 //   TRIAGEM_DB          id da base "Triagem MedEasy" (recebe a triagem feita no site)
 //   CLIENTES_DB         id da base "Controle cliente" (recebe o cliente que fechou)
+//   FEEDBACK_DB         id da base "Feedback MedEasy" (opcional: sem ele, a ponte acha pelo nome ou cria a base ao lado da Triagem)
+//   SITE                endereço do site, para conferir o código do cliente (opcional: usa a primeira ORIGEM)
 
 // Colunas que o site pode gravar, com o tipo no Notion. Qualquer outra é recusada.
 const COLUNAS = {
@@ -109,12 +111,85 @@ function montar(permitidas, entrada) {
   return { props, recusadas };
 }
 
+/* ---------- feedback dos clientes ---------- */
+// O cliente manda sem a senha da equipe. A ponte só confere se o código existe no site (o arquivo cifrado dele),
+// e não guarda o código. A parte particular vai sem nome, só com o mentor, e só a administração vê no site.
+const COLUNAS_FEEDBACK = {
+  "Nome": { title: {} },
+  "Tipo": { select: { options: [{ name: "Público", color: "green" }, { name: "Particular", color: "gray" }] } },
+  "Nota": { number: {} }, "Nota do mentor": { number: {} }, "Nota da MedEasy": { number: {} },
+  "Indicaria": { select: { options: [{ name: "Sim", color: "green" }, { name: "Talvez", color: "yellow" }, { name: "Não", color: "red" }] } },
+  "Texto": { rich_text: {} }, "Mentor": { rich_text: {} }, "Provas": { rich_text: {} }, "Publicar": { checkbox: {} },
+};
+let BASE_FEEDBACK = "";
+const tituloDe = d => (d.title || []).map(t => t.plain_text).join("");
+async function baseFeedback(env) {
+  if (env.FEEDBACK_DB) return String(env.FEEDBACK_DB).replace(/-/g, "");
+  if (BASE_FEEDBACK) return BASE_FEEDBACK;
+  const busca = await notion(env, "search", "POST", { query: "Feedback MedEasy", filter: { property: "object", value: "database" }, page_size: 20 });
+  const achou = (busca.results || []).find(d => /feedback medeasy/i.test(tituloDe(d)) && !d.archived && !d.in_trash);
+  if (achou) return (BASE_FEEDBACK = achou.id.replace(/-/g, ""));
+  // Não existe: cria na mesma página da base Triagem (ou do Controle cliente)
+  let pai = "";
+  for (const db of [env.TRIAGEM_DB, env.CLIENTES_DB].filter(Boolean)) {
+    try { const j = await notion(env, `databases/${String(db).replace(/-/g, "")}`); if (j.parent?.type === "page_id") { pai = j.parent.page_id; break; } } catch {}
+  }
+  if (!pai) throw new Error("não achei onde criar a base Feedback MedEasy. Crie a base no Notion ou defina FEEDBACK_DB");
+  const nova = await notion(env, "databases", "POST", { parent: { type: "page_id", page_id: pai }, title: [{ type: "text", text: { content: "Feedback MedEasy" } }], properties: COLUNAS_FEEDBACK });
+  return (BASE_FEEDBACK = nova.id.replace(/-/g, ""));
+}
+const normCodigo = c => String(c || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+async function arquivoCliente(codigo) {
+  const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("medeasy-c:" + normCodigo(codigo))));
+  return [...d].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
+}
+const siteDe = env => String(env.SITE || String(env.ORIGEM || "").split(",")[0] || "").trim().replace(/\/$/, "");
+const nota5 = v => { const n = Math.round(Number(v)); return n >= 1 && n <= 5 ? n : null; };
+const corta = (v, n) => String(v ?? "").replace(/\s+$/g, "").slice(0, n);
+async function receberFeedback(env, corpo) {
+  const codigo = normCodigo(corpo.codigo);
+  if (codigo.length < 8) return [400, { erro: "código inválido" }];
+  const site = siteDe(env); if (!site) return [500, { erro: "SITE não configurado" }];
+  const arq = await arquivoCliente(codigo);
+  const r = await fetch(`${site}/data/c/${arq}.json`, { cf: { cacheTtl: 60 } });
+  if (!r.ok) return [403, { erro: "código não encontrado" }];
+  // Um envio a cada 2 minutos por cliente (no mesmo ponto do Cloudflare)
+  const marca = new Request(`https://ponte.local/feedback/${arq}`);
+  if (await caches.default.match(marca)) return [429, { erro: "Você acabou de mandar. Espere 2 minutos para mandar de novo" }];
+  const mentor = (Array.isArray(corpo.mentor) ? corpo.mentor : [corpo.mentor]).filter(Boolean).slice(0, 3).map(m => corta(m, 60)).join(", ");
+  const pub = corpo.publico || null, par = corpo.particular || null;
+  const paginas = [];
+  if (pub && (corta(pub.texto, 3000).trim() || nota5(pub.nota))) paginas.push({
+    "Nome": valorNotion("title", corta(pub.assinatura, 80).trim() || "Anônimo"), "Tipo": valorNotion("select", "Público"),
+    "Nota": valorNotion("number", nota5(pub.nota)), "Texto": valorNotion("rich_text", corta(pub.texto, 3000)),
+    "Mentor": valorNotion("rich_text", mentor), "Provas": valorNotion("rich_text", corta(pub.provas, 200)), "Publicar": valorNotion("checkbox", false) });
+  if (par && (corta(par.texto, 4000).trim() || nota5(par.notaMentor) || nota5(par.notaMedEasy) || par.indicaria)) paginas.push({
+    "Nome": valorNotion("title", "Anônimo"), "Tipo": valorNotion("select", "Particular"),
+    "Nota do mentor": valorNotion("number", nota5(par.notaMentor)), "Nota da MedEasy": valorNotion("number", nota5(par.notaMedEasy)),
+    "Indicaria": valorNotion("select", ["Sim", "Talvez", "Não"].includes(par.indicaria) ? par.indicaria : ""), "Texto": valorNotion("rich_text", corta(par.texto, 4000)),
+    "Mentor": valorNotion("rich_text", mentor) });
+  if (!paginas.length) return [400, { erro: "feedback vazio" }];
+  const base = await baseFeedback(env);
+  for (const props of paginas) await notion(env, "pages", "POST", { parent: { database_id: base }, properties: props });
+  await caches.default.put(marca, new Response("1", { headers: { "Cache-Control": "max-age=120" } }));
+  return [200, { ok: true, gravados: paginas.length }];
+}
+
 export default {
   async fetch(req, env) {
     const h = cors(env, req);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: h });
     const url = new URL(req.url);
-    if (url.pathname === "/saude") return resposta({ ok: true, notion: !!env.NOTION_TOKEN, github: !!(env.GITHUB_TOKEN && env.GITHUB_REPO), admin: !!env.PORTAL_SENHA_ADMIN }, 200, h);
+    if (url.pathname === "/saude") return resposta({ ok: true, notion: !!env.NOTION_TOKEN, github: !!(env.GITHUB_TOKEN && env.GITHUB_REPO), admin: !!env.PORTAL_SENHA_ADMIN, feedback: true }, 200, h);
+
+    // Feedback do cliente: a única rota sem a senha da equipe. Precisa do código de um cliente que existe.
+    if (url.pathname === "/feedback/enviar") {
+      if (req.method !== "POST") return resposta({ erro: "use POST" }, 405, h);
+      if (Number(req.headers.get("Content-Length") || 0) > 20000) return resposta({ erro: "grande demais" }, 413, h);
+      let corpo; try { corpo = await req.json(); } catch { return resposta({ erro: "JSON inválido" }, 400, h); }
+      try { const [st, j] = await receberFeedback(env, corpo); return resposta(j, st, h); }
+      catch (e) { return resposta({ erro: e.message }, 502, h); }
+    }
 
     // Quem chama precisa da senha da equipe. A de administrador vai em X-Admin.
     const senha = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
@@ -157,6 +232,18 @@ export default {
         const j = await notion(env, "pages", "POST", { parent: { database_id: dbc }, properties: await ajustarOpcoes(env, dbc, props.props) });
         const sync = await sincronizar(env);
         return resposta({ ok: true, id: j.id, url: j.url, gravadas: Object.keys(props.props), recusadas: props.recusadas, sincronizar: sync }, 200, h);
+      } catch (e) { return resposta({ erro: e.message }, 502, h); }
+    }
+
+    // Administração publica ou tira um depoimento do site. Só mexe em páginas da base de feedback.
+    if (url.pathname === "/feedback/publicar") {
+      if (!admin) return resposta({ erro: "só o administrador publica depoimentos" }, 403, h);
+      const id = String(corpo.id || "").replace(/-/g, ""); if (!/^[0-9a-f]{32}$/.test(id)) return resposta({ erro: "id da página inválido" }, 400, h);
+      try {
+        const base = await baseFeedback(env); const pg = await notion(env, `pages/${id}`);
+        if (String(pg.parent?.database_id || "").replace(/-/g, "") !== base) return resposta({ erro: "essa página não é de feedback" }, 403, h);
+        await notion(env, `pages/${id}`, "PATCH", { properties: { "Publicar": valorNotion("checkbox", !!corpo.publicar) } });
+        return resposta({ ok: true, sincronizar: await sincronizar(env) }, 200, h);
       } catch (e) { return resposta({ erro: e.message }, 502, h); }
     }
 

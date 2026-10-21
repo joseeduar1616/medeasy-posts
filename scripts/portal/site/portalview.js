@@ -53,6 +53,8 @@ function portalView(p, preview){
       <p class="xs muted" style="margin:10px 0 0">${f.saldo <= 0.009 ? "Pagamento completo. Obrigado pela confiança." : f.entradaOk ? "Entrada recebida. O restante é pago quando você receber a versão para conferência." : `A entrada é de 50% (${brl(f.total / 2)}) e libera o começo da produção.`}</p>
       ${f.pix && f.saldo > 0 ? `<div class="code" style="margin-top:10px;font-family:var(--f-body);font-size:13px">${esc(f.pix)}</div>` : ""}</section>` : ""}
 
+    ${typeof feedbackCardView === "function" ? feedbackCardView(p, preview) : ""}
+
     <section class="card"><div class="card-h"><h2>Como funciona</h2></div>
       <details class="faq"><summary>Quanto tempo leva?</summary><p>A análise curricular sai em até 3 dias úteis. O Vitae e o Lattes, em até 7 dias úteis. Se precisar antes, fale com o mentor sobre a taxa de urgência.</p></details>
       <details class="faq"><summary>Como confiro o documento?</summary><p>Quando o serviço chegar na etapa de conferência, o link aparece em Seus documentos. Confira tudo e mande os ajustes pelo WhatsApp. Alterações depois de 2 dias do envio têm taxa adicional.</p></details>
