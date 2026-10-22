@@ -19,6 +19,10 @@ caminho de um vídeo (relativo a cadencia/ ou absoluto). O vídeo entra
 recortado na área do cartão, com o áudio original. Opcionais: "inicio" e
 "fim" em segundos pra cortar o trecho. Até 30 s.
 
+Meme com foto da IA do Canva (o normal desde 22/10): use "imagem_ia": true.
+Aí sai só publicado/<id>/moldura.png (a arte com o texto e a área da foto
+vazada) e previa-texto.jpg. A foto entra embaixo no Canva (AGENTES.md).
+
 Em "texto", **assim** sai em negrito. Cabem até 3 linhas. "mov" pode ser
 direita, esquerda, zoom ou desce. Saída: cadencia/publicado/<id>/reel.mp4,
 capa.jpg (primeiro quadro) e previa-*.jpg pra conferir.
@@ -49,8 +53,8 @@ def conferir(post):
         raise SystemExit('texto no molde "não é X, é Y"')
     if len(post.get('legenda', '')) > 2200:
         raise SystemExit('legenda passa de 2200 caracteres')
-    if not post.get('midia') and not post.get('clipe'):
-        raise SystemExit('falta "clipe" (vídeo do meme) ou "midia" (telas do app)')
+    if not post.get('midia') and not post.get('clipe') and not post.get('imagem_ia'):
+        raise SystemExit('falta "clipe" (vídeo do meme), "imagem_ia" (foto feita no Canva) ou "midia" (telas do app)')
 
 
 def palavras(texto):
@@ -212,10 +216,29 @@ def meme(post, base, dest):
     print(saida, f'{dur:.1f} s')
 
 
+def moldura(post, base):
+    """Meme com foto feita por IA no Canva: gera a arte com o texto e a área da
+    foto vazada (transparente). No Canva a foto entra embaixo e esta arte por
+    cima, e a exportação sai de lá (veja AGENTES.md)."""
+    dest = os.path.join(AQUI, 'publicado', post['id'])
+    os.makedirs(dest, exist_ok=True)
+    img = base.convert('RGBA')
+    vazio = Image.new('RGBA', (MX1 - MX0, MY1 - MY0), (0, 0, 0, 0))
+    img.paste(vazio, (MX0, MY0))
+    saida = os.path.join(dest, 'moldura.png')
+    img.save(saida, optimize=True)
+    previa = base.copy()
+    ImageDraw.Draw(previa).rectangle((MX0, MY0, MX1 - 1, MY1 - 1), fill=(120, 120, 130))
+    previa.save(os.path.join(dest, 'previa-texto.jpg'), quality=85)
+    print(saida)
+
+
 def main():
     post = json.load(open(sys.argv[1], encoding='utf-8'))
     conferir(post)
     base = base_com_texto(post['texto'])
+    if post.get('imagem_ia'):
+        return moldura(post, base)
     if post.get('clipe'):
         dest = os.path.join(AQUI, 'publicado', post['id'])
         os.makedirs(dest, exist_ok=True)

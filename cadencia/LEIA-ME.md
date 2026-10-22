@@ -1,8 +1,8 @@
 # Posts do Instagram do Cadência Med (@cadenciamed)
 
 Esta pasta faz e publica os posts do perfil @cadenciamed. Desde 22/10/2026 quem
-posta todo dia são os agentes descritos em `AGENTES.md`: um Reel no formato tweet
-às 14:52 e a turbinada no Meta às 19:47. O carrossel e o Reel de cenas deste
+posta todo dia são os agentes descritos em `AGENTES.md`: um Reel de meme no formato
+tweet às 14:52 (foto feita pela IA do Canva, sem precisar de vídeo do José) e a turbinada no Meta às 19:47. O carrossel e o Reel de cenas deste
 guia continuam disponíveis pra post feito na mão.
 
 A pasta mora no repositório `joseeduar1616/medeasy-posts` desde 21/10/2026.

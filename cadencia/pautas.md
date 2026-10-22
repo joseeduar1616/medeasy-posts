@@ -52,3 +52,23 @@ Frase de identificação ou humor, com 2 a 4 trechos em **negrito**. Ao lado, as
 11. Errar a mesma questão pela **terceira vez** e ela voltar pra **revisão** no dia certo. Telas: revisoes, hoje
 12. Domingo à noite e a semana **já montada** em volta da **escala**. Telas: rotina, assistente
 
+
+## Memes com foto (14:52, feitos sozinhos no Canva)
+
+Texto do tweet em primeira pessoa e a cena da foto que o Canva gera. Marque `~~...~~ *(saiu em DD/MM)*` quando sair. Quando acabar, invente novas no mesmo tom.
+
+1. ~~Eu às **3h da manhã** jurando que amanhã eu **começo a revisar** direito~~ *(teste no story em 22/10)*. Foto: estudante de pijama de plantão na mesa cheia de livros de madrugada, olhar vazio pra câmera, caneca na mão
+2. Meu estado mental faltando **1 mês** pra prova de residência. Foto: estudante deitado no chão do quarto em cima de apostilas, olhando o teto
+3. Quando me perguntam o **tamanho** do meu conteúdo atrasado. Foto: estudante rindo de nervoso ao lado de uma pilha enorme de livros
+4. Eu saindo do **plantão de 12h** e lembrando que hoje tem **revisão**. Foto: residente de pijama cirúrgico no corredor do hospital, olheiras, olhando o celular com cara de choque
+5. Eu fingindo que entendi a aula de **Nefro** pela terceira vez. Foto: estudante sorrindo amarelo na frente do notebook com aula aberta
+6. O grupo da turma às 23h: "**alguém já começou** a revisar?". Eu: Foto: estudante na cama no escuro, rosto iluminado pelo celular, olhos arregalados
+7. Eu depois de **acertar uma questão** de Cardio que errava sempre. Foto: estudante comemorando de punho fechado na frente do notebook
+8. Quando o simulado acaba e você percebe que **chutou metade**. Foto: estudante olhando o papel do gabarito com as mãos na cabeça
+9. Eu no **internato** prometendo que ia estudar **depois do ambulatório**. Foto: estudante de jaleco cochilando sentado num banco do hospital
+10. Quando seu amigo diz que estudou **6 horas** e você ainda tá no **primeiro tema**. Foto: estudante olhando de lado com desconfiança, segurando marca-texto
+11. Eu abrindo o cronograma na **segunda** cheio de esperança. Foto: estudante sorrindo radiante na mesa organizada de manhã, café e post-its
+12. Eu abrindo o mesmo cronograma na **sexta**. Foto: a mesma mesa bagunçada à noite, estudante largado na cadeira
+13. Quando a **revisão de 1 mês** chega e você não lembra nem do **título** da aula. Foto: estudante encarando o caderno com expressão de vazio total
+14. Minha cara quando alguém fala que **ainda tem tempo** pra prova. Foto: estudante com sorriso forçado e olho tremendo, segurando livro grosso
+15. Eu explicando pra família que **não posso** ir no almoço de domingo porque tenho **revisão**. Foto: estudante na mesa de estudos, de costas pra uma sala com família, olhando pra trás com culpa

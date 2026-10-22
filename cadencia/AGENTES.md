@@ -4,7 +4,7 @@ Dois agentes rodam todo dia, sozinhos, por pedido do José (22/10/2026):
 
 | Agente | Horário (Brasília) | O que faz |
 |---|---|---|
-| Meme do dia | 14:52 | Pega um vídeo da pasta de memes, monta na arte de tweet e publica no feed (Reel) e no story |
+| Meme do dia | 14:52 | Cria o meme sozinho (foto feita pela IA do Canva na arte de tweet), publica no feed (Reel) e no story |
 | Turbinar | 19:47 | Coloca o meme novo como anúncio no conjunto de memes do Meta e tira os que não rendem |
 
 Os dois começam igual a qualquer rotina daqui: leia antes o `LEIA-ME.md`
@@ -26,45 +26,78 @@ Os dois começam igual a qualquer rotina daqui: leia antes o `LEIA-ME.md`
 
 ## 1. Meme do dia (14:52)
 
-### Onde estão os vídeos
+O agente faz o meme inteiro sozinho, sem o José mandar nada (pedido dele em 22/10).
+Os sites de vídeo e banco de imagens não abrem daqui, e repostar vídeo viral de outra
+pessoa tem risco de direito autoral e de imagem. Por isso a foto do meme é feita pela
+IA do Canva (pessoa que não existe, sem direito de ninguém) e a montagem sai do Canva.
 
-Pasta do Google Drive "Cadência Med · memes (jogue os vídeos aqui)", id `1qkfX5z2T6zCgAebXPz4wJSX6U7T3Kn2H`.
-O José salva ali os vídeos que escolheu. Depois de usado, o vídeo vai pra subpasta "usados",
-id `1jXMBvV544KQJIE6jHQ8gUWWhJh1khCce`. O agente nunca busca vídeo fora dessa pasta.
+**Vídeo do José (opcional).** Se houver vídeo na pasta do Drive "Cadência Med · memes"
+(`1qkfX5z2T6zCgAebXPz4wJSX6U7T3Kn2H`), use ele no lugar da foto, pelo caminho B.
+Se a pasta estiver vazia, use o caminho A sem avisar nada.
 
-### Passo a passo
+### Antes de tudo
 
 1. **Desempenho.** Leia os últimos 14 dias no Windsor (como no LEIA-ME, com `media_reel_skip_rate` e
    `media_reel_avg_watch_time`) e preencha o "Alcance depois" no `historico.md`. Se já houver Reel publicado
    hoje, não publique outro.
-2. **Escolher o vídeo.** No Drive (`search_files` com `parentId = '1qkfX5z2T6zCgAebXPz4wJSX6U7T3Kn2H' and mimeType contains 'video/'`),
-   pegue o mais antigo. Se a pasta estiver vazia, não publique: avise em uma frase que a pasta de memes
-   acabou. Se o vídeo passar de 80 MB, pule pro próximo e avise.
-3. **Baixar.** `download_file_content` devolve o arquivo em base64 (num JSON salvo em disco quando é grande).
-   Decodifique pra um arquivo FORA do repositório (pasta temporária). O vídeo original nunca vai pro GitHub.
-4. **Assistir.** Tire um quadro por segundo com o ffmpeg (`-vf fps=1,scale=270:-1,tile=6x3`) e abra a imagem.
-   Use também o nome do arquivo como pista. Escolha o trecho mais forte, de 4 a 20 s (`inicio` e `fim`).
-5. **Texto do tweet.** Uma frase em primeira pessoa que case com a reação do vídeo, sobre a vida de quem
-   presta residência (prova chegando, plantão, revisão, conteúdo atrasado, simulado, internato, ranking com
-   os amigos). Pode citar o Cadência Med no fim ("Como eu revisava antes de conhecer o Cadência Med").
+2. **Texto do tweet.** Pegue a próxima pauta de "Memes com foto" no `pautas.md` (ou invente uma no mesmo tom
+   quando acabar). Uma frase em primeira pessoa sobre a vida de quem presta residência (prova chegando,
+   plantão, revisão, conteúdo atrasado, simulado, internato, ranking com os amigos). Pode citar o Cadência Med
+   no fim ("Como eu revisava antes de conhecer o Cadência Med").
    - Até 3 linhas, 1 ou 2 trechos em **negrito**.
-   - Nunca zombe da pessoa do vídeo, nem cite o nome dela, nem diga quem ela é.
    - Nada de conteúdo médico, número inventado ou promessa de aprovação.
-6. **JSON.** `cadencia/posts/AAAA-MM-DD-slug-meme.json` com `id`, `formato: "tweet"`, `texto`,
-   `clipe` (caminho do arquivo baixado), `inicio`, `fim` e `legenda` (regras do LEIA-ME, com "Marca quem tá
-   na mesma" ou "Manda pra quem..." e "Teste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br").
-   No JSON que vai pro repositório, troque o caminho do `clipe` pelo nome do arquivo do Drive e o id dele.
-7. **Gerar.** `./cadencia/preparar.sh <json> --tweet`. Abra `capa.jpg`, `previa-meio.jpg` e `previa-fim.jpg`
-   e confira texto e enquadramento.
-8. **Subir.** Commit só de `cadencia/posts/<id>.json` e `cadencia/publicado/<id>/` (reel.mp4 e as capas),
-   `git pull --rebase origin main`, push. Link: `https://raw.githubusercontent.com/joseeduar1616/medeasy-posts/<hash>/cadencia/publicado/<id>/reel.mp4`.
-9. **Publicar.** Windsor `execute_action`, conector `instagram`, conta `17841456884640989`:
-   - `create_video_post` com `video_url`, `caption` = legenda, `share_to_feed: true`;
-   - logo depois, `create_story` com o mesmo `video_url` (repost no story).
+   - Olhe os números: se um tema de meme rendeu bem, faça outro parecido.
+
+### Caminho A: foto da IA do Canva (o normal)
+
+1. **Foto.** `generate-image` do Canva, `aspectRatio: SQUARE_1_1`, prompt em inglês no molde:
+   "Candid realistic photo, meme reaction style: <cena da pauta, com estudante de medicina ou residente
+   brasileiro, roupa de plantão ou jaleco quando fizer sentido, expressão bem exagerada>. Slightly grainy
+   phone-camera look. No text, no logos, no watermarks."
+   Espere com `get-generate-image-job` até SUCCESS e olhe a prévia. Gere de novo (no máximo 2 vezes) se a
+   expressão não casar com o texto, se aparecer letra, logo, mão deformada ou paciente. Varie quem aparece
+   (homem, mulher, idades e tons de pele diferentes). Guarde o `media id` (MA...).
+2. **Moldura com o texto.** JSON `cadencia/posts/AAAA-MM-DD-slug-meme.json` com `id`, `formato: "tweet"`,
+   `imagem_ia: true`, `texto`, `prompt` (o que foi pro Canva) e `legenda` (regras do LEIA-ME, com "Marca quem
+   tá na mesma" ou "Manda pra quem..." e "Teste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br").
+   Rode `python3 cadencia/tweet.py <json>`: sai `publicado/<id>/moldura.png` (arte com o texto e a área da
+   foto vazada) e `previa-texto.jpg`. Abra a prévia e confira o texto.
+3. **Subir a moldura.** Commit de `posts/<id>.json` e `publicado/<id>/`, `git pull --rebase origin main`, push.
+   No Canva, `upload-asset-from-url` com o link raw da `moldura.png` (do commit) e nome `cadencia-<id>`.
+4. **Montar no Canva.** O desenho base é "Cadência Med · meme base" (`DAHYxSBc_kA`); a página 2 tem a foto
+   (top 898, left 189, 702 x 705) e a moldura por cima (página inteira).
+   - `copy-design` de `DAHYxSBc_kA` com `page_numbers: [2]` (guarde o `design_id` novo);
+   - `read-design` com `open_transaction: true` pra ver os dois elementos;
+   - `edit-design` com `update_fill` na foto (o elemento de 702 x 705) com o media id da IA e na moldura
+     (o de 1080 x 1920) com o media id da moldura, mais `update_title` "Meme <data> <slug>";
+   - olhe a miniatura que volta (texto, foto e moldura no lugar) e `commit`.
+5. **Exportar.** `export-design` do design novo: `jpg` (width 1080, height 1920, quality 92) e
+   `mp4` (`quality: "vertical_1080p"`). Os links que voltam são públicos por algumas horas: use logo.
+6. **Publicar.** Windsor `execute_action`, conector `instagram`, conta `17841456884640989`:
+   - `create_video_post` com `video_url` = link do mp4, `cover_url` = link do jpg, `caption` = legenda,
+     `share_to_feed: true`;
+   - logo depois, `create_story` com `image_url` = link do jpg.
    Se der timeout, confira os posts do dia antes de tentar de novo.
-10. **Mover o vídeo** pra "usados" (`update_file` com `parentId = '1jXMBvV544KQJIE6jHQ8gUWWhJh1khCce'`).
-11. **Registrar** no `historico.md` (data, hora, formato "Reel meme", texto, arquivo do Drive, media_id do
-    Reel e do story, link). Commit e push.
+7. **Registrar** no `historico.md` (data, hora, formato "Reel meme IA", texto, `design_id` do Canva, media_id do
+   Reel e do story, link) e marque a pauta como saída. Commit e push. O `design_id` é o que o Turbinar usa.
+
+### Caminho B: vídeo que o José deixou no Drive
+
+1. **Escolher o vídeo.** No Drive (`search_files` com `parentId = '1qkfX5z2T6zCgAebXPz4wJSX6U7T3Kn2H' and mimeType contains 'video/'`),
+   pegue o mais antigo. Se passar de 80 MB, pule pro próximo e avise.
+2. **Baixar.** `download_file_content` devolve o arquivo em base64 (num JSON salvo em disco quando é grande).
+   Decodifique pra um arquivo FORA do repositório. O vídeo original nunca vai pro GitHub.
+3. **Assistir.** Tire um quadro por segundo com o ffmpeg (`-vf fps=1,scale=270:-1,tile=6x3`) e abra a imagem.
+   Escolha o trecho mais forte, de 4 a 20 s (`inicio` e `fim`). Nunca zombe da pessoa do vídeo, nem cite o
+   nome dela, nem diga quem ela é. O texto do tweet casa com a reação do vídeo.
+4. **JSON** com `clipe` (caminho do arquivo baixado), `inicio`, `fim`, `texto` e `legenda`. No JSON que vai pro
+   repositório, troque o caminho do `clipe` pelo nome e id do arquivo no Drive.
+5. **Gerar.** `./cadencia/preparar.sh <json> --tweet`. Abra `capa.jpg`, `previa-meio.jpg` e `previa-fim.jpg`.
+6. **Subir.** Commit só de `posts/<id>.json` e `publicado/<id>/`, pull com rebase, push. Link:
+   `https://raw.githubusercontent.com/joseeduar1616/medeasy-posts/<hash>/cadencia/publicado/<id>/reel.mp4`.
+7. **Publicar.** `create_video_post` (`video_url`, `caption`, `share_to_feed: true`) e `create_story` com o mesmo `video_url`.
+8. **Mover o vídeo** pra "usados" (`update_file` com `parentId = '1jXMBvV544KQJIE6jHQ8gUWWhJh1khCce'`).
+9. **Registrar** no `historico.md` (formato "Reel meme vídeo", arquivo do Drive, media_ids, link). Commit e push.
 
 ---
 
@@ -86,10 +119,12 @@ id `1jXMBvV544KQJIE6jHQ8gUWWhJh1khCce`. O agente nunca busca vídeo fora dessa p
    `adset_status`, `spend`, `reach`, `actions_link_click`, `actions_landing_page_view`, `ctr`) dos últimos 7 dias.
    Preencha o resultado em `turbinadas.md`.
 2. **Meme novo.** Pra cada Reel meme publicado nas últimas 30 h que ainda não está em `turbinadas.md`:
-   - `create_ad_video` com o `video_url` raw do `reel.mp4`;
+   - `create_ad_video` com o `video_url`: no meme de IA, exporte de novo o design do Canva anotado no
+     `historico.md` (`export-design` mp4 `vertical_1080p` e jpg pra capa), porque os links do Canva vencem
+     em poucas horas; no meme de vídeo, o link raw do `reel.mp4`;
    - `create_ad` no conjunto `120251603405840345`, nome "Meme <data> <slug>", `status: active`, com
      `creative.object_story_spec` = `page_id` 1411404442052391, `instagram_user_id` 17841456884640989 e
-     `video_data` (`video_id`, `image_url` = link raw da `capa.jpg`, `message` = primeira frase da legenda
+     `video_data` (`video_id`, `image_url` = jpg exportado ou link raw da `capa.jpg`, `message` = primeira frase da legenda
      + "Teste 3 dias grátis, sem cartão.", `call_to_action` `SIGN_UP` com link `https://cadenciamed.com.br`).
    (O caminho pelo post do Instagram com `source_instagram_media_id` dá erro de vídeo não carregado: use este.)
 3. **Tirar o que não rende.** Pause (`pause_ad`) o anúncio que já gastou R$ 10 ou mais e:

@@ -12,6 +12,7 @@
 | 16/10/2026 | 15:18 | Carrossel 6 slides | Atrasou o cronograma? | https://www.instagram.com/p/DekKKhMiJxZ/ | 47 contas |
 | 21/10/2026 | 11:32 | Carrossel 7 slides (estilo lançamento) | Plantão de 12h e a aula ficou pra depois (`posts/2026-10-21-semana-com-plantao.json`, media_id 18118727726062342) | https://www.instagram.com/p/DewoWY_DZOm/ | 37 contas em 26 h |
 | 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | (preencher) |
+| 22/10/2026 | 18:15 | Story meme IA (teste) | Eu às 3h da manhã jurando que amanhã eu começo a revisar direito (`posts/2026-10-22-teste-ia.json`, Canva `DAHYxSBc_kA` página 2, story 18428106304159152) | story | (teste, só story) |
 
 ## Anotações de desempenho
 
@@ -23,3 +24,4 @@
 - 22/10: o José pediu o formato tweet (arte dele em `molde-tweet.png`) e turbinar no Meta. Primeiro Reel tweet publicado às 17:22. O Instagram aceita o vídeo pelo link raw do GitHub.
 - 22/10: o José não gostou do Reel tweet com telas do app. Daqui pra frente o post do dia é meme: vídeo viral escolhido por ele (pasta do Drive), dentro da arte de tweet, com repost no story. Regras em `AGENTES.md`.
 - 22/10: nos anúncios, o meme "estado mental" saiu a R$ 0,10 por visita ao site (2.087 visitas com R$ 206). Os outros formatos ficaram entre R$ 0,76 e R$ 0,85.
+- 22/10: o José não quer mandar vídeo nem pagar automação de direct. O meme passou a ser feito sozinho: foto gerada pela IA do Canva, montada no Canva com a moldura de texto (`tweet.py` com `imagem_ia`) e publicada pelo link de exportação do Canva, que o Instagram e o Meta aceitam. Teste no story às 18:15 deu certo, e o mp4 exportado subiu na biblioteca de anúncios (vídeo 1479389637436304). O vídeo do Drive virou opcional.
