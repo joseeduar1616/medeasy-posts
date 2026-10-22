@@ -47,7 +47,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 - `worker/` tem a ponte: Cloudflare Worker que grava no Notion o que o mentor muda pelo site e dispara a sincronização no GitHub. Instruções em `worker/README.md`. O endereço dela fica em `scripts/portal/ponte.txt` (hoje https://medeasy-ponte.medeasy.workers.dev, não é segredo). O Worker também pede a sincronização a cada 10 minutos pelo agendamento do Cloudflare, e o site pede uma quando o mentor entra. Com a ponte, "Copiar para o Notion" vira "Salvar no Notion", e a tela do cliente tem Status, Pagamento e Mentor pago (só admin) editáveis. Sem a ponte, o site só copia o texto.
 - Workflows:
   - `.github/workflows/portal-pages.yml` publica o site a cada push.
-  - `.github/workflows/portal-ponte.yml` verifica a versão da ponte no ar e, com o secret CLOUDFLARE_API_TOKEN, publica a pasta `worker/` no Cloudflare a cada mudança. Sem o token, a publicação é pelo computador (`npx wrangler deploy`).
+  - `.github/workflows/portal-ponte.yml` verifica a versão da ponte no ar e, com o secret CLOUDFLARE_API_TOKEN, publica a pasta `worker/` no Cloudflare a cada mudança. O secret já está cadastrado, então a ponte sobe sozinha a cada mudança em `worker/` (ou rodando o workflow à mão).
   - `.github/workflows/portal-notion.yml` sincroniza com o Notion. O agendamento do GitHub atrasa horas, por isso quem dispara de verdade é a ponte. Precisa dos secrets PORTAL_SENHA, NOTION_TOKEN e NOTION_DB.
 
 ## Notion
@@ -86,7 +86,6 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 
 ## Pendências conhecidas
 
-- Falta o secret CLOUDFLARE_API_TOKEN no GitHub. Sem ele, a ponte não sobe sozinha, e a versão no ar ainda não tem as rotas do feedback (`/saude` sem `"feedback":true`).
 - Mentoria mensal: o repasse é por linha, então cada mês precisa de uma linha própria no Notion (duplicar a linha do mês anterior). Falta confirmar se os 150 são por prova a mais ou uma vez só.
 - Fichas sem números:
   - IPSEMG e Santa Casa SP: falta o PDF do anexo.
