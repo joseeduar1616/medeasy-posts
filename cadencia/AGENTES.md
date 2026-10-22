@@ -5,7 +5,7 @@ Dois agentes rodam todo dia, sozinhos, por pedido do José (22/10/2026):
 | Agente | Horário (Brasília) | O que faz |
 |---|---|---|
 | Meme do dia | 14:52 | Cria o meme sozinho (foto feita pela IA do Canva na arte de tweet), publica no feed (Reel) e no story |
-| Turbinar | 19:47 | Coloca o meme novo como anúncio no conjunto de memes do Meta e tira os que não rendem |
+| Turbinar | 19:47 | Coloca o meme novo como anúncio no conjunto certo (nicho ou geral), tira os que não rendem e põe mais dinheiro no conjunto que dá visita mais barata, com teto de R$ 15 por dia |
 
 Os dois começam igual a qualquer rotina daqui: leia antes o `LEIA-ME.md`
 (começo da execução, regras de texto e como subir arquivos).
@@ -152,8 +152,10 @@ direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A e 
   raio de 25 km do centro de Goiânia, 19 a 27 anos, R$ 14 por dia. Criado em 22/10 a pedido do José, com os
   memes de internato e ENAMED. Os memes de nicho (que falam de internato, 4º ano ou ENAMED) entram aqui. Os
   outros entram no conjunto geral.
-- O orçamento é o do conjunto: o agente **nunca** muda orçamento, nunca cria campanha ou conjunto novo e
-  nunca ativa conjunto pausado. Quem liga e desliga o gasto é o José.
+- **Dinheiro (pedido do José em 22/10):** no total, cerca de R$ 15 por dia somando os conjuntos ativos.
+  Começou com R$ 9 no nicho e R$ 6 no geral, os dois ligados. O agente divide esse valor pelo desempenho
+  (passo 4) e nunca passa de R$ 15 no total. Não cria campanha nem conjunto novo e não liga conjunto que
+  esteja pausado (se o José pausou, ele quis assim).
 
 ### Passo a passo
 
@@ -175,11 +177,21 @@ direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A e 
    - não trouxe nenhuma visita ao site; ou
    - tem custo por visita acima de 3 vezes o do melhor anúncio do conjunto.
    Deixe no máximo 6 anúncios ativos (pause os piores). Nunca pause o melhor.
-4. **Data de fim.** Se o conjunto termina em menos de 7 dias, adie o fim em 30 dias (`update_adset` com
-   `end_time`). Não mexa em mais nada do conjunto.
-5. Se o conjunto estiver pausado, siga colocando os anúncios novos (ficam prontos) e lembre o José em uma
-   frase que o gasto está desligado.
-6. Se o Meta der erro de acesso ("log in to www.facebook.com", conta desconectada) ou pedir identidade
+4. **Investir mais no que dá certo.** Se o último ajuste anotado em `turbinadas.md` foi há 3 dias ou mais:
+   - compare o custo por visita ao site (`spend` / `actions_landing_page_view`) dos últimos 3 dias dos
+     conjuntos ativos que gastaram pelo menos R$ 10 nesse período;
+   - se o melhor custa 70% ou menos do pior, tire R$ 2 por dia do pior e ponha no melhor
+     (`set_adset_budget`, valor em centavos: R$ 9 = 900);
+   - cada conjunto ativo fica entre R$ 4 e R$ 11 por dia, e a soma fica em R$ 15;
+   - se a diferença for menor que isso, não mexa (o Meta precisa de dias estáveis pra aprender);
+   - anote o ajuste e o motivo em `turbinadas.md`.
+   Quando o site tiver o Pixel com o evento de conta criada, o critério passa a ser custo por conta criada.
+5. **Data de fim.** Se um conjunto termina em menos de 7 dias, adie o fim em 30 dias (`update_adset` com
+   `end_time`).
+6. Se um conjunto estiver pausado, siga colocando os anúncios novos nele (ficam prontos) e lembre o José em
+   uma frase que o gasto dele está desligado. O dinheiro dele fica com o conjunto ativo, sem passar de R$ 11.
+7. Se o Meta der erro de acesso ("log in to www.facebook.com", conta desconectada) ou pedir identidade
    verificada, não tente contornar: registre e avise em uma frase que o acesso ao Meta no Windsor precisa
    ser refeito.
-7. Registre em `turbinadas.md` (data, meme, ids do vídeo e do anúncio, o que foi pausado e por quê). Commit e push.
+8. Registre em `turbinadas.md` (data, meme, ids do vídeo e do anúncio, o que foi pausado, ajuste de dinheiro
+   e por quê). Commit e push.

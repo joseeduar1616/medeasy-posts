@@ -4,14 +4,21 @@
   "instagram_user_id": "17841456884640989",
   "campaign_id": "120251405506040345",
   "adset_id": "120251603405840345",
-  "orcamento_diario_brl": 14,
-  "observacao": "O orçamento é o do conjunto no Meta. O agente nunca muda orçamento nem ativa o conjunto: isso é com o José.",
+  "orcamento_diario_brl": 6,
+  "observacao": "Teto do José (22/10): R$ 15 por dia somando os conjuntos ativos. O agente divide esse valor entre os conjuntos pelo desempenho (regras em AGENTES.md) e nunca passa do teto.",
   "regras": {
     "pausar_depois_de_gastar_brl": 10,
     "pausar_se_custo_por_visita_maior_que_x_o_melhor": 3,
     "max_anuncios_ativos": 6,
     "adiar_fim_quando_faltar_dias": 7,
-    "adiar_fim_em_dias": 30
+    "adiar_fim_em_dias": 30,
+    "teto_diario_total_brl": 15,
+    "minimo_por_conjunto_brl": 4,
+    "maximo_por_conjunto_brl": 11,
+    "passo_de_ajuste_brl": 2,
+    "ajustar_a_cada_dias": 3,
+    "ajustar_se_custo_por_visita_menor_que_x_do_outro": 0.7,
+    "gasto_minimo_pra_comparar_brl": 10
   },
   "link": "https://cadenciamed.com.br",
   "botao": "SIGN_UP",
@@ -19,7 +26,7 @@
     "adset_id": "120251603906260345",
     "nome": "Goiânia · 19-27 · Instagram · medicina internato e ENAMED",
     "publico": "raio de 25 km do centro de Goiânia, 19 a 27 anos, só Instagram",
-    "orcamento_diario_brl": 14,
-    "criado": "2026-10-22, pausado: o José liga"
+    "orcamento_diario_brl": 9,
+    "criado": "2026-10-22, ligado pelo pedido do José no mesmo dia"
   }
 }
