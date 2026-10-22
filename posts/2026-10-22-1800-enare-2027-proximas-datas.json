@@ -1,0 +1,21 @@
+{"slug": "2026-10-22-1800-enare-2027-proximas-datas", "pillar": "calendário e prazos", "header": ["ENARE", "2026/2027"], "verified_on": "2026-10-22",
+"sources": ["https://www.medway.com.br/conteudos/residencia-medica-enare/ (cronograma Enare 2026/2027, acesso direto e pré-requisito)", "https://med.estrategia.com/portal/noticias/enare-edital-residencia-medica-2026-2027/ (cronograma Enare 2026/2027)", "log/news_seen.md 09/10: Edital Inep nº 146/2026 (reaplicação do Enamed em 18/10, resultado final 04/12)", "log/news_seen.md 22/10: usebip, resultado definitivo do Enare pré-requisito previsto para 29/10"],
+"slides": [
+{"type": "cover", "label": "Residência médica", "pill": "ENARE 2026/2027", "title": ["O QUE VEM", "<span class='g glow'>AGORA?</span>"], "body": "A prova já passou. Veja as <b>próximas datas</b> do Enare até a <b>escolha de vagas</b>, no acesso direto e no pré-requisito.", "bullets": ["Resultados previstos", "Precisa de currículo?", "Quando escolher a vaga"]},
+{"type": "rows", "label": "Próximas datas", "title": ["ANOTA <span class='y'>AÍ</span>"], "sub": "Datas previstas no cronograma do Enare", "rows": [
+ {"name": "Pré-requisito", "sub": "Resultado definitivo da prova objetiva", "value": "29/10"},
+ {"name": "Acesso direto", "sub": "Resultado final do Enamed, pelo Inep", "value": "04/12"},
+ {"name": "1ª escolha de vagas", "sub": "Acesso direto e pré-requisito", "value": "11 e 12/01"},
+ {"name": "Resultado da 1ª escolha", "sub": "Ano de 2027", "value": "15/01"}],
+ "note": "Datas previstas. Confira sempre a página oficial do Enare, porque o cronograma pode ser retificado."},
+{"type": "cards", "label": "Análise curricular", "title": ["PRECISA DE <span class='g'>CURRÍCULO?</span>"], "sub": "No Enare 2026/2027", "cards": [
+ {"num": "1", "h": "Acesso direto", "tag": "NÃO", "p": "A classificação sai da <b>nota do Enamed</b>. Não tem análise curricular."},
+ {"num": "2", "h": "Pré-requisito", "tag": "NÃO", "p": "A classificação sai da <b>prova objetiva</b> feita em 13/09. Também sem análise curricular."}],
+ "note": "Vai prestar provas que pedem currículo, como PSU-GO, PSU-MG, SES-GO e USP? Ele pode decidir a vaga."},
+{"type": "cards", "label": "Escolha de vagas", "title": ["COMO A VAGA <span class='y'>É DEFINIDA</span>"], "sub": "O que muda depois do resultado", "cards": [
+ {"num": "1", "h": "Nota nacional", "tag": "por especialidade", "p": "A classificação é <b>nacional</b>, dentro de cada especialidade. A instituição ainda não está definida."},
+ {"num": "2", "h": "Escolha", "tag": "a partir de 11/01", "p": "Na escolha de vagas, quem tem a nota maior escolhe primeiro <b>onde</b> vai fazer a residência."}],
+ "note": "Antes de 11/01, monte a sua lista de instituições em ordem de preferência."},
+{"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>NÃO PERDER</span>"], "pill": "SALVA", "body": "e manda para quem<br>fez o Enare com você.", "note": "Vai prestar outras provas com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.", "small": "Fontes: cronograma do Enare 2026/2027 (Ebserh), conferido em Medway e Estratégia MED, e Edital Inep nº 146/2026 (Enamed). Datas previstas, sujeitas a retificação."}],
+"story": {"kicker": "POST NOVO", "cta": "Enare 2026/2027: <span>o que vem agora?</span><br>Veja no feed da @med_easyy."},
+"caption": "📅 ENARE 2026/2027: O QUE VEM AGORA\n\nA prova já passou, e as próximas datas estão chegando. No pré-requisito, o resultado definitivo da prova objetiva está previsto para 29/10. No acesso direto, a nota vem do Enamed, e o resultado final do Inep está previsto para 04/12.\n\nPrecisa de currículo? Não. No Enare a classificação sai da nota da prova, sem análise curricular.\n\nA 1ª escolha de vagas está prevista para 11 e 12/01/2027, com resultado em 15/01. Quem tem a nota maior escolhe primeiro a instituição, então vale montar sua lista de preferência desde já. Salva e manda para quem fez o Enare com você 📌\n\nVocê fez o Enare? Qual especialidade? Comenta aqui 👇\n\nPrecisa organizar o currículo para as outras provas? Chama a MedEasy no direct 💚\n\n#enare #enamed #residenciamedica #residencia2027 #ebserh #medicina"}
