@@ -146,10 +146,10 @@ direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A e 
 - Conta de anúncios `1829823838034115` (BRL), página do Facebook `1411404442052391`, Instagram `17841456884640989`.
 - Campanha "Memes Reels · cliques no site · out/26" (`120251405506040345`, objetivo tráfego).
 - Conjunto "BR · 20-32 · Instagram · memes · turbinar contínuo" (`120251603405840345`):
-  R$ 14 por dia (cerca de R$ 100 por semana), público de 20 a 32 anos no Brasil, só Instagram.
+  orçamento definido pelo passo 4 (começou com R$ 6 por dia em 22/10), público de 20 a 32 anos no Brasil, só Instagram.
   Criado em 22/10 com o meme campeão "estado mental" (anúncio `120251603412240345`).
 - Conjunto de nicho "Goiânia · 19-27 · Instagram · medicina internato e ENAMED" (`120251603906260345`):
-  raio de 25 km do centro de Goiânia, 19 a 27 anos, R$ 14 por dia. Criado em 22/10 a pedido do José, com os
+  raio de 25 km do centro de Goiânia, 19 a 27 anos, começou com R$ 9 por dia. Criado em 22/10 a pedido do José, com os
   memes de internato e ENAMED. Os memes de nicho (que falam de internato, 4º ano ou ENAMED) entram aqui. Os
   outros entram no conjunto geral.
 - **Dinheiro (pedido do José em 22/10):** no total, cerca de R$ 15 por dia somando os conjuntos ativos.
