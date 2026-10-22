@@ -15,12 +15,15 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    # Uma rodada travada segurava todas as outras (o apt-get ficou parado mais de 1 hora). Com o limite, ela cai e a próxima roda.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - name: Instalar leitor de PDF
+        timeout-minutes: 4
         run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
       - name: Gerar dados criptografados
         env:
