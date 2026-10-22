@@ -14,6 +14,11 @@ O JSON tem:
   "duracao": 9,
   "legenda": "..."
 
+Formato meme (o que mais rende): em vez de "midia", use "clipe" com o
+caminho de um vídeo (relativo a cadencia/ ou absoluto). O vídeo entra
+recortado na área do cartão, com o áudio original. Opcionais: "inicio" e
+"fim" em segundos pra cortar o trecho. Até 30 s.
+
 Em "texto", **assim** sai em negrito. Cabem até 3 linhas. "mov" pode ser
 direita, esquerda, zoom ou desce. Saída: cadencia/publicado/<id>/reel.mp4,
 capa.jpg (primeiro quadro) e previa-*.jpg pra conferir.
@@ -44,8 +49,8 @@ def conferir(post):
         raise SystemExit('texto no molde "não é X, é Y"')
     if len(post.get('legenda', '')) > 2200:
         raise SystemExit('legenda passa de 2200 caracteres')
-    if not post.get('midia'):
-        raise SystemExit('falta "midia" com pelo menos um print')
+    if not post.get('midia') and not post.get('clipe'):
+        raise SystemExit('falta "clipe" (vídeo do meme) ou "midia" (telas do app)')
 
 
 def palavras(texto):
@@ -158,10 +163,63 @@ def ffmpeg():
         return 'ffmpeg'
 
 
+def tem_audio(arq):
+    r = subprocess.run([ffmpeg(), '-hide_banner', '-i', arq], capture_output=True, text=True)
+    return 'Audio:' in r.stderr
+
+
+def duracao(arq):
+    r = subprocess.run([ffmpeg(), '-hide_banner', '-i', arq], capture_output=True, text=True)
+    m = re.search(r'Duration: (\d+):(\d+):([\d.]+)', r.stderr)
+    if not m:
+        raise SystemExit('não consegui ler a duração do clipe')
+    return int(m.group(1)) * 3600 + int(m.group(2)) * 60 + float(m.group(3))
+
+
+def meme(post, base, dest):
+    clipe = post['clipe']
+    if not os.path.isabs(clipe):
+        clipe = os.path.join(AQUI, clipe)
+    if not os.path.exists(clipe):
+        raise SystemExit('clipe não encontrado: ' + clipe)
+    ini = float(post.get('inicio', 0))
+    fim = float(post.get('fim', duracao(clipe)))
+    dur = min(fim - ini, 30.0)
+    if dur < 3:
+        raise SystemExit('o trecho do clipe precisa ter pelo menos 3 s')
+    fundo = os.path.join(dest, '_fundo.png')
+    base.save(fundo)
+    bw, bh = MX1 - MX0, MY1 - MY0
+    saida = os.path.join(dest, 'reel.mp4')
+    filtro = (f'[1:v]trim=start={ini}:duration={dur},setpts=PTS-STARTPTS,fps={FPS},'
+              f'scale={bw}:{bh}:force_original_aspect_ratio=increase,crop={bw}:{bh},setsar=1[c];'
+              f'[0:v][c]overlay={MX0}:{MY0}:shortest=1,format=yuv420p[v]')
+    cmd = [ffmpeg(), '-v', 'error', '-y', '-loop', '1', '-framerate', str(FPS), '-i', fundo, '-i', clipe]
+    if tem_audio(clipe):
+        filtro += f';[1:a]atrim=start={ini}:duration={dur},asetpts=PTS-STARTPTS[a]'
+        mapa = ['-map', '[v]', '-map', '[a]']
+    else:
+        cmd += ['-f', 'lavfi', '-i', 'anullsrc=channel_layout=stereo:sample_rate=44100']
+        mapa = ['-map', '[v]', '-map', '2:a']
+    cmd += ['-filter_complex', filtro, *mapa, '-t', f'{dur:.2f}', '-c:v', 'libx264', '-preset', 'medium',
+            '-crf', '20', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', saida]
+    if subprocess.run(cmd).returncode != 0:
+        raise SystemExit('ffmpeg falhou')
+    for nome, t in (('capa.jpg', 0.4), ('previa-meio.jpg', dur / 2), ('previa-fim.jpg', max(dur - 0.5, 0))):
+        subprocess.run([ffmpeg(), '-v', 'error', '-y', '-ss', f'{t:.2f}', '-i', saida, '-frames:v', '1',
+                        '-q:v', '3', os.path.join(dest, nome)])
+    os.remove(fundo)
+    print(saida, f'{dur:.1f} s')
+
+
 def main():
     post = json.load(open(sys.argv[1], encoding='utf-8'))
     conferir(post)
     base = base_com_texto(post['texto'])
+    if post.get('clipe'):
+        dest = os.path.join(AQUI, 'publicado', post['id'])
+        os.makedirs(dest, exist_ok=True)
+        return meme(post, base, dest)
     cenas = [(carregar_print(m['print']), m.get('mov', 'direita')) for m in post['midia']]
     dur = float(post.get('duracao', 9))
     n = round(dur * FPS)

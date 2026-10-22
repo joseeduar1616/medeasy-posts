@@ -1,17 +1,18 @@
 {
-  "orcamento_por_dia_brl": 10,
-  "dias": 3,
-  "max_posts_por_dia": 1,
-  "teto_semanal_brl": 100,
-  "publico": {
-    "geo_locations": {"countries": ["BR"]},
-    "age_min": 22,
-    "age_max": 35,
-    "publisher_platforms": ["instagram"],
-    "instagram_positions": ["stream", "reels", "explore"]
+  "conta_de_anuncios": "1829823838034115",
+  "page_id": "1411404442052391",
+  "instagram_user_id": "17841456884640989",
+  "campaign_id": "120251405506040345",
+  "adset_id": "120251603405840345",
+  "orcamento_diario_brl": 14,
+  "observacao": "O orçamento é o do conjunto no Meta. O agente nunca muda orçamento nem ativa o conjunto: isso é com o José.",
+  "regras": {
+    "pausar_depois_de_gastar_brl": 10,
+    "pausar_se_custo_por_visita_maior_que_x_o_melhor": 3,
+    "max_anuncios_ativos": 6,
+    "adiar_fim_quando_faltar_dias": 7,
+    "adiar_fim_em_dias": 30
   },
-  "contas_de_anuncio": ["1829823838034115", "518156015581127"],
-  "conta_usada": null,
-  "page_id": null,
-  "campaign_id": null
+  "link": "https://cadenciamed.com.br",
+  "botao": "SIGN_UP"
 }

@@ -21,3 +21,5 @@
 - 21/10: o post saiu às 11:32, publicado na mão pela sessão que fez a mudança, porque as rotinas paravam esperando aprovação.
 - 22/10: as duas rotinas antigas rodaram e pararam em 20 s de novo (sem aprovação automática). O carrossel de 21/10 ficou com 37 contas, então o estilo de lançamento sozinho não repetiu os 500+ de 03/10. Depois do lançamento, os Reels (165 a 390 contas) alcançaram bem mais que os carrosséis (37 a 55).
 - 22/10: o José pediu o formato tweet (arte dele em `molde-tweet.png`) e turbinar no Meta. Primeiro Reel tweet publicado às 17:22. O Instagram aceita o vídeo pelo link raw do GitHub.
+- 22/10: o José não gostou do Reel tweet com telas do app. Daqui pra frente o post do dia é meme: vídeo viral escolhido por ele (pasta do Drive), dentro da arte de tweet, com repost no story. Regras em `AGENTES.md`.
+- 22/10: nos anúncios, o meme "estado mental" saiu a R$ 0,10 por visita ao site (2.087 visitas com R$ 206). Os outros formatos ficaram entre R$ 0,76 e R$ 0,85.
