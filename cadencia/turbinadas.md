@@ -2,9 +2,9 @@
 
 | Data | Meme | Vídeo (Meta) | Anúncio | Situação | Resultado |
 |---|---|---|---|---|---|
-| 22/10/2026 | Meme internato (nicho, design DAHYxZ0zSRk) | 1478269804187198 | 120251603911060345 | ativo no conjunto de nicho 120251603906260345 | (preencher) |
-| 22/10/2026 | Meme ENAMED 4º ano (nicho, design DAHYxWGZ_yg) | 1010080365469725 | 120251603910790345 | ativo no conjunto de nicho 120251603906260345 | (preencher) |
-| 22/10/2026 | Meme estado mental (campeão de out/26, criativo 1805159200630232) | já existia | 120251603412240345 | ativo no conjunto geral 120251603405840345 | (preencher) |
+| 22/10/2026 | Meme internato (nicho, design DAHYxZ0zSRk) | 1478269804187198 | 120251603911060345 | ativo no conjunto de nicho 120251603906260345 | 22/10 19h48: R$ 0,00, 1 conta, 0 visitas (começou hoje) |
+| 22/10/2026 | Meme ENAMED 4º ano (nicho, design DAHYxWGZ_yg) | 1010080365469725 | 120251603910790345 | ativo no conjunto de nicho 120251603906260345 | 22/10 19h48: sem entrega ainda no Windsor |
+| 22/10/2026 | Meme estado mental (campeão de out/26, criativo 1805159200630232) | já existia | 120251603412240345 | ativo no conjunto geral 120251603405840345 | 22/10 19h48: sem entrega ainda no Windsor (conjunto ligado hoje) |
 
 ## Anotações
 
@@ -13,3 +13,4 @@
 - 22/10/2026: criado o conjunto de nicho "Goiânia · 19-27 · Instagram · medicina internato e ENAMED" (120251603906260345), cópia do conjunto de memes com público novo: raio de 25 km do centro de Goiânia, 19 a 27 anos, só Instagram, R$ 14 por dia. Ficou PAUSADO: quem liga é o José. O Meta não deixa escolher faculdade pela API daqui, então o nicho vem do texto dos memes.
 - 22/10/2026, 19h: o José definiu R$ 15 por dia no total e pediu pra pôr mais no que der certo. Ajuste: nicho R$ 9 e geral R$ 6, os dois conjuntos ligados. Próxima comparação de dinheiro a partir de 25/10.
 - Preço que vale (José, 22/10): mensal R$ 39 e anual R$ 300.
+- 22/10/2026, 19:48 (Turbinar): nenhum Reel meme novo nas últimas 30 h fora os dois de nicho que já estão aqui. Gasto da semana nos conjuntos novos: geral R$ 0,00 e nicho R$ 0,00 (ligados hoje, o Windsor guarda cópia e ainda não mostra entrega). Nada pausado, nenhum anúncio passou de R$ 10. Dinheiro sem mudança (nicho R$ 9, geral R$ 6, último ajuste hoje, próxima comparação a partir de 25/10). Fim do nicho em 22/11, sem adiar.
