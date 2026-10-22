@@ -1,0 +1,39 @@
+{
+ "slug": "2026-10-22-1200-unesp-2027-guia",
+ "pillar": "o que diz o edital",
+ "header": ["EDITAL", "UNESP 2027"],
+ "verified_on": "2026-10-22",
+ "sources": [
+  "https://www.grupomedcof.com.br/blog/edital-residencia-medica-unesp/ (201 vagas, 142 de acesso direto e 59 com pré-requisito; inscrições 20/10 10h a 06/11 23h59 na Vunesp; taxa R$ 648 por boleto; prova 12/12 às 14h em Botucatu, São Paulo ou Brasília; 100 questões no acesso direto; sem análise curricular em Clínica Médica, Ortopedia e Traumatologia, Cirurgia Plástica e Cirurgia da Mão; nos demais 90% prova e 10% currículo; envio do currículo 22 e 23/12; convocação 2ª etapa 21/12; classificação final até 02/02/2027)",
+  "https://med.estrategia.com/portal/noticias/unesp-edital-residencia-medica-2027/ (conferência: 201 vagas, 142 acesso direto e 59 pré-requisito, inscrições 20/10 a 06/11 na Vunesp vunesp.com.br/FMHO2602, R$ 648, prova 12/12 às 14h em Botucatu, São Paulo e Brasília, mesmos 4 programas sem análise curricular, envio do currículo 22 e 23/12, avaliação 14 a 20/01, convocação 21/12, resultado final 02/02/2027)",
+  "https://medgrupo.com.br/plantao-mdg/edital-de-residencia-medica-unesp-2027-veja-cronograma-vagas-e-formato-da-prova/ (conferência: 201 vagas, 20/10 a 06/11, R$ 648, prova 12/12, 100 questões no acesso direto, Botucatu, São Paulo e Brasília, 2ª etapa curricular peso 10%, etapa única nos 4 programas, habilitados 21/12, final 02/02/2027)",
+  "SES-DF 2027 prova em 12/12: Edital Normativo nº 1 RM-1/SES/DF/2027, já conferido em posts/2026-10-10-1800-sesdf-2027-guia.json"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "UNESP", "title": ["UNESP 2027:", "<span class='g glow'>PROVA EM BRASÍLIA</span>"], "body": "A FMB/Unesp aplica a prova em <b>Botucatu, São Paulo e Brasília</b>, no mesmo dia da <b>SES-DF</b>. Veja vagas, prazos e se precisa de currículo.", "bullets": ["Vagas e inscrição", "Precisa de currículo?", "Cronograma até o resultado"]},
+  {"type": "rows", "label": "Inscrição", "title": ["VAGAS E <span class='y'>INSCRIÇÃO</span>"], "sub": "Faculdade de Medicina de Botucatu, banca Vunesp", "rows": [
+    {"name": "Vagas", "sub": "142 de acesso direto e 59 com pré-requisito", "value": "201"},
+    {"name": "Inscrições", "sub": "Só pelo site da Vunesp", "value": "Até 06/11"},
+    {"name": "Taxa", "sub": "Valor único, por boleto", "value": "R$ 648"},
+    {"name": "Prova objetiva", "sub": "Sábado, às 14h. 100 questões no acesso direto", "value": "12/12"}
+  ], "note": "Você escolhe na inscrição onde fazer a prova: <b>Botucatu, São Paulo ou Brasília</b>."},
+  {"type": "rows", "label": "Currículo", "title": ["PRECISA DE <span class='g'>CURRÍCULO?</span>"], "sub": "Na maioria dos programas, sim, depois da prova", "rows": [
+    {"name": "Prova objetiva", "sub": "Peso na nota final", "value": "90%"},
+    {"name": "Análise curricular", "sub": "Só para quem passar para a 2ª etapa", "value": "10%"},
+    {"name": "Envio do currículo", "sub": "Arquivo único em PDF", "value": "22 e 23/12"}
+  ], "note": "<b>Sem currículo</b> (só a prova, 100%): Clínica Médica, Ortopedia e Traumatologia, Cirurgia Plástica e Cirurgia da Mão."},
+  {"type": "rows", "label": "Cronograma", "title": ["DA PROVA AO <span class='y'>RESULTADO</span>"], "sub": "Datas do edital 2027", "rows": [
+    {"name": "Prova objetiva", "sub": "Botucatu, São Paulo ou Brasília", "value": "12/12"},
+    {"name": "Convocação 2ª etapa", "sub": "Lista de quem envia currículo", "value": "21/12"},
+    {"name": "Avaliação do currículo", "sub": "Feita pela comissão", "value": "14 a 20/01"},
+    {"name": "Resultado final", "sub": "Classificação definitiva", "value": "02/02"}
+  ]},
+  {"type": "rows", "label": "Atenção", "title": ["UNESP OU <span class='y'>SES-DF?</span>"], "sub": "As duas provas caem no sábado, 12/12", "rows": [
+    {"name": "UNESP", "sub": "Inscrições até 06/11, R$ 648, tem currículo (10%)", "value": "12/12"},
+    {"name": "SES-DF", "sub": "Inscrições até 18/11, R$ 120, sem currículo", "value": "12/12"}
+  ], "note": "Como as duas são no mesmo dia, dá para fazer só uma. Escolha <b>antes de pagar a taxa</b>."},
+  {"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>NÃO PERDER</span>"], "pill": "SALVA", "body": "e manda para quem vai<br>prestar com você.", "note": "Vai prestar Unesp? Chama a <b>MedEasy</b> no direct para organizar o seu currículo.", "small": "Fonte: editais de residência médica FMB/Unesp 2027 (Vunesp), conferidos com MedCof, Estratégia MED e Medgrupo, e edital SES-DF 2027. Confira o edital do seu programa."}
+ ],
+ "story": {"kicker": "UNESP 2027", "cta": "Prova <span>em Brasília</span> também.<br>Veja no feed da @med_easyy."},
+ "caption": "🏥 UNESP 2027: TEM PROVA EM BRASÍLIA\n\nA residência médica da Faculdade de Medicina de Botucatu (Unesp) está com inscrições abertas até 06/11, só pelo site da Vunesp. São 201 vagas, 142 delas de acesso direto, e a taxa é de R$ 648. A prova objetiva é no sábado, 12/12, às 14h, e você escolhe fazer em Botucatu, São Paulo ou Brasília.\n\nPrecisa de currículo? Na maioria dos programas, sim: a prova vale 90% e a análise curricular 10%, com envio do currículo em 22 e 23/12 só para quem passar para a 2ª etapa. Clínica Médica, Ortopedia, Cirurgia Plástica e Cirurgia da Mão não têm currículo, só a prova.\n\nAtenção: a SES-DF também é no dia 12/12. Então é uma ou outra. Arrasta para ver o cronograma completo. Salva e manda para quem vai prestar com você 📌\n\nUnesp ou SES-DF: qual vai ser a sua? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#unesp #residenciamedica #residencia2027 #botucatu #sesdf #vunesp"
+}
