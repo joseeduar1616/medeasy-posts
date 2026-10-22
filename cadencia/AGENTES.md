@@ -42,6 +42,10 @@ passe a usar mais o que rende mais (anote a decisão aqui).
 
 ### Antes de tudo
 
+0. **Meme pronto na fila.** Se a seção "Memes prontos na fila" do `historico.md` tiver item, publique o
+   primeiro dela (exporte de novo o design do Canva anotado, jpg e mp4, e siga do passo 6 do caminho A) e
+   tire da fila. Não crie outro nesse dia.
+
 1. **Desempenho.** Leia os últimos 14 dias no Windsor (como no LEIA-ME, com `media_reel_skip_rate` e
    `media_reel_avg_watch_time`) e preencha o "Alcance depois" no `historico.md`. Se já houver Reel publicado
    hoje, não publique outro.
@@ -51,6 +55,10 @@ passe a usar mais o que rende mais (anote a decisão aqui).
    no fim ("Como eu revisava antes de conhecer o Cadência Med").
    - Até 3 linhas, 1 ou 2 trechos em **negrito**.
    - Nada de conteúdo médico, número inventado ou promessa de aprovação.
+   - **Nicho (pedido do José em 22/10):** pelo menos 3 memes por semana falam de quem está no 3º e 4º ano,
+     entrando no internato ou se preparando pro ENAMED (pautas "Nicho internato e ENAMED" no `pautas.md`).
+     Nesses, use as hashtags #enamed #internato #medicinagoiania. Fato do ENAMED só o que está no
+     `pautas.md` (vem do edital). Não use o nome da UFG nem de outra faculdade no texto.
    - Olhe os números: se um tema de meme rendeu bem, faça outro parecido.
 
 ### Caminho A: foto da IA do Canva (o normal)
@@ -75,6 +83,8 @@ passe a usar mais o que rende mais (anote a decisão aqui).
    - `read-design` com `open_transaction: true` pra ver os dois elementos;
    - `edit-design` com `update_fill` na foto (o elemento de 702 x 705) com o media id da IA e na moldura
      (o de 1080 x 1920) com o media id da moldura, mais `update_title` "Meme <data> <slug>";
+   - em seguida `crop_media` na moldura com top 0, left 0, width 1080, height 1920 (o `update_fill`
+     amplia a imagem uns 2% e desalinha o furo da foto);
    - olhe a miniatura que volta (texto, foto e moldura no lugar) e `commit`.
 5. **Exportar.** `export-design` do design novo: `jpg` (width 1080, height 1920, quality 92) e
    `mp4` (`quality: "vertical_1080p"`). Os links que voltam são públicos por algumas horas: use logo.
@@ -138,12 +148,16 @@ direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A e 
 - Conjunto "BR · 20-32 · Instagram · memes · turbinar contínuo" (`120251603405840345`):
   R$ 14 por dia (cerca de R$ 100 por semana), público de 20 a 32 anos no Brasil, só Instagram.
   Criado em 22/10 com o meme campeão "estado mental" (anúncio `120251603412240345`).
+- Conjunto de nicho "Goiânia · 19-27 · Instagram · medicina internato e ENAMED" (`120251603906260345`):
+  raio de 25 km do centro de Goiânia, 19 a 27 anos, R$ 14 por dia. Criado em 22/10 a pedido do José, com os
+  memes de internato e ENAMED. Os memes de nicho (que falam de internato, 4º ano ou ENAMED) entram aqui. Os
+  outros entram no conjunto geral.
 - O orçamento é o do conjunto: o agente **nunca** muda orçamento, nunca cria campanha ou conjunto novo e
   nunca ativa conjunto pausado. Quem liga e desliga o gasto é o José.
 
 ### Passo a passo
 
-1. Leia os anúncios do conjunto no Windsor (conector `facebook`, campos `ad_name`, `ad_id`, `ad_status`,
+1. Leia os anúncios dos dois conjuntos no Windsor (conector `facebook`, campos `ad_name`, `ad_id`, `ad_status`,
    `adset_status`, `spend`, `reach`, `actions_link_click`, `actions_landing_page_view`, `ctr`) dos últimos 7 dias.
    Preencha o resultado em `turbinadas.md`.
 2. **Meme novo.** Pra cada Reel meme publicado nas últimas 30 h que ainda não está em `turbinadas.md`
@@ -151,7 +165,8 @@ direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A e 
    - `create_ad_video` com o `video_url`: no meme de IA, exporte de novo o design do Canva anotado no
      `historico.md` (`export-design` mp4 `vertical_1080p` e jpg pra capa), porque os links do Canva vencem
      em poucas horas; no meme de vídeo, o link raw do `reel.mp4`;
-   - `create_ad` no conjunto `120251603405840345`, nome "Meme <data> <slug>", `status: active`, com
+   - `create_ad` no conjunto `120251603405840345` (ou no de nicho `120251603906260345`, se o meme for de
+     internato, 4º ano ou ENAMED), nome "Meme <data> <slug>", `status: active`, com
      `creative.object_story_spec` = `page_id` 1411404442052391, `instagram_user_id` 17841456884640989 e
      `video_data` (`video_id`, `image_url` = jpg exportado ou link raw da `capa.jpg`, `message` = primeira frase da legenda
      + "Teste 3 dias grátis, sem cartão.", `call_to_action` `SIGN_UP` com link `https://cadenciamed.com.br`).

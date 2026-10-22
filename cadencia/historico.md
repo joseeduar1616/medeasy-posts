@@ -25,3 +25,13 @@
 - 22/10: o José não gostou do Reel tweet com telas do app. Daqui pra frente o post do dia é meme: vídeo viral escolhido por ele (pasta do Drive), dentro da arte de tweet, com repost no story. Regras em `AGENTES.md`.
 - 22/10: nos anúncios, o meme "estado mental" saiu a R$ 0,10 por visita ao site (2.087 visitas com R$ 206). Os outros formatos ficaram entre R$ 0,76 e R$ 0,85.
 - 22/10: o José não quer mandar vídeo nem pagar automação de direct. O meme passou a ser feito sozinho: foto gerada pela IA do Canva, montada no Canva com a moldura de texto (`tweet.py` com `imagem_ia`) e publicada pelo link de exportação do Canva, que o Instagram e o Meta aceitam. Teste no story às 18:15 deu certo, e o mp4 exportado subiu na biblioteca de anúncios (vídeo 1479389637436304). O vídeo do Drive virou opcional.
+- 22/10: o José contou que ninguém criou conta no site, mesmo com 2.191 visitas pelos anúncios (R$ 289 gastos). O site não tem o Pixel da Meta, então o Meta otimiza só clique. Pedido dele: ir pra nichos, como medicina em Goiânia, quem vai entrar no internato e quem se prepara pro ENAMED. Criado o conjunto de nicho (pausado) com dois memes de foto da IA. O nicho vira pelo menos 3 memes por semana.
+
+## Memes prontos na fila
+
+O agente do meme publica o primeiro daqui antes de criar outro (veja AGENTES.md).
+
+| Meme | JSON | Design do Canva |
+|---|---|---|
+| Eu entrando no internato jurando que ia estudar depois do plantão | `posts/2026-10-22-internato-meme.json` | `DAHYxZ0zSRk` |
+| Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões | `posts/2026-10-22-enamed-meme.json` | `DAHYxWGZ_yg` |

@@ -72,3 +72,23 @@ Texto do tweet em primeira pessoa e a cena da foto que o Canva gera. Marque `~~.
 13. Quando a **revisão de 1 mês** chega e você não lembra nem do **título** da aula. Foto: estudante encarando o caderno com expressão de vazio total
 14. Minha cara quando alguém fala que **ainda tem tempo** pra prova. Foto: estudante com sorriso forçado e olho tremendo, segurando livro grosso
 15. Eu explicando pra família que **não posso** ir no almoço de domingo porque tenho **revisão**. Foto: estudante na mesa de estudos, de costas pra uma sala com família, olhando pra trás com culpa
+
+## Nicho internato e ENAMED (memes com foto, Goiânia)
+
+Público: 3º e 4º ano de medicina, quem vai entrar no internato e quem se prepara pro ENAMED.
+Fatos do ENAMED que podem ser usados (edital 2026, Inep): 100 questões, 20 de cada área (Clínica Médica,
+Cirurgia, Pediatria, GO e Preventiva), prova de 5 horas. É obrigatória pros concluintes e o 4º ano faz quando
+inscrito pela coordenação. A nota de concluinte e de formado pode ser usada no ENARE (acesso direto). A de 2026
+foi em 13/09/2026: a próxima é a de 2027, então o tom é "dá tempo se começar agora".
+O app tem cronograma do ciclo clínico, que é o que serve pra esse público.
+
+1. ~~Eu no **4º ano** lembrando que o ENAMED cobra as **5 áreas** em 100 questões~~ *(pronto em 22/10, design DAHYxWGZ_yg)*
+2. ~~Eu entrando no **internato** jurando que ia estudar **depois do plantão**~~ *(pronto em 22/10, design DAHYxZ0zSRk)*
+3. O **primeiro dia** de internato vs o **primeiro mês** de internato. Foto: estudante de jaleco impecável sorrindo, e o mesmo cansado e amassado (gerar duas e usar a segunda)
+4. Quando a coordenação manda o e-mail do **ENAMED** e você ainda tá no **ciclo clínico**. Foto: estudante lendo o celular com cara de susto no corredor da faculdade
+5. Eu tentando lembrar **Pediatria** do 3º ano porque o ENAMED cobra **20 questões** dela. Foto: estudante coçando a cabeça diante de um caderno antigo
+6. Meu grupo da turma dividindo a escala do **internato** como se fosse **guerra**. Foto: estudantes em volta de uma mesa olhando uma planilha impressa, tensos
+7. Eu no ambulatório fingindo que lembro a **dose** que estudei no **3º ano**. Foto: estudante de jaleco com sorriso amarelo segurando prancheta
+8. Quando um amigo do **4º ano** diz que já começou a revisar pro **ENAMED**. Foto: estudante olhando de lado com desconfiança na biblioteca
+9. Eu montando o cronograma do **internato** pela quinta vez. Foto: estudante cercado de post-its na parede, olhar perdido
+10. O som que a minha cabeça faz depois de **12h de plantão** no internato. Foto: interno deitado de pijama cirúrgico no banco do vestiário, olhando o teto
