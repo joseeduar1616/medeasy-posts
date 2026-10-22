@@ -1,0 +1,17 @@
+{
+  "orcamento_por_dia_brl": 10,
+  "dias": 3,
+  "max_posts_por_dia": 1,
+  "teto_semanal_brl": 100,
+  "publico": {
+    "geo_locations": {"countries": ["BR"]},
+    "age_min": 22,
+    "age_max": 35,
+    "publisher_platforms": ["instagram"],
+    "instagram_positions": ["stream", "reels", "explore"]
+  },
+  "contas_de_anuncio": ["1829823838034115", "518156015581127"],
+  "conta_usada": null,
+  "page_id": null,
+  "campaign_id": null
+}

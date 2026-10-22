@@ -3,6 +3,7 @@
 #
 #   ./cadencia/preparar.sh cadencia/posts/2026-10-21-algo.json           # carrossel
 #   ./cadencia/preparar.sh cadencia/posts/2026-10-21-algo.json --reel    # Reel 9:16
+#   ./cadencia/preparar.sh cadencia/posts/2026-10-22-algo-tweet.json --tweet  # Reel formato tweet
 #
 # Gera as imagens (ou o reel.mp4) em cadencia/publicado/<id>/. Depois é commit,
 # push no main deste repositório e publicar pelo Windsor com os links
@@ -15,6 +16,13 @@ ID=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['id'])" "$J
 
 # dependências que não moram no repositório
 python3 -c "import PIL" 2>/dev/null || python3 -m pip install -q --break-system-packages pillow
+if [ "$MODO" = "--tweet" ]; then
+  python3 -c "import imageio_ffmpeg" 2>/dev/null || python3 -m pip install -q --break-system-packages imageio-ffmpeg
+  python3 tweet.py "$JSON"
+  ls -la "publicado/$ID"
+  echo "https://raw.githubusercontent.com/joseeduar1616/medeasy-posts/COMMIT/cadencia/publicado/$ID/reel.mp4"
+  exit 0
+fi
 if [ "$MODO" = "--reel" ]; then
   python3 -c "import imageio_ffmpeg" 2>/dev/null || python3 -m pip install -q --break-system-packages imageio-ffmpeg
   export FFMPEG="${FFMPEG:-$(python3 -c 'import imageio_ffmpeg as f; print(f.get_ffmpeg_exe())')}"

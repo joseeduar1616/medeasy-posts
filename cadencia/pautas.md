@@ -34,3 +34,21 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 6. "Fazer flashcard na mão às 23h" e a IA montando os cartões do PDF
 7. "Errar a mesma questão pela terceira vez" e o caderno de erros
 8. "Mandar o cronograma do cursinho e a IA organizar tudo" e o cronograma lido
+
+## Tweets (14:52, Reel formato tweet)
+
+Frase de identificação ou humor, com 2 a 4 trechos em **negrito**. Ao lado, as telas que combinam.
+
+1. ~~A PAZ de sair de um **plantão de 12h** e a **revisão do dia** já estar lá~~ *(saiu em 22/10)*. Telas: hoje, revisoes, rotina
+2. O SOM QUE A VIDA TEM quando a **revisão** chega no **dia certo** mesmo na semana de **plantão**. Telas: revisoes, hoje
+3. POV: você abriu o caderno de **Cardio** e lembrou que estudou isso há **2 meses**. Telas: revisoes, materias
+4. Ninguém fala sobre o alívio de **jogar o PDF** e os **flashcards** saírem prontos. Telas: cartoes_ia, revisoes
+5. Eu às **23h** depois do internato tentando decidir **o que estudar**. Spoiler: o app já decidiu. Telas: hoje, assistente
+6. A sensação de ver o painel dizer que o seu ritmo **fecha o cronograma** antes da prova. Telas: hoje, cronograma
+7. Quando o amigo posta que estudou **4 horas** e você tá logo atrás no **ranking** da sala. Telas: foco, hoje
+8. O mentor de IA perguntando quantos **plantões** você tem e devolvendo a **semana pronta**. Telas: assistente, rotina
+9. Mandei o **cronograma do cursinho** num PDF e ele virou **painel**. Telas: cronograma, materias
+10. 25 minutos de **foco**, 5 de pausa e a hora estudada **contando sozinha**. Telas: foco, hoje
+11. Errar a mesma questão pela **terceira vez** e ela voltar pra **revisão** no dia certo. Telas: revisoes, hoje
+12. Domingo à noite e a semana **já montada** em volta da **escala**. Telas: rotina, assistente
+
