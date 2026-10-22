@@ -86,7 +86,8 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 
 ## Pendências conhecidas
 
-- Faltam os secrets do Notion no GitHub, por isso a sincronização automática ainda não roda.
+- Falta o secret CLOUDFLARE_API_TOKEN no GitHub. Sem ele, a ponte não sobe sozinha, e a versão no ar ainda não tem as rotas do feedback (`/saude` sem `"feedback":true`).
+- Mentoria mensal: o repasse é por linha, então cada mês precisa de uma linha própria no Notion (duplicar a linha do mês anterior). Falta confirmar se os 150 são por prova a mais ou uma vez só.
 - Fichas sem números:
   - IPSEMG e Santa Casa SP: falta o PDF do anexo.
   - Einstein: os pesos ainda não saíram.
