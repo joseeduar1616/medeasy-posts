@@ -88,15 +88,13 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 
 - Mentoria mensal: o repasse é por linha, então cada mês precisa de uma linha própria no Notion (duplicar a linha do mês anterior). Falta confirmar se os 150 são por prova a mais ou uma vez só.
 - Fichas sem números:
-  - IPSEMG e Santa Casa SP: falta o PDF do anexo.
-  - Einstein: os pesos ainda não saíram.
+  - Einstein: os pesos ainda não saíram. O edital diz que vêm em aditivo (item 4.5.8.3).
   - UNIFESP: o peso é definido por cada programa.
   - CET: não tem tabela de pontos.
   - Sírio: não tem análise no acesso direto.
 - Conferir:
-  - HCPA: os valores por subitem vieram de resumo.
-  - HPP: a ficha vem da análise da Beatriz.
-  - UNIARA: usa o edital de 2026.
-- 21 clientes em andamento ainda estão sem prova marcada no Notion. A lista aparece no Painel do site.
+  - IPSEMG: cada alínea entrou uma vez só. Ver se o edital aceita mais de um comprovante na mesma alínea.
+  - Santa Casa SP: os itens somam 10, mas o edital fala em nota de 0 a 100.
+- 9 clientes em andamento ainda estão sem prova marcada no Notion (22/10/2026). A lista aparece no Painel do site.
 - O secret PORTAL_SENHA foi cadastrado com maiúscula. O build usa a forma que abre os extras (minúsculas), então funciona, mas o certo é corrigir o secret.
 - Não guarde chave de escrita (GitHub, Notion) dentro do site. Ele é público, e a senha da equipe é compartilhada.
