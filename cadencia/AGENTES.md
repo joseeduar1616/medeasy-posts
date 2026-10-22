@@ -31,9 +31,14 @@ Os sites de vídeo e banco de imagens não abrem daqui, e repostar vídeo viral 
 pessoa tem risco de direito autoral e de imagem. Por isso a foto do meme é feita pela
 IA do Canva (pessoa que não existe, sem direito de ninguém) e a montagem sai do Canva.
 
-**Vídeo do José (opcional).** Se houver vídeo na pasta do Drive "Cadência Med · memes"
-(`1qkfX5z2T6zCgAebXPz4wJSX6U7T3Kn2H`), use ele no lugar da foto, pelo caminho B.
-Se a pasta estiver vazia, use o caminho A sem avisar nada.
+**Qual caminho usar hoje:**
+1. Tem vídeo na pasta do Drive "Cadência Med · memes" (`1qkfX5z2T6zCgAebXPz4wJSX6U7T3Kn2H`)? Caminho B.
+2. Senão, se o post de ontem foi de foto da IA e a pasta "Cadência Med · memes famosos"
+   (`1ClSHXlSwaB2feWe23qsMCfl8Tu2-T2Mh`) tem imagem que não saiu nos últimos 14 dias? Caminho C.
+3. Senão, caminho A (foto da IA). Nunca avise que a pasta está vazia: as pastas são opcionais.
+
+Depois de 14 dias alternando, compare no `historico.md` o alcance e as visitas ao perfil de A e C e
+passe a usar mais o que rende mais (anote a decisão aqui).
 
 ### Antes de tudo
 
@@ -99,6 +104,29 @@ Se a pasta estiver vazia, use o caminho A sem avisar nada.
 8. **Mover o vídeo** pra "usados" (`update_file` com `parentId = '1jXMBvV544KQJIE6jHQ8gUWWhJh1khCce'`).
 9. **Registrar** no `historico.md` (formato "Reel meme vídeo", arquivo do Drive, media_ids, link). Commit e push.
 
+### Caminho C: meme famoso que o José deixou no Drive
+
+As imagens de memes conhecidos (novela, reality, famosos) o José salva na pasta "memes famosos". Cada
+imagem pode voltar com outro texto, desde que não repita nos últimos 14 dias.
+
+1. **Escolher.** `search_files` com `parentId = '1ClSHXlSwaB2feWe23qsMCfl8Tu2-T2Mh' and mimeType contains 'image/'`.
+   Pegue a que saiu há mais tempo (ou nunca saiu), olhando o `historico.md`.
+2. **Baixar** com `download_file_content` pra um arquivo FORA do repositório e abrir a imagem (Read).
+   Entenda a reação do meme e o texto que ele já tem.
+3. **Texto do tweet** que casa com a reação, pelas regras de cima. Nunca escreva o nome da pessoa da imagem,
+   nunca ponha fala inventada na boca dela e nunca diga que ela usa ou indica o Cadência Med.
+4. **JSON** com `foto` (caminho do arquivo baixado), `texto` e `legenda`. No JSON que vai pro repositório,
+   troque o caminho da `foto` pelo nome e id do arquivo no Drive.
+5. **Gerar.** `python3 cadencia/tweet.py <json>` (precisa do `imageio-ffmpeg`): sai `reel.mp4` parado de 6 s e
+   `capa.jpg`. Abra a capa e confira: a imagem entra inteira, sem cortar o texto que ela tem.
+6. **Subir** só `posts/<id>.json` e `publicado/<id>/` (a imagem original nunca vai pro GitHub), pull com rebase, push.
+7. **Publicar.** `create_video_post` (`video_url` raw do `reel.mp4`, `cover_url` raw da `capa.jpg`, `caption`,
+   `share_to_feed: true`) e `create_story` com `image_url` raw da `capa.jpg`.
+8. **Registrar** no `historico.md` (formato "Reel meme famoso", nome do arquivo no Drive, media_ids, link). Commit e push.
+
+**Meme famoso nunca vira anúncio.** Usar a imagem de famoso pra vender o app em anúncio pago tem risco de
+direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A e B.
+
 ---
 
 ## 2. Turbinar (19:47)
@@ -118,7 +146,8 @@ Se a pasta estiver vazia, use o caminho A sem avisar nada.
 1. Leia os anúncios do conjunto no Windsor (conector `facebook`, campos `ad_name`, `ad_id`, `ad_status`,
    `adset_status`, `spend`, `reach`, `actions_link_click`, `actions_landing_page_view`, `ctr`) dos últimos 7 dias.
    Preencha o resultado em `turbinadas.md`.
-2. **Meme novo.** Pra cada Reel meme publicado nas últimas 30 h que ainda não está em `turbinadas.md`:
+2. **Meme novo.** Pra cada Reel meme publicado nas últimas 30 h que ainda não está em `turbinadas.md`
+   (só "Reel meme IA" e "Reel meme vídeo", nunca "Reel meme famoso"):
    - `create_ad_video` com o `video_url`: no meme de IA, exporte de novo o design do Canva anotado no
      `historico.md` (`export-design` mp4 `vertical_1080p` e jpg pra capa), porque os links do Canva vencem
      em poucas horas; no meme de vídeo, o link raw do `reel.mp4`;

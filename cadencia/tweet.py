@@ -23,6 +23,9 @@ Meme com foto da IA do Canva (o normal desde 22/10): use "imagem_ia": true.
 Aí sai só publicado/<id>/moldura.png (a arte com o texto e a área da foto
 vazada) e previa-texto.jpg. A foto entra embaixo no Canva (AGENTES.md).
 
+Meme famoso (imagem pronta da pasta "memes famosos" do Drive): use "foto"
+com o caminho da imagem baixada. Sai reel.mp4 parado de 6 s e capa.jpg.
+
 Em "texto", **assim** sai em negrito. Cabem até 3 linhas. "mov" pode ser
 direita, esquerda, zoom ou desce. Saída: cadencia/publicado/<id>/reel.mp4,
 capa.jpg (primeiro quadro) e previa-*.jpg pra conferir.
@@ -53,8 +56,8 @@ def conferir(post):
         raise SystemExit('texto no molde "não é X, é Y"')
     if len(post.get('legenda', '')) > 2200:
         raise SystemExit('legenda passa de 2200 caracteres')
-    if not post.get('midia') and not post.get('clipe') and not post.get('imagem_ia'):
-        raise SystemExit('falta "clipe" (vídeo do meme), "imagem_ia" (foto feita no Canva) ou "midia" (telas do app)')
+    if not any(post.get(k) for k in ('midia', 'clipe', 'imagem_ia', 'foto')):
+        raise SystemExit('falta "foto" (meme famoso), "clipe" (vídeo), "imagem_ia" (foto do Canva) ou "midia" (telas do app)')
 
 
 def palavras(texto):
@@ -216,6 +219,45 @@ def meme(post, base, dest):
     print(saida, f'{dur:.1f} s')
 
 
+def foto_meme(post, base):
+    """Meme famoso (imagem pronta da pasta do Drive) dentro do cartão.
+    A imagem entra inteira (sem cortar o texto que ela já tem), com o fundo
+    preenchido pela própria imagem desfocada. Sai reel.mp4 parado de 6 s,
+    capa.jpg (9:16, serve pro story) e não sobe a imagem original."""
+    from PIL import ImageFilter
+    arq = post['foto']
+    if not os.path.isabs(arq):
+        arq = os.path.join(AQUI, arq)
+    if not os.path.exists(arq):
+        raise SystemExit('foto não encontrada: ' + arq)
+    bw, bh = MX1 - MX0, MY1 - MY0
+    im = Image.open(arq).convert('RGB')
+    fundo = im.copy()
+    r = max(bw / fundo.width, bh / fundo.height)
+    fundo = fundo.resize((round(fundo.width * r) + 1, round(fundo.height * r) + 1))
+    fundo = fundo.crop(((fundo.width - bw) // 2, (fundo.height - bh) // 2,
+                        (fundo.width - bw) // 2 + bw, (fundo.height - bh) // 2 + bh))
+    fundo = fundo.filter(ImageFilter.GaussianBlur(28))
+    r = min(bw / im.width, bh / im.height)
+    im = im.resize((round(im.width * r), round(im.height * r)), Image.LANCZOS)
+    fundo.paste(im, ((bw - im.width) // 2, (bh - im.height) // 2))
+    quadro = base.copy()
+    quadro.paste(fundo, (MX0, MY0))
+    dest = os.path.join(AQUI, 'publicado', post['id'])
+    os.makedirs(dest, exist_ok=True)
+    capa = os.path.join(dest, 'capa.jpg')
+    quadro.save(capa, quality=92)
+    dur = float(post.get('duracao', 6))
+    saida = os.path.join(dest, 'reel.mp4')
+    cmd = [ffmpeg(), '-v', 'error', '-y', '-loop', '1', '-framerate', str(FPS), '-i', capa,
+           '-f', 'lavfi', '-i', 'anullsrc=channel_layout=stereo:sample_rate=44100',
+           '-t', f'{dur:.2f}', '-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-pix_fmt', 'yuv420p',
+           '-c:a', 'aac', '-b:a', '128k', '-shortest', '-movflags', '+faststart', saida]
+    if subprocess.run(cmd).returncode != 0:
+        raise SystemExit('ffmpeg falhou')
+    print(saida, f'{dur:.1f} s')
+
+
 def moldura(post, base):
     """Meme com foto feita por IA no Canva: gera a arte com o texto e a área da
     foto vazada (transparente). No Canva a foto entra embaixo e esta arte por
@@ -239,6 +281,8 @@ def main():
     base = base_com_texto(post['texto'])
     if post.get('imagem_ia'):
         return moldura(post, base)
+    if post.get('foto'):
+        return foto_meme(post, base)
     if post.get('clipe'):
         dest = os.path.join(AQUI, 'publicado', post['id'])
         os.makedirs(dest, exist_ok=True)
