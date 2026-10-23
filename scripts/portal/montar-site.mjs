@@ -12,5 +12,9 @@ const formCert = fs.existsSync(path.join(d, "..", "form-cert.txt")) ? fs.readFil
 const ponte = fs.existsSync(path.join(d, "..", "ponte.txt")) ? fs.readFileSync(path.join(d, "..", "ponte.txt"), "utf8").trim() : "";
 const provas = JSON.stringify(Object.entries(editais).map(([k, e]) => ({ k, nome: e.nome })));
 t = t.split("__CSS__").join(ler("base.css")).split("__CERTITENS__").join(ler("certitens.js")).split("__FICHA__").join(ler("ficha.js").replace("__LEITOR_FICHA__", () => fs.readFileSync(path.join(d, "..", "leitor-ficha.mjs"), "utf8").replace(/^export\s+(?=function|const)/gm, ""))).split("__PORTALVIEW__").join(ler("portalview.js")).split("__TRIAGEM__").join(ler("triagem.js").replace("__PROVAS__", provas).replace("__FORM_CERT__", formCert)).split("__ANALISE__").join(ler("analise.js").replace("__LEITOR_ANALISE__", () => fs.readFileSync(path.join(d, "..", "leitor-analise.mjs"), "utf8").replace(/^export\s+(?=function|const)/gm, "").replace(/^export\s*\{[^}]*\};?\s*$/gm, ""))).split("__CONTROLE__").join(ler("controle.js")).split("__MARCACAO__").join(ler("marcacao.js")).split("__PONTE__").join(ler("ponte.js").replace("__PONTE__", ponte)).split("__FEEDBACK__").join(ler("feedback.js"));
+// Versão do site: muda quando o código muda (não com os dados). O site compara com portal/site.txt e avisa quem está com a aba antiga.
+const versao = (await import("node:crypto")).createHash("sha256").update(t).digest("hex").slice(0, 12);
+t = t.split("__VERSAO__").join(versao);
 fs.writeFileSync(path.resolve(d, "../../../portal/index.html"), t);
+fs.writeFileSync(path.resolve(d, "../../../portal/site.txt"), versao + "\n");
 console.log("portal/index.html montado");

@@ -298,22 +298,31 @@ function atualizarTriParcial(){
   for (const id of ["triProvas", "triOrc", "triFechar"]){ const novo = tmp.querySelector("#" + id), velho = document.getElementById(id); if (novo && velho) velho.replaceWith(novo); }
 }
 /* Cliente já criado no Notion: o valor gravado lá não muda sozinho quando o orçamento muda depois. Mostra a diferença e deixa atualizar. */
+/* Linha do cliente no Notion: a criada pelo botão do site ou, se ele foi criado direto no Notion, a do mesmo telefone (8 últimos dígitos) */
+function servicoNotionTri(t){
+  const todos = S.eq?.clientes || []; let id = t.clienteNotionId || idDeUrl(t.clienteNotion);
+  let svc = id ? todos.flatMap(c => c.servicos || []).find(x => x.id === id) : null; let varias = false;
+  if (!svc){ const tel = String(t.whats || "").replace(/\D/g, "").slice(-8);
+    const cli = tel.length === 8 ? todos.find(c => String(c.whatsapp || "").replace(/\D/g, "").slice(-8) === tel) : null;
+    const linhas = cli ? (cli.servicos || []).filter(x => !x.mensal && x.id) : [];
+    if (linhas.length){ const abertas = linhas.filter(x => (x.etapa || 0) < 6); varias = (abertas.length || linhas.length) > 1; svc = (abertas[0] || linhas[0]); id = svc.id; } }
+  return { id, svc, varias };
+}
 function valorNotionTri(t, ops){
-  if (!t.clienteNotion) return "";
-  // O valor de verdade vem da última sincronização (serviço com o mesmo id da página). Sem ela, o que foi gravado na criação.
-  const idN = t.clienteNotionId || idDeUrl(t.clienteNotion); const svc = (S.eq?.clientes || []).flatMap(c => c.servicos || []).find(x => x.id === idN);
+  const { svc, varias } = servicoNotionTri(t);
+  // O valor de verdade vem da última sincronização. Sem ela, o que foi gravado na criação.
   const noNotion = svc && svc.total != null ? svc.total : t.valorNotion; if (noNotion == null) return "";
   const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const agora = o ? o.total : null;
   const dif = agora != null && Math.abs(agora - noNotion) >= 0.01;
   const pagou = !!(svc && svc.pagamento && !semAcento(svc.pagamento).startsWith("nao pago"));
-  return `<div class="svc" style="margin-bottom:10px"><div class="row between small"><span>Valor no Notion${t.opcaoNotion ? ` (opção ${esc(t.opcaoNotion)})` : ""}</span><b class="num">${brl(noNotion)}</b></div>
-    ${dif ? `<div class="row between small" style="margin-top:4px"><span class="gold">O orçamento mudou depois</span><b class="num gold">${brl(agora)}</b></div>
-    ${pagou && !S.admin ? `<p class="xs muted" style="margin:6px 0 0">O cliente já começou a pagar, então só o José ou o Eduardo mudam o valor.</p>` : `<div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="atualizarValorTri">Atualizar o valor no Notion</button></div>`}` : `<p class="xs muted" style="margin:4px 0 0">Igual ao orçamento de agora.</p>`}</div>`;
+  return `<div class="svc" style="margin-bottom:10px"><div class="row between small"><span>Valor no Notion${o ? ` (opção ${esc(o.letra)})` : ""}${!t.clienteNotion ? " · achado pelo telefone" : ""}</span><b class="num">${brl(noNotion)}</b></div>
+    ${dif ? `<div class="row between small" style="margin-top:4px"><span class="gold">O orçamento de agora é outro</span><b class="num gold">${brl(agora)}</b></div>
+    ${varias ? `<p class="xs muted" style="margin:6px 0 0">Esse cliente tem mais de uma linha aberta no Notion. Ajuste o valor de cada uma lá.</p>` : pagou && !S.admin ? `<p class="xs muted" style="margin:6px 0 0">O cliente já começou a pagar, então só o José ou o Eduardo mudam o valor.</p>` : `<div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="atualizarValorTri">Atualizar o valor no Notion</button></div>`}` : `<p class="xs muted" style="margin:4px 0 0">Igual ao orçamento de agora.</p>`}</div>`;
 }
 async function atualizarValorTri(){
-  const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t); const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const id = t.clienteNotionId || idDeUrl(t.clienteNotion);
+  const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t); const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const { id, svc } = servicoNotionTri(t);
   if (!o || !id) return;
-  try { await salvarNotion(id, { "Valor total":o.total }, "Valor atualizado no Notion"); t.valorNotion = o.total; t.opcaoNotion = o.letra; salvarTri(t); render(); }
+  try { await salvarNotion(id, { "Valor total":o.total }, "Valor atualizado no Notion. O site mostra o novo em 1 ou 2 minutos"); t.valorNotion = o.total; t.opcaoNotion = o.letra; if (!t.clienteNotionId) t.clienteNotionId = id; if (svc) svc.total = o.total; salvarTri(t); render(); }
   catch (e) { toast("Não gravou: " + e.message); }
 }
 function triInput(el){
