@@ -255,6 +255,7 @@ details.faq p{margin:8px 0 0;color:var(--muted)}
 .drop-list img{width:24px;height:24px;border-radius:50%}
 .av{width:28px;height:28px;border-radius:50%;flex:none}
 .stars{display:inline-flex;gap:2px}.stars button{background:none;border:0;padding:2px 3px;font-size:30px;line-height:1;color:var(--line);cursor:pointer;font-family:inherit}.stars button.on{color:var(--gold)}.stars button:focus-visible{outline:2px solid var(--neon);border-radius:6px}
+.nova-versao{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--neon);border-radius:var(--r);padding:10px 14px;box-shadow:0 8px 30px rgba(0,0,0,.4);font-size:14px;max-width:calc(100% - 32px)}
 
 .login{max-width:400px;width:100%;text-align:left}
 .login h1{font-size:30px;text-align:center}
@@ -1375,22 +1376,31 @@ function atualizarTriParcial(){
   for (const id of ["triProvas", "triOrc", "triFechar"]){ const novo = tmp.querySelector("#" + id), velho = document.getElementById(id); if (novo && velho) velho.replaceWith(novo); }
 }
 /* Cliente já criado no Notion: o valor gravado lá não muda sozinho quando o orçamento muda depois. Mostra a diferença e deixa atualizar. */
+/* Linha do cliente no Notion: a criada pelo botão do site ou, se ele foi criado direto no Notion, a do mesmo telefone (8 últimos dígitos) */
+function servicoNotionTri(t){
+  const todos = S.eq?.clientes || []; let id = t.clienteNotionId || idDeUrl(t.clienteNotion);
+  let svc = id ? todos.flatMap(c => c.servicos || []).find(x => x.id === id) : null; let varias = false;
+  if (!svc){ const tel = String(t.whats || "").replace(/\D/g, "").slice(-8);
+    const cli = tel.length === 8 ? todos.find(c => String(c.whatsapp || "").replace(/\D/g, "").slice(-8) === tel) : null;
+    const linhas = cli ? (cli.servicos || []).filter(x => !x.mensal && x.id) : [];
+    if (linhas.length){ const abertas = linhas.filter(x => (x.etapa || 0) < 6); varias = (abertas.length || linhas.length) > 1; svc = (abertas[0] || linhas[0]); id = svc.id; } }
+  return { id, svc, varias };
+}
 function valorNotionTri(t, ops){
-  if (!t.clienteNotion) return "";
-  // O valor de verdade vem da última sincronização (serviço com o mesmo id da página). Sem ela, o que foi gravado na criação.
-  const idN = t.clienteNotionId || idDeUrl(t.clienteNotion); const svc = (S.eq?.clientes || []).flatMap(c => c.servicos || []).find(x => x.id === idN);
+  const { svc, varias } = servicoNotionTri(t);
+  // O valor de verdade vem da última sincronização. Sem ela, o que foi gravado na criação.
   const noNotion = svc && svc.total != null ? svc.total : t.valorNotion; if (noNotion == null) return "";
   const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const agora = o ? o.total : null;
   const dif = agora != null && Math.abs(agora - noNotion) >= 0.01;
   const pagou = !!(svc && svc.pagamento && !semAcento(svc.pagamento).startsWith("nao pago"));
-  return `<div class="svc" style="margin-bottom:10px"><div class="row between small"><span>Valor no Notion${t.opcaoNotion ? ` (opção ${esc(t.opcaoNotion)})` : ""}</span><b class="num">${brl(noNotion)}</b></div>
-    ${dif ? `<div class="row between small" style="margin-top:4px"><span class="gold">O orçamento mudou depois</span><b class="num gold">${brl(agora)}</b></div>
-    ${pagou && !S.admin ? `<p class="xs muted" style="margin:6px 0 0">O cliente já começou a pagar, então só o José ou o Eduardo mudam o valor.</p>` : `<div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="atualizarValorTri">Atualizar o valor no Notion</button></div>`}` : `<p class="xs muted" style="margin:4px 0 0">Igual ao orçamento de agora.</p>`}</div>`;
+  return `<div class="svc" style="margin-bottom:10px"><div class="row between small"><span>Valor no Notion${o ? ` (opção ${esc(o.letra)})` : ""}${!t.clienteNotion ? " · achado pelo telefone" : ""}</span><b class="num">${brl(noNotion)}</b></div>
+    ${dif ? `<div class="row between small" style="margin-top:4px"><span class="gold">O orçamento de agora é outro</span><b class="num gold">${brl(agora)}</b></div>
+    ${varias ? `<p class="xs muted" style="margin:6px 0 0">Esse cliente tem mais de uma linha aberta no Notion. Ajuste o valor de cada uma lá.</p>` : pagou && !S.admin ? `<p class="xs muted" style="margin:6px 0 0">O cliente já começou a pagar, então só o José ou o Eduardo mudam o valor.</p>` : `<div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="atualizarValorTri">Atualizar o valor no Notion</button></div>`}` : `<p class="xs muted" style="margin:4px 0 0">Igual ao orçamento de agora.</p>`}</div>`;
 }
 async function atualizarValorTri(){
-  const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t); const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const id = t.clienteNotionId || idDeUrl(t.clienteNotion);
+  const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t); const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const { id, svc } = servicoNotionTri(t);
   if (!o || !id) return;
-  try { await salvarNotion(id, { "Valor total":o.total }, "Valor atualizado no Notion"); t.valorNotion = o.total; t.opcaoNotion = o.letra; salvarTri(t); render(); }
+  try { await salvarNotion(id, { "Valor total":o.total }, "Valor atualizado no Notion. O site mostra o novo em 1 ou 2 minutos"); t.valorNotion = o.total; t.opcaoNotion = o.letra; if (!t.clienteNotionId) t.clienteNotionId = id; if (svc) svc.total = o.total; salvarTri(t); render(); }
   catch (e) { toast("Não gravou: " + e.message); }
 }
 function triInput(el){
@@ -2329,6 +2339,19 @@ app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.targe
 app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.fb) fbInput(e.target); else if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); else if (e.target.dataset.fe) feInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
+/* Versão nova do site: quem deixa a aba aberta continuava com o código antigo depois de uma correção.
+   O montar-site grava a versão em site.txt. Ao voltar para a aba (e a cada 5 minutos) o site confere e oferece atualizar. */
+const VERSAO_SITE = "c3695114af40";
+async function conferirVersao(){
+  if (document.getElementById("novaVersao")) return;
+  try { const r = await fetch("site.txt?t=" + Date.now(), { cache:"no-store" }); if (!r.ok) return; const v = (await r.text()).trim();
+    if (!v || v === VERSAO_SITE) return;
+    const d = document.createElement("div"); d.id = "novaVersao"; d.className = "nova-versao";
+    d.innerHTML = `<span>Saiu uma versão nova do site.</span><button class="btn sm pri" type="button">Atualizar agora</button>`;
+    d.querySelector("button").onclick = () => location.reload(); document.body.appendChild(d); } catch {}
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) conferirVersao(); });
+setInterval(conferirVersao, 5 * 60 * 1000);
 (async () => {
   let s = null; try { s = JSON.parse(sessionStorage.getItem("medeasy")); } catch {}
   const cod = new URLSearchParams(location.search).get("c");
