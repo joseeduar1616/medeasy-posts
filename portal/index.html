@@ -256,6 +256,7 @@ details.faq p{margin:8px 0 0;color:var(--muted)}
 .av{width:28px;height:28px;border-radius:50%;flex:none}
 .stars{display:inline-flex;gap:2px}.stars button{background:none;border:0;padding:2px 3px;font-size:30px;line-height:1;color:var(--line);cursor:pointer;font-family:inherit}.stars button.on{color:var(--gold)}.stars button:focus-visible{outline:2px solid var(--neon);border-radius:6px}
 .nova-versao{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--neon);border-radius:var(--r);padding:10px 14px;box-shadow:0 8px 30px rgba(0,0,0,.4);font-size:14px;max-width:calc(100% - 32px)}
+.ci-passo{display:inline-flex;align-items:center;gap:2px}.ci-passo .btn{padding:4px 9px;font-size:16px;line-height:1}
 
 .login{max-width:400px;width:100%;text-align:left}
 .login h1{font-size:30px;text-align:center}
@@ -646,7 +647,7 @@ function certItensView(c){
   const p = provas.find(p => kP(p.nome) === pk); const itens = itensDaProva(p); const cp = calcDe(c, p);
   const tabs = provas.map(x => { const k = kP(x.nome), cx = calcDe(c, x); return `<button class="btn sm ${k === pk ? "pri" : ""}" data-a="ciProva" data-v="${k}">${esc(x.nome)}${cx.tem ? ` · ${d1(cx.total)}` : ""}</button>`; }).join("");
   const grupos = [...new Set(itens.filter(i => i.grupo).map(i => i.grupo))];
-  return `<section class="card" id="certItens"><div class="card-h"><div><h2>Certificados por item</h2><div class="sub">Digite quantos certificados o cliente tem em cada item. A nota e o valor se atualizam na hora</div></div>
+  return `<section class="card" id="certItens"><div class="card-h"><div><h2>Certificados por item</h2><div class="sub">Marque "Completo" nos itens em que o cliente já tem a nota máxima e use − e + nos parciais. A nota e o valor se atualizam na hora</div></div>
     <div class="row"><span class="xs muted" id="ciStatus">${esc(statusTxt(reg, c))}</span><button class="btn sm pri" data-a="copiarCont">${!c.triagem && typeof temPonte === "function" && temPonte() ? "Salvar no Notion" : "Copiar para o Notion"}</button></div></div>
    ${S.ciCopiado === c.id ? `<div class="wait small" style="margin-bottom:12px"><b>Copiado.</b> Abra o cliente no Notion e cole na coluna "Certificados por item". Na próxima sincronização a nota e o valor aparecem para toda a equipe e no portal do cliente.${notionDe(c) ? `<div style="margin-top:8px"><a class="btn sm pri" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Abrir no Notion</a></div>` : ""}</div>` : ""}
    <div class="row" style="gap:6px;margin-bottom:12px">${tabs}</div>
@@ -654,10 +655,10 @@ function certItensView(c){
    ${itens.length ? `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Nota ${esc(p.nome)}</div><div class="v"><span id="ciNota">${d1(cp.total)}</span><small class="muted" style="font-size:16px"> / ${d1(cp.max)}</small></div><div class="d">${esc((p.edital && p.edital.peso) || "")}</div></div>
      <div class="kpi"><div class="label">Certificados</div><div class="v" id="ciCert">${cp.nCert}</div><div class="d" id="ciArt">${cp.nArt ? cp.nArt + " artigos ou capítulos" : "sem artigo"}</div></div>
      <div class="kpi"><div class="label">Valor desta prova</div><div class="v gold" id="ciValor">${(() => { const l = (estimarJS(c) || { linhas:[] }).linhas.find(l => l.desc.startsWith(p.nome + ":")); return l && l.valor != null ? brl(l.valor) : "–"; })()}</div><div class="d">Modelo ${modeloDe(p.nome)} Vitae</div></div></div>
-   <div class="tbl-wrap"><table class="tbl ci"><thead><tr><th>Item</th><th class="r" style="width:92px">Certificados</th><th class="r" style="width:92px">Pontos</th><th class="r" style="width:64px">Máx</th></tr></thead><tbody>
-   ${cp.rows.map((x, i) => `<tr><td class="small"><b>${esc(x.item)}</b>${x.grupo ? ` <span class="pill" style="font-size:10px">${esc(x.grupo)}${x.grupoMax != null ? " até " + d1(x.grupoMax) : ""}</span>` : ""}<div class="xs muted">${esc(x.pontos)}</div>
+   <div class="tbl-wrap"><table class="tbl ci"><thead><tr><th>Item</th><th class="r" style="width:132px">Certificados</th><th class="r" style="width:92px">Pontos</th><th class="r" style="width:64px">Máx</th></tr></thead><tbody>
+   ${cp.rows.map((x, i) => `<tr><td class="small"><label class="chk ci-cheio" style="float:right;margin-left:8px"><input type="checkbox" data-ci="cheio" data-i="${i}" ${x.pts >= x.maxN && x.maxN > 0 ? "checked" : ""}><span class="xs">Completo</span></label><b>${esc(x.item)}</b>${x.grupo ? ` <span class="pill" style="font-size:10px">${esc(x.grupo)}${x.grupoMax != null ? " até " + d1(x.grupoMax) : ""}</span>` : ""}<div class="xs muted">${esc(x.pontos)}</div>
        <details style="margin-top:4px"><summary class="xs" style="cursor:pointer">${x.lista.length ? `${x.lista.length} certificados listados` : "Listar certificados"}</summary><textarea class="in" data-ci="lista" data-i="${i}" rows="3" placeholder="Um certificado por linha" style="margin-top:6px;font-size:13px">${esc(x.lista.join("\n"))}</textarea>${c.triagem ? `<select class="in" data-ci="sit" data-i="${i}" style="margin-top:6px;font-size:13px"><option value="">Situação automática</option>${["Completo","Parcial","Aumentar agora","Médio prazo","Não se aplica agora"].map(o => `<option ${x.sit === o ? "selected" : ""}>${o}</option>`).join("")}</select><textarea class="in" data-ci="com" data-i="${i}" rows="2" placeholder="Comentário para a análise curricular" style="margin-top:6px;font-size:13px">${esc(x.com)}</textarea>` : ""}</details></td>
-     <td class="r"><input class="in num" data-ci="n" data-i="${i}" type="number" min="0" step="1" inputmode="numeric" value="${x.n || ""}" placeholder="0" style="width:76px;text-align:right"></td>
+     <td class="r"><div class="ci-passo">${x.unit != null ? `<button class="btn sm ghost" data-a="ciPasso" data-i="${i}" data-v="-1" aria-label="Menos um">−</button>` : ""}<input class="in num" data-ci="n" data-i="${i}" type="number" min="0" step="1" inputmode="numeric" value="${x.n || ""}" placeholder="0" style="width:56px;text-align:right">${x.unit != null ? `<button class="btn sm ghost" data-a="ciPasso" data-i="${i}" data-v="1" aria-label="Mais um">+</button>` : ""}</div></td>
      <td class="r"><input class="in num" data-ci="pts" data-i="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${x.manual ? x.pts : ""}" placeholder="${x.unit != null ? String(x.auto).replace(".", ",") : "–"}" title="${x.unit != null ? "Calculado pelos certificados. Digite só para corrigir" : "Este item não é por certificado. Digite os pontos"}" style="width:76px;text-align:right"><div class="xs ${x.pts >= x.maxN ? "neon" : "muted"}" id="ciP${i}">${d1(x.pts)}</div></td>
      <td class="r num small">${d1(x.maxN)}</td></tr>`).join("")}</tbody></table></div>
    <p class="xs muted" style="margin:10px 0 0">Itens marcados com grupo dividem o mesmo teto.${grupos.length ? "" : ""} Quando o item não é por certificado (histórico, ENADE, faixa), digite os pontos direto. Ficha: ${esc((p.edital && p.edital.fichaFonte) || (p.itens && p.itens.length ? "análise curricular do cliente" : ""))}</p>`
@@ -669,6 +670,11 @@ function ciInput(el){
   const p = provas.find(p => kP(p.nome) === pk); const itens = itensDaProva(p); const it = itens[+el.dataset.i]; if (!it) return;
   const reg = S.cont[c.id]; const pr = (reg.provas[pk] ||= {}); const r = (pr[it.key] ||= { ...(it.base || {}) });
   if (el.dataset.ci === "n") r.n = el.value === "" ? 0 : Math.max(0, Math.floor(num(el.value)));
+  else if (el.dataset.ci === "cheio"){
+    // Completo: o número de certificados que dá a nota máxima do item (ou os pontos máximos, se não é por certificado)
+    if (el.checked){ if (it.unit > 0){ r.n = Math.ceil(it.maxN / it.unit - 1e-9); r.pts = ""; } else r.pts = it.maxN; } else { r.n = 0; r.pts = ""; }
+    const ni = document.querySelector(`[data-ci="n"][data-i="${el.dataset.i}"]`); if (ni) ni.value = r.n || "";
+    const pi = document.querySelector(`[data-ci="pts"][data-i="${el.dataset.i}"]`); if (pi) pi.value = r.pts === "" || r.pts == null ? "" : r.pts; }
   else if (el.dataset.ci === "pts") r.pts = el.value === "" ? "" : num(el.value);
   else if (el.dataset.ci === "com"){ r.com = el.value; gravarRasc(c.id); return; }
   else if (el.dataset.ci === "sit"){ r.sit = el.value; gravarRasc(c.id); return; }
@@ -679,12 +685,14 @@ function ciInput(el){
   reg.copiado = false; S.ciCopiado = null;
   const cp = calcProva(itens, pr, tetoDe(p)); const x = cp.rows[+el.dataset.i];
   const set = (id, v) => { const e = document.getElementById(id); if (e) e.innerHTML = v; };
-  set("ciP" + el.dataset.i, d1(x.pts)); const pe = document.querySelector(`[data-ci="pts"][data-i="${el.dataset.i}"]`); if (pe && x.unit != null) pe.placeholder = String(x.auto).replace(".", ",");
+  set("ciP" + el.dataset.i, d1(x.pts)); const ck = document.querySelector(`[data-ci="cheio"][data-i="${el.dataset.i}"]`); if (ck) ck.checked = x.maxN > 0 && x.pts >= x.maxN; const pe = document.querySelector(`[data-ci="pts"][data-i="${el.dataset.i}"]`); if (pe && x.unit != null) pe.placeholder = String(x.auto).replace(".", ",");
   set("ciNota", d1(cp.total)); set("ciCert", cp.nCert); set("ciArt", cp.nArt ? cp.nArt + " artigos ou capítulos" : "sem artigo");
   const l = (estimarJS(c) || { linhas:[] }).linhas.find(l => l.desc.startsWith(p.nome + ":")); set("ciValor", l && l.valor != null ? brl(l.valor) : "–");
   const vc = document.getElementById("valorCard"); if (vc) vc.outerHTML = valorCard(c);
   pintarStatus(c);
 }
+/* − e + do número de certificados do item */
+function ciPasso(el){ const inp = document.querySelector(`[data-ci="n"][data-i="${el.dataset.i}"]`); if (!inp) return; inp.value = Math.max(0, (Math.floor(num(inp.value)) || 0) + Number(el.dataset.v)) || ""; ciInput(inp); }
 
 /* ---------- ficha do edital pelo PDF e leitura do currículo pronto ---------- */
 /* Leitor das tabelas: vem de scripts/portal/leitor-ficha.mjs na montagem */
@@ -799,8 +807,16 @@ function numerosFinaisF(l) {
   return m ? (m[1].match(new RegExp(NUM_F, "g")) || []).map(numF) : [];
 }
 // Lê a ficha preenchida no currículo pronto: a última coluna é a nota do candidato.
+// Análises escritas à mão separam a nota com pontinhos, dois pontos, traço ou seta ("Monitoria ........ 0,5", "Monitoria: 0,5 ponto"),
+// ou trazem "nota/máximo" ("0,5/1" e "0,5 de 1"). Tudo vira coluna separada por espaços, com a nota por último.
+function normalizarNotaF(l) {
+  let t = String(l).replace(/[.…_·]{3,}/g, "   ");
+  t = t.replace(new RegExp("(" + NUM_F + ")\\s*(?:\\/|de)\\s*" + NUM_F + "\\s*(?:pontos?|pts?)?\\s*$", "i"), "   $1");
+  t = t.replace(new RegExp("\\s*(?::|=|→|->|–|—|\\s-)\\s*(" + NUM_F + "\\s*(?:pontos?|pts?)?)\\s*$", "i"), "   $1");
+  return t;
+}
 function lerNotasDoCurriculo(texto, ficha) {
-  const linhas = String(texto || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n");
+  const linhas = String(texto || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n").map(normalizarNotaF);
   const notas = []; let usadas = new Set();
   (ficha || []).forEach((it, idx) => {
     const cod = codigoF(it.item); const pal = palavrasF(it.item).slice(0, 6);
@@ -809,7 +825,9 @@ function lerNotasDoCurriculo(texto, ficha) {
       if (usadas.has(i)) continue; const l = linhas[i]; const t = semAcF(l);
       const porCodigo = cod && new RegExp("^\\s*" + cod.replace(".", "\\.") + "[.)]?\\s", "i").test(l);
       const comuns = pal.filter(w => t.includes(w)).length;
-      if ((porCodigo && (comuns >= 1 || !pal.length)) || (pal.length >= 2 && comuns >= Math.ceil(pal.length * 0.6))) { achou = i; break; }
+      // item de uma palavra só ("Monitoria"): a linha precisa começar com ela
+      const umaSo = pal.length === 1 && new RegExp("^[^a-z0-9]*(?:[0-9]{1,2}[a-z]?[.)]?\\s+)?" + pal[0]).test(t.trim());
+      if ((porCodigo && (comuns >= 1 || !pal.length)) || (pal.length >= 2 && comuns >= Math.ceil(pal.length * 0.6)) || umaSo) { achou = i; break; }
     }
     if (achou < 0) return;
     // os números podem estar na mesma linha ou nas duas seguintes (título quebrado)
@@ -1785,11 +1803,30 @@ async function importarAnalise(input){
   const c = clienteSel(); const f = input.files && input.files[0]; if (!c || !f) return;
   toast("Lendo o arquivo");
   try { const pr = await lerArquivoAnaliseSite(f); pr.arquivo = f.name; guardarAnalise(c, pr); delete S.cont[c.id]; if (!c.triagem) aplicarAnalises(c); render(); toast(`Análise ${pr.nome} lida: ${d1(pr.notaEstimada)} pontos em ${pr.itens.length} itens`); }
-  catch (e) { toast(e.message || "Não consegui ler o arquivo"); }
+  catch (e) { if (!(await analiseLivre(c, f))) toast("Esse arquivo não está no formato da análise MedEasy e não achei as notas dos itens da ficha nele. Lance em Certificados por item (Completo, − e +)"); }
+}
+/* Análise fora do padrão MedEasy (cada mentor faz de um jeito): procura cada item da ficha da prova no texto e pega a nota,
+   como no "Ler currículo pronto". Vira rascunho da contagem por item para o mentor conferir. */
+async function analiseLivre(c, f){
+  if (/\.json$/i.test(f.name) || typeof textoDoArquivo !== "function") return false;
+  let txt; try { txt = await textoDoArquivo(f); } catch { return false; }
+  const provas = (c.provas || []).filter(p => p.nome && itensDaProva(p).length); if (!provas.length) return false;
+  const nomeNoTexto = p => kP(txt).includes(kP(p.nome));
+  let melhor = null;
+  for (const p of provas){ const itens = itensDaProva(p); const r = lerNotasDoCurriculo(txt, itens.map(i => ({ item:i.item, maxN:i.maxN })));
+    const pontos = r.notas.length + (nomeNoTexto(p) ? 0.5 : 0); if (r.notas.length && (!melhor || pontos > melhor.pontos)) melhor = { p, itens, notas:r.notas, pontos }; }
+  if (!melhor) return false;
+  const { p, itens, notas } = melhor; const pk = kP(p.nome); const reg = carregarCont(c); const pr = (reg.provas[pk] ||= {});
+  for (const n of notas){ const it = itens[n.idx]; if (!it) continue; const r = (pr[it.key] ||= { ...(it.base || {}) });
+    if (it.unit){ const q = Math.round(n.pts / it.unit); r.n = q; r.pts = Math.abs(Math.min(it.maxN, q * it.unit) - n.pts) < 0.001 ? "" : n.pts; } else r.pts = n.pts;
+    if (n.conferir) r.com = r.com || "Conferir: a análise só trazia um número neste item"; }
+  if (!c.triagem) reg.rascunho = true; reg.copiado = false; gravarRasc(c.id); S.ciProva[c.id] = pk; render();
+  toast(`Análise fora do padrão: li a nota de ${notas.length} de ${itens.length} itens de ${p.nome} (nota ${d1(calcDe(c, p).total)}). Confira em Certificados por item e salve`);
+  return true;
 }
 function analiseCard(c){
   const tudo = analisesDe(c); const ks = Object.keys(tudo);
-  return `<section class="card"><div class="card-h"><div><h2>Análise curricular em arquivo</h2><div class="sub">PDF da análise MedEasy ou triagem.json. O site lê a nota, os itens, o que falta e como conseguir</div></div><label class="btn sm pri" style="cursor:pointer">Importar arquivo<input type="file" accept=".pdf,.json,application/pdf,application/json" hidden data-an="1"></label></div>
+  return `<section class="card"><div class="card-h"><div><h2>Análise curricular em arquivo</h2><div class="sub">PDF da análise MedEasy ou triagem.json. Análise em outro formato (PDF ou Word) também entra: o site procura a nota de cada item da ficha</div></div><label class="btn sm pri" style="cursor:pointer">Importar arquivo<input type="file" accept=".pdf,.docx,.json,application/pdf,application/json" hidden data-an="1"></label></div>
    ${ks.length ? `<div class="list">${ks.map(k => { const pr = tudo[k]; const falta = (pr.itens || []).filter(i => i.ganho > 0).length; const nomeP = nomeDaAnalise(pr); return `<div class="li" style="flex-wrap:wrap"><div class="grow"><div class="t">${esc(nomeP)} ${esc(pr.ano || "")}${pr.area ? ` <span class="pill">${esc(pr.area)}</span>` : ""}</div>${pr.titulo && kP(pr.titulo) !== kP(nomeP) ? `<div class="xs muted">${esc(pr.titulo)}</div>` : ""}${!provaConhecida(nomeP) ? `<label class="row xs gold" style="gap:6px;margin:4px 0">Não reconheci a prova. É de qual? <select class="in" data-anprova="1" data-k="${k}" style="width:auto;padding:4px 8px;font-size:12px"><option value="">Escolher</option>${PROVAS.map(p => `<option>${esc(p.nome)}</option>`).join("")}</select></label>` : ""}<div class="small muted">${d1(pr.notaEstimada)} / ${d1(pr.notaMax)}${pr.notaPossivel !== "" && pr.notaPossivel != null ? ` · possível ${d1(pr.notaPossivel)}` : ""} · ${pr.itens.length} itens · ${falta} com espaço para crescer${pr.em ? " · lida em " + dBR(new Date(pr.em).toISOString()) : ""}${pr.arquivo ? ` · ${esc(pr.arquivo)}` : ""}</div></div><button class="btn sm danger" data-a="apagarAnalise" data-v="${k}" title="Tira esta análise do site">Remover PDF</button>
      <details style="width:100%;margin-top:6px"><summary class="small" style="cursor:pointer;font-weight:600">Ver o que foi analisado</summary><div class="stack" style="gap:8px;margin-top:8px">${(pr.itens || []).map(i => `<div class="svc" style="padding:10px 12px"><div class="row between" style="gap:8px"><b class="small">${esc(i.nome)}</b><span class="row" style="gap:6px">${i.situacao ? `<span class="pill ${/complet/i.test(i.situacao) ? "ok" : /parcial/i.test(i.situacao) ? "info" : /aumentar/i.test(i.situacao) ? "gold" : ""}">${esc(i.situacao)}</span>` : ""}<b class="num">${d1(i.pontos)} / ${d1(i.max)}</b></span></div>${i.regra ? `<div class="xs muted">${esc(i.regra)}</div>` : ""}${i.ganho > 0 ? `<div class="xs gold">Pode ganhar mais ${d1(i.ganho)}</div>` : ""}${(i.comprovantes || []).length ? `<ul class="xs" style="margin:6px 0 0;padding-left:18px">${i.comprovantes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${i.comentario ? `<p class="xs" style="margin:6px 0 0">${esc(i.comentario)}</p>` : ""}</div>`).join("")}</div></details></div>`; }).join("")}</div>
    ${ks.length > 1 ? `<div class="row" style="margin-top:10px"><button class="btn sm ghost" data-a="apagarAnalises">Remover todas as ${ks.length} análises</button></div>` : ""}
@@ -2332,6 +2369,7 @@ const A = {
   enviarMarc: el => enviarMarc(el.dataset.pk),
   limparMarc: el => { if (!confirm("Limpar o que você marcou nesta prova?")) return; const all = lerMarc(); delete all[el.dataset.pk]; gravarMarc(all); render(); },
   ciProva: el => { S.ciProva[S.sel] = el.dataset.v; render(); },
+  ciPasso: el => ciPasso(el),
   copiarCont: () => copiarParaNotion(clienteSel()),
   salvarServico: el => salvarServico(el.dataset.id),
   novaTri: () => novaTri(),
@@ -2353,13 +2391,13 @@ Object.assign(A, A_CTRL, A_ORC, A_CERTCLI, A_FICHA, A_FB, {
   usarValorNotion: async () => { const c = clienteSel(); const e = estimarJS(c); const id = paginaDoCliente(c); if (!e || !id || !confirm(`Gravar ${brl(e.total)} como Valor total no Notion?`)) return;
     try { await salvarNotion(id, { "Valor total":e.total }, "Valor gravado no Notion"); const s = (c.servicos || []).find(x => x.id === id); if (s){ s.total = e.total; c.financeiro.total = (c.servicos || []).reduce((a, x) => a + (x.total || 0), 0); } render(); } catch (er) { toast("Não gravou: " + er.message); } },
 });
-app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
+app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.ci === "cheio") { ciInput(e.target); return; } if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
 app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.fb) fbInput(e.target); else if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); else if (e.target.dataset.fe) feInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 /* Versão nova do site: quem deixa a aba aberta continuava com o código antigo depois de uma correção.
    O montar-site grava a versão em site.txt. Ao voltar para a aba (e a cada 5 minutos) o site confere e oferece atualizar. */
-const VERSAO_SITE = "5d18e9e4b604";
+const VERSAO_SITE = "b10285d4afd8";
 async function conferirVersao(){
   if (document.getElementById("novaVersao")) return;
   try { const r = await fetch("site.txt?t=" + Date.now(), { cache:"no-store" }); if (!r.ok) return; const v = (await r.text()).trim();

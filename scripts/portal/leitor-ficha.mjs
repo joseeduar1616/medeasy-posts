@@ -109,8 +109,16 @@ function numerosFinaisF(l) {
   return m ? (m[1].match(new RegExp(NUM_F, "g")) || []).map(numF) : [];
 }
 // Lê a ficha preenchida no currículo pronto: a última coluna é a nota do candidato.
+// Análises escritas à mão separam a nota com pontinhos, dois pontos, traço ou seta ("Monitoria ........ 0,5", "Monitoria: 0,5 ponto"),
+// ou trazem "nota/máximo" ("0,5/1" e "0,5 de 1"). Tudo vira coluna separada por espaços, com a nota por último.
+function normalizarNotaF(l) {
+  let t = String(l).replace(/[.…_·]{3,}/g, "   ");
+  t = t.replace(new RegExp("(" + NUM_F + ")\\s*(?:\\/|de)\\s*" + NUM_F + "\\s*(?:pontos?|pts?)?\\s*$", "i"), "   $1");
+  t = t.replace(new RegExp("\\s*(?::|=|→|->|–|—|\\s-)\\s*(" + NUM_F + "\\s*(?:pontos?|pts?)?)\\s*$", "i"), "   $1");
+  return t;
+}
 export function lerNotasDoCurriculo(texto, ficha) {
-  const linhas = String(texto || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n");
+  const linhas = String(texto || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n").map(normalizarNotaF);
   const notas = []; let usadas = new Set();
   (ficha || []).forEach((it, idx) => {
     const cod = codigoF(it.item); const pal = palavrasF(it.item).slice(0, 6);
@@ -119,7 +127,9 @@ export function lerNotasDoCurriculo(texto, ficha) {
       if (usadas.has(i)) continue; const l = linhas[i]; const t = semAcF(l);
       const porCodigo = cod && new RegExp("^\\s*" + cod.replace(".", "\\.") + "[.)]?\\s", "i").test(l);
       const comuns = pal.filter(w => t.includes(w)).length;
-      if ((porCodigo && (comuns >= 1 || !pal.length)) || (pal.length >= 2 && comuns >= Math.ceil(pal.length * 0.6))) { achou = i; break; }
+      // item de uma palavra só ("Monitoria"): a linha precisa começar com ela
+      const umaSo = pal.length === 1 && new RegExp("^[^a-z0-9]*(?:[0-9]{1,2}[a-z]?[.)]?\\s+)?" + pal[0]).test(t.trim());
+      if ((porCodigo && (comuns >= 1 || !pal.length)) || (pal.length >= 2 && comuns >= Math.ceil(pal.length * 0.6)) || umaSo) { achou = i; break; }
     }
     if (achou < 0) return;
     // os números podem estar na mesma linha ou nas duas seguintes (título quebrado)

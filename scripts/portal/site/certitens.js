@@ -132,7 +132,7 @@ function certItensView(c){
   const p = provas.find(p => kP(p.nome) === pk); const itens = itensDaProva(p); const cp = calcDe(c, p);
   const tabs = provas.map(x => { const k = kP(x.nome), cx = calcDe(c, x); return `<button class="btn sm ${k === pk ? "pri" : ""}" data-a="ciProva" data-v="${k}">${esc(x.nome)}${cx.tem ? ` · ${d1(cx.total)}` : ""}</button>`; }).join("");
   const grupos = [...new Set(itens.filter(i => i.grupo).map(i => i.grupo))];
-  return `<section class="card" id="certItens"><div class="card-h"><div><h2>Certificados por item</h2><div class="sub">Digite quantos certificados o cliente tem em cada item. A nota e o valor se atualizam na hora</div></div>
+  return `<section class="card" id="certItens"><div class="card-h"><div><h2>Certificados por item</h2><div class="sub">Marque "Completo" nos itens em que o cliente já tem a nota máxima e use − e + nos parciais. A nota e o valor se atualizam na hora</div></div>
     <div class="row"><span class="xs muted" id="ciStatus">${esc(statusTxt(reg, c))}</span><button class="btn sm pri" data-a="copiarCont">${!c.triagem && typeof temPonte === "function" && temPonte() ? "Salvar no Notion" : "Copiar para o Notion"}</button></div></div>
    ${S.ciCopiado === c.id ? `<div class="wait small" style="margin-bottom:12px"><b>Copiado.</b> Abra o cliente no Notion e cole na coluna "Certificados por item". Na próxima sincronização a nota e o valor aparecem para toda a equipe e no portal do cliente.${notionDe(c) ? `<div style="margin-top:8px"><a class="btn sm pri" href="${esc(notionDe(c))}" target="_blank" rel="noopener">Abrir no Notion</a></div>` : ""}</div>` : ""}
    <div class="row" style="gap:6px;margin-bottom:12px">${tabs}</div>
@@ -140,10 +140,10 @@ function certItensView(c){
    ${itens.length ? `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Nota ${esc(p.nome)}</div><div class="v"><span id="ciNota">${d1(cp.total)}</span><small class="muted" style="font-size:16px"> / ${d1(cp.max)}</small></div><div class="d">${esc((p.edital && p.edital.peso) || "")}</div></div>
      <div class="kpi"><div class="label">Certificados</div><div class="v" id="ciCert">${cp.nCert}</div><div class="d" id="ciArt">${cp.nArt ? cp.nArt + " artigos ou capítulos" : "sem artigo"}</div></div>
      <div class="kpi"><div class="label">Valor desta prova</div><div class="v gold" id="ciValor">${(() => { const l = (estimarJS(c) || { linhas:[] }).linhas.find(l => l.desc.startsWith(p.nome + ":")); return l && l.valor != null ? brl(l.valor) : "–"; })()}</div><div class="d">Modelo ${modeloDe(p.nome)} Vitae</div></div></div>
-   <div class="tbl-wrap"><table class="tbl ci"><thead><tr><th>Item</th><th class="r" style="width:92px">Certificados</th><th class="r" style="width:92px">Pontos</th><th class="r" style="width:64px">Máx</th></tr></thead><tbody>
-   ${cp.rows.map((x, i) => `<tr><td class="small"><b>${esc(x.item)}</b>${x.grupo ? ` <span class="pill" style="font-size:10px">${esc(x.grupo)}${x.grupoMax != null ? " até " + d1(x.grupoMax) : ""}</span>` : ""}<div class="xs muted">${esc(x.pontos)}</div>
+   <div class="tbl-wrap"><table class="tbl ci"><thead><tr><th>Item</th><th class="r" style="width:132px">Certificados</th><th class="r" style="width:92px">Pontos</th><th class="r" style="width:64px">Máx</th></tr></thead><tbody>
+   ${cp.rows.map((x, i) => `<tr><td class="small"><label class="chk ci-cheio" style="float:right;margin-left:8px"><input type="checkbox" data-ci="cheio" data-i="${i}" ${x.pts >= x.maxN && x.maxN > 0 ? "checked" : ""}><span class="xs">Completo</span></label><b>${esc(x.item)}</b>${x.grupo ? ` <span class="pill" style="font-size:10px">${esc(x.grupo)}${x.grupoMax != null ? " até " + d1(x.grupoMax) : ""}</span>` : ""}<div class="xs muted">${esc(x.pontos)}</div>
        <details style="margin-top:4px"><summary class="xs" style="cursor:pointer">${x.lista.length ? `${x.lista.length} certificados listados` : "Listar certificados"}</summary><textarea class="in" data-ci="lista" data-i="${i}" rows="3" placeholder="Um certificado por linha" style="margin-top:6px;font-size:13px">${esc(x.lista.join("\n"))}</textarea>${c.triagem ? `<select class="in" data-ci="sit" data-i="${i}" style="margin-top:6px;font-size:13px"><option value="">Situação automática</option>${["Completo","Parcial","Aumentar agora","Médio prazo","Não se aplica agora"].map(o => `<option ${x.sit === o ? "selected" : ""}>${o}</option>`).join("")}</select><textarea class="in" data-ci="com" data-i="${i}" rows="2" placeholder="Comentário para a análise curricular" style="margin-top:6px;font-size:13px">${esc(x.com)}</textarea>` : ""}</details></td>
-     <td class="r"><input class="in num" data-ci="n" data-i="${i}" type="number" min="0" step="1" inputmode="numeric" value="${x.n || ""}" placeholder="0" style="width:76px;text-align:right"></td>
+     <td class="r"><div class="ci-passo">${x.unit != null ? `<button class="btn sm ghost" data-a="ciPasso" data-i="${i}" data-v="-1" aria-label="Menos um">−</button>` : ""}<input class="in num" data-ci="n" data-i="${i}" type="number" min="0" step="1" inputmode="numeric" value="${x.n || ""}" placeholder="0" style="width:56px;text-align:right">${x.unit != null ? `<button class="btn sm ghost" data-a="ciPasso" data-i="${i}" data-v="1" aria-label="Mais um">+</button>` : ""}</div></td>
      <td class="r"><input class="in num" data-ci="pts" data-i="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${x.manual ? x.pts : ""}" placeholder="${x.unit != null ? String(x.auto).replace(".", ",") : "–"}" title="${x.unit != null ? "Calculado pelos certificados. Digite só para corrigir" : "Este item não é por certificado. Digite os pontos"}" style="width:76px;text-align:right"><div class="xs ${x.pts >= x.maxN ? "neon" : "muted"}" id="ciP${i}">${d1(x.pts)}</div></td>
      <td class="r num small">${d1(x.maxN)}</td></tr>`).join("")}</tbody></table></div>
    <p class="xs muted" style="margin:10px 0 0">Itens marcados com grupo dividem o mesmo teto.${grupos.length ? "" : ""} Quando o item não é por certificado (histórico, ENADE, faixa), digite os pontos direto. Ficha: ${esc((p.edital && p.edital.fichaFonte) || (p.itens && p.itens.length ? "análise curricular do cliente" : ""))}</p>`
@@ -155,6 +155,11 @@ function ciInput(el){
   const p = provas.find(p => kP(p.nome) === pk); const itens = itensDaProva(p); const it = itens[+el.dataset.i]; if (!it) return;
   const reg = S.cont[c.id]; const pr = (reg.provas[pk] ||= {}); const r = (pr[it.key] ||= { ...(it.base || {}) });
   if (el.dataset.ci === "n") r.n = el.value === "" ? 0 : Math.max(0, Math.floor(num(el.value)));
+  else if (el.dataset.ci === "cheio"){
+    // Completo: o número de certificados que dá a nota máxima do item (ou os pontos máximos, se não é por certificado)
+    if (el.checked){ if (it.unit > 0){ r.n = Math.ceil(it.maxN / it.unit - 1e-9); r.pts = ""; } else r.pts = it.maxN; } else { r.n = 0; r.pts = ""; }
+    const ni = document.querySelector(`[data-ci="n"][data-i="${el.dataset.i}"]`); if (ni) ni.value = r.n || "";
+    const pi = document.querySelector(`[data-ci="pts"][data-i="${el.dataset.i}"]`); if (pi) pi.value = r.pts === "" || r.pts == null ? "" : r.pts; }
   else if (el.dataset.ci === "pts") r.pts = el.value === "" ? "" : num(el.value);
   else if (el.dataset.ci === "com"){ r.com = el.value; gravarRasc(c.id); return; }
   else if (el.dataset.ci === "sit"){ r.sit = el.value; gravarRasc(c.id); return; }
@@ -165,9 +170,11 @@ function ciInput(el){
   reg.copiado = false; S.ciCopiado = null;
   const cp = calcProva(itens, pr, tetoDe(p)); const x = cp.rows[+el.dataset.i];
   const set = (id, v) => { const e = document.getElementById(id); if (e) e.innerHTML = v; };
-  set("ciP" + el.dataset.i, d1(x.pts)); const pe = document.querySelector(`[data-ci="pts"][data-i="${el.dataset.i}"]`); if (pe && x.unit != null) pe.placeholder = String(x.auto).replace(".", ",");
+  set("ciP" + el.dataset.i, d1(x.pts)); const ck = document.querySelector(`[data-ci="cheio"][data-i="${el.dataset.i}"]`); if (ck) ck.checked = x.maxN > 0 && x.pts >= x.maxN; const pe = document.querySelector(`[data-ci="pts"][data-i="${el.dataset.i}"]`); if (pe && x.unit != null) pe.placeholder = String(x.auto).replace(".", ",");
   set("ciNota", d1(cp.total)); set("ciCert", cp.nCert); set("ciArt", cp.nArt ? cp.nArt + " artigos ou capítulos" : "sem artigo");
   const l = (estimarJS(c) || { linhas:[] }).linhas.find(l => l.desc.startsWith(p.nome + ":")); set("ciValor", l && l.valor != null ? brl(l.valor) : "–");
   const vc = document.getElementById("valorCard"); if (vc) vc.outerHTML = valorCard(c);
   pintarStatus(c);
 }
+/* − e + do número de certificados do item */
+function ciPasso(el){ const inp = document.querySelector(`[data-ci="n"][data-i="${el.dataset.i}"]`); if (!inp) return; inp.value = Math.max(0, (Math.floor(num(inp.value)) || 0) + Number(el.dataset.v)) || ""; ciInput(inp); }
