@@ -41,6 +41,8 @@ async function enviarTriNotion(id){
     S.triSync[id] = "ok";
   } catch (e) { S.triSync[id] = "erro:" + e.message; }
   mostrarSyncTri(id);
+  // O valor do cliente vai mesmo se a gravação da triagem falhar
+  const t3 = triDe(id); if (t3) await valorClienteAutomatico(t3);
 }
 function syncTriTexto(id){
   const t = triDe(id); const s = (S.triSync || {})[id];
@@ -317,7 +319,23 @@ function valorNotionTri(t, ops){
   const pagou = !!(svc && svc.pagamento && !semAcento(svc.pagamento).startsWith("nao pago"));
   return `<div class="svc" style="margin-bottom:10px"><div class="row between small"><span>Valor no Notion${o ? ` (opção ${esc(o.letra)})` : ""}${!t.clienteNotion ? " · achado pelo telefone" : ""}</span><b class="num">${brl(noNotion)}</b></div>
     ${dif ? `<div class="row between small" style="margin-top:4px"><span class="gold">O orçamento de agora é outro</span><b class="num gold">${brl(agora)}</b></div>
-    ${varias ? `<p class="xs muted" style="margin:6px 0 0">Esse cliente tem mais de uma linha aberta no Notion. Ajuste o valor de cada uma lá.</p>` : pagou && !S.admin ? `<p class="xs muted" style="margin:6px 0 0">O cliente já começou a pagar, então só o José ou o Eduardo mudam o valor.</p>` : `<div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="atualizarValorTri">Atualizar o valor no Notion</button></div>`}` : `<p class="xs muted" style="margin:4px 0 0">Igual ao orçamento de agora.</p>`}</div>`;
+    ${varias ? `<p class="xs muted" style="margin:6px 0 0">Esse cliente tem mais de uma linha aberta no Notion. Ajuste o valor de cada uma lá.</p>` : pagou && !S.admin ? `<p class="xs muted" style="margin:6px 0 0">O cliente já começou a pagar, então só o José ou o Eduardo mudam o valor.</p>` : `<div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="atualizarValorTri">Atualizar o valor no Notion</button></div>`}` : `<p class="xs muted" style="margin:4px 0 0">Igual ao orçamento de agora.${t.clienteNotion ? " Enquanto o cliente estiver como \"Não pago\", o valor do Notion acompanha o orçamento sozinho." : ""}</p>`}</div>`;
+}
+/* Cliente criado pelo botão do site e ainda "Não pago": quando o orçamento muda, o Valor total do Notion muda junto.
+   Cliente achado só pelo telefone não muda sozinho (pode ser outro serviço do mesmo cliente): fica o botão. */
+async function valorClienteAutomatico(t){
+  if (!t.clienteNotion && !t.clienteNotionId) return;
+  const { id, svc, varias } = servicoNotionTri(t); if (!id || varias) return;
+  if (svc && svc.pagamento && !semAcento(svc.pagamento).startsWith("nao pago")) return;
+  // Sem saber qual opção o cliente fechou (triagem antiga com mais de uma opção), não muda sozinho: fica o botão
+  const ops = opcoesTri(t); if (!t.opcaoNotion && ops.length > 1) return;
+  const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; if (!o || !o.completo) return;
+  const atual = svc && svc.total != null ? svc.total : t.valorNotion; if (atual != null && Math.abs(atual - o.total) < 0.01) return;
+  try {
+    await pontePedido("/pagina", { id, props:{ "Valor total":o.total }, quem:S.mentor?.nome });
+    t.valorNotion = o.total; t.opcaoNotion = o.letra; t.clienteNotionId = t.clienteNotionId || id; if (svc) svc.total = o.total; salvarTri(t, true);
+    toast(`Valor do cliente atualizado no Notion: ${brl(o.total)}`); if (S.sel === t.id && document.getElementById("triFechar")) atualizarTriParcial();
+  } catch {}
 }
 async function atualizarValorTri(){
   const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t); const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const { id, svc } = servicoNotionTri(t);
