@@ -200,12 +200,12 @@ function opcoesTri(t){
   if (t.servico === "analise"){ montar("A", "ANÁLISE CURRICULAR", ["analise"]); montar("B", `${VITAE} + ANÁLISE CURRICULAR`, ["vitae"]); }
   else if (t.servico === "lattesb"){ montar("A", "LATTES COM DOCUMENTO DE COMPROVAÇÃO", ["lattes","certificados"]); }
   else { montar("A", `${VITAE} + ANÁLISE CURRICULAR`, ["vitae"]); if (t.servico === "lattes" || pedeLattes) montar("B", `${VITAE} + ANÁLISE CURRICULAR + LATTES${quem ? ` (${quem})` : ""}`, ["vitae","lattes"]); }
-  // Mentoria mensal: 250 por mês até 2 provas e mais 150 por prova a mais. Mentoria individual: valor único que o mentor digita.
+  // Mentoria mensal: 250 por mês, para até 2 provas. Mentoria individual: 150 por reunião (cada vez que reunir de novo).
   const letra = () => String.fromCharCode(65 + ops.length), nP = c.provas.length;
-  if (t.mentoria){ const extra = Math.max(0, nP - 2), v = PRECO.mentoria.ate2 + extra * PRECO.mentoria.extra;
-    ops.push({ letra:letra(), titulo:"MENTORIA MENSAL", tipos:["mentoria"], mensal:true, linhas:[{ desc:`Mentoria mensal (${extra ? nP + " provas" : "até 2 provas"})`, conta:extra ? `${br2(PRECO.mentoria.ate2)} + ${extra} X ${br2(PRECO.mentoria.extra)}` : "1 mês", valor:v }], bruto:v, desconto:0, total:v, completo:true }); }
-  if (t.mentoriaInd){ const v = t.valorMentoriaInd === "" || t.valorMentoriaInd == null ? null : num(t.valorMentoriaInd);
-    ops.push({ letra:letra(), titulo:"MENTORIA INDIVIDUAL", tipos:["mentoriaInd"], linhas:[{ desc:"Mentoria individual", conta:"1", valor:v }], bruto:v || 0, desconto:0, total:v || 0, completo:v != null }); }
+  if (t.mentoria){ const v = PRECO.mentoria.mensal;
+    ops.push({ letra:letra(), titulo:"MENTORIA MENSAL", tipos:["mentoria"], mensal:true, linhas:[{ desc:"Mentoria mensal (até 2 provas)", conta:nP > 2 ? `1 mês · o cliente tem ${nP} provas, combine o valor e ajuste em Editar à mão` : "1 mês", valor:v }], bruto:v, desconto:0, total:v, completo:true }); }
+  if (t.mentoriaInd){ const n = Math.max(1, Math.floor(num(t.reunioes) || 1)), v = n * PRECO.mentoria.reuniao;
+    ops.push({ letra:letra(), titulo:"MENTORIA INDIVIDUAL", tipos:["mentoriaInd"], reunioes:n, linhas:[{ desc:`Mentoria individual (${n} ${n === 1 ? "reunião" : "reuniões"})`, conta:`${n} X ${br2(PRECO.mentoria.reuniao)}`, valor:v }], bruto:v, desconto:0, total:v, completo:true }); }
   return ops.map(o => ajustarOpcao(o, (t.ajuste || {})[o.letra]));
 }
 /* Ajustes feitos à mão no orçamento: título, cada linha (pela descrição automática), linhas a mais e valor final */
@@ -253,7 +253,7 @@ const A_ORC = {
 function mensagemOrcamento(t, ops){
   const c = clienteDaTriagem(t); const provas = c.provas.map(p => p.nome);
   const porProva = o => o.linhas.filter(l => l.valor != null && /:/.test(l.desc)).map(l => `${l.desc.split(":")[0]} ${brl(l.valor)}`).join(", ");
-  const desc = (o, i) => o.mensal ? `Mentoria mensal: acompanhamento mês a mês do seu currículo para ${provas.length > 2 ? `as ${provas.length} provas` : "até 2 provas"}, sem prazo de entrega` : (o.tipos || []).includes("mentoriaInd") ? "Mentoria individual com o seu mentor" : null;
+  const desc = (o, i) => o.mensal ? "Mentoria mensal: acompanhamento mês a mês do seu currículo para até 2 provas, sem prazo de entrega" : (o.tipos || []).includes("mentoriaInd") ? `Mentoria individual: ${o.reunioes || 1} ${(o.reunioes || 1) === 1 ? "reunião" : "reuniões"} com o seu mentor, ${brl(PRECO.mentoria.reuniao)} cada. Se quiser reunir de novo depois, é o mesmo valor por reunião` : null;
   const curr = ops.filter(o => !o.mensal && !(o.tipos || []).includes("mentoriaInd"));
   const blocos = ops.map(o => { const d = desc(o); const i = curr.indexOf(o); return `OPÇÃO ${o.letra}: ${brl(o.total)}${o.mensal ? " por mês" : ""}\n${d ? d : i === 0 ? `${/ANÁLISE CURRICULAR$/.test(o.titulo) && !/VITAE/.test(o.titulo) ? "Análise curricular" : "Currículo Vitae/currículo com certificados comprovados e análise curricular"} ${provas.length === 1 ? "da prova" : `das ${provas.length} provas`} (${porProva(o)})` : `Tudo da opção ${curr[i - 1].letra} + ${/LATTES/.test(o.titulo) ? "a atualização do seu Currículo Lattes" : "o documento pronto para envio"}`}${o.desconto ? `\nJá com ${o.desconto}% de desconto` : ""}`; }).join("\n\n");
   const prox = c.provas.filter(p => p.prazoEnvio && dias(p.prazoEnvio) >= 0).sort((a, b) => a.prazoEnvio.localeCompare(b.prazoEnvio))[0];
@@ -275,8 +275,8 @@ function triagemItemView(){
       ${campoOutras(t.outras, true)}
       <div class="grid2" style="gap:10px"><label class="f"><span>Certificados (quando não contou por item)</span><input class="in" data-tri="nCert" type="number" min="0" value="${esc(t.nCert || "")}"></label><label class="f"><span>Desconto (%)</span><input class="in" data-tri="desconto" type="number" min="0" max="10" value="${esc(t.desconto || "")}" placeholder="0"></label></div>
       <label class="chk"><input type="checkbox" data-tri="drive" ${t.drive ? "checked" : ""}><span>Cobrar organização do drive (R$ 75,00)</span></label>
-      <label class="chk"><input type="checkbox" data-tri="mentoria" ${t.mentoria ? "checked" : ""}><span>Oferecer mentoria mensal (${brl(PRECO.mentoria.ate2)} por mês até 2 provas, mais ${brl(PRECO.mentoria.extra)} por prova a mais)</span></label>
-      <div class="row" style="gap:8px"><label class="chk"><input type="checkbox" data-tri="mentoriaInd" ${t.mentoriaInd ? "checked" : ""}><span>Oferecer mentoria individual</span></label>${t.mentoriaInd ? `<input class="in" data-tri="valorMentoriaInd" type="number" min="0" step="0.01" value="${esc(t.valorMentoriaInd ?? "")}" placeholder="Valor" style="width:120px">` : ""}</div>
+      <label class="chk"><input type="checkbox" data-tri="mentoria" ${t.mentoria ? "checked" : ""}><span>Oferecer mentoria mensal (${brl(PRECO.mentoria.mensal)} por mês, até 2 provas)</span></label>
+      <div class="row" style="gap:8px"><label class="chk"><input type="checkbox" data-tri="mentoriaInd" ${t.mentoriaInd ? "checked" : ""}><span>Oferecer mentoria individual (${brl(PRECO.mentoria.reuniao)} por reunião)</span></label>${t.mentoriaInd ? `<label class="row small" style="gap:6px">Reuniões <input class="in" data-tri="reunioes" type="number" min="1" step="1" value="${esc(t.reunioes ?? 1)}" style="width:70px"></label>` : ""}</div>
       <label class="f"><span>Links do Drive</span><input class="in" data-tri="links" value="${esc(t.links || "")}"></label>
       <label class="f"><span>Observações</span><textarea class="in" data-tri="obs" rows="2">${esc(t.obs || "")}</textarea></label></div></section>
     <section class="card" id="triProvas"><div class="card-h"><h2>Provas</h2></div>${c.provas.length ? `<div class="list">${c.provas.map(p => { const cp = calcDe(c, p); return `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${ANO}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) + " (" + quando(p.prazoEnvio) + ")" : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div></div>${cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : ""}</div>`; }).join("")}</div>` : `<div class="empty">Marque as provas acima</div>`}</section>
@@ -352,7 +352,7 @@ function triInput(el){
   if (campo === "prova" || campo === "servico" || campo === "drive" || campo === "mentoria" || campo === "mentoriaInd") render();
   // Campos digitados (desconto, certificados, valor da mentoria): redesenhar a tela inteira tirava o foco do campo a cada número,
   // e "10" virava "1". Agora só os cartões de provas, orçamento e fechamento são refeitos.
-  else if (campo === "nCert" || campo === "desconto" || campo === "valorMentoriaInd") atualizarTriParcial();
+  else if (campo === "nCert" || campo === "desconto" || campo === "reunioes") atualizarTriParcial();
 }
 
 /* ---------- PDFs no navegador ---------- */

@@ -75,8 +75,8 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 - Artigo: 12,50 cada.
 - No orçamento de cada prova entram só os certificados válidos para ela: no item por certificado, até o número que ainda soma ponto. O que passa do máximo do item fica de fora, e a tela avisa quantos.
 - O serviço Vitae aparece como "Currículo Vitae/currículo com certificados comprovados".
-- Mentoria mensal: 250 por mês para até 2 provas, mais 150 por prova a mais (PRECO.mentoria no certitens.js). Na triagem é uma opção à parte, com o valor "por mês". No Notion entra como "Mentoria" no Tipo de serviço.
-- Mentoria individual: paga uma vez, com o valor digitado pelo mentor na triagem. No Notion entra como "Mentoria individual".
+- Mentoria mensal: 250 por mês, para até 2 provas (PRECO.mentoria no certitens.js). Na triagem é uma opção à parte, com o valor "por mês". Com mais de 2 provas o valor não está definido: a tela avisa para combinar e ajustar em "Editar à mão". No Notion entra como "Mentoria" no Tipo de serviço.
+- Mentoria individual: 150 por reunião, cada vez que reunir de novo. Na triagem o mentor marca quantas reuniões. No Notion entra como "Mentoria individual".
 - Lattes: Categoria A 7 / 6,5 / 6. Categoria B 12 / 11,5 / 11.
 - Lattes com Certificados e sem Vitae equivale ao plano B: o documento já está incluso e a prova cobra só a análise (100, ou 90 cada com 2 ou mais).
 - Modelo por prova:
@@ -87,7 +87,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 
 ## Pendências conhecidas
 
-- Mentoria mensal: o repasse é por linha, então cada mês precisa de uma linha própria no Notion (duplicar a linha do mês anterior). Falta confirmar se os 150 são por prova a mais ou uma vez só.
+- Mentoria mensal: o repasse é por linha, então cada mês precisa de uma linha própria no Notion (duplicar a linha do mês anterior).
 - Fichas sem números:
   - Einstein: os pesos ainda não saíram. O edital diz que vêm em aditivo (item 4.5.8.3).
   - UNIFESP: o peso é definido por cada programa.
