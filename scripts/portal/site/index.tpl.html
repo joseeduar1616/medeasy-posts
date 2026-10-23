@@ -321,6 +321,7 @@ const A = {
   copiarLinkTri: () => copiar(linkTriagem()),
   abrirTri: el => { S.sel = el.dataset.id; S.view = "triagemItem"; render(); window.scrollTo(0, 0); },
   criarClienteNotion: () => criarClienteNotion(),
+  atualizarValorTri: () => atualizarValorTri(),
   apagarTri: () => { if (!confirm("Apagar este cliente da triagem?")) return; const ta = triDe(S.sel); if (ta && (ta.notionId || ta.notion) && triNoNotion()) pontePedido("/triagem", { id:ta.notionId || idDeUrl(ta.notion), arquivar:true }).catch(e => toast("Não tirou do Notion: " + e.message)); gravarTri(lerTri().filter(t => t.id !== S.sel)); delete S.cont[S.sel]; S.view = "triagem"; render(); },
   pdfOrc: () => pdfOrcamento(triDe(S.sel)),
   pdfAnalise: el => pdfAnalise(triDe(S.sel), el.dataset.v),
