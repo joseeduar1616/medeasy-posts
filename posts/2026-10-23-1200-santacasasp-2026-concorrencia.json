@@ -1,0 +1,66 @@
+{
+ "slug": "2026-10-23-1200-santacasasp-2026-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "header": ["CONCORRÊNCIA", "SANTA CASA SP"],
+ "verified_on": "2026-10-23",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/scmsp-2026-veja-a-relacao-candidato-vaga-para-residencia-medica/ (concorrência 2026, ampla concorrência, dados da ISCMSP)",
+  "https://www.medway.com.br/conteudos/concorrencia-residencia-medica-iscmsp/ (concorrência 2026, mesmos inscritos)",
+  "https://www.medway.com.br/conteudos/residencia-medica-iscmsp/ (edital 2027: pesos 9 e 1, datas)",
+  "https://med.estrategia.com/portal/noticias/scmsp-edital-residencia-medica-2027/ (edital 2027: 257 vagas, prova 05/12, currículo 13 e 14/01, final 17/02)",
+  "https://med.estrategia.com/portal/noticias/inscricoes-residencia-medica-santa-casa-sp-2027/ (inscrições até 04/11 23h59, R$ 680)",
+  "https://www.vestibulandoweb.com.br/pos-graduacao/inscricao-residencia-medica-santa-casa-de-sao-paulo-2027/amp/ (257 vagas, prova 05/12, R$ 680)",
+  "scripts/portal/editais.json: Edital SCMSP 2027 (FCC), Anexo II, nota ENAMED 2025 da faculdade até 2,5 de 10 pontos"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica Santa Casa SP", "pill": "CONCORRÊNCIA 2026",
+   "title": ["QUANTOS DISPUTAM", "<span class='y glow'>CADA VAGA</span>"],
+   "body": "Na seleção de 2026, a <b>Dermatologia</b> da Santa Casa de SP teve <b>418 inscritos para 2 vagas</b>: <b>209 por vaga</b>.",
+   "bullets": ["As especialidades mais disputadas", "Onde tem mais inscritos", "Precisa de currículo?"]},
+  {"type": "rows", "label": "Acesso direto", "title": ["AS MAIS <span class='y'>DISPUTADAS</span>"],
+   "sub": "Santa Casa SP 2026, candidatos por vaga",
+   "rows": [
+    {"name": "Dermatologia", "sub": "418 inscritos para 2 vagas", "value": "209"},
+    {"name": "Psiquiatria", "sub": "624 inscritos", "value": "+100"},
+    {"name": "Otorrinolaringologia", "sub": "413 inscritos", "value": "+100"},
+    {"name": "Oftalmologia", "sub": "295 inscritos", "value": "+95"},
+    {"name": "Neurocirurgia", "sub": "238 inscritos", "value": "+75"},
+    {"name": "Cirurgia Plástica", "sub": "Pré-requisito, 146 inscritos para 2 vagas", "value": "73"}
+   ],
+   "note": "A relação muda se a conta usa só a ampla concorrência ou todas as vagas. Mostramos o menor valor."},
+  {"type": "rows", "label": "Mais procuradas", "title": ["ONDE TEM MAIS <span class='y'>INSCRITOS</span>"],
+   "sub": "Santa Casa SP 2026, acesso direto",
+   "rows": [
+    {"name": "Clínica Médica", "sub": "A que mais recebe inscrições", "value": "1.304"},
+    {"name": "Cirurgia Geral", "sub": "Inscritos", "value": "1.104"},
+    {"name": "Ginecologia e Obstetrícia", "sub": "Inscritos", "value": "904"},
+    {"name": "Anestesiologia", "sub": "Inscritos", "value": "746"},
+    {"name": "Pediatria", "sub": "Inscritos", "value": "577"},
+    {"name": "Ortopedia e Traumatologia", "sub": "Inscritos", "value": "454"}
+   ],
+   "note": "Concorrência de 2026 é referência, não previsão: as vagas mudam todo ano."},
+  {"type": "cards", "label": "Análise curricular", "title": ["PRECISA DE <span class='g'>CURRÍCULO?</span>"],
+   "sub": "No edital da Santa Casa SP 2027",
+   "cards": [
+    {"num": "1", "h": "Sim, peso 1", "tag": "prova tem peso 9", "p": "A análise curricular é a <b>2ª fase</b>, só para quem for convocado depois da prova."},
+    {"num": "2", "h": "13 e 14/01/2027", "tag": "envio pelo site da FCC", "p": "São só <b>2 dias</b> para subir os comprovantes. Deixe tudo pronto antes."},
+    {"num": "3", "h": "Nota do ENAMED 2025", "tag": "da sua faculdade", "p": "Na ficha, a nota da faculdade no ENAMED 2025 vale até <b>2,5 dos 10 pontos</b> do currículo."}
+   ]},
+  {"type": "rows", "label": "Edital 2027", "title": ["ANOTA <span class='y'>AÍ</span>"],
+   "sub": "Santa Casa SP 2027, banca FCC",
+   "rows": [
+    {"name": "Vagas", "sub": "Acesso direto e pré-requisito", "value": "257"},
+    {"name": "Inscrições", "sub": "Até 23h59, no site da FCC. Taxa R$ 680", "value": "04/11"},
+    {"name": "Prova objetiva", "sub": "1ª fase", "value": "05/12"},
+    {"name": "Envio do currículo", "sub": "Só convocados", "value": "13 e 14/01"},
+    {"name": "Resultado final", "sub": "Ano de 2027", "value": "17/02"}
+   ],
+   "note": "Atenção: USP-SP e SES-GO têm prova no dia seguinte, 06/12."},
+  {"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>ESCOLHER</span>"], "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar Santa Casa com você.",
+   "note": "Vai precisar do currículo em janeiro? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: estatística de candidatos 2026 da ISCMSP, conferida em Estratégia MED e Medway, e edital SCMSP 2027 (FCC). Conferido em 23/10/2026."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "Santa Casa SP: <span>209 por vaga</span><br>em Dermatologia. Veja no feed da @med_easyy."},
+ "caption": "📊 QUANTOS DISPUTAM CADA VAGA NA SANTA CASA SP\n\nNa seleção de residência médica 2026 da Santa Casa de São Paulo, a Dermatologia teve 418 inscritos para 2 vagas: 209 por vaga. Psiquiatria e Otorrino passaram de 100 por vaga, e Oftalmo ficou acima de 95. Clínica Médica foi a que mais recebeu inscrições, 1.304.\n\nPrecisa de currículo? Sim. A prova tem peso 9 e a análise curricular, peso 1, na 2ª fase. O envio é só em 13 e 14/01/2027, pelo site da FCC, e a nota da sua faculdade no ENAMED 2025 entra na ficha.\n\nPara 2027 são 257 vagas. As inscrições vão até 04/11, às 23h59, com taxa de R$ 680, e a prova é em 05/12. Arrasta para ver tudo e salva para decidir com calma 📌\n\nQual especialidade você vai prestar na Santa Casa? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #santacasasp #iscmsp #concorrencia #residencia2027 #saopaulo"
+}
