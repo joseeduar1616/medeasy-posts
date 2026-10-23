@@ -77,7 +77,7 @@ async function criarClienteNotion(){
   const props = { "Cliente":t.nome.trim(), "Telefone":t.whats, "Tipo de serviço":[...tipos, ...c.provas.map(p => p.nome)], "Mentor":S.mentor?.nome || "", "Status":"Não iniciada", "Pagamento":"Não pago",
     "Valor total":o ? o.total : null, "Data de início ":isoLocal(), "Certificados por item":textoCont(c, carregarCont(c).provas) || "", "Controle de certificados":temCtrl(ct) ? textoCtrl(ct) : "" };
   toast("Criando o cliente no Notion");
-  try { const j = await pontePedido("/cliente", { props }); t.clienteNotion = j.url; t.etapa = "fechado"; salvarTri(t); render(); toast("Cliente criado no Notion. Entra no painel com o código de acesso em 1 ou 2 minutos"); }
+  try { const j = await pontePedido("/cliente", { props }); t.clienteNotion = j.url; t.clienteNotionId = String(j.id || "").replace(/-/g, ""); t.valorNotion = o ? o.total : null; t.opcaoNotion = o ? o.letra : ""; t.etapa = "fechado"; salvarTri(t); render(); toast("Cliente criado no Notion. Entra no painel com o código de acesso em 1 ou 2 minutos"); }
   catch (e) { toast("Não criou: " + e.message); }
 }
 const novoIdTri = () => "t:" + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3);
@@ -277,14 +277,15 @@ function triagemItemView(){
       <div class="row" style="gap:8px"><label class="chk"><input type="checkbox" data-tri="mentoriaInd" ${t.mentoriaInd ? "checked" : ""}><span>Oferecer mentoria individual</span></label>${t.mentoriaInd ? `<input class="in" data-tri="valorMentoriaInd" type="number" min="0" step="0.01" value="${esc(t.valorMentoriaInd ?? "")}" placeholder="Valor" style="width:120px">` : ""}</div>
       <label class="f"><span>Links do Drive</span><input class="in" data-tri="links" value="${esc(t.links || "")}"></label>
       <label class="f"><span>Observações</span><textarea class="in" data-tri="obs" rows="2">${esc(t.obs || "")}</textarea></label></div></section>
-    <section class="card"><div class="card-h"><h2>Provas</h2></div>${c.provas.length ? `<div class="list">${c.provas.map(p => { const cp = calcDe(c, p); return `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${ANO}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) + " (" + quando(p.prazoEnvio) + ")" : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div></div>${cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : ""}</div>`; }).join("")}</div>` : `<div class="empty">Marque as provas acima</div>`}</section>
+    <section class="card" id="triProvas"><div class="card-h"><h2>Provas</h2></div>${c.provas.length ? `<div class="list">${c.provas.map(p => { const cp = calcDe(c, p); return `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${ANO}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) + " (" + quando(p.prazoEnvio) + ")" : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div></div>${cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : ""}</div>`; }).join("")}</div>` : `<div class="empty">Marque as provas acima</div>`}</section>
    </div><div class="stack">
-    <section class="card"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
+    <section class="card" id="triOrc"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
       ${ops.length && S.orcEdit ? orcEditor(t, ops) : ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}${o.mensal ? " por mês" : ""}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${esc(foraTxt(l))}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
       <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, msgOrc(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
     ${analiseCard(c)}
     <section class="card"><div class="card-h"><h2>PDF da análise</h2></div><p class="xs muted" style="margin:0 0 10px">Sai da análise importada ou da contagem por item lá embaixo, com os comentários de cada item. Uma prova por vez.</p><div class="row">${c.provas.map(p => `<button class="btn sm ${calcDe(c, p).tem ? "pri" : ""}" data-a="pdfAnalise" data-v="${kP(p.nome)}">PDF ${esc(p.nome)}</button>`).join("") || `<span class="xs muted">Sem prova</span>`}</div></section>
-    <section class="card"><div class="card-h"><h2>Quando fechar</h2>${t.clienteNotion ? `<a class="pill ok" href="${esc(t.clienteNotion)}" target="_blank" rel="noopener">Cliente no Notion</a>` : ""}</div>
+    <section class="card" id="triFechar"><div class="card-h"><h2>Quando fechar</h2>${t.clienteNotion ? `<a class="pill ok" href="${esc(t.clienteNotion)}" target="_blank" rel="noopener">Cliente no Notion</a>` : ""}</div>
+      ${valorNotionTri(t, ops)}
       ${triNoNotion() ? `<p class="xs muted" style="margin:0 0 10px">Cria a linha do cliente no Controle cliente, com serviço, provas, valor, contagem por item e controle de certificados. Ele entra no painel com o código de acesso em 1 ou 2 minutos.</p>
       <div class="row">${ops.length > 1 ? `<select class="in" id="triOpFechar" style="width:auto">${ops.map(o => `<option value="${o.letra}">Opção ${o.letra}: ${brl(o.total)}${o.mensal ? " por mês" : ""}</option>`).join("")}</select>` : ""}<button class="btn sm pri" data-a="criarClienteNotion" ${t.nome && t.whats ? "" : "disabled"}>Criar cliente no Notion</button><button class="btn sm ghost" data-a="copiarNotionTri">Copiar texto</button></div>`
       : `<p class="xs muted" style="margin:0 0 10px">Crie o cliente no Notion e cole o texto abaixo. Na próxima sincronização ele entra no painel com a contagem e o código de acesso.</p><button class="btn sm" data-a="copiarNotionTri">Copiar dados para o Notion</button>`}</section>
@@ -292,14 +293,39 @@ function triagemItemView(){
    <div style="margin-top:16px">${controleView(c)}</div>
    <div style="margin-top:16px">${certItensView(c)}</div>`;
 }
+function atualizarTriParcial(){
+  const tmp = document.createElement("div"); tmp.innerHTML = triagemItemView();
+  for (const id of ["triProvas", "triOrc", "triFechar"]){ const novo = tmp.querySelector("#" + id), velho = document.getElementById(id); if (novo && velho) velho.replaceWith(novo); }
+}
+/* Cliente já criado no Notion: o valor gravado lá não muda sozinho quando o orçamento muda depois. Mostra a diferença e deixa atualizar. */
+function valorNotionTri(t, ops){
+  if (!t.clienteNotion) return "";
+  // O valor de verdade vem da última sincronização (serviço com o mesmo id da página). Sem ela, o que foi gravado na criação.
+  const idN = t.clienteNotionId || idDeUrl(t.clienteNotion); const svc = (S.eq?.clientes || []).flatMap(c => c.servicos || []).find(x => x.id === idN);
+  const noNotion = svc && svc.total != null ? svc.total : t.valorNotion; if (noNotion == null) return "";
+  const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const agora = o ? o.total : null;
+  const dif = agora != null && Math.abs(agora - noNotion) >= 0.01;
+  const pagou = !!(svc && svc.pagamento && !semAcento(svc.pagamento).startsWith("nao pago"));
+  return `<div class="svc" style="margin-bottom:10px"><div class="row between small"><span>Valor no Notion${t.opcaoNotion ? ` (opção ${esc(t.opcaoNotion)})` : ""}</span><b class="num">${brl(noNotion)}</b></div>
+    ${dif ? `<div class="row between small" style="margin-top:4px"><span class="gold">O orçamento mudou depois</span><b class="num gold">${brl(agora)}</b></div>
+    ${pagou && !S.admin ? `<p class="xs muted" style="margin:6px 0 0">O cliente já começou a pagar, então só o José ou o Eduardo mudam o valor.</p>` : `<div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="atualizarValorTri">Atualizar o valor no Notion</button></div>`}` : `<p class="xs muted" style="margin:4px 0 0">Igual ao orçamento de agora.</p>`}</div>`;
+}
+async function atualizarValorTri(){
+  const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t); const o = ops.find(x => x.letra === t.opcaoNotion) || ops[0]; const id = t.clienteNotionId || idDeUrl(t.clienteNotion);
+  if (!o || !id) return;
+  try { await salvarNotion(id, { "Valor total":o.total }, "Valor atualizado no Notion"); t.valorNotion = o.total; t.opcaoNotion = o.letra; salvarTri(t); render(); }
+  catch (e) { toast("Não gravou: " + e.message); }
+}
 function triInput(el){
   const campo = el.dataset.tri; const t = S.modo === "triagem" ? S.triForm : triDe(S.sel); if (!t) return;
   if (campo === "prova"){ const set = new Set(t.provas || []); el.checked ? set.add(el.value) : set.delete(el.value); t.provas = PROVAS.map(p => p.k).filter(k => set.has(k)); }
   else if (el.type === "checkbox") t[campo] = el.checked; else t[campo] = el.value;
   if (S.modo === "triagem") return;
   salvarTri(t); delete S.cont[t.id];
-  if (campo === "prova" || campo === "servico" || campo === "nCert" || campo === "desconto" || campo === "drive" || campo === "mentoria" || campo === "mentoriaInd") render();
-  else if (campo === "valorMentoriaInd"){ const pos = el.selectionStart; render(); const nv = document.querySelector('[data-tri="valorMentoriaInd"]'); if (nv){ nv.focus(); try { nv.setSelectionRange(pos, pos); } catch {} } }
+  if (campo === "prova" || campo === "servico" || campo === "drive" || campo === "mentoria" || campo === "mentoriaInd") render();
+  // Campos digitados (desconto, certificados, valor da mentoria): redesenhar a tela inteira tirava o foco do campo a cada número,
+  // e "10" virava "1". Agora só os cartões de provas, orçamento e fechamento são refeitos.
+  else if (campo === "nCert" || campo === "desconto" || campo === "valorMentoriaInd") atualizarTriParcial();
 }
 
 /* ---------- PDFs no navegador ---------- */

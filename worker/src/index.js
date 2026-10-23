@@ -250,9 +250,15 @@ export default {
     if (url.pathname === "/pagina") {
       const id = String(corpo.id || "").replace(/-/g, ""); if (!/^[0-9a-f]{32}$/.test(id)) return resposta({ erro: "id da página inválido" }, 400, h);
       const props = {}; const recusadas = [];
+      // O mentor ajusta o "Valor total" do próprio orçamento enquanto o cliente não pagou nada. Depois disso, só o administrador.
+      let naoPago = false;
+      if (!admin && corpo.props && "Valor total" in corpo.props) {
+        try { const pg = await notion(env, `pages/${id}`); const p = pg.properties?.["Pagamento"]?.select?.name || ""; naoPago = !p || semAcento(p).startsWith("nao pago"); } catch {}
+      }
       for (const [nome, v] of Object.entries(corpo.props || {})) {
-        const tipo = COLUNAS[nome] || (admin ? TIPOS_ADMIN[nome] : null);
-        if (!tipo || (SO_ADMIN.has(nome) && !admin)) { recusadas.push(nome); continue; }
+        const liberadoMentor = nome === "Valor total" && naoPago;
+        const tipo = COLUNAS[nome] || (admin || liberadoMentor ? TIPOS_ADMIN[nome] : null);
+        if (!tipo || (SO_ADMIN.has(nome) && !admin && !liberadoMentor)) { recusadas.push(nome); continue; }
         const nv = valorNotion(tipo, v); if (nv) props[nome] = nv;
       }
       if (!Object.keys(props).length) return resposta({ erro: "nenhuma coluna permitida", recusadas }, 403, h);
