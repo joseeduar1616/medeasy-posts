@@ -2,7 +2,7 @@
 const kP = s => semAcento(s).replace(/[^a-z0-9]/g, "");
 const r2 = n => Math.round((Number(n) || 0) * 100) / 100;
 const PRECO = { taxa:100, taxaMaisDeDuas:90, artigo:12.5, analise1:100, analise2:90,
-  mentoria:{ ate2:250, extra:150 },
+  mentoria:{ mensal:250, reuniao:150 },
   vitae:{ A:[9, 8.5, 8], B:[9.5, 9, 8.5], C:[8, 7.5, 7], D:[9, 8.5, 8], E:[9, 8.5, 8] }, lattes:{ A:[7, 6.5, 6], B:[12, 11.5, 11] } };
 const MODELO = { psugo:"D", psumg:"D", hpp:"C", santacasasp:"C", scmsp:"C", fmabc:"C", unitau:"C", idor:"C", puccamp:"C", hcpa:"C", enare:"C", sesdf:"C", cet:"E" };
 const faixaQ = q => q >= 50 ? 2 : q >= 31 ? 1 : 0;
