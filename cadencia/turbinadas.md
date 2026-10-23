@@ -2,9 +2,9 @@
 
 | Data | Meme | Vídeo (Meta) | Anúncio | Situação | Resultado |
 |---|---|---|---|---|---|
-| 22/10/2026 | Meme internato (nicho, design DAHYxZ0zSRk) | 1478269804187198 | 120251603911060345 | ativo no conjunto de nicho 120251603906260345 | 22/10 19h48: R$ 0,00, 1 conta, 0 visitas (começou hoje) |
-| 22/10/2026 | Meme ENAMED 4º ano (nicho, design DAHYxWGZ_yg) | 1010080365469725 | 120251603910790345 | ativo no conjunto de nicho 120251603906260345 | 22/10 19h48: sem entrega ainda no Windsor |
-| 22/10/2026 | Meme estado mental (campeão de out/26, criativo 1805159200630232) | já existia | 120251603412240345 | ativo no conjunto geral 120251603405840345 | 22/10 19h48: sem entrega ainda no Windsor (conjunto ligado hoje) |
+| 22/10/2026 | Meme internato (nicho, design DAHYxZ0zSRk) | 1478269804187198 | 120251603911060345 | ativo no conjunto de nicho 120251603906260345 | 23/10 19h50 (7 dias): R$ 1,82, 409 contas, 8 cliques, 4 visitas (R$ 0,46 por visita), CTR 1,7% |
+| 22/10/2026 | Meme ENAMED 4º ano (nicho, design DAHYxWGZ_yg) | 1010080365469725 | 120251603910790345 | ativo no conjunto de nicho 120251603906260345 | 23/10 19h50 (7 dias): R$ 7,13, 1.468 contas, 26 cliques, 15 visitas (R$ 0,48 por visita), CTR 1,6% |
+| 22/10/2026 | Meme estado mental (campeão de out/26, criativo 1805159200630232) | já existia | 120251603412240345 | ativo no conjunto geral 120251603405840345 | 23/10 19h50 (7 dias): R$ 3,11, 714 contas, 36 cliques, 27 visitas (R$ 0,12 por visita), CTR 4,6% |
 
 ## Anotações
 
@@ -14,3 +14,4 @@
 - 22/10/2026, 19h: o José definiu R$ 15 por dia no total e pediu pra pôr mais no que der certo. Ajuste: nicho R$ 9 e geral R$ 6, os dois conjuntos ligados. Próxima comparação de dinheiro a partir de 25/10.
 - Preço que vale (José, 22/10): mensal R$ 39 e anual R$ 300.
 - 22/10/2026, 19:48 (Turbinar): nenhum Reel meme novo nas últimas 30 h fora os dois de nicho que já estão aqui. Gasto da semana nos conjuntos novos: geral R$ 0,00 e nicho R$ 0,00 (ligados hoje, o Windsor guarda cópia e ainda não mostra entrega). Nada pausado, nenhum anúncio passou de R$ 10. Dinheiro sem mudança (nicho R$ 9, geral R$ 6, último ajuste hoje, próxima comparação a partir de 25/10). Fim do nicho em 22/11, sem adiar.
+- 23/10/2026, 19:50 (Turbinar): nenhum Reel meme novo pra anunciar. O meme de internato publicado às 14:54 (Canva DAHYxZ0zSRk) já roda como anúncio 120251603911060345 desde 22/10, e o Reel tweet de 22/10 com telas do app não é meme, então fica de fora. Gasto da semana: geral R$ 3,11 (27 visitas, R$ 0,12 por visita) e nicho R$ 8,95 (19 visitas, R$ 0,47 por visita). Nada pausado, nenhum anúncio chegou a R$ 10. Dinheiro sem mudança (nicho R$ 9, geral R$ 6): o último ajuste foi em 22/10 e a comparação só vale a partir de 25/10. Por enquanto o geral sai bem mais barato por visita, então é provável que o dinheiro vá pra ele no dia 25 se continuar assim. Fim dos conjuntos em 22/11, sem adiar. O Windsor está no plano de teste e não deixa forçar dados novos, então os números são da última cópia guardada.
