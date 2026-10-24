@@ -11,9 +11,10 @@
 | 11/10/2026 | 08:50 a 14:55 | 5 Reels de meme | Atraso, 1 mês pra prova, confiança, revisão, ranking | perfil | 165 a 300 contas, 66% a 78% de pulo |
 | 16/10/2026 | 15:18 | Carrossel 6 slides | Atrasou o cronograma? | https://www.instagram.com/p/DekKKhMiJxZ/ | 47 contas |
 | 21/10/2026 | 11:32 | Carrossel 7 slides (estilo lançamento) | Plantão de 12h e a aula ficou pra depois (`posts/2026-10-21-semana-com-plantao.json`, media_id 18118727726062342) | https://www.instagram.com/p/DewoWY_DZOm/ | 40 contas, 1 visita (37 em 26 h) |
-| 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | 39 contas, 71 views, 81% de pulo, 14 s de média em 21 h |
+| 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | 39 contas, 71 views, 81% de pulo, 14 s de média |
 | 22/10/2026 | 18:15 | Story meme IA (teste) | Eu às 3h da manhã jurando que amanhã eu começo a revisar direito (`posts/2026-10-22-teste-ia.json`, Canva `DAHYxSBc_kA` página 2, story 18428106304159152) | story | (teste, só story) |
-| 23/10/2026 | 14:54 | Reel meme IA + story (nicho) | Eu entrando no internato jurando que ia estudar depois do plantão (`posts/2026-10-22-internato-meme.json`, Canva `DAHYxZ0zSRk`, Reel 18128083216860041, story 18564470875075324) | https://www.instagram.com/reel/De2JAQzjdBZ/ | (preencher) |
+| 23/10/2026 | 14:54 | Reel meme IA + story (nicho) | Eu entrando no internato jurando que ia estudar depois do plantão (`posts/2026-10-22-internato-meme.json`, Canva `DAHYxZ0zSRk`, Reel 18128083216860041, story 18564470875075324) | https://www.instagram.com/reel/De2JAQzjdBZ/ | 60 contas, 103 views, 89% de pulo, 4 s de média em 21 h |
+| 24/10/2026 | 14:55 | Reel meme IA + story (nicho) | Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões (`posts/2026-10-22-enamed-meme.json`, Canva `DAHYxWGZ_yg`, Reel 18014643902975818, story 17914682283285618) | perfil (link a conferir) | (preencher) |
 
 ## Anotações de desempenho
 
@@ -27,6 +28,7 @@
 - 22/10: nos anúncios, o meme "estado mental" saiu a R$ 0,10 por visita ao site (2.087 visitas com R$ 206). Os outros formatos ficaram entre R$ 0,76 e R$ 0,85.
 - 22/10: o José não quer mandar vídeo nem pagar automação de direct. O meme passou a ser feito sozinho: foto gerada pela IA do Canva, montada no Canva com a moldura de texto (`tweet.py` com `imagem_ia`) e publicada pelo link de exportação do Canva, que o Instagram e o Meta aceitam. Teste no story às 18:15 deu certo, e o mp4 exportado subiu na biblioteca de anúncios (vídeo 1479389637436304). O vídeo do Drive virou opcional.
 - 22/10: o José contou que ninguém criou conta no site, mesmo com 2.191 visitas pelos anúncios (R$ 289 gastos). O site não tem o Pixel da Meta, então o Meta otimiza só clique. Pedido dele: ir pra nichos, como medicina em Goiânia, quem vai entrar no internato e quem se prepara pro ENAMED. Criado o conjunto de nicho (pausado) com dois memes de foto da IA. O nicho vira pelo menos 3 memes por semana.
+- 24/10: o meme de internato (23/10) teve 60 contas em 21 h, com 89% de pulo e 4 s de média. Publicado o meme do ENAMED que estava na fila (segundo meme de nicho seguido). A fila ficou vazia, então amanhã volta o caminho A com pauta nova.
 - 23/10: o Reel tweet de 22/10 teve só 39 contas em 21 h, com 81% de pulo, mas quem ficou assistiu 14 s em média. Primeiro meme da fila (internato, nicho) publicado às 14:54 com o mp4 e o jpg exportados do Canva.
 
 ## Memes prontos na fila
@@ -35,4 +37,3 @@ O agente do meme publica o primeiro daqui antes de criar outro (veja AGENTES.md)
 
 | Meme | JSON | Design do Canva |
 |---|---|---|
-| Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões | `posts/2026-10-22-enamed-meme.json` | `DAHYxWGZ_yg` |
