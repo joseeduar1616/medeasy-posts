@@ -296,8 +296,11 @@ function triagemItemView(){
    <div style="margin-top:16px">${certItensView(c)}</div>`;
 }
 function atualizarTriParcial(){
-  const tmp = document.createElement("div"); tmp.innerHTML = triagemItemView();
-  for (const id of ["triProvas", "triOrc", "triFechar"]){ const novo = tmp.querySelector("#" + id), velho = document.getElementById(id); if (novo && velho) velho.replaceWith(novo); }
+  try {
+    const tmp = document.createElement("div"); tmp.innerHTML = triagemItemView(); let trocou = 0;
+    for (const id of ["triProvas", "triOrc", "triFechar"]){ const novo = tmp.querySelector("#" + id), velho = document.getElementById(id); if (novo && velho){ velho.replaceWith(novo); trocou++; } }
+    if (!trocou) render();
+  } catch (e) { toast("Não consegui atualizar o orçamento: " + e.message); }
 }
 /* Cliente já criado no Notion: o valor gravado lá não muda sozinho quando o orçamento muda depois. Mostra a diferença e deixa atualizar. */
 /* Linha do cliente no Notion: a criada pelo botão do site ou, se ele foi criado direto no Notion, a do mesmo telefone (8 últimos dígitos) */
