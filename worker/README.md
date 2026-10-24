@@ -10,7 +10,6 @@ Cloudflare Worker que grava no Notion o que o mentor muda pelo site e manda o Gi
    cd worker
    npx wrangler login
    npx wrangler secret put PORTAL_SENHA         # senha da equipe, igual à do site
-   npx wrangler secret put PORTAL_SENHA_ADMIN   # senha de administrador (opcional)
    npx wrangler secret put NOTION_TOKEN         # token da conexão Portal MedEasy, com "Atualizar conteúdo" ligado
    npx wrangler secret put GITHUB_TOKEN         # token fine-grained só com Actions: write em medeasy-posts
    npx wrangler deploy
@@ -39,3 +38,5 @@ Nas colunas de opção (Mentor, Tipo de serviço, Provas), a ponte usa a opção
 - `GET /saude`: diz o que está configurado.
 
 Todo pedido leva `Authorization: Bearer <senha da equipe>`. O site manda isso sozinho com a senha que o mentor usou para entrar.
+
+Administrador: José e Eduardo (variável `ADMINS`, padrão "jose,eduardo"). O site manda o nome de quem entrou no cabeçalho `X-Quem` e a ponte libera as colunas de dinheiro e a publicação de depoimentos para eles. O antigo `PORTAL_SENHA_ADMIN` com o cabeçalho `X-Admin` ainda funciona, mas o site não usa mais.

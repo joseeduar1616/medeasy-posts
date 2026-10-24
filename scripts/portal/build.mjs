@@ -51,7 +51,7 @@ const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").
 const APELIDOS = { eder: "Éder", leo: "Leonardo", leonardo: "Leonardo", lucas: "Lucas", erick: "Erick", jose: "José", cadu: "Cadu", matheus: "Matheus", eduardo: "Eduardo", caroline: "Caroline", pedro: "Pedro", "joao gabriel": "João Gabriel", "ana eluiza": "Ana Eluiza" };
 const pessoa = n => { if (!n) return ""; const k = semAcento(n); return APELIDOS[k] || String(n).trim().replace(/\b\w/g, c => c.toUpperCase()); };
 const PCT_MENTOR = Number(process.env.PORTAL_PCT_MENTOR || 0.6);
-// Administradores: veem toda a equipe, o filtro por mentor e os repasses de todos. Com o secret PORTAL_SENHA_ADMIN, entram com uma segunda senha.
+// Administradores: veem toda a equipe, o filtro por mentor, os repasses de todos e os feedbacks. Entram só com o nome e a senha da equipe.
 const ADMINS = ["José", "Eduardo"];
 const SENHA_ADMIN = (process.env.PORTAL_SENHA_ADMIN || "").trim();
 // Quem saiu da equipe: não entra no login nem no filtro de mentores. Os clientes antigos continuam com o nome no histórico.
@@ -385,7 +385,7 @@ const dados = await montar(linhas);
 dados.triagem = await lerTriagemNotion();
 dados.feedbacks = await lerFeedbackNotion();
 // Sem ler o Notion agora, mantém os feedbacks que já estavam no admin.json
-if (dados.feedbacks === null && SENHA_ADMIN) { try { dados.feedbacks = (await abrir(JSON.parse(fs.readFileSync(path.join(SAIDA, "admin.json"), "utf8")), SENHA_ADMIN)).feedbacks || null; } catch {} }
+if (dados.feedbacks === null) { for (const s of [SENHA, SENHA_ADMIN].filter(Boolean)) { try { dados.feedbacks = (await abrir(JSON.parse(fs.readFileSync(path.join(SAIDA, "admin.json"), "utf8")), s)).feedbacks || null; break; } catch {} } }
 await juntarExtras(dados);
 // Ficha de cada edital (parte do currículo), com datas e regras. Completa o que a prova do cliente ainda não tem.
 const EDITAIS = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), "editais.json"), "utf8")); delete EDITAIS._fonte;
@@ -425,10 +425,9 @@ fs.mkdirSync(path.join(SAIDA, "c"), { recursive: true });
 const agora = Date.now();
 for (const c of dados.clientes) fs.writeFileSync(path.join(SAIDA, "c", await arquivoCliente(c.codigo) + ".json"), JSON.stringify(await cifrar({ ...espelho(c, contato), atualizadoEm: agora }, c.codigo)));
 const semValor = dados.clientes.flatMap(c => c.repasses).filter(r => r.valor == null).length;
-// Senha de administrador: um arquivo pequeno cifrado com ela. O site confere abrindo esse arquivo.
-// Leva também os feedbacks (os particulares só a administração vê).
-if (SENHA_ADMIN) fs.writeFileSync(path.join(SAIDA, "admin.json"), JSON.stringify(await cifrar({ ok: true, em: agora, feedbacks: dados.feedbacks || [] }, SENHA_ADMIN))); else fs.rmSync(path.join(SAIDA, "admin.json"), { force: true });
-fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, editais: EDITAIS, senhaAdmin: !!SENHA_ADMIN, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, triagem: dados.triagem || [], valoresPendentes: semValor > 0 }, SENHA)));
+// Feedbacks para a aba da administração. Cifrado com a senha da equipe: o site só abre para José e Eduardo.
+fs.writeFileSync(path.join(SAIDA, "admin.json"), JSON.stringify(await cifrar({ ok: true, em: agora, feedbacks: dados.feedbacks || [] }, SENHA)));
+fs.writeFileSync(path.join(SAIDA, "equipe.json"), JSON.stringify(await cifrar({ geradoEm: new Date(agora).toISOString(), contato, editais: EDITAIS, mentores: dados.mentores.map(m => ({ ...m, telefone: EQUIPE[m.nome] || "" })), clientes: dados.clientes, triagem: dados.triagem || [], valoresPendentes: semValor > 0 }, SENHA)));
 // Depoimentos aprovados pela administração: públicos de propósito, com a assinatura que o cliente escolheu
 if (dados.feedbacks) fs.writeFileSync(path.join(SAIDA, "depoimentos.json"), JSON.stringify(dados.feedbacks.filter(f => f.tipo === "publico" && f.publicar && f.texto.trim())
   .map(f => ({ nome: f.nome || "Cliente MedEasy", nota: f.nota, texto: f.texto, provas: f.provas, mentor: String(f.mentor || "").split(",")[0].trim(), mes: new Date(f.em).toISOString().slice(0, 7) }))));
