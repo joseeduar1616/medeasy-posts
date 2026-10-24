@@ -3,7 +3,8 @@
 const PONTE = "__PONTE__";
 const temPonte = () => !!PONTE && S.modo === "mentor" && !!S.senha;
 async function pontePedido(rota, corpo){
-  const h = { "Content-Type":"application/json", Authorization:"Bearer " + S.senha }; if (S.admin && S.senhaAdmin) h["X-Admin"] = S.senhaAdmin;
+  // X-Quem: quem está usando (a ponte reconhece José e Eduardo como administradores). Codificado porque cabeçalho não aceita acento.
+  const h = { "Content-Type":"application/json", Authorization:"Bearer " + S.senha, "X-Quem":encodeURIComponent(S.mentor?.nome || "") };
   const r = await fetch(PONTE.replace(/\/$/, "") + rota, { method:"POST", headers:h, body:JSON.stringify(corpo || {}) });
   const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.erro || ("erro " + r.status)); return j;
 }

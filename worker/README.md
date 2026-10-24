@@ -10,7 +10,6 @@ Cloudflare Worker que grava no Notion o que o mentor muda pelo site e manda o Gi
    cd worker
    npx wrangler login
    npx wrangler secret put PORTAL_SENHA         # senha da equipe, igual à do site
-   npx wrangler secret put PORTAL_SENHA_ADMIN   # senha de administrador (opcional)
    npx wrangler secret put NOTION_TOKEN         # token da conexão Portal MedEasy, com "Atualizar conteúdo" ligado
    npx wrangler secret put GITHUB_TOKEN         # token fine-grained só com Actions: write em medeasy-posts
    npx wrangler deploy
@@ -28,7 +27,7 @@ O `wrangler.toml` tem um agendamento a cada 10 minutos que dispara a sincroniza�
 
 ## O que ele aceita
 
-- `POST /pagina` com `{ id, props }`: grava nas colunas permitidas da linha do cliente (Status, Pagamento, Tipo de serviço, Certificados por item, Controle de certificados, datas, Mentor, Corretor, Trainee, Telefone). Mentor pago, Valor total, Desconto e Forma de pagamento só com a senha de administrador no cabeçalho `X-Admin`.
+- `POST /pagina` com `{ id, props }`: grava nas colunas permitidas da linha do cliente (Status, Pagamento, Tipo de serviço, Certificados por item, Controle de certificados, datas, Mentor, Corretor, Trainee, Telefone). Mentor pago, Valor total, Desconto e Forma de pagamento só para administrador (José e Eduardo, veja no fim).
 - `POST /triagem` com `{ id?, props, arquivar? }`: cria ou atualiza a linha na base "Triagem MedEasy" (TRIAGEM_DB). Só mexe em páginas dessa base.
 - `POST /cliente` com `{ props }`: cria o cliente que fechou no "Controle cliente" (CLIENTES_DB) e pede a sincronização.
 - `POST /feedback/enviar` com `{ codigo, mentor, publico?, particular? }`: a única rota sem a senha da equipe. Confere se o código é de um cliente que existe (o arquivo cifrado dele no site, em SITE) e grava na base "Feedback MedEasy", criando a base se precisar. Não guarda o código. A parte particular vai sem nome. Um envio a cada 2 minutos por cliente.
@@ -39,3 +38,5 @@ Nas colunas de opção (Mentor, Tipo de serviço, Provas), a ponte usa a opção
 - `GET /saude`: diz o que está configurado.
 
 Todo pedido leva `Authorization: Bearer <senha da equipe>`. O site manda isso sozinho com a senha que o mentor usou para entrar.
+
+Administrador: José e Eduardo (variável `ADMINS`, padrão "jose,eduardo"). O site manda o nome de quem entrou no cabeçalho `X-Quem` e a ponte libera as colunas de dinheiro e a publicação de depoimentos para eles. O antigo `PORTAL_SENHA_ADMIN` com o cabeçalho `X-Admin` ainda funciona, mas o site não usa mais.

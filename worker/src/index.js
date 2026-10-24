@@ -1,7 +1,8 @@
 // Ponte do Portal MedEasy: recebe mudanças do site, grava no Notion e manda o GitHub sincronizar.
 // Roda num Cloudflare Worker. As chaves ficam nos secrets do Worker, nunca no site.
 //   PORTAL_SENHA        senha da equipe (a mesma do site)
-//   PORTAL_SENHA_ADMIN  senha de administrador (opcional, libera as colunas de dinheiro)
+//   PORTAL_SENHA_ADMIN  senha de administrador (opcional, antiga: ainda libera as colunas de dinheiro pelo cabeçalho X-Admin)
+//   ADMINS              primeiros nomes dos administradores, separados por vírgula (padrão "jose,eduardo"). Eles entram só com a senha da equipe.
 //   NOTION_TOKEN        token da conexão "Portal MedEasy" no Notion, com permissão de escrita
 //   GITHUB_TOKEN        token fine-grained com Actions: write no repositório medeasy-posts (opcional)
 //   GITHUB_REPO         "joseeduar1616/medeasy-posts"
@@ -66,7 +67,7 @@ function cors(env, req) {
   const origem = req.headers.get("Origin") || "";
   const lista = String(env.ORIGEM || "").split(",").map(s => s.trim()).filter(Boolean);
   const ok = !lista.length || lista.includes(origem) || /^http:\/\/localhost(:\d+)?$/.test(origem);
-  return { "Access-Control-Allow-Origin": ok ? origem || "*" : "null", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Admin", "Access-Control-Max-Age": "86400", "Vary": "Origin" };
+  return { "Access-Control-Allow-Origin": ok ? origem || "*" : "null", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Admin,X-Quem", "Access-Control-Max-Age": "86400", "Vary": "Origin" };
 }
 const resposta = (obj, status, extra) => new Response(JSON.stringify(obj), { status: status || 200, headers: { "Content-Type": "application/json; charset=utf-8", ...(extra || {}) } });
 
@@ -180,7 +181,7 @@ export default {
     const h = cors(env, req);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: h });
     const url = new URL(req.url);
-    if (url.pathname === "/saude") return resposta({ ok: true, notion: !!env.NOTION_TOKEN, github: !!(env.GITHUB_TOKEN && env.GITHUB_REPO), admin: !!env.PORTAL_SENHA_ADMIN, feedback: true }, 200, h);
+    if (url.pathname === "/saude") return resposta({ ok: true, notion: !!env.NOTION_TOKEN, github: !!(env.GITHUB_TOKEN && env.GITHUB_REPO), admin: true, feedback: true }, 200, h);
 
     // Feedback do cliente: a única rota sem a senha da equipe. Precisa do código de um cliente que existe.
     if (url.pathname === "/feedback/enviar") {
@@ -195,7 +196,10 @@ export default {
     const senha = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
     const equipeOk = env.PORTAL_SENHA && (iguais(senha, env.PORTAL_SENHA) || iguais(senha, String(env.PORTAL_SENHA).toLowerCase()));
     if (!equipeOk) return resposta({ erro: "senha da equipe incorreta" }, 401, h);
-    const admin = !!env.PORTAL_SENHA_ADMIN && iguais((req.headers.get("X-Admin") || "").trim(), env.PORTAL_SENHA_ADMIN);
+    // Administrador: José e Eduardo entram só com a senha da equipe, e o site manda o nome em X-Quem.
+    let quem = ""; try { quem = decodeURIComponent(req.headers.get("X-Quem") || ""); } catch {}
+    const admins = String(env.ADMINS || "jose,eduardo").split(",").map(semAcento).filter(Boolean);
+    const admin = admins.includes(semAcento(quem).split(" ")[0]) || (!!env.PORTAL_SENHA_ADMIN && iguais((req.headers.get("X-Admin") || "").trim(), env.PORTAL_SENHA_ADMIN));
     if (req.method !== "POST") return resposta({ erro: "use POST" }, 405, h);
     let corpo; try { corpo = await req.json(); } catch { return resposta({ erro: "JSON inválido" }, 400, h); }
 
