@@ -30,13 +30,33 @@ function lerTriagemJson(j){
 }
 async function lerArquivoAnaliseSite(arquivo){
   if (/\.json$/i.test(arquivo.name)) return lerTriagemJson(JSON.parse(await arquivo.text()));
+  if (/\.txt$/i.test(arquivo.name)){ const prs = lerAnaliseTexto(await arquivo.text()); if (!prs.length) throw new Error("Esse texto não está no formato ANÁLISE MEDEASY"); return prs[0]; }
   const pr = lerTextoAnalise(await textoDoPdf(arquivo));
   if (!pr.itens.length) throw new Error("Não achei os itens nesse PDF. Ele precisa ser a análise curricular MedEasy, com um card por item e a pontuação de cada um");
   return pr;
 }
 /* Guardar: cliente do Notion fica neste navegador, triagem fica no registro dela */
 const anKey = id => "medeasy-analise-" + id;
-function analisesDe(c){ if (c.triagem) return c.triagem.analises || {}; try { return JSON.parse(localStorage.getItem(anKey(c.id)) || "{}"); } catch { return {}; } }
+function analisesDe(c){
+  if (c.triagem) return c.triagem.analises || {};
+  let local = {}; try { local = JSON.parse(localStorage.getItem(anKey(c.id)) || "{}"); } catch {}
+  // As do Notion (controle do cliente) valem para toda a equipe. Fica a mais nova de cada prova.
+  const doCtrl = (typeof ctrlDe === "function" ? ctrlDe(c).analises : null) || {}; const tudo = { ...doCtrl };
+  for (const [k, pr] of Object.entries(local)) if (!tudo[k] || (pr.em || 0) > (tudo[k].em || 0)) tudo[k] = pr;
+  for (const k of Object.keys(tudo)) if (tudo[k] && tudo[k].removida) delete tudo[k];
+  return tudo;
+}
+/* Cliente do Notion: grava neste navegador e no controle do cliente, que vai para o Notion pela ponte. Assim o cliente vê no portal. */
+async function gravarAnalisesCliente(c, tudo, removidas){
+  try { localStorage.setItem(anKey(c.id), JSON.stringify(tudo)); } catch {}
+  if (typeof ctrlDe !== "function") return; const ct = ctrlDe(c);
+  ct.analises = {}; for (const [k, pr] of Object.entries(tudo)){ const { texto, ...resto } = pr; ct.analises[k] = resto; }
+  salvarCtrl(c);
+  if (typeof temPonte === "function" && temPonte() && paginaDoCliente(c)){
+    try { await salvarNotion(paginaDoCliente(c), { "Controle de certificados":textoCtrl(ct) }, removidas ? "Análise removida do Notion" : "Análise salva no Notion. O cliente vê no portal na próxima sincronização"); ct.notion = textoCtrl(ct); c.controle = JSON.parse(ct.notion); salvarCtrl(c); }
+    catch (e) { toast("A análise ficou neste navegador, mas não gravou no Notion: " + e.message); }
+  }
+}
 /* Nome da prova da análise: reconhece pelo título, mesmo nas análises guardadas antes dessa correção */
 const nomeDaAnalise = pr => pr.provaEscolhida || provaDoTitulo([pr.titulo, pr.nome].filter(Boolean).join(" ")) || pr.nome;
 const provaConhecida = nome => PROVAS.some(p => kP(p.nome) === kP(nome));
@@ -45,13 +65,13 @@ function escolherProvaAnalise(el){
   const c = clienteSel(); const tudo = analisesDe(c); const pr = tudo[el.dataset.k]; if (!pr || !el.value) return;
   delete tudo[el.dataset.k]; pr.provaEscolhida = el.value; pr.titulo = pr.titulo || pr.nome; pr.nome = el.value; tudo[kP(el.value)] = pr;
   if (c.triagem){ const t = triDe(c.id); t.analises = tudo; if (!(t.provas || []).includes(PROVAS.find(p => p.nome === el.value)?.k)) t.provas = [...(t.provas || []), PROVAS.find(p => p.nome === el.value).k]; salvarTri(t); }
-  else { try { localStorage.setItem(anKey(c.id), JSON.stringify(tudo)); } catch {} c.provas = (c.provas || []).filter(p => !(p.fonte === "analise" && String(p.id).startsWith("a"))); aplicarAnalises(c); }
+  else { gravarAnalisesCliente(c, tudo); c.provas = (c.provas || []).filter(p => !(p.fonte === "analise" && String(p.id).startsWith("a"))); aplicarAnalises(c); }
   delete S.cont[c.id]; render(); toast(`Análise ligada à prova ${el.value}`);
 }
 function guardarAnalise(c, pr){
   pr = { ...pr, nome:nomeDaAnalise(pr) }; const k = kP(pr.nome); const tudo = analisesDe(c); tudo[k] = { ...pr, em:Date.now() };
   if (c.triagem){ const t = triDe(c.id); t.analises = tudo; if (!(t.provas || []).some(x => kP(nomeProva(x)).startsWith(k) || k.startsWith(kP(nomeProva(x))))){ const p = PROVAS.find(p => k.startsWith(p.k) || kP(p.nome).startsWith(k)); if (p){ t.provas = [...(t.provas || []), p.k]; t.provasDaAnalise = [...(t.provasDaAnalise || []), p.k]; } } salvarTri(t); }
-  else { try { localStorage.setItem(anKey(c.id), JSON.stringify(tudo)); } catch { toast("Não consegui guardar neste navegador"); } }
+  else gravarAnalisesCliente(c, tudo);
 }
 /* Remove a análise (o PDF lançado). Na triagem, tira também a prova que a análise tinha marcado sozinha. */
 function apagarAnalise(c, k){
@@ -60,7 +80,7 @@ function apagarAnalise(c, k){
   if (c.triagem){ const t = triDe(c.id); t.analises = tudo; const pk = (PROVAS.find(p => kP(p.nome) === kP(nome)) || {}).k;
     if (pk && !aindaUsa && (t.provasDaAnalise || []).includes(pk)){ t.provas = (t.provas || []).filter(x => x !== pk); t.provasDaAnalise = t.provasDaAnalise.filter(x => x !== pk); }
     salvarTri(t); }
-  else { try { localStorage.setItem(anKey(c.id), JSON.stringify(tudo)); } catch {}
+  else { gravarAnalisesCliente(c, tudo, true);
     if (!aindaUsa){ c.provas = (c.provas || []).filter(p => !(p.fonte === "analise" && kP(p.nome) === kP(nome) && String(p.id).startsWith("a")));
       for (const p of c.provas) if (p.fonte === "analise" && p.analiseEm && kP(p.nome) === kP(nome)){ delete p.itens; delete p.fonte; delete p.notaEstimada; delete p.notaPossivel; delete p.analiseEm; } }
     aplicarAnalises(c); }
@@ -84,6 +104,71 @@ async function importarAnalise(input){
   try { const pr = await lerArquivoAnaliseSite(f); pr.arquivo = f.name; guardarAnalise(c, pr); delete S.cont[c.id]; if (!c.triagem) aplicarAnalises(c); render(); toast(`Análise ${pr.nome} lida: ${d1(pr.notaEstimada)} pontos em ${pr.itens.length} itens`); }
   catch (e) { if (!(await analiseLivre(c, f))) toast("Esse arquivo não está no formato da análise MedEasy e não achei as notas dos itens da ficha nele. Lance em Certificados por item (Completo, − e +)"); }
 }
+/* ---------- análise padrão em texto ----------
+   O mentor copia o pedido pronto ("Copiar pedido para o Claude"), cola no Claude junto com os certificados e cola a resposta de volta.
+   Formato, um bloco por prova:
+     ANÁLISE MEDEASY
+     Cliente: Fulana
+     Prova: PSU-GO 2027
+     Especialidade: Clínica Médica
+     Item | Nome | Pontos | Máximo | Comprovantes | Como aumentar
+     2 | Monitoria | 0,25 | 0,5 | Monitoria de Anatomia 2023 | Fazer mais uma monitoria
+     Nota: 2,2 */
+const codItemA = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?)\b/i) || [])[1] || "";
+function lerAnaliseTexto(txt){
+  const blocos = String(txt || "").replace(/\r/g, "").replace(/\*\*/g, "").split(/^\s*#*\s*AN[AÁ]LISE MEDEASY\s*$/im).slice(1);
+  const out = [];
+  for (const b of blocos){
+    const ls = b.split("\n").map(l => l.trim()).filter(Boolean);
+    const campo = rot => { const l = ls.find(l => new RegExp("^" + rot + "\\s*:", "i").test(semAcento(l))); return l ? l.slice(l.indexOf(":") + 1).trim() : ""; };
+    const provaTxt = campo("prova"); if (!provaTxt) continue;
+    const nome = (typeof provaDoTitulo === "function" && provaDoTitulo(provaTxt)) || provaTxt.replace(/\s*20\d\d.*$/, "").trim();
+    const ed = typeof editalJS === "function" ? editalJS(nome) : null; const ficha = ((ed && ed.ficha) || []).filter(x => x.maxN != null);
+    const itens = [];
+    for (const l of ls){
+      if ((l.match(/\|/g) || []).length < 3) continue;
+      const cel = l.replace(/^\|/, "").replace(/\|$/, "").split("|").map(x => x.trim());
+      if (/^item$/i.test(cel[0]) || /^[-:\s]+$/.test(cel.join(""))) continue;
+      const [cod, titulo, pts, max, comp, como] = cel; if (!titulo && !cod) continue;
+      const f = ficha.find(x => codItemA(x.item) && codItemA(x.item).toLowerCase() === String(cod).toLowerCase());
+      const mx = numA(max) || (f ? numA(f.maxN) : 0), pt = Math.min(numA(pts), mx || Infinity);
+      itens.push({ n:cod, nome:f ? f.item : `${cod ? cod + ". " : ""}${titulo}`, regra:f ? f.pontos || "" : "", max:mx, porAtividade:f && f.unit != null ? numA(f.unit) : 0, pontos:pt,
+        ganho:Math.max(0, Math.round((mx - pt) * 100) / 100), comprovantes:String(comp || "").split(";").map(x => x.trim()).filter(Boolean), comentario:como || "",
+        situacao:mx && pt >= mx - 0.001 ? "Completo" : pt > 0 ? "Parcial" : como ? "Aumentar agora" : "" });
+    }
+    if (!itens.length) continue;
+    const soma = Math.round(itens.reduce((a, i) => a + i.pontos, 0) * 100) / 100;
+    out.push({ nome, titulo:provaTxt, ano:(provaTxt.match(/20\d\d/) || [ANO_AN()])[0], area:campo("especialidade"), cliente:campo("cliente"), notaEstimada:numA(campo("nota")) || soma,
+      notaMax:numA(ed && ed.maximo) || Math.round(itens.reduce((a, i) => a + i.max, 0) * 100) / 100, notaPossivel:"", itens, fonte:"texto" });
+  }
+  return out;
+}
+const ANO_AN = () => (typeof ANO !== "undefined" ? ANO : "2027");
+/* Pedido pronto para colar no Claude: já vai com a ficha de cada prova do cliente, com o número e o máximo de cada item */
+function pedidoClaude(c){
+  const provas = (c.provas || []).filter(p => p.nome);
+  const bloco = p => { const it = itensDaProva(p);
+    return `ANÁLISE MEDEASY\nCliente: ${c.nome || ""}\nProva: ${p.nome} ${ANO_AN()}\nEspecialidade: ${c.area || ""}\nItem | Nome | Pontos | Máximo | Comprovantes | Como aumentar\n` +
+      (it.length ? it.map(i => `${codItemA(i.item) || ""} | ${i.item.replace(/^\s*\d{1,2}[a-z]?[.)]?\s*/i, "")} |  | ${String(i.maxN).replace(".", ",")} |  | `).join("\n") : "(a ficha desta prova não está no site: use os itens do edital, um por linha)") + "\nNota: "; };
+  const regras = p => { const it = itensDaProva(p); return it.length ? `Como pontua cada item da ${p.nome}:\n` + it.map(i => `${i.item}: ${i.pontos || "ver edital"} (máximo ${String(i.maxN).replace(".", ",")})`).join("\n") : ""; };
+  return `Preciso da análise curricular de um cliente da MedEasy no formato padrão do Portal MedEasy. Vou mandar junto os certificados e o currículo dele${provas.some(p => !itensDaProva(p).length) ? " e o edital" : ""}.
+
+Para cada item, diga quantos pontos ele faz hoje (sem passar do máximo), quais comprovantes contam e o que ele pode fazer para aumentar a nota.
+
+Responda só com ${provas.length > 1 ? "os blocos abaixo, um por prova" : "o bloco abaixo"}, preenchido, sem nada antes nem depois. Não use negrito nem tabela formatada. Não mude a primeira coluna (número do item) nem a ordem. Use vírgula decimal. Separe as colunas com " | " e os comprovantes com ";". Deixe vazio o que não tiver. Na linha "Nota", coloque a soma dos pontos.
+
+${provas.map(bloco).join("\n\n")}
+
+${provas.map(regras).filter(Boolean).join("\n\n")}`.trim();
+}
+function lerAnaliseColada(){
+  const c = clienteSel(); const el = document.getElementById("anColar"); if (!c || !el) return;
+  const prs = lerAnaliseTexto(el.value);
+  if (!prs.length){ toast('Não achei o bloco "ANÁLISE MEDEASY" com os itens. Cole a resposta inteira do Claude'); return; }
+  for (const pr of prs) guardarAnalise(c, pr);
+  delete S.cont[c.id]; if (!c.triagem) aplicarAnalises(c); S.colarAn = false; render();
+  toast(`${prs.length === 1 ? "Análise" : prs.length + " análises"} lida${prs.length === 1 ? "" : "s"}: ${prs.map(p => `${p.nome} ${d1(p.notaEstimada)} pontos`).join(", ")}`);
+}
 /* Análise fora do padrão MedEasy (cada mentor faz de um jeito): procura cada item da ficha da prova no texto e pega a nota,
    como no "Ler currículo pronto". Vira rascunho da contagem por item para o mentor conferir. */
 async function analiseLivre(c, f){
@@ -105,7 +190,8 @@ async function analiseLivre(c, f){
 }
 function analiseCard(c){
   const tudo = analisesDe(c); const ks = Object.keys(tudo);
-  return `<section class="card"><div class="card-h"><div><h2>Análise curricular em arquivo</h2><div class="sub">PDF da análise MedEasy ou triagem.json. Análise em outro formato (PDF ou Word) também entra: o site procura a nota de cada item da ficha</div></div><label class="btn sm pri" style="cursor:pointer">Importar arquivo<input type="file" accept=".pdf,.docx,.json,application/pdf,application/json" hidden data-an="1"></label></div>
+  return `<section class="card"><div class="card-h"><div><h2>Análise curricular em arquivo</h2><div class="sub">O jeito mais fácil: "Copiar pedido para o Claude", e depois "Colar análise" com a resposta. Também entram o PDF da análise MedEasy, triagem.json e análise em outro formato (PDF ou Word)</div></div><div class="row" style="gap:6px"><button class="btn sm" data-a="anPedido" title="Copia o pedido com a ficha das provas do cliente para colar no Claude">Copiar pedido para o Claude</button><button class="btn sm ${S.colarAn ? "pri" : ""}" data-a="anColarAbrir">Colar análise</button><label class="btn sm pri" style="cursor:pointer">Importar arquivo<input type="file" accept=".pdf,.docx,.json,.txt,application/pdf,application/json,text/plain" hidden data-an="1"></label></div></div>
+   ${S.colarAn ? `<div class="svc" style="margin-bottom:12px"><p class="small" style="margin:0 0 8px">1. Clique em "Copiar pedido para o Claude", cole no Claude e mande junto os certificados do cliente.<br>2. Copie a resposta inteira do Claude e cole aqui.</p><textarea class="in" id="anColar" rows="8" placeholder="ANÁLISE MEDEASY&#10;Cliente: ...&#10;Prova: ...&#10;Item | Nome | Pontos | Máximo | Comprovantes | Como aumentar&#10;..." style="font-family:var(--f-mono);font-size:12.5px"></textarea><div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="anColarLer">Ler análise</button><button class="btn sm ghost" data-a="anColarAbrir">Cancelar</button></div></div>` : ""}
    ${ks.length ? `<div class="list">${ks.map(k => { const pr = tudo[k]; const falta = (pr.itens || []).filter(i => i.ganho > 0).length; const nomeP = nomeDaAnalise(pr); return `<div class="li" style="flex-wrap:wrap"><div class="grow"><div class="t">${esc(nomeP)} ${esc(pr.ano || "")}${pr.area ? ` <span class="pill">${esc(pr.area)}</span>` : ""}</div>${pr.titulo && kP(pr.titulo) !== kP(nomeP) ? `<div class="xs muted">${esc(pr.titulo)}</div>` : ""}${!provaConhecida(nomeP) ? `<label class="row xs gold" style="gap:6px;margin:4px 0">Não reconheci a prova. É de qual? <select class="in" data-anprova="1" data-k="${k}" style="width:auto;padding:4px 8px;font-size:12px"><option value="">Escolher</option>${PROVAS.map(p => `<option>${esc(p.nome)}</option>`).join("")}</select></label>` : ""}<div class="small muted">${d1(pr.notaEstimada)} / ${d1(pr.notaMax)}${pr.notaPossivel !== "" && pr.notaPossivel != null ? ` · possível ${d1(pr.notaPossivel)}` : ""} · ${pr.itens.length} itens · ${falta} com espaço para crescer${pr.em ? " · lida em " + dBR(new Date(pr.em).toISOString()) : ""}${pr.arquivo ? ` · ${esc(pr.arquivo)}` : ""}</div></div><button class="btn sm danger" data-a="apagarAnalise" data-v="${k}" title="Tira esta análise do site">Remover PDF</button>
      <details style="width:100%;margin-top:6px"><summary class="small" style="cursor:pointer;font-weight:600">Ver o que foi analisado</summary><div class="stack" style="gap:8px;margin-top:8px">${(pr.itens || []).map(i => `<div class="svc" style="padding:10px 12px"><div class="row between" style="gap:8px"><b class="small">${esc(i.nome)}</b><span class="row" style="gap:6px">${i.situacao ? `<span class="pill ${/complet/i.test(i.situacao) ? "ok" : /parcial/i.test(i.situacao) ? "info" : /aumentar/i.test(i.situacao) ? "gold" : ""}">${esc(i.situacao)}</span>` : ""}<b class="num">${d1(i.pontos)} / ${d1(i.max)}</b></span></div>${i.regra ? `<div class="xs muted">${esc(i.regra)}</div>` : ""}${i.ganho > 0 ? `<div class="xs gold">Pode ganhar mais ${d1(i.ganho)}</div>` : ""}${(i.comprovantes || []).length ? `<ul class="xs" style="margin:6px 0 0;padding-left:18px">${i.comprovantes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${i.comentario ? `<p class="xs" style="margin:6px 0 0">${esc(i.comentario)}</p>` : ""}</div>`).join("")}</div></details></div>`; }).join("")}</div>
    ${ks.length > 1 ? `<div class="row" style="margin-top:10px"><button class="btn sm ghost" data-a="apagarAnalises">Remover todas as ${ks.length} análises</button></div>` : ""}
