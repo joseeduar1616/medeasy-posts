@@ -1,0 +1,46 @@
+{
+ "slug": "2026-10-24-1200-usprp-2027-fecha-segunda",
+ "pillar": "vagas e concorrência",
+ "header": ["EDITAL", "USP-RP 2027"],
+ "verified_on": "2026-10-24",
+ "sources": [
+  "https://www.grupomedcof.com.br/blog/edital-residencia-medica-usp-rp/ (218 vagas de acesso direto por programa, inscrições 06/10 0h a 26/10 16h no site do HCFMRP-USP, pagamento até 26/10, R$ 800 acesso direto e R$ 650 pré-requisito, prova 20/11 às 13h, 100 questões, mínimo 50%, pesos 0,5+0,5 em 6 programas e 0,5+0,4+0,1 nos demais, currículo 27/11 a 01/12, prática 05/12, notas 07/12, final 17/12)",
+  "https://www.medway.com.br/conteudos/residencia-medica-usp-rp/ (conferência: 218 vagas acesso direto, inscrições até 16h de 26/10, R$ 800, prova 20/11 13h em Ribeirão Preto, pesos 50/50 e 50/40/10, currículo 27/11 a 01/12 com 5 itens, prática 05/12, final 17/12; links para editais oficiais e hcribeirao.sp.gov.br)",
+  "https://www.otempo.com.br/educacao/2026/10/10/residencia-do-hc-de-ribeirao-preto-inscricao-vai-ate-26-10-prova-e-em-20-de-novembro-e-sao-218-vagas (conferência: 218 vagas em 22 programas, inscrição até 26/10 16h, R$ 800, prova 20/11 13h em Ribeirão Preto, 6 programas com 2 fases e 16 com 3, currículo 0,1)",
+  "https://med.estrategia.com/portal/noticias/usp-rp-inscricoes-residencia-medica-2027/ e https://med.estrategia.com/portal/noticias/usp-rp-edital-residencia-medica-2027/ (conferência: inscrições 0h de 06/10 a 16h de 26/10, R$ 800 e R$ 650, boleto até 26/10, prova 20/11, lista dos programas com e sem análise curricular, currículo 27/11 a 01/12, prática 05/12, final 17/12)"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "USP-RP", "title": ["USP RIBEIRÃO:", "<span class='g glow'>FECHA SEGUNDA</span>"], "body": "As inscrições do <b>HCFMRP-USP</b> vão só até <b>26/10, às 16h</b>. Veja as vagas, a taxa e se precisa de currículo.", "bullets": ["218 vagas de acesso direto", "Precisa de currículo?", "Cronograma até o resultado"]},
+  {"type": "rows", "label": "Inscrição", "title": ["VAGAS E <span class='y'>INSCRIÇÃO</span>"], "sub": "Hospital das Clínicas da FMRP-USP", "rows": [
+    {"name": "Vagas de acesso direto", "sub": "Em 22 programas", "value": "218"},
+    {"name": "Inscrições", "sub": "Só pelo site do HCFMRP-USP", "value": "26/10 16h"},
+    {"name": "Taxa", "sub": "Acesso direto. Pré-requisito: R$ 650", "value": "R$ 800"},
+    {"name": "Prova objetiva", "sub": "Sexta, às 13h, em Ribeirão Preto", "value": "20/11"}
+  ], "note": "O boleto também vence em <b>26/10</b>. São 100 questões e é preciso acertar <b>pelo menos 50%</b>."},
+  {"type": "grid", "label": "Acesso direto", "title": ["ONDE ESTÃO <span class='g'>AS VAGAS</span>"], "sub": "Programas com mais vagas abertas", "cells": [
+    {"v": "35", "k": "Clínica Médica"},
+    {"v": "20", "k": "Pediatria"},
+    {"v": "16", "k": "Ginecologia e Obstetrícia"},
+    {"v": "15", "k": "Cirurgia Geral"},
+    {"v": "15", "k": "Medicina de Família"},
+    {"v": "14", "k": "Neurologia"},
+    {"v": "14", "k": "Psiquiatria"},
+    {"v": "12", "k": "Anestesiologia"}
+  ], "box": {"h": "Poucas vagas", "x": "Neurocirurgia 3, Otorrino 4, Dermatologia 6 e Oftalmologia 9."}},
+  {"type": "rows", "label": "Currículo", "title": ["PRECISA DE <span class='g'>CURRÍCULO?</span>"], "sub": "Depende do programa, e só depois da prova", "rows": [
+    {"name": "16 programas", "sub": "Prova 50%, prova prática 40%, currículo 10%", "value": "SIM"},
+    {"name": "6 programas", "sub": "Prova 50% e prova prática 50%", "value": "NÃO"},
+    {"name": "Envio do currículo", "sub": "Só para quem passar na prova", "value": "27/11 a 01/12"}
+  ], "note": "<b>Sem currículo:</b> Anestesiologia, Cirurgia Cardiovascular, Cirurgia Geral, Oftalmologia, Ortopedia e Patologia."},
+  {"type": "rows", "label": "Cronograma", "title": ["DA PROVA AO <span class='y'>RESULTADO</span>"], "sub": "Datas do edital de acesso direto", "rows": [
+    {"name": "Prova objetiva", "sub": "Gabarito no mesmo dia, após 20h", "value": "20/11"},
+    {"name": "Classificados e notas de corte", "sub": "Após 18h", "value": "27/11"},
+    {"name": "Prova prática", "sub": "5 estações, uma por grande área", "value": "05/12"},
+    {"name": "Notas da prática e do currículo", "sub": "A partir das 12h", "value": "07/12"},
+    {"name": "Resultado final", "sub": "Após 18h", "value": "17/12"}
+  ]},
+  {"type": "cta", "title": ["SALVA PARA", "<span class='g glow'>NÃO PERDER</span>"], "pill": "SALVA", "body": "e manda para quem vai<br>prestar com você.", "note": "Vai prestar USP-RP? Chama a <b>MedEasy</b> no direct para organizar o seu currículo.", "small": "Fonte: edital de acesso direto HCFMRP-USP 2027, conferido com MedCof, Medway, Estratégia MED e O Tempo. Confira o edital do seu programa."}
+ ],
+ "story": {"kicker": "USP-RP 2027", "cta": "Inscrições até <span>segunda, 16h</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "⏰ USP RIBEIRÃO PRETO 2027: FECHA SEGUNDA\n\nAs inscrições da residência médica do HC da FMRP-USP vão até segunda, 26/10, às 16h, só pelo site do hospital. O boleto também vence nesse dia. A taxa é de R$ 800 no acesso direto e R$ 650 nos programas com pré-requisito.\n\nSão 218 vagas de acesso direto em 22 programas. Clínica Médica tem 35, Pediatria 20 e GO 16. A prova objetiva é na sexta, 20/11, às 13h, em Ribeirão Preto, com 100 questões e mínimo de 50% de acertos.\n\nPrecisa de currículo? Depende do programa. Em 16 deles, a nota é prova 50%, prova prática 40% e currículo 10%, com envio de 27/11 a 01/12 só para quem passar. Anestesio, Cirurgia Cardiovascular, Cirurgia Geral, Oftalmo, Ortopedia e Patologia não têm currículo, só prova e prática.\n\nArrasta para ver o cronograma até o resultado final, em 17/12. Salva e manda para quem vai prestar com você 📌\n\nVai prestar USP-RP? Qual especialidade? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#usprp #residenciamedica #residencia2027 #ribeiraopreto #hcfmrp #medicina"
+}
