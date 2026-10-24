@@ -41,3 +41,19 @@ jobs:
           path: _site
       - id: deploy
         uses: actions/deploy-pages@v4
+
+      # Confere se o domínio já entrega a versão nova (site.txt) e mostra como ele manda guardar a página.
+      # Se a versão no ar demorar a mudar, o cache está no caminho (navegador ou Cloudflare).
+      - name: Conferir o site no ar
+        run: |
+          esperado=$(cat portal/site.txt)
+          for i in 1 2 3 4 5 6; do
+            noar=$(curl -s "https://curriculosmedeasy.com.br/site.txt?t=$(date +%s)" | tr -d '\n')
+            echo "esperado $esperado, no ar $noar"
+            [ "$noar" = "$esperado" ] && break
+            sleep 20
+          done
+          echo "--- cabeçalhos da página"
+          curl -sI https://curriculosmedeasy.com.br/ | grep -iE "cache-control|age:|cf-cache-status|server|expires|last-modified|etag" || true
+          echo "--- versão dentro do index.html"
+          curl -s https://curriculosmedeasy.com.br/ | grep -o 'VERSAO_SITE = "[^"]*"' || echo "index sem VERSAO_SITE (versão antiga)"
