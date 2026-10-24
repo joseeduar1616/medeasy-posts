@@ -1,0 +1,34 @@
+{
+ "slug": "2026-10-24-1800-agenda-provas-datas-que-batem",
+ "pillar": "calendário e prazos",
+ "header": ["AGENDA", "PROVAS 2027"],
+ "verified_on": "2026-10-24",
+ "sources": [
+  "Unicamp 15/11: med.estrategia.com/portal/noticias/unicamp-edital-residencia-medica-2027/ (editais FCM Unicamp), conferido em posts/2026-10-14-1800-unicamp-2027-fecha-amanha.json",
+  "USP-RP 20/11: edital HCFMRP-USP, conferido com MedCof, Medway, Estratégia MED e O Tempo em posts/2026-10-24-1200-usprp-2027-fecha-segunda.json",
+  "AMRIGS 22/11: Edital nº 08/2026 Fundatec, posts/2026-10-19-1715-amrigs-2027-prorrogada.json",
+  "PSU-MG 22/11: aremg.org.br Retificação nº 4 (15/10, prova mantida), posts/2026-10-18-0715-psumg-2027-prorrogada.json",
+  "PSU-GO 29/11: Retificação nº 1 AGRM/AREMG (20/10, demais datas inalteradas), posts/2026-10-20-2115-psugo-2027-prorrogada.json",
+  "Unifesp 29/11: edital Vunesp, posts/2026-10-20-1200-unifesp-2027-guia.json",
+  "USP-SP 06/12: fuvest.br Edital COREME/FM nº 02/2026",
+  "SES-GO 06/12: Edital nº 24/2026 COREME SES-GO (Instituto Verbena/UFG)",
+  "SES-DF 12/12: Edital Normativo nº 1 RM-1/SES/DF/2027 (IADES)",
+  "UNESP 12/12 às 14h: med.estrategia.com/portal/noticias/unesp-edital-residencia-medica-2027/, MedCof e Medgrupo, posts/2026-10-22-1200-unesp-2027-guia.json",
+  "SUS-SP 13/12: vunesp.com.br/SESA2601",
+  "log/news_seen.md, varreduras até 24/10 17h: nenhuma mudança de data nessas provas"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "AGENDA DE PROVAS", "title": ["4 DATAS QUE", "<span class='y glow'>BATEM</span>"], "body": "São <b>11 provas</b> entre 15/11 e 13/12, e em quatro datas caem duas provas grandes no mesmo dia.", "bullets": ["Data de cada prova", "Precisa de currículo?", "Onde você vai ter que escolher"]},
+  {"type": "table", "label": "Novembro", "title": ["PROVAS EM <span class='y'>NOVEMBRO</span>"], "sub": "Data da prova objetiva", "headers": ["PROVA", "DATA", "CURRÍCULO?"], "rows": [["Unicamp", "15/11", "SIM"], ["USP-RP", "20/11", "DEPENDE"], ["AMRIGS", "22/11", "DEPENDE"], ["PSU-MG", "22/11", "SIM"], ["PSU-GO", "29/11", "SIM"], ["Unifesp", "29/11", "SIM"]], "note": "A USP-RP é numa <b>sexta</b>. Na AMRIGS e na USP-RP, o currículo vale só nos programas que adotam."},
+  {"type": "table", "label": "Dezembro", "title": ["PROVAS EM <span class='y'>DEZEMBRO</span>"], "sub": "Data da prova objetiva", "headers": ["PROVA", "DATA", "CURRÍCULO?"], "rows": [["USP-SP", "06/12", "SIM"], ["SES-GO", "06/12", "SIM"], ["SES-DF", "12/12", "NÃO"], ["UNESP", "12/12", "DEPENDE"], ["SUS-SP", "13/12", "NÃO"]], "note": "Na UNESP, só 4 programas não têm currículo. SES-DF e UNESP caem num <b>sábado</b>."},
+  {"type": "cards", "label": "Atenção", "title": ["ONDE VOCÊ VAI <span class='g'>ESCOLHER</span>"], "sub": "Duas provas no mesmo dia", "cards": [
+    {"num": "1", "h": "22/11", "tag": "AMRIGS e PSU-MG", "p": "Domingo. A AMRIGS começa às <b>9h</b>."},
+    {"num": "2", "h": "29/11", "tag": "PSU-GO e Unifesp", "p": "Domingo. A Unifesp começa às <b>13h</b>."},
+    {"num": "3", "h": "06/12", "tag": "USP-SP e SES-GO", "p": "Domingo, as duas à tarde: São Paulo ou Goiânia."},
+    {"num": "4", "h": "12/12", "tag": "SES-DF e UNESP", "p": "Sábado. A UNESP começa às <b>14h</b>."}
+  ], "note": "Antes de pagar uma taxa, veja se a data não bate com outra prova que você quer fazer."},
+  {"type": "cta", "title": ["MONTA SUA", "<span class='g glow'>AGENDA</span>"], "pill": "SALVA", "body": "e manda para quem vai<br>prestar com você.", "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.", "small": "Fontes: editais 2027 de Unicamp, HCFMRP-USP, AMRIGS (Fundatec), AREMG (PSU-MG e PSU-GO), Unifesp, UNESP e SUS-SP (Vunesp), FMUSP (FUVEST), COREME SES-GO e SES-DF (IADES). Datas podem mudar: confira o edital."}
+ ],
+ "story": {"kicker": "AGENDA 2027", "cta": "Quatro datas com <span>duas provas</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "📅 4 DATAS QUE BATEM NAS PROVAS DE RESIDÊNCIA 2027\n\nEntre 15/11 e 13/12 caem 11 provas de residência, e em quatro datas duas provas grandes acontecem no mesmo dia: AMRIGS e PSU-MG em 22/11, PSU-GO e Unifesp em 29/11, USP-SP e SES-GO em 06/12, e SES-DF e UNESP no sábado, 12/12.\n\nNo carrossel tem a data de cada prova e se ela tem análise de currículo. PSU-MG, PSU-GO, SES-GO, USP-SP, Unifesp e Unicamp têm. SES-DF e SUS-SP não. Na AMRIGS, na USP-RP e na UNESP depende do programa.\n\nAntes de pagar uma taxa, confira se a data não bate com outra prova que você quer fazer. Salva e manda para quem vai prestar com você 📌\n\nQual dupla de provas vai te fazer escolher? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #residencia2027 #psumg #psugo #sesgo #provasderesidencia"
+}
