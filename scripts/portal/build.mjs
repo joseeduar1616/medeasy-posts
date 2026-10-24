@@ -190,7 +190,7 @@ function juntarProva(provas, pr) {
 /* Coluna "Controle de certificados": JSON colado do site (certificados, alocação por item e pendências) */
 function lerControle(t) {
   if (!t) return null;
-  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], fichas: j.fichas || {}, v: j.v || 1 }; }
+  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], fichas: j.fichas || {}, analises: j.analises || {}, v: j.v || 1 }; }
   catch { console.warn("Controle de certificados com JSON inválido, ignorado"); return null; }
 }
 /* Coluna "Certificados por item": uma linha por prova, "PSU-GO: 2=2; 4=3; 9=/0,5" (item=certificados, /pontos digitados) */
@@ -247,6 +247,9 @@ async function montar(linhas) {
       if (c && process.env.PORTAL_CORRETOR_SEPARADO === "1") repasses.push({ pessoa: c, papel: "Corretor", servico: l.id, valor: l.valorCorretor, pago: l.corretorPago, data: l.dataPagCorretor || "" });
       if (l.valorMedeasy != null) repasses.push({ pessoa: "MedEasy", papel: "Empresa", servico: l.id, valor: l.valorMedeasy, pago: true, data: "" });
     }
+    // Análises gravadas pelo site no controle do cliente (análise padrão colada ou PDF importado pelo mentor): entram nas provas e no portal
+    const controle = lerControle(g.linhas.map(l => l.controleTexto).find(t => t && t.trim()));
+    for (const pr of Object.values((controle && controle.analises) || {})) if (pr && pr.nome && Array.isArray(pr.itens) && pr.itens.length) juntarProva(provas, { ...pr, nome: pr.provaEscolhida || pr.nome });
     const id = (await hmac("id:" + g.chave)).slice(0, 8).reduce((a, b) => a + b.toString(16).padStart(2, "0"), "");
     clientes.push({
       id, chave: g.chave, nome: g.nome, whatsapp: g.telefone, codigo: await codigoDe(g.chave),
@@ -255,7 +258,7 @@ async function montar(linhas) {
       origem: g.linhas.map(l => l.origem).find(Boolean) || "", desconto: [...new Set(g.linhas.flatMap(l => l.desconto).filter(d => d && d !== "NENHUM"))],
       financeiro: { total, pago, pagamentos }, repasses, mentoria: temMensal ? { mensal: true, valor: mensalidade } : null,
       contagem: lerTextoCont(g.linhas.map(l => l.contTexto).filter(Boolean).join("\n")),
-      controle: lerControle(g.linhas.map(l => l.controleTexto).find(t => t && t.trim())),
+      controle,
       nCert: Math.max(...g.linhas.map(l => l.nCert ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nCert ?? -1)) : null,
       nArtigos: Math.max(...g.linhas.map(l => l.nArtigos ?? -1)) >= 0 ? Math.max(...g.linhas.map(l => l.nArtigos ?? -1)) : null,
       tipos: [...new Set(g.linhas.flatMap(l => l.tipos.map(t => semAcento(t))))],
