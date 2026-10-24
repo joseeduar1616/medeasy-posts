@@ -27,7 +27,7 @@ O `wrangler.toml` tem um agendamento a cada 10 minutos que dispara a sincroniza�
 
 ## O que ele aceita
 
-- `POST /pagina` com `{ id, props }`: grava nas colunas permitidas da linha do cliente (Status, Pagamento, Tipo de serviço, Certificados por item, Controle de certificados, datas, Mentor, Corretor, Trainee, Telefone). Mentor pago, Valor total, Desconto e Forma de pagamento só com a senha de administrador no cabeçalho `X-Admin`.
+- `POST /pagina` com `{ id, props }`: grava nas colunas permitidas da linha do cliente (Status, Pagamento, Tipo de serviço, Certificados por item, Controle de certificados, datas, Mentor, Corretor, Trainee, Telefone). Mentor pago, Valor total, Desconto e Forma de pagamento só para administrador (José e Eduardo, veja no fim).
 - `POST /triagem` com `{ id?, props, arquivar? }`: cria ou atualiza a linha na base "Triagem MedEasy" (TRIAGEM_DB). Só mexe em páginas dessa base.
 - `POST /cliente` com `{ props }`: cria o cliente que fechou no "Controle cliente" (CLIENTES_DB) e pede a sincronização.
 - `POST /feedback/enviar` com `{ codigo, mentor, publico?, particular? }`: a única rota sem a senha da equipe. Confere se o código é de um cliente que existe (o arquivo cifrado dele no site, em SITE) e grava na base "Feedback MedEasy", criando a base se precisar. Não guarda o código. A parte particular vai sem nome. Um envio a cada 2 minutos por cliente.
