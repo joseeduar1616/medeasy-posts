@@ -53,7 +53,7 @@ Frase de identificação ou humor, com 2 a 4 trechos em **negrito**. Ao lado, as
 12. Domingo à noite e a semana **já montada** em volta da **escala**. Telas: rotina, assistente
 
 
-## Memes com foto (14:52, feitos sozinhos no Canva)
+## Memes com foto da IA (parado em 25/10: selo de IA e pouco alcance)
 
 Texto do tweet em primeira pessoa e a cena da foto que o Canva gera. Marque `~~...~~ *(saiu em DD/MM)*` quando sair. Quando acabar, invente novas no mesmo tom.
 
@@ -92,3 +92,20 @@ O app tem cronograma do ciclo clínico, que é o que serve pra esse público.
 8. Quando um amigo do **4º ano** diz que já começou a revisar pro **ENAMED**. Foto: estudante olhando de lado com desconfiança na biblioteca
 9. Eu montando o cronograma do **internato** pela quinta vez. Foto: estudante cercado de post-its na parede, olhar perdido
 10. O som que a minha cabeça faz depois de **12h de plantão** no internato. Foto: interno deitado de pijama cirúrgico no banco do vestiário, olhando o teto
+
+## Memes que divulgam (14:52, desde 25/10)
+
+A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(saiu em DD/MM)*`.
+
+1. A1 · Eu fingindo que não vi as **revisões vencidas** pra conseguir dormir. Tela: revisoes *(pronto: `posts/2026-10-26-revisoes-vencidas-meme.json`)*
+2. A2 · POV: saiu do internato às 23h e abriu o caderno. "E agora, estudo o quê?" O Cadência Med já separou a revisão de hoje. *(pronto: `videos/v5.js`)*
+3. A1 · Eu às 23h jogando o PDF da aula no **Cadência Med** e os **flashcards** saindo prontos. Tela: cartoes_ia *(pronto)*
+4. A1 · Meu amigo jurando que estudou **o dia todo**. O ranking da nossa sala no Cadência Med: (ranking) *(pronto)*
+5. A2 · Eu antes do Cadência Med: planilha, Anki, cronômetro e caderno. Eu depois: uma tela. (etiquetas riscadas e tela Hoje)
+6. A1 · O mentor de IA do **Cadência Med** olhando meu painel antes de **montar minha semana**. Tela: assistente
+7. A2 · Níveis de cansaço no internato, do 1 ao 5, e o 5 é abrir o Cadência Med e a semana já estar montada. (escada com os níveis)
+8. A1 · Quando você conta seus **plantões** pro Cadência Med e ele devolve a **semana pronta**. Tela: rotina
+9. A1 · Eu mandando o conteúdo do **ciclo clínico** pro Cadência Med e ele entrando no lugar das aulas. Tela: cronograma (ciclo clínico)
+10. A2 · "Vou revisar depois" × o Cadência Med com a revisão marcada pra daqui 1 semana, 1 mês, 2, 4 e 6 meses.
+11. A1 · Pagar **R$ 25 por mês** no anual e parar de montar cronograma na mão. Tela: planos
+12. A2 · POV: seu amigo te chamou pra sala do Cadência Med e agora você tá em **último** no ranking.

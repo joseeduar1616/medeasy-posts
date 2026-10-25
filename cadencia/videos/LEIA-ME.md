@@ -12,6 +12,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v2.js` | Pergunta frequente: quanto custa (R$ 39 por mês, R$ 300 por ano, 7 dias de garantia) | 32 s |
 | `v3.js` | O app em 30 segundos: cronograma, ciclo clínico, revisão, flashcards, foco e ranking | 36 s |
 | `v4.js` | Nicho internato e ENAMED: 100 questões, 20 por área | 32 s |
+| `v5.js` | Meme animado (caminho A2 do AGENTES.md): POV 23h, "e agora, estudo o quê?" | 16 s |
 
 ## Como gerar
 

@@ -1,100 +1,106 @@
 # Agentes do Cadência Med
 
-Dois agentes rodam todo dia, sozinhos, por pedido do José (22/10/2026):
+Três agentes rodam todo dia, sozinhos, por pedido do José (22/10 e 25/10/2026):
 
 | Agente | Horário (Brasília) | O que faz |
 |---|---|---|
-| Meme do dia | 14:52 | Cria o meme sozinho (foto feita pela IA do Canva na arte de tweet), publica no feed (Reel) e no story |
+| Carrossel do dia | 09:52 | Carrossel de 7 slides no estilo de lançamento (dor na capa e telas reais do app) |
+| Meme do dia | 14:52 | Meme que divulga o Cadência Med, feito aqui em alta, no feed e no story |
 | Turbinar | 19:47 | Coloca o meme novo como anúncio no conjunto certo (nicho ou geral), tira os que não rendem e põe mais dinheiro no conjunto que dá visita mais barata, com teto de R$ 15 por dia |
 
-Os dois começam igual a qualquer rotina daqui: leia antes o `LEIA-ME.md`
+Os três começam igual a qualquer rotina daqui: leia antes o `LEIA-ME.md`
 (começo da execução, regras de texto e como subir arquivos).
 
-## O que funciona (até 22/10/2026)
+## O que funciona (até 25/10/2026)
 
 - **Pago:** o Reel de meme "Meu estado mental faltando 1 mês para as provas de Residência" gastou R$ 206 e
   trouxe 2.087 visitas ao site, cerca de R$ 0,10 por visita (CTR de 5,5%). O carrossel de concorrência saiu
   R$ 0,76 por visita, e os Reels com tela do app, R$ 0,85.
 - **Orgânico:** depois do lançamento, os Reels tiveram 165 a 390 contas alcançadas e os carrosséis 37 a 55.
-- **Formato que ganhou:** a arte de tweet (`molde-tweet.png`), um texto curto em primeira pessoa
-  ("Meu estado mental faltando 1 mês pra prova de residência", "Quando me perguntam o tamanho do meu conteúdo
-  atrasado", "Como eu revisava antes de conhecer o Cadência Med") e, dentro do cartão, um vídeo viral de pessoa
-  reagindo, com o áudio original.
-- **O José não gostou** do Reel com telas do app passando dentro do cartão (22/10). Não use mais `midia` com prints no post do dia.
+- **Formato que ganhou:** a arte de tweet com texto curto em primeira pessoa e, dentro do cartão, um vídeo
+  viral de pessoa reagindo, com o áudio original.
+- **O José não gostou** do Reel com telas do app passando dentro do cartão (22/10).
+- **Foto da IA do Canva não serve mais (25/10):** os três memes ficaram entre 39 e 63 contas, com 82% a 89%
+  de pulo, o Instagram põe o selo "Conteúdo de IA" e o vídeo exportado do Canva sai borrado no feed. Não use
+  `generate-image` nem o desenho `DAHYxSBc_kA` no post do dia.
+- **Pedido do José (25/10):** os memes têm que divulgar o Cadência Med, e o carrossel volta todo dia.
 
 ---
 
 ## 1. Meme do dia (14:52)
 
-O agente faz o meme inteiro sozinho, sem o José mandar nada (pedido dele em 22/10).
-Os sites de vídeo e banco de imagens não abrem daqui, e repostar vídeo viral de outra
-pessoa tem risco de direito autoral e de imagem. Por isso a foto do meme é feita pela
-IA do Canva (pessoa que não existe, sem direito de ninguém) e a montagem sai do Canva.
+O agente faz o meme inteiro sozinho e em alta, sem o José mandar nada. Todo meme divulga o Cadência Med:
+o nome do app aparece no texto do tweet ou a imagem é uma tela real do app (ou as duas coisas).
 
 **Qual caminho usar hoje:**
 1. Tem vídeo na pasta do Drive "Cadência Med · memes" (`1qkfX5z2T6zCgAebXPz4wJSX6U7T3Kn2H`)? Caminho B.
-2. Senão, se o post de ontem foi de foto da IA e a pasta "Cadência Med · memes famosos"
-   (`1ClSHXlSwaB2feWe23qsMCfl8Tu2-T2Mh`) tem imagem que não saiu nos últimos 14 dias? Caminho C.
-3. Senão, caminho A (foto da IA). Nunca avise que a pasta está vazia: as pastas são opcionais.
+2. Senão, a pasta "Cadência Med · memes famosos" (`1ClSHXlSwaB2feWe23qsMCfl8Tu2-T2Mh`) tem imagem que não
+   saiu nos últimos 14 dias e o meme de ontem não foi famoso? Caminho C.
+3. Senão, alterne entre o caminho A1 (meme com tela do app, foto) e o A2 (meme animado, Reel): se ontem foi
+   A1, hoje é A2, e o contrário. Nunca avise que a pasta está vazia: as pastas são opcionais.
 
-Depois de 14 dias alternando, compare no `historico.md` o alcance e as visitas ao perfil de A e C e
-passe a usar mais o que rende mais (anote a decisão aqui).
+Depois de 14 dias, compare no `historico.md` alcance, visitas ao perfil e pulo de A1, A2 e C e passe a usar
+mais o que rende mais (anote a decisão aqui).
 
 ### Antes de tudo
 
 0. **Meme pronto na fila.** Se a seção "Memes prontos na fila" do `historico.md` tiver item, publique o
-   primeiro dela (exporte de novo o design do Canva anotado, jpg e mp4, e siga do passo 6 do caminho A) e
-   tire da fila. Não crie outro nesse dia.
-
+   primeiro dela (os arquivos já estão em `publicado/<id>/`) e tire da fila. Não crie outro nesse dia.
 1. **Desempenho.** Leia os últimos 14 dias no Windsor (como no LEIA-ME, com `media_reel_skip_rate` e
-   `media_reel_avg_watch_time`) e preencha o "Alcance depois" no `historico.md`. Se já houver Reel publicado
+   `media_reel_avg_watch_time`) e preencha o "Alcance depois" no `historico.md`. Se já houver meme publicado
    hoje, não publique outro.
-2. **Texto do tweet.** Pegue a próxima pauta de "Memes com foto" no `pautas.md` (ou invente uma no mesmo tom
-   quando acabar). Uma frase em primeira pessoa sobre a vida de quem presta residência (prova chegando,
-   plantão, revisão, conteúdo atrasado, simulado, internato, ranking com os amigos). Pode citar o Cadência Med
-   no fim ("Como eu revisava antes de conhecer o Cadência Med").
+2. **Texto do tweet.** Pegue a próxima pauta de "Memes que divulgam" no `pautas.md` (ou invente uma no mesmo
+   tom quando acabar). Uma frase em primeira pessoa sobre a vida de quem presta residência (prova chegando,
+   plantão, revisão, conteúdo atrasado, simulado, internato, ranking com os amigos) com o Cadência Med na piada.
    - Até 3 linhas, 1 ou 2 trechos em **negrito**.
-   - Nada de conteúdo médico, número inventado ou promessa de aprovação.
+   - Nada de conteúdo médico, número inventado ou promessa de aprovação. Só função que existe no app.
    - **Nicho (pedido do José em 22/10):** pelo menos 3 memes por semana falam de quem está no 3º e 4º ano,
      entrando no internato ou se preparando pro ENAMED (pautas "Nicho internato e ENAMED" no `pautas.md`).
      Nesses, use as hashtags #enamed #internato #medicinagoiania. Fato do ENAMED só o que está no
      `pautas.md` (vem do edital). Não use o nome da UFG nem de outra faculdade no texto.
    - Olhe os números: se um tema de meme rendeu bem, faça outro parecido.
 
-### Caminho A: foto da IA do Canva (o normal)
+### Caminho A1: meme com tela do app (foto no feed)
 
-1. **Foto.** `generate-image` do Canva, `aspectRatio: SQUARE_1_1`, prompt em inglês no molde:
-   "Candid realistic photo, meme reaction style: <cena da pauta, com estudante de medicina ou residente
-   brasileiro, roupa de plantão ou jaleco quando fizer sentido, expressão bem exagerada>. Slightly grainy
-   phone-camera look. No text, no logos, no watermarks."
-   Espere com `get-generate-image-job` até SUCCESS e olhe a prévia. Gere de novo (no máximo 2 vezes) se a
-   expressão não casar com o texto, se aparecer letra, logo, mão deformada ou paciente. Varie quem aparece
-   (homem, mulher, idades e tons de pele diferentes). Guarde o `media id` (MA...).
-2. **Moldura com o texto.** JSON `cadencia/posts/AAAA-MM-DD-slug-meme.json` com `id`, `formato: "tweet"`,
-   `imagem_ia: true`, `texto`, `prompt` (o que foi pro Canva) e `legenda` (regras do LEIA-ME, com "Marca quem
-   tá na mesma" ou "Manda pra quem..." e "Teste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br").
-   Rode `python3 cadencia/tweet.py <json>`: sai `publicado/<id>/moldura.png` (arte com o texto e a área da
-   foto vazada) e `previa-texto.jpg`. Abra a prévia e confira o texto.
-3. **Subir a moldura.** Commit de `posts/<id>.json` e `publicado/<id>/`, `git pull --rebase origin main`, push.
-   No Canva, `upload-asset-from-url` com o link raw da `moldura.png` (do commit) e nome `cadencia-<id>`.
-4. **Montar no Canva.** O desenho base é "Cadência Med · meme base" (`DAHYxSBc_kA`); a página 2 tem a foto
-   (top 898, left 189, 702 x 705) e a moldura por cima (página inteira).
-   - `copy-design` de `DAHYxSBc_kA` com `page_numbers: [2]` (guarde o `design_id` novo);
-   - `read-design` com `open_transaction: true` pra ver os dois elementos;
-   - `edit-design` com `update_fill` na foto (o elemento de 702 x 705) com o media id da IA e na moldura
-     (o de 1080 x 1920) com o media id da moldura, mais `update_title` "Meme <data> <slug>";
-   - em seguida `crop_media` na moldura com top 0, left 0, width 1080, height 1920 (o `update_fill`
-     amplia a imagem uns 2% e desalinha o furo da foto);
-   - olhe a miniatura que volta (texto, foto e moldura no lugar) e `commit`.
-5. **Exportar.** `export-design` do design novo: `jpg` (width 1080, height 1920, quality 92) e
-   `mp4` (`quality: "vertical_1080p"`). Os links que voltam são públicos por algumas horas: use logo.
-6. **Publicar.** Windsor `execute_action`, conector `instagram`, conta `17841456884640989`:
-   - `create_video_post` com `video_url` = link do mp4, `cover_url` = link do jpg, `caption` = legenda,
-     `share_to_feed: true`;
-   - logo depois, `create_story` com `image_url` = link do jpg.
-   Se der timeout, confira os posts do dia antes de tentar de novo.
-7. **Registrar** no `historico.md` (data, hora, formato "Reel meme IA", texto, `design_id` do Canva, media_id do
-   Reel e do story, link) e marque a pauta como saída. Commit e push. O `design_id` é o que o Turbinar usa.
+1. **JSON** `cadencia/posts/AAAA-MM-DD-slug-meme.json` com `id`, `formato: "meme-print"`, `texto`, `imagem` e
+   `legenda` (regras do LEIA-ME, com "Marca quem..." ou "Manda pra quem..." e "Teste 3 dias grátis, sem cartão.
+   Link na bio 👉 cadenciamed.com.br", hashtags com #memesdemedicina). `imagem` é uma destas:
+   - `{"print": "<nome>", "recorte": [x, y, largura, altura]}`, tela real de `prints/` (tabela no LEIA-ME), com
+     `"selo": "Tela real do Cadência Med"`. Recortes que funcionam: revisoes `[290,225,660,190]`,
+     cartoes_ia `[210,0,840,450]`, assistente `[225,255,830,300]`, rotina `[205,378,520,300]`,
+     cronograma `[662,126,352,188]` (ciclo clínico), planos `[205,440,845,230]`. Prefira recorte em que a parte
+     importante da tela fique grande.
+   - `{"ranking": [["Você","11h05",1],["Marina","8h30"],["Seu amigo","1h40"]]}` (sala com amigos, desenhado).
+   Modelos: `posts/2026-10-26-revisoes-vencidas-meme.json`, `posts/2026-10-27-pdf-flashcards-meme.json`,
+   `posts/2026-10-28-ranking-meme.json`.
+2. **Gerar.** Se `cadencia/node_modules/playwright` não existir, rode antes `./cadencia/preparar.sh` em qualquer
+   carrossel ou `cd cadencia && npm i --no-save playwright@1.56`. Depois `node cadencia/meme.mjs <json>`: sai
+   `publicado/<id>/feed.jpg` (1080x1350) e `story.jpg` (1080x1920). Abra os dois (Read) e confira texto e imagem.
+3. **Subir.** Commit de `posts/<id>.json` e `publicado/<id>/`, `git pull --rebase origin main`, push. Confira um
+   link raw com `curl -sI` (200).
+4. **Publicar.** Windsor `execute_action`, conector `instagram`, conta `17841456884640989`:
+   `create_image_post` com `image_url` = raw do `feed.jpg` e `caption` = legenda, e depois `create_story` com
+   `image_url` = raw do `story.jpg`. Se der timeout, confira os posts do dia antes de tentar de novo.
+5. **Registrar** no `historico.md` (data, hora, formato "Meme com tela", texto, media_id do post e do story,
+   link) e marque a pauta como saída. Commit e push.
+
+### Caminho A2: meme animado (Reel)
+
+Usa o gerador de `cadencia/videos/` (leia o `videos/LEIA-ME.md`): texto grande aparecendo palavra por palavra
+em fundo escuro, um elemento no meio (etiquetas, carimbo, escada de revisão, tela do app) e o cartão final
+"Teste 3 dias grátis". De 14 a 18 s: cena 1 com o gancho do meme (bloco `pergunta` com rótulo "POV" ou frase
+grande), cena 2 com o exagero (etiquetas e carimbo), cena 3 com o Cadência Med resolvendo e a cena final.
+Modelo: `videos/v5.js` (POV 23h).
+
+1. Escreva `cadencia/videos/<id>.js` no modelo e a legenda num JSON `posts/<id>.json` (`formato: "meme-animado"`).
+2. Gere fora do repositório como manda o `videos/LEIA-ME.md` (prévia com `render.mjs <v> previa`, depois o
+   vídeo, a trilha com `som.py` e o ffmpeg que junta). Comprima pra subir: `ffmpeg -i <mp4> -c:v libx264
+   -preset medium -crf 23 -maxrate 10M -bufsize 20M -c:a copy -movflags +faststart publicado/<id>/reel.mp4`
+   e tire a capa com `ffmpeg -ss 2 -i reel.mp4 -frames:v 1 -q:v 3 publicado/<id>/capa.jpg`. Leva uns 10 minutos.
+3. Abra 3 quadros da prévia antes de gerar o vídeo inteiro.
+4. Subir como no A1 e publicar: `create_video_post` (`video_url` raw do `reel.mp4`, `cover_url` raw da
+   `capa.jpg`, `caption`, `share_to_feed: true`) e `create_story` com o mesmo `video_url`.
+5. Registrar como no A1, com formato "Meme animado".
 
 ### Caminho B: vídeo que o José deixou no Drive
 
@@ -125,17 +131,28 @@ imagem pode voltar com outro texto, desde que não repita nos últimos 14 dias.
    Entenda a reação do meme e o texto que ele já tem.
 3. **Texto do tweet** que casa com a reação, pelas regras de cima. Nunca escreva o nome da pessoa da imagem,
    nunca ponha fala inventada na boca dela e nunca diga que ela usa ou indica o Cadência Med.
-4. **JSON** com `foto` (caminho do arquivo baixado), `texto` e `legenda`. No JSON que vai pro repositório,
-   troque o caminho da `foto` pelo nome e id do arquivo no Drive.
-5. **Gerar.** `python3 cadencia/tweet.py <json>` (precisa do `imageio-ffmpeg`): sai `reel.mp4` parado de 6 s e
-   `capa.jpg`. Abra a capa e confira: a imagem entra inteira, sem cortar o texto que ela tem.
+4. **JSON** com `formato: "meme-print"`, `imagem: {"arquivo": "<caminho do arquivo baixado>"}`, `texto` (com o
+   Cadência Med na piada, sem dizer que a pessoa usa o app) e `legenda`. No JSON que vai pro repositório,
+   troque o caminho do `arquivo` pelo nome e id do arquivo no Drive.
+5. **Gerar.** `node cadencia/meme.mjs <json>`: sai `feed.jpg` e `story.jpg`. Abra e confira: a imagem entra
+   inteira, sem cortar o texto que ela tem (se cortar, ponha `"recorte"` com a imagem toda).
 6. **Subir** só `posts/<id>.json` e `publicado/<id>/` (a imagem original nunca vai pro GitHub), pull com rebase, push.
-7. **Publicar.** `create_video_post` (`video_url` raw do `reel.mp4`, `cover_url` raw da `capa.jpg`, `caption`,
-   `share_to_feed: true`) e `create_story` com `image_url` raw da `capa.jpg`.
-8. **Registrar** no `historico.md` (formato "Reel meme famoso", nome do arquivo no Drive, media_ids, link). Commit e push.
+7. **Publicar** como no A1: `create_image_post` com o `feed.jpg` e `create_story` com o `story.jpg`.
+8. **Registrar** no `historico.md` (formato "Meme famoso", nome do arquivo no Drive, media_ids, link). Commit e push.
 
 **Meme famoso nunca vira anúncio.** Usar a imagem de famoso pra vender o app em anúncio pago tem risco de
-direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A e B.
+direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A1, A2 e B.
+
+---
+
+## 3. Carrossel do dia (09:52)
+
+Volta todo dia desde 25/10 (pedido do José). Siga a "Rotina de cada dia" e o "Passo a passo" do `LEIA-ME.md`:
+7 slides no estilo de lançamento, molde `posts/2026-10-25-nao-lembro-nada.json`, pauta do `pautas.md`
+(a próxima que não saiu, marque `~~...~~ *(saiu em DD/MM)*`). Pelo menos 3 slides com `print` real e não
+repita a tela da capa do dia anterior. Uma vez por semana a pauta pode ser do nicho internato e ENAMED.
+Publica com `create_carousel_post` e registra no `historico.md` como "Carrossel 7 slides".
+Se já houver carrossel publicado hoje, não publique outro.
 
 ---
 
@@ -164,9 +181,12 @@ direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A e 
    Preencha o resultado em `turbinadas.md`.
 2. **Meme novo.** Pra cada Reel meme publicado nas últimas 30 h que ainda não está em `turbinadas.md`
    (só "Reel meme IA" e "Reel meme vídeo", nunca "Reel meme famoso"):
-   - `create_ad_video` com o `video_url`: no meme de IA, exporte de novo o design do Canva anotado no
-     `historico.md` (`export-design` mp4 `vertical_1080p` e jpg pra capa), porque os links do Canva vencem
-     em poucas horas; no meme de vídeo, o link raw do `reel.mp4`;
+   - meme em vídeo (A2 e B): `create_ad_video` com o link raw do `reel.mp4`, e no `create_ad` abaixo o
+     `video_data` com `image_url` = raw da `capa.jpg`;
+   - meme em foto (A1): sem vídeo. No `create_ad`, use `object_story_spec` com `link_data`
+     (`picture` = raw do `feed.jpg`, `link` = https://cadenciamed.com.br, `message`, `call_to_action` SIGN_UP).
+     Se o Meta recusar, anote o erro em `turbinadas.md` e turbine só os memes em vídeo;
+   - memes antigos de foto da IA (até 25/10) têm o `design_id` do Canva no `historico.md`: não entram mais;
    - `create_ad` no conjunto `120251603405840345` (ou no de nicho `120251603906260345`, se o meme for de
      internato, 4º ano ou ENAMED), nome "Meme <data> <slug>", `status: active`, com
      `creative.object_story_spec` = `page_id` 1411404442052391, `instagram_user_id` 17841456884640989 e

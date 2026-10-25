@@ -37,6 +37,9 @@
 
 O agente do meme publica o primeiro daqui antes de criar outro (veja AGENTES.md).
 
-| Meme | JSON | Design do Canva |
+| Meme | Formato | Arquivos |
 |---|---|---|
+| Eu fingindo que não vi as revisões vencidas pra conseguir dormir | A1, foto | `posts/2026-10-26-revisoes-vencidas-meme.json`, `publicado/2026-10-26-revisoes-vencidas-meme/` |
+| Eu às 23h jogando o PDF da aula no Cadência Med e os flashcards saindo prontos | A1, foto | `posts/2026-10-27-pdf-flashcards-meme.json`, `publicado/2026-10-27-pdf-flashcards-meme/` |
 - 25/10: o José mandou dois vídeos de referência (texto animado em cima de fundo escuro, palavra por palavra, com destaque colorido) e pediu vídeos nesse estilo com as informações do site. Feitos 4 (plantão, quanto custa, o app em 30 segundos, internato e ENAMED) em `publicado/2026-10-25-videos/`, com o gerador em `videos/` e as legendas em `videos/legendas.md`. O José posta na mão. Quando saírem, anotar aqui o alcance pra comparar com os memes de foto da IA, que estão com 89% de pulo.
+- 25/10, 15h: o José viu o meme da IA no feed com o selo "Conteúdo de IA" e borrado, e pediu memes que divulguem o Cadência e o carrossel de volta. Saiu o caminho A (foto da IA no Canva). Agora os memes são feitos aqui em alta: A1 (tweet com tela real do app, foto 4:5 no feed e story) e A2 (meme animado em Reel, com o gerador de `videos/`). Carrossel "Estudei mês passado e não lembro nada" publicado às 15:15 (media_id 18103448012039978) e o carrossel diário das 09:52 voltou.
