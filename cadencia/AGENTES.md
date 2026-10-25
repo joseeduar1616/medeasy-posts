@@ -54,7 +54,8 @@ mais o que rende mais (anote a decisão aqui).
 1. **Desempenho.** Leia os últimos 14 dias no Windsor (como no LEIA-ME, com `media_reel_skip_rate` e
    `media_reel_avg_watch_time`) e preencha o "Alcance depois" no `historico.md`. Se já houver meme publicado
    hoje, não publique outro.
-2. **Texto do tweet.** Pegue a próxima pauta de "Memes que divulgam" no `pautas.md` (ou invente uma no mesmo
+2. **Texto do tweet.** Pegue o meme do dia no "Plano da semana" do `viralizacao.md` ou, sem plano, a próxima
+   pauta de "Memes que divulgam" no `pautas.md` (ou invente uma no mesmo
    tom quando acabar). Uma frase em primeira pessoa sobre a vida de quem presta residência (prova chegando,
    plantão, revisão, conteúdo atrasado, simulado, internato, ranking com os amigos) com o Cadência Med na piada.
    - Até 3 linhas, 1 ou 2 trechos em **negrito**.
@@ -153,8 +154,8 @@ direito de imagem e o Meta costuma reprovar. O Turbinar só usa os caminhos A1, 
 ## 3. Carrossel do dia (09:52)
 
 Volta todo dia desde 25/10 (pedido do José). Siga a "Rotina de cada dia" e o "Passo a passo" do `LEIA-ME.md`:
-7 slides no estilo de lançamento, molde `posts/2026-10-25-nao-lembro-nada.json`, pauta do `pautas.md`
-(a próxima que não saiu, marque `~~...~~ *(saiu em DD/MM)*`). Pelo menos 3 slides com `print` real e não
+7 slides no estilo de lançamento, molde `posts/2026-10-25-nao-lembro-nada.json`. A pauta é a do dia no
+"Plano da semana" do `viralizacao.md`; sem plano pro dia, a próxima do `pautas.md` que não saiu (a próxima que não saiu, marque `~~...~~ *(saiu em DD/MM)*`). Pelo menos 3 slides com `print` real e não
 repita a tela da capa do dia anterior. Uma vez por semana a pauta pode ser do nicho internato e ENAMED.
 Publica com `create_carousel_post` e registra no `historico.md` como "Carrossel 7 slides".
 Se já houver carrossel publicado hoje, não publique outro.
