@@ -85,7 +85,7 @@ O app tem cronograma do ciclo clínico, que é o que serve pra esse público.
 1. ~~Eu no **4º ano** lembrando que o ENAMED cobra as **5 áreas** em 100 questões~~ *(pronto em 22/10, design DAHYxWGZ_yg, saiu em 24/10)*
 2. ~~Eu entrando no **internato** jurando que ia estudar **depois do plantão**~~ *(pronto em 22/10, design DAHYxZ0zSRk, saiu em 23/10)*
 3. O **primeiro dia** de internato vs o **primeiro mês** de internato. Foto: estudante de jaleco impecável sorrindo, e o mesmo cansado e amassado (gerar duas e usar a segunda)
-4. Quando a coordenação manda o e-mail do **ENAMED** e você ainda tá no **ciclo clínico**. Foto: estudante lendo o celular com cara de susto no corredor da faculdade
+4. ~~Quando a coordenação manda o e-mail do **ENAMED** e você ainda tá no **ciclo clínico**~~ *(saiu em 25/10, design DAHZCcJ58IA)*
 5. Eu tentando lembrar **Pediatria** do 3º ano porque o ENAMED cobra **20 questões** dela. Foto: estudante coçando a cabeça diante de um caderno antigo
 6. Meu grupo da turma dividindo a escala do **internato** como se fosse **guerra**. Foto: estudantes em volta de uma mesa olhando uma planilha impressa, tensos
 7. Eu no ambulatório fingindo que lembro a **dose** que estudei no **3º ano**. Foto: estudante de jaleco com sorriso amarelo segurando prancheta

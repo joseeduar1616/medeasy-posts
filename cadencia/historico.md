@@ -11,10 +11,11 @@
 | 11/10/2026 | 08:50 a 14:55 | 5 Reels de meme | Atraso, 1 mês pra prova, confiança, revisão, ranking | perfil | 165 a 300 contas, 66% a 78% de pulo |
 | 16/10/2026 | 15:18 | Carrossel 6 slides | Atrasou o cronograma? | https://www.instagram.com/p/DekKKhMiJxZ/ | 47 contas |
 | 21/10/2026 | 11:32 | Carrossel 7 slides (estilo lançamento) | Plantão de 12h e a aula ficou pra depois (`posts/2026-10-21-semana-com-plantao.json`, media_id 18118727726062342) | https://www.instagram.com/p/DewoWY_DZOm/ | 40 contas, 1 visita (37 em 26 h) |
-| 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | 39 contas, 71 views, 81% de pulo, 14 s de média |
+| 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | 39 contas, 77 views, 82% de pulo, 14 s de média (3 dias) |
 | 22/10/2026 | 18:15 | Story meme IA (teste) | Eu às 3h da manhã jurando que amanhã eu começo a revisar direito (`posts/2026-10-22-teste-ia.json`, Canva `DAHYxSBc_kA` página 2, story 18428106304159152) | story | (teste, só story) |
-| 23/10/2026 | 14:54 | Reel meme IA + story (nicho) | Eu entrando no internato jurando que ia estudar depois do plantão (`posts/2026-10-22-internato-meme.json`, Canva `DAHYxZ0zSRk`, Reel 18128083216860041, story 18564470875075324) | https://www.instagram.com/reel/De2JAQzjdBZ/ | 60 contas, 103 views, 89% de pulo, 4 s de média em 21 h |
-| 24/10/2026 | 14:55 | Reel meme IA + story (nicho) | Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões (`posts/2026-10-22-enamed-meme.json`, Canva `DAHYxWGZ_yg`, Reel 18014643902975818, story 17914682283285618) | perfil (link a conferir) | (preencher) |
+| 23/10/2026 | 14:54 | Reel meme IA + story (nicho) | Eu entrando no internato jurando que ia estudar depois do plantão (`posts/2026-10-22-internato-meme.json`, Canva `DAHYxZ0zSRk`, Reel 18128083216860041, story 18564470875075324) | https://www.instagram.com/reel/De2JAQzjdBZ/ | 63 contas, 111 views, 88% de pulo, 4,9 s de média (2 dias) |
+| 24/10/2026 | 14:55 | Reel meme IA + story (nicho) | Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões (`posts/2026-10-22-enamed-meme.json`, Canva `DAHYxWGZ_yg`, Reel 18014643902975818, story 17914682283285618) | https://www.instagram.com/reel/De4t0dtj__s/ | 41 contas, 91 views, 83% de pulo, 3,2 s de média em 24 h |
+| 25/10/2026 | 14:56 | Reel meme IA + story (nicho) | Quando a coordenação manda o e-mail do ENAMED e você ainda tá no ciclo clínico (`posts/2026-10-25-email-enamed-meme.json`, Canva `DAHZCcJ58IA`, foto IA MAHZCbHzu5w, Reel 17930907531422957, story 18341781508257955) | perfil (link a conferir) | (preencher) |
 
 ## Anotações de desempenho
 
@@ -30,6 +31,7 @@
 - 22/10: o José contou que ninguém criou conta no site, mesmo com 2.191 visitas pelos anúncios (R$ 289 gastos). O site não tem o Pixel da Meta, então o Meta otimiza só clique. Pedido dele: ir pra nichos, como medicina em Goiânia, quem vai entrar no internato e quem se prepara pro ENAMED. Criado o conjunto de nicho (pausado) com dois memes de foto da IA. O nicho vira pelo menos 3 memes por semana.
 - 24/10: o meme de internato (23/10) teve 60 contas em 21 h, com 89% de pulo e 4 s de média. Publicado o meme do ENAMED que estava na fila (segundo meme de nicho seguido). A fila ficou vazia, então amanhã volta o caminho A com pauta nova.
 - 23/10: o Reel tweet de 22/10 teve só 39 contas em 21 h, com 81% de pulo, mas quem ficou assistiu 14 s em média. Primeiro meme da fila (internato, nicho) publicado às 14:54 com o mp4 e o jpg exportados do Canva.
+- 25/10: o meme do ENAMED (24/10) ficou com 41 contas e 3,2 s de média, abaixo do de internato (63). Os três memes de foto da IA estão entre 39 e 63 contas, com 82% a 88% de pulo. Pastas do Drive vazias, então saiu o caminho A de novo, com a pauta de nicho 4 (terceiro meme de nicho da semana).
 
 ## Memes prontos na fila
 
