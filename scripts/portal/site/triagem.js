@@ -192,6 +192,9 @@ function triagemView(){
 }
 /* Opções de orçamento, do mais simples ao mais completo */
 function opcoesTri(t){
+  // Orçamento lido de um PDF pronto: usa as opções dele (ainda dá para mexer em "Editar à mão")
+  const imp = t.orcImportado && (t.orcImportado.opcoes || []).length ? t.orcImportado.opcoes : null;
+  if (imp) return imp.map(o => ajustarOpcao({ ...o, linhas:o.linhas.map(l => ({ ...l })), bruto:r2(o.linhas.reduce((s, l) => s + (l.valor || 0), 0)), desconto:0, completo:o.linhas.every(l => l.valor != null), importado:true }, (t.ajuste || {})[o.letra]));
   const c = clienteDaTriagem(t); const ops = [];
   const extra = []; if (t.drive) extra.push({ desc:"Organização dos certificados no drive", conta:"1", valor:75 });
   const montar = (letra, titulo, tipos) => { const e = estimarJS({ ...c, tipos }); if (!e) return; const linhas = [...e.linhas, ...extra]; const bruto = r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)); const desc = Math.min(10, Math.max(0, num(t.desconto))); ops.push({ letra, titulo, tipos, linhas, bruto, desconto:desc, total:r2(bruto * (1 - desc / 100)), completo:e.completo }); };
@@ -210,11 +213,11 @@ function opcoesTri(t){
 }
 /* Ajustes feitos à mão no orçamento: título, cada linha (pela descrição automática), linhas a mais e valor final */
 function ajustarOpcao(o, a){
-  if (!a) return { ...o, linhas:o.linhas.map(l => ({ ...l, orig:l.desc })) };
+  if (!a) return { ...o, linhas:o.linhas.map(l => ({ ...l, orig:l.desc })), total:o.totalPdf != null ? o.totalPdf : o.total };
   const linhas = o.linhas.map(l => { const x = (a.linhas || {})[l.desc]; if (!x) return { ...l, orig:l.desc };
     return { ...l, orig:l.desc, desc:x.desc != null && x.desc !== "" ? x.desc : l.desc, conta:x.conta != null && x.conta !== "" ? x.conta : l.conta, valor:x.valor != null && x.valor !== "" ? num(x.valor) : l.valor, manual:true }; }).filter(l => !(a.linhas || {})[l.orig]?.fora);
   (a.extras || []).forEach((x, i) => linhas.push({ desc:x.desc || "", conta:x.conta || "1", valor:x.valor === "" || x.valor == null ? null : num(x.valor), extra:i, manual:true }));
-  const bruto = r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)); const total = a.total != null && a.total !== "" ? num(a.total) : r2(bruto * (1 - o.desconto / 100));
+  const bruto = r2(linhas.reduce((s, l) => s + (l.valor || 0), 0)); const total = a.total != null && a.total !== "" ? num(a.total) : o.totalPdf != null && !a.linhas && !a.extras ? o.totalPdf : r2(bruto * (1 - o.desconto / 100));
   return { ...o, titulo:a.titulo || o.titulo, linhas, bruto, total, totalManual:a.total != null && a.total !== "", manual:true, completo:linhas.every(l => l.valor != null) };
 }
 const NOTA_ORC = "Valor estimado com os certificados recebidos. Pode variar em até 3 certificados para mais ou para menos após a conferência completa de cada edital. Pagamento de 50% na contratação e o restante após a versão para conferência.";
@@ -243,7 +246,48 @@ function orcInput(el){
   // Redesenha depois que o foco passou para o próximo campo, e devolve o foco a ele
   setTimeout(() => { const Q = "input, textarea, select, button"; const i = [...document.querySelectorAll(Q)].indexOf(document.activeElement); render(); if (i >= 0){ const novo = document.querySelectorAll(Q)[i]; if (novo){ novo.focus(); if (novo.select && novo.tagName === "INPUT") try { novo.select(); } catch {} } } }, 0);
 }
+/* Orçamento pronto em PDF (o do site ou outro no mesmo jeito): "OPÇÃO A", linhas com o valor no fim e "VALOR TOTAL: R$ ..." */
+const dinheiroT = s => { const m = String(s || "").match(/(-)?\s*R\$\s*(-)?\s*([\d.]+,\d{2}|\d+(?:\.\d{2})?)/); if (!m) return null; const v = Number(m[3].includes(",") ? m[3].replace(/\./g, "").replace(",", ".") : m[3]); return (m[1] || m[2]) ? -v : v; };
+function lerOrcamentoTexto(txt){
+  const linhas = String(txt || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n").map(l => l.replace(/\s+$/, "")).filter(l => l.trim());
+  const cab = /OP[ÇC][ÃA]O\s+([A-Z])\b/i; const segs = []; let atual = null;
+  for (const l of linhas){ const m = l.match(cab); if (m && (/OR[ÇC]AMENTO/i.test(l) || l.trim().length < 40)){ atual = { letra:m[1].toUpperCase(), ls:[] }; if (!segs.some(s => s.letra === atual.letra)) segs.push(atual); else atual = segs.find(s => s.letra === atual.letra);
+    // o título pode vir na mesma linha do "OPÇÃO A" (depois dele, sem a data)
+    const resto = l.replace(/^.*?OP[ÇC][ÃA]O\s+[A-Z]\b/i, "").replace(/DATA:.*$/i, "").replace(/\d{2}\/\d{2}\/\d{4}/, "").trim(); if (/[A-ZÁÉÍÓÚÂÊÔÃÕÇ]{4}/.test(resto)) atual.ls.push(resto); continue; } (atual || (segs[0] ||= (atual = { letra:"A", ls:[] }))).ls.push(l); }
+  const ROT = /^\s*((DATA|CLIENTE|CPF|MENTOR)\s*:|DESCRI[ÇC][ÃA]O|QUANTIDADE|VALOR\b)/i;
+  return segs.map(sg => {
+    let titulo = "", total = null, mensal = false; const its = []; let naTabela = false, tituloFechado = false;
+    for (const l of sg.ls){
+      const tl = l.trim();
+      const tot = tl.match(/VALOR TOTAL\s*:?\s*(.*)$/i); if (tot){ total = dinheiroT(tot[1]); mensal = /POR M[ÊE]S/i.test(tot[1]); naTabela = false; continue; }
+      if (/^DESCRI[ÇC][ÃA]O\b/i.test(tl)){ naTabela = true; continue; }
+      if (!naTabela){
+        // título: as linhas em maiúsculas logo depois do "OPÇÃO A", até CLIENTE, DATA ou a tabela (pode quebrar em duas linhas)
+        const ehTitulo = !ROT.test(tl) && /[A-ZÁÉÍÓÚÂÊÔÃÕÇ]{4}/.test(tl) && tl === tl.toUpperCase() && !/^\(?\d{2}\)/.test(tl) && !/^\d{2}\/\d{2}\/\d{4}$/.test(tl);
+        if (!tituloFechado && ehTitulo) titulo = (titulo + " " + tl.replace(/\s{2,}.*$/, "")).trim(); else if (titulo || ROT.test(tl)) tituloFechado = tituloFechado || !!titulo || /^\s*(CLIENTE|CPF|MENTOR)\s*:/i.test(tl);
+        continue; }
+      const v = tl.match(/(-\s*R\$\s*[\d.]+,\d{2}|R\$\s*-?[\d.]+,\d{2}|a definir)\s*$/i);
+      if (v){ const antes = tl.slice(0, v.index).trim(); const cols = antes.split(/\s{2,}/); const desc = cols.length > 1 ? cols.slice(0, -1).join(" ") : cols[0]; const conta = cols.length > 1 ? cols[cols.length - 1] : "";
+        its.push({ desc:desc.replace(/\s+20\d\d:/, ":"), conta, valor:/a definir/i.test(v[1]) ? null : dinheiroT(v[1]) }); }
+      else if (its.length) its[its.length - 1].desc = (its[its.length - 1].desc + " " + tl).replace(/\s+20\d\d:/, ":");
+    }
+    const linhasOk = its.filter(i => i.desc);
+    return { letra:sg.letra, titulo:titulo || `OPÇÃO ${sg.letra}`, linhas:linhasOk, totalPdf:total, total:total != null ? total : r2(linhasOk.reduce((s, l) => s + (l.valor || 0), 0)), mensal,
+      tipos:/MENTORIA MENSAL/i.test(titulo) ? ["mentoria"] : /MENTORIA INDIVIDUAL/i.test(titulo) ? ["mentoriaInd"] : /LATTES/i.test(titulo) && !/VITAE/i.test(titulo) ? ["lattes", "certificados"] : /LATTES/i.test(titulo) ? ["vitae", "lattes"] : /^AN[ÁA]LISE CURRICULAR$/i.test(titulo.trim()) ? ["analise"] : ["vitae"] };
+  }).filter(o => o.linhas.length || o.totalPdf != null);
+}
+async function importarOrcPdf(input){
+  const t = triDe(S.sel); const f = input.files && input.files[0]; input.value = ""; if (!t || !f) return;
+  toast("Lendo o orçamento");
+  try {
+    const ops = lerOrcamentoTexto(await textoDoPdf(f));
+    if (!ops.length) throw new Error("Não achei as opções e os valores nesse PDF. Ele precisa ter as linhas com R$ e o VALOR TOTAL");
+    t.orcImportado = { arquivo:f.name, em:Date.now(), opcoes:ops }; t.ajuste = {}; salvarTri(t); S.orcEdit = false; render();
+    toast(`Orçamento lido: ${ops.map(o => `opção ${o.letra} ${brl(o.total)}${o.mensal ? " por mês" : ""}`).join(", ")}`);
+  } catch (e) { toast(e.message || "Não consegui ler o PDF"); }
+}
 const A_ORC = {
+  orcAuto: () => { const t = triDe(S.sel); if (!t || !confirm("Voltar ao orçamento automático? O PDF lido deixa de ser usado.")) return; delete t.orcImportado; t.ajuste = {}; salvarTri(t); render(); toast("Orçamento automático de novo"); },
   orcEditar: () => { S.orcEdit = !S.orcEdit; render(); },
   orcLinha: el => { const t = triDe(S.sel); const a = ((t.ajuste ||= {})[el.dataset.l] ||= {}); (a.extras ||= []).push({ desc:"", conta:"1", valor:"" }); salvarTri(t); render(); },
   orcTirar: el => { const t = triDe(S.sel); const a = ((t.ajuste ||= {})[el.dataset.l] ||= {}); if (el.dataset.x != null) a.extras.splice(+el.dataset.x, 1); else ((a.linhas ||= {})[el.dataset.k] ||= {}).fora = true; salvarTri(t); render(); },
@@ -281,7 +325,7 @@ function triagemItemView(){
       <label class="f"><span>Observações</span><textarea class="in" data-tri="obs" rows="2">${esc(t.obs || "")}</textarea></label></div></section>
     <section class="card" id="triProvas"><div class="card-h"><h2>Provas</h2></div>${c.provas.length ? `<div class="list">${c.provas.map(p => { const cp = calcDe(c, p); return `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${ANO}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) + " (" + quando(p.prazoEnvio) + ")" : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div></div>${cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : ""}</div>`; }).join("")}</div>` : `<div class="empty">Marque as provas acima</div>`}</section>
    </div><div class="stack">
-    <section class="card" id="triOrc"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
+    <section class="card" id="triOrc"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${t.orcImportado ? `<span class="pill gold" title="${esc(t.orcImportado.arquivo || "")}">Do PDF</span><button class="btn sm ghost" data-a="orcAuto">Voltar ao automático</button>` : `<label class="btn sm" style="cursor:pointer" title="Usa as opções e os valores de um orçamento em PDF que já foi feito">Usar PDF pronto<input type="file" accept=".pdf,application/pdf" hidden data-orcpdf="1"></label>`}${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
       ${ops.length && S.orcEdit ? orcEditor(t, ops) : ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}${o.mensal ? " por mês" : ""}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${esc(foraTxt(l))}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
       <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, msgOrc(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
     ${analiseCard(c)}
