@@ -34,7 +34,7 @@ async function blocosDoPdf(arquivo){
       if (f === O.save) pilha.push(m); else if (f === O.restore) m = pilha.pop() || [1, 0, 0, 1, 0, 0]; else if (f === O.transform) m = mult(m, ops.argsArray[i]);
       else if (IMG.has(f) && Math.hypot(m[0], m[1]) * Math.hypot(m[2], m[3]) > area * 0.12) grandes++; }
     const texto = textos[n - 1] || "";
-    blocos.push({ texto, certs:grandes || (texto.length > 80 && PARECE_CERT.test(texto) ? 1 : 0), ref:"página " + n });
+    blocos.push({ texto, certs:grandes, certsTexto:!grandes && texto.length > 80 && PARECE_CERT.test(texto) ? 1 : 0, ref:"página " + n });
   }
   return blocos;
 }
@@ -144,7 +144,8 @@ async function lerCurriculoArquivo(input){
           base.origem = origem; ct.certs.push(base); alocDe(ct, pk, it.key).push({ id:base.id, estado:"pontua" }); });
         // Contagem: o número de certificados do item. Se a nota da ficha for outra (algum não vale), ela fica como pontos.
         const r = (pr[it.key] ||= { ...(it.base || {}) }); const nota = notas.find(n => n.idx === +idx);
-        if (it.unit){ r.n = lista.length; r.pts = nota && Math.abs(Math.min(it.maxN, lista.length * it.unit) - nota.pts) > 0.001 ? nota.pts : ""; } }
+        if (it.unit){ r.n = lista.length; r.pts = nota && Math.abs(Math.min(it.maxN, lista.length * it.unit) - nota.pts) > 0.001 ? nota.pts : ""; }
+        else r.n = lista.length; } // item sem valor por certificado: os pontos vêm da ficha, e o número entra no orçamento
       salvarCtrl(c);
     }
     if (!c.triagem) reg.rascunho = true; reg.copiado = false; gravarRasc(c.id); S.ciProva[c.id] = pk; render();

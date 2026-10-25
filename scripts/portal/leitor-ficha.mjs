@@ -103,7 +103,12 @@ export function lerFichaDoEdital(texto) {
 
 // Código do item ("1", "1.1", "3a", "E1") e palavras do título, para casar com as linhas do currículo
 const codigoF = item => (String(item).match(/^\s*([0-9]{1,2}(?:\.[0-9]{1,2})?[a-z]?|[A-Z][0-9]?)[.)]?\s/) || [])[1] || "";
-const palavrasF = s => semAcF(s).replace(/^\s*\S+\s+/, "").replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(w => w.length >= 4);
+const palavrasF = s => semAcF(s).replace(/^\s*\S+\s+/, "").replace(/\([^)]*\)/g, " ").replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(w => w.length >= 4);
+// Número do item no currículo em ordinal ("6º", "6°", "6ª"), como no Vitae MedEasy. No site, o número no começo do nome ("6 Liga", "4a Estágios").
+const ordinalF = l => (String(l).match(/^\s*(\d{1,2})\s*[º°ª](?![0-9])/) || [])[1] || "";
+const numeroItemF = item => (String(item).match(/^\s*(\d{1,2})[a-z]?\b/i) || [])[1] || "";
+// Primeiro item da ficha com aquele número (item dividido em subitens, como 4a e 4b, recebe no primeiro)
+const itemDoOrdinalF = (ficha, n) => n ? (ficha || []).findIndex(it => numeroItemF(it.item) === String(+n)) : -1;
 function numerosFinaisF(l) {
   const m = String(l).match(new RegExp("((?:\\s{2,}[+-]?" + NUM_F + "(?:\\s*(?:pontos?|pts?))?)+)\\s*$", "i"));
   return m ? (m[1].match(new RegExp(NUM_F, "g")) || []).map(numF) : [];
@@ -119,8 +124,21 @@ function normalizarNotaF(l) {
 }
 export function lerNotasDoCurriculo(texto, ficha) {
   const linhas = String(texto || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n").map(normalizarNotaF);
-  const notas = []; let usadas = new Set();
+  const notas = []; let usadas = new Set(); const feitos = new Set();
+  // Ficha do Vitae com "1º", "2º"...: a linha do ordinal dá a nota do item (ou do primeiro subitem do grupo)
+  for (let i = 0; i < linhas.length; i++) {
+    const n = ordinalF(linhas[i]); if (!n) continue; const idx = itemDoOrdinalF(ficha, n); if (idx < 0 || feitos.has(idx)) continue;
+    let nums = [];
+    for (let k = i; k < Math.min(linhas.length, i + 4); k++) { if (k > i && ordinalF(linhas[k])) break; nums = numerosFinaisF(linhas[k]); if (nums.length) { usadas.add(k); break; } }
+    if (!nums.length) continue; usadas.add(i); feitos.add(idx);
+    // o número do grupo vale pelos subitens juntos: usa o maior teto do grupo para conferir
+    const mesmos = (ficha || []).filter(x => numeroItemF(x.item) === String(+n)); const max = mesmos.reduce((a, x) => a + (numF(x.maxN) || 0), 0); const nota = nums[nums.length - 1];
+    if (!max || nota <= max + 0.001) notas.push({ idx, pts: nota, conferir: nums.length === 1 && Math.abs(nota - max) < 0.001 });
+  }
   (ficha || []).forEach((it, idx) => {
+    if (feitos.has(idx)) return;
+    // subitem de um grupo que já recebeu a nota pelo ordinal
+    if (numeroItemF(it.item) && [...feitos].some(j => numeroItemF(ficha[j].item) === numeroItemF(it.item))) return;
     const cod = codigoF(it.item); const pal = palavrasF(it.item).slice(0, 6);
     let achou = -1;
     for (let i = 0; i < linhas.length; i++) {
@@ -161,7 +179,7 @@ export function fichaDoCurriculo(texto) {
 }
 
 // Certificados do currículo pronto (Vitae MedEasy): título do item e, depois, os certificados, um por página (imagem).
-// blocos: na ordem do documento, { texto, certs, ref }. certs = quantos certificados o bloco tem (imagens grandes, ou 1 para página de certificado com texto).
+// blocos: na ordem do documento, { texto, certs, certsTexto, ref }. certs = imagens grandes. certsTexto = 1 quando a página não tem imagem mas o texto parece certificado.
 // O que vem antes do primeiro título (capa, Lattes, documentos) fica de fora. Bloco que cita 3 ou mais itens e não tem certificado é a ficha de pontuação: pula.
 export function certificadosDoCurriculo(blocos, ficha) {
   const chaves = (ficha || []).map(it => palavrasF(it.item).slice(0, 6));
@@ -177,13 +195,18 @@ export function certificadosDoCurriculo(blocos, ficha) {
   };
   const porItem = {}; let atual = -1, total = 0, fora = 0;
   for (const b of blocos || []) {
-    const achados = String(b.texto || "").split("\n").map(casa).filter(i => i >= 0); const distintos = new Set(achados);
+    const ls = String(b.texto || "").split("\n");
+    // Título com ordinal ("6º - LIGA CIENTÍFICA") vale mais que as palavras: as linhas dos comprovantes podem citar outros itens
+    const ords = ls.map(l => itemDoOrdinalF(ficha, ordinalF(l))).filter(i => i >= 0);
+    const achados = ords.length ? ords : ls.map(casa).filter(i => i >= 0); const distintos = new Set(achados);
     if (distintos.size >= 3 && !b.certs) continue;
     if (distintos.size && distintos.size < 3) atual = achados[achados.length - 1];
-    if (b.certs > 0) {
-      if (atual < 0) { fora += b.certs; continue; }
-      for (let k = 0; k < b.certs; k++) (porItem[atual] ||= []).push({ ref: b.ref || "", texto: distintos.size ? "" : String(b.texto || "") });
-      total += b.certs;
+    // certsTexto: página sem imagem que parece certificado. Se ela tem título de item, é a página do título (lista dos comprovantes), não conta.
+    const n = b.certs || (distintos.size ? 0 : (b.certsTexto || 0));
+    if (n > 0) {
+      if (atual < 0) { fora += n; continue; }
+      for (let k = 0; k < n; k++) (porItem[atual] ||= []).push({ ref: b.ref || "", texto: distintos.size ? "" : String(b.texto || "") });
+      total += n;
     }
   }
   return { porItem, total, fora };
