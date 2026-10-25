@@ -159,3 +159,32 @@ export function fichaDoCurriculo(texto) {
   }
   return { ficha, notas };
 }
+
+// Certificados do currículo pronto (Vitae MedEasy): título do item e, depois, os certificados, um por página (imagem).
+// blocos: na ordem do documento, { texto, certs, ref }. certs = quantos certificados o bloco tem (imagens grandes, ou 1 para página de certificado com texto).
+// O que vem antes do primeiro título (capa, Lattes, documentos) fica de fora. Bloco que cita 3 ou mais itens e não tem certificado é a ficha de pontuação: pula.
+export function certificadosDoCurriculo(blocos, ficha) {
+  const chaves = (ficha || []).map(it => palavrasF(it.item).slice(0, 6));
+  const casa = l => {
+    const t = semAcF(l).trim(); if (!t || t.length > 220) return -1;
+    let melhor = -1, nota = 0;
+    chaves.forEach((pal, idx) => {
+      if (!pal.length) return; const comuns = pal.filter(w => t.includes(w)).length;
+      const ok = pal.length === 1 ? new RegExp("^[^a-z0-9]*(?:[0-9]{1,2}(?:\\.[0-9]{1,2})?[a-z]?[.)]?\\s+)?" + pal[0]).test(t) : comuns >= Math.ceil(pal.length * 0.6);
+      const n = comuns / pal.length; if (ok && n > nota) { melhor = idx; nota = n; }
+    });
+    return melhor;
+  };
+  const porItem = {}; let atual = -1, total = 0, fora = 0;
+  for (const b of blocos || []) {
+    const achados = String(b.texto || "").split("\n").map(casa).filter(i => i >= 0); const distintos = new Set(achados);
+    if (distintos.size >= 3 && !b.certs) continue;
+    if (distintos.size && distintos.size < 3) atual = achados[achados.length - 1];
+    if (b.certs > 0) {
+      if (atual < 0) { fora += b.certs; continue; }
+      for (let k = 0; k < b.certs; k++) (porItem[atual] ||= []).push({ ref: b.ref || "", texto: distintos.size ? "" : String(b.texto || "") });
+      total += b.certs;
+    }
+  }
+  return { porItem, total, fora };
+}

@@ -18,6 +18,38 @@ async function textoDoDocx(arquivo){
   if (body) andar(body);
   return linhas.join("\n");
 }
+/* Currículo pronto em blocos, na ordem do documento: { texto, certs, ref }. certs = imagens grandes (o certificado).
+   O logo do cabeçalho e o QR code do verso são pequenos e não contam. Página só de texto que parece certificado conta como 1. */
+const PARECE_CERT = /certific|declara|atesta|participou|concluiu|apresentou/i;
+async function blocosDoPdf(arquivo){
+  const lib = await pdfjs(); const doc = await lib.getDocument({ data:await arquivo.arrayBuffer() }).promise; const O = lib.OPS;
+  const textos = (await textoDoPdf(arquivo)).split("\f").map(t => t.trim());
+  const mult = (a, b) => [a[0] * b[0] + a[2] * b[1], a[1] * b[0] + a[3] * b[1], a[0] * b[2] + a[2] * b[3], a[1] * b[2] + a[3] * b[3], a[0] * b[4] + a[2] * b[5] + a[4], a[1] * b[4] + a[3] * b[5] + a[5]];
+  const IMG = new Set([O.paintImageXObject, O.paintJpegXObject, O.paintInlineImageXObject, O.paintImageXObjectRepeat].filter(x => x != null));
+  const blocos = [];
+  for (let n = 1; n <= doc.numPages; n++){
+    const pg = await doc.getPage(n); const vp = pg.getViewport({ scale:1 }); const area = vp.width * vp.height; const ops = await pg.getOperatorList();
+    let m = [1, 0, 0, 1, 0, 0], grandes = 0; const pilha = [];
+    for (let i = 0; i < ops.fnArray.length; i++){ const f = ops.fnArray[i];
+      if (f === O.save) pilha.push(m); else if (f === O.restore) m = pilha.pop() || [1, 0, 0, 1, 0, 0]; else if (f === O.transform) m = mult(m, ops.argsArray[i]);
+      else if (IMG.has(f) && Math.hypot(m[0], m[1]) * Math.hypot(m[2], m[3]) > area * 0.12) grandes++; }
+    const texto = textos[n - 1] || "";
+    blocos.push({ texto, certs:grandes || (texto.length > 80 && PARECE_CERT.test(texto) ? 1 : 0), ref:"página " + n });
+  }
+  return blocos;
+}
+async function blocosDoDocx(arquivo){
+  const Z = await jszip(); const zip = await Z.loadAsync(await arquivo.arrayBuffer()); const doc = zip.file("word/document.xml"); if (!doc) throw new Error("Esse arquivo não parece um Word (.docx)");
+  const x = new DOMParser().parseFromString(await doc.async("string"), "application/xml"); const W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+  const txt = el => [...el.getElementsByTagNameNS(W, "t")].map(t => t.textContent).join("");
+  // Imagem grande: mais de 12% de uma folha A4 (em EMU)
+  const grandes = el => [...el.getElementsByTagName("*")].filter(e => e.localName === "extent" && e.parentNode && /inline|anchor/.test(e.parentNode.localName)).filter(e => Number(e.getAttribute("cx")) * Number(e.getAttribute("cy")) > 7560000 * 10692000 * 0.12).length;
+  const blocos = []; const body = x.getElementsByTagNameNS(W, "body")[0]; let k = 0;
+  for (const f of body ? body.children : []){ k++;
+    if (f.localName === "p") blocos.push({ texto:txt(f), certs:grandes(f), ref:"parágrafo " + k });
+    else if (f.localName === "tbl") blocos.push({ texto:[...f.getElementsByTagNameNS(W, "tr")].map(tr => txt(tr)).join("\n"), certs:grandes(f), ref:"tabela " + k }); }
+  return blocos;
+}
 async function textoDoArquivo(f){
   if (/\.docx$/i.test(f.name)) return textoDoDocx(f);
   if (/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name)) return textoDoPdf(f);
@@ -95,13 +127,29 @@ async function lerCurriculoArquivo(input){
       await guardarFicha(c, pk, p.nome, r.ficha, `Tirada da ficha do currículo ${f.name}`, null);
       c = clienteSel(); p = (c.provas || []).find(x => kP(x.nome) === pk); itens = itensDaProva(p); notas = r.notas;
     } else { const r = lerNotasDoCurriculo(txt, itens.map(i => ({ item:i.item, maxN:i.maxN }))); notas = r.notas; total = r.total; }
-    if (!notas.length) throw new Error("Não achei as notas dos itens nesse currículo. Ele precisa ter a ficha de pontuação preenchida");
+    // Certificados do currículo: quantos vêm depois do título de cada item
+    let cv = { porItem:{}, total:0, fora:0 };
+    try { const blocos = /\.docx$/i.test(f.name) ? await blocosDoDocx(f) : await blocosDoPdf(f); cv = certificadosDoCurriculo(blocos, itens.map(i => ({ item:i.item }))); } catch (e) { console.warn(e); }
+    if (!notas.length && !cv.total) throw new Error("Não achei as notas nem os certificados dos itens nesse currículo");
     const reg = carregarCont(c); const pr = (reg.provas[pk] ||= {});
     for (const n of notas){ const it = itens[n.idx]; if (!it) continue; const r = (pr[it.key] ||= { ...(it.base || {}) });
       if (it.unit){ const q = Math.round(n.pts / it.unit); r.n = q; r.pts = Math.abs(Math.min(it.maxN, q * it.unit) - n.pts) < 0.001 ? "" : n.pts; } else r.pts = n.pts;
       if (n.conferir) r.com = r.com || "Conferir: o currículo só trazia um número neste item"; }
+    if (cv.total){
+      // Controle: troca os certificados lidos antes do currículo desta prova pelos de agora, cada um ligado ao seu item
+      const ct = ctrlDe(c); const origem = "curriculo:" + pk; const velhos = new Set(ct.certs.filter(x => x.origem === origem).map(x => x.id));
+      ct.certs = ct.certs.filter(x => !velhos.has(x.id)); for (const key of Object.keys(ct.aloc[pk] || {})) ct.aloc[pk][key] = ct.aloc[pk][key].filter(a => !velhos.has(a.id));
+      for (const [idx, lista] of Object.entries(cv.porItem)){ const it = itens[idx]; if (!it) continue; const titulo = it.item.replace(/^\s*\d{1,2}[a-z]?[.)]?\s*/i, "");
+        lista.forEach((x, k) => { const base = x.texto ? certDoTexto(x.texto, `${f.name} (${x.ref})`) : { id:novoIdC(), desc:`${titulo}: certificado ${k + 1}`, tipo:(TIPO_POR_TEXTO.find(([re]) => re.test(titulo)) || [0, "Outro"])[1], ano:"", ch:"", obs:"Lido do currículo pronto, conferir", arquivo:`${f.name} (${x.ref})` };
+          base.origem = origem; ct.certs.push(base); alocDe(ct, pk, it.key).push({ id:base.id, estado:"pontua" }); });
+        // Contagem: o número de certificados do item. Se a nota da ficha for outra (algum não vale), ela fica como pontos.
+        const r = (pr[it.key] ||= { ...(it.base || {}) }); const nota = notas.find(n => n.idx === +idx);
+        if (it.unit){ r.n = lista.length; r.pts = nota && Math.abs(Math.min(it.maxN, lista.length * it.unit) - nota.pts) > 0.001 ? nota.pts : ""; } }
+      salvarCtrl(c);
+    }
     if (!c.triagem) reg.rascunho = true; reg.copiado = false; gravarRasc(c.id); S.ciProva[c.id] = pk; render();
     const cp = calcDe(c, p);
+    if (cv.total) toast(`Currículo lido: ${cv.total} certificados em ${Object.keys(cv.porItem).length} itens, nota ${d1(cp.total)}. Eles entraram no Controle de certificados e na contagem por item. Confira e salve no Notion`); else
     toast(`Currículo lido: ${notas.length} de ${itens.length} itens, nota ${d1(cp.total)}${total != null && Math.abs(total - cp.total) > 0.01 ? ` (o currículo diz ${d1(total)}, confira os tetos)` : ""}. Nos itens por certificado entrou o mínimo de certificados para chegar na nota. Ajuste a quantidade e salve`);
   } catch (e) { toast(e.message || "Não consegui ler o currículo"); }
 }
