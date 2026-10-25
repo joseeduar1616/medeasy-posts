@@ -3,54 +3,77 @@
 Quem atualiza: o agente "Viralização e plano da semana" (domingo, 17:44) com o skill `insta-viralizacao`.
 Os agentes diários leem este arquivo antes de criar o post.
 
-## Padrões que os números mostraram (até 25/10/2026, 148 seguidores)
+## Padrões que os números mostraram (leitura de 25/10/2026, 17:44, últimos 30 dias, 19 posts)
 
-1. **O primeiro segundo decide.** Reels com gancho fraco ou foto parada tiveram 82% a 92% de pulo
-   (memes de foto da IA, 23 a 25/10: 11 a 63 contas). Os memes com vídeo de pessoa real reagindo (11/10)
-   ficaram em 66% a 78% de pulo e 165 a 300 contas.
-2. **Quem passa do gancho assiste.** O Reel tweet com telas do app (22/10) teve 82% de pulo, mas quem ficou
-   assistiu 13,6 s em média. O miolo segura, o problema é o quadro 0: frase grande e legível logo de cara.
-3. **Gancho de identificação + número verdadeiro** é o que mais rende no pago: "Meu estado mental faltando
-   1 mês pra prova" saiu a R$ 0,10 por visita (2.087 visitas). Os outros formatos ficaram entre R$ 0,76 e 0,85.
-4. **Carrossel só passou de 500 contas no lançamento (03/10)**, com "Comente CADÊNCIA" e cupom: os
-   comentários empurraram a entrega. Sem isso, carrossel ficou entre 40 e 55 contas.
-5. **Quase nada é salvo ou compartilhado** (0 a 6 por post). Falta conteúdo que dá vontade de guardar:
-   lista, checklist, cronograma pronto, calendário. Na MedEasy, calendário e prazos são os mais compartilhados.
-6. **Bio:** "Sua preparação para a residência organizada num lugar só! Cronograma, revisão espaçada,
-   flashcards e ranking com os amigos. Comece grátis aqui👇". Sugestão: "App de estudos pra residência e
-   internato · cronograma, revisão e flashcards num lugar só · 3 dias grátis, sem cartão 👇" (o José troca no app).
+1. **Pergunta-desafio no quadro 0 segura mais que qualquer outro gancho.** "Você sobreviveria a uma semana de
+   internato?" (Reel animado, 25/10) teve 58% de pulo, o menor do perfil até hoje, e 71 contas em poucas horas.
+   Os memes com foto da IA ficaram entre 86% e 97% de pulo ("e-mail do ENAMED", 25/10: 97% de pulo e 1,8 s de
+   média). É o mesmo gancho do campeão do nicho ("Você sobreviveria a um dia sendo R1?", 10.613 curtidas).
+2. **Foto parada perde no primeiro segundo.** Os 3 memes de foto da IA (23 a 25/10) ficaram entre 42 e 76
+   contas. Os memes com pessoa real reagindo (11/10) ficaram entre 66% e 78% de pulo e 165 a 300 contas.
+3. **Quem passa do gancho assiste o miolo.** O Reel tweet com telas do app (22/10) teve 82% de pulo, mas
+   13,6 s de média. Falta um quadro 0 forte, o miolo com tela real funciona.
+4. **Identificação + nicho barateia o anúncio.** "Meu estado mental faltando 1 mês pra prova" saiu a R$ 0,10 por
+   visita ao site (R$ 206,03 e 2.087 visitas, e a versão "campeão" repetiu R$ 0,10 com 169 visitas). O meme
+   "ENAMED 4º ano" saiu a R$ 0,38 (58 visitas), o "internato" a R$ 0,59, o carrossel de concorrência a R$ 0,76 e os
+   Reels "escuro" e "claro" a R$ 0,92 e R$ 0,80.
+5. **Carrossel orgânico parou em 21 a 55 contas depois do lançamento.** Só os de 03/10 (657 e 513 contas, 12 e
+   10 seguidores) passaram de 500, com "Comente CADÊNCIA" e cupom. Nenhum carrossel pós-lançamento foi salvo.
+6. **Quase ninguém salva.** 3 salvamentos em 30 dias somando todos os posts. O que mais foi compartilhado foi o
+   meme "confiança de quem chegou na prova com tudo revisado" (6 compartilhamentos em 202 contas): recompensa
+   positiva no fim é o que a pessoa manda pro amigo.
+7. **No nicho, comentário vem de pedido simples com recompensa.** "Caderno de prova liberado" do ENAMED teve
+   8.298 comentários e a questão "cravada" pela professora teve 2.433. Notícia oficial que muda a rotina (receita
+   digital, 12.762 curtidas) e concorrência com número (ENARE, 6.841 curtidas) também lideram. Nas páginas de meme,
+   o campeão é imagem única com legenda curtíssima (10 a 30 mil curtidas).
+8. **Horário:** sem diferença clara pra mudar. O melhor Reel do perfil saiu às 14:55 (300 contas) e os do mesmo
+   dia às 08:50 tiveram 165 a 215, mas são só 5 posts e os do lançamento (09:52) puxam a média. Fica 09:52 e 14:52.
 
-## Perfis do nicho no Windsor (`instagram_public`, desde 25/10)
+## Perfis do nicho no Windsor (`instagram_public`)
 
 Trazem dados: `estrategiamed`, `medway.residenciamedica`, `grupomedcof`, `mentoria.residencia`,
 `memesforstressedmedstudents`. Vêm vazios (perfil pessoal ou sem post recente): `memesmedicina`,
-`med.residenciamedica`, `medicalinmemes`. Peça os 10 posts com mais curtidas + comentários de cada um nos
-últimos 60 dias (a resposta é grande: peça só `account_name`, `media_type`, `media_like_count`,
-`media_comments_count`, `media_caption`, `media_permalink` e resuma num script).
-
-Primeira leitura (25/10, últimos 60 dias): os campeões são notícia oficial que mexe com a rotina (receita
-digital, "OAB da Medicina", nova diretriz), concorrência do ENARE com número, "Você sobreviveria a um dia
-sendo R1?" (vídeo de identificação, 10,6 mil curtidas) e "Caderno de prova liberado" do ENAMED com pedido de
-comentário (8,3 mil comentários). Comentário pra receber algo é o que mais puxa conversa.
+`med.residenciamedica`, `medicalinmemes`. Peça os posts dos últimos 60 dias com `account_name`, `media_type`,
+`media_like_count`, `media_comments_count`, `media_caption`, `media_permalink` e filtro de curtidas (a resposta
+é grande: salve e resuma num script).
 
 ## O que mudar a partir de 26/10
 
-- Meme: foto da IA saiu. Entram o meme com tela real (foto em alta) e o meme animado (Reel com frase grande
-  no quadro 0, quebra de padrão até 3 s com etiqueta ou carimbo, recompensa no fim).
-- Carrossel: 1 em cada 3 vira "pra salvar" (checklist, plano de 7 dias, cronograma de revisão), com a capa
-  dizendo "salva esse" e o último slide pedindo pra mandar pra alguém.
-- Pedir comentário com pergunta fácil de responder com uma palavra ou número ("Quantos plantões essa semana?").
-- Os 4 vídeos de texto animado de 25/10 (plantão, preço, o app em 30 s, ENAMED) o José posta na mão:
-  comparar o pulo deles com os memes.
+- **A2 vira o formato principal do meme**, sempre com pergunta-desafio ou cena no quadro 0 em letra grande
+  ("Você sobreviveria...?", "POV: ..."), uma quebra até os 3 s (horário que muda, carimbo, etiqueta riscada) e a
+  recompensa no fim (a tela do app resolvendo). A1 continua, mas com a frase legível já no primeiro olhar.
+- **Parar:** foto da IA no meme (selo de IA, 86% a 97% de pulo) e carrossel de dica sem gancho (21 a 48 contas).
+- **Carrossel com pergunta na capa** em vez de afirmação, e 1 em cada 3 "pra salvar" (checklist, plano de 7 dias,
+  mapa do ENAMED) com "salva esse" na capa e "manda pra quem..." no último slide.
+- **Recompensa positiva no fim** (alívio, semana pronta, revisão em dia), que é o que gerou compartilhamento.
+- **Pergunta de uma palavra nos comentários** ("Qual área você mais teme no ENAMED?"), como no nicho.
+- **Anúncio:** manter o "estado mental" e testar o A2 "sobreviveria" como anúncio de nicho (internato e ENAMED).
+
+## Sugestões de perfil (o José troca no app)
+
+- **Bio:** "App de estudos pra residência e internato · cronograma, revisão e flashcards num lugar só · 3 dias
+  grátis, sem cartão 👇". A atual não fala do internato, que é o nicho da semana.
+- **Fixar 3 posts:** "Cronograma na planilha..." (657 contas, 12 seguidores), "Terminou a aula. E agora?" (513
+  contas, 40 visitas ao perfil) e "Você sobreviveria a uma semana de internato?" (menor pulo).
 
 ## Plano da semana de 26/10 a 01/11
 
-| Dia | 09:52 carrossel | 14:52 meme |
+Os 3 memes da fila (`historico.md`) saem primeiro, na ordem. O meme alterna A1 e A2. Nicho internato e ENAMED:
+qua, qui, sáb (carrossel e meme) e ter. Pra salvar: ter, sex e sáb.
+
+| Dia | 09:52 carrossel (pauta e gancho da capa) | 14:52 meme (formato e texto) |
 |---|---|---|
-| seg 26 | Errou a mesma questão pela 3ª vez e o caderno de erros | A1 revisões vencidas (fila) |
-| ter 27 | Checklist da semana de plantão (pra salvar) | A2 POV 23h (fila) |
-| qua 28 | 23h montando flashcard na mão e a IA montando do PDF | A1 PDF vira flashcard (fila) |
-| qui 29 | Internato e ENAMED: o ciclo clínico junto do cronograma (nicho) | A2 Eu antes e depois do Cadência Med |
-| sex 30 | Plano de 7 dias pra tirar o atraso (pra salvar) | A1 mentor de IA montando a semana |
-| sáb 31 | Estudar sozinho cansa e a sala com os amigos | A2 níveis de cansaço no internato (nicho) |
-| dom 01 | "Será que dá tempo antes da prova?" e o ritmo com projeção | A1 contei meus plantões e a semana veio pronta (nicho) |
+| seg 26 | Caderno de erros (pauta 4). Capa: "Você erra sempre a mesma questão?" Prints: revisoes, hoje | A1 · Eu fingindo que não vi as **revisões vencidas** pra conseguir dormir (fila) |
+| ter 27 | (pra salvar) Checklist da semana de plantão (pauta 16). Capa: "Salva esse antes do próximo plantão" Prints: rotina, hoje | A2 · POV: saiu do internato às 23h e abriu o caderno (fila, nicho) |
+| qua 28 | (nicho) Internato e ENAMED no mesmo ano (pauta 9). Capa: "Dá pra fazer internato e estudar pro ENAMED junto?" Prints: cronograma, materias | A1 · Eu às 23h jogando o PDF da aula no **Cadência Med** e os **flashcards** saindo prontos (fila) |
+| qui 29 | 23h montando flashcard na mão (pauta 5). Capa: "Quanto tempo você gasta montando flashcard?" Prints: cartoes_ia, revisoes | A2 (nicho) · "Você sobreviveria a um dia de 4º ano com o ENAMED chegando?" Cenas: 7h ambulatório, 13h aula, 19h plantão, 23h Pediatria parada desde o 3º ano. Fim: a semana montada no Cadência Med com o ciclo clínico |
+| sex 30 | (pra salvar) Plano de 7 dias pra tirar o atraso (pauta 17). Capa: "Atrasou? Salva esse plano de 7 dias" Prints: revisoes, assistente | A1 · Meu amigo jurando que estudou **o dia todo**. O ranking da nossa sala no Cadência Med (pronto: `posts/2026-10-28-ranking-meme.json`) |
+| sáb 31 | (nicho, pra salvar) Mapa do ENAMED (pauta 19). Capa: "100 questões, 5 áreas: salva esse mapa do ENAMED" Prints: cronograma, materias | A2 (nicho) · Níveis de cansaço no internato, do 1 ao 5. O 5 é abrir o Cadência Med e a semana já estar montada |
+| dom 01 | Domingo à noite sem saber como vai ser a semana (pauta 13). Capa: "Já sabe o que vai estudar amanhã?" Prints: assistente, rotina | A1 · Quando você conta seus **plantões** pro **Cadência Med** e ele devolve a **semana pronta**. Tela: rotina |
+
+Pergunta da legenda pra cada dia (uma palavra ou número): seg "Qual tema você mais erra?", ter "Quantos
+plantões essa semana?", qua "Que ano você tá?", qui "Quantos flashcards por dia?", sex "Quantas aulas
+atrasadas?", sáb "Qual área você mais teme no ENAMED?", dom "Quantas horas vai estudar amanhã?".
+
+Ideias de vídeo de texto animado (`videos/`) pro José postar: "Você sobreviveria a uma semana de revisão
+atrasada?" e "O que muda quando a revisão vem sozinha", no estilo dos vídeos de 25/10.
