@@ -247,7 +247,8 @@ function orcInput(el){
   setTimeout(() => { const Q = "input, textarea, select, button"; const i = [...document.querySelectorAll(Q)].indexOf(document.activeElement); render(); if (i >= 0){ const novo = document.querySelectorAll(Q)[i]; if (novo){ novo.focus(); if (novo.select && novo.tagName === "INPUT") try { novo.select(); } catch {} } } }, 0);
 }
 /* Orçamento pronto em PDF (o do site ou outro no mesmo jeito): "OPÇÃO A", linhas com o valor no fim e "VALOR TOTAL: R$ ..." */
-const dinheiroT = s => { const m = String(s || "").match(/(-)?\s*R\$\s*(-)?\s*([\d.]+,\d{2}|\d+(?:\.\d{2})?)/); if (!m) return null; const v = Number(m[3].includes(",") ? m[3].replace(/\./g, "").replace(",", ".") : m[3]); return (m[1] || m[2]) ? -v : v; };
+// "R$" na foto pode sair como "RS" ou "R5" na leitura da imagem
+const dinheiroT = s => { const m = String(s || "").match(/(-)?\s*R\s?[$S5]\s*(-)?\s*([\d.]+,\d{2}|\d+(?:\.\d{2})?)/); if (!m) return null; const v = Number(m[3].includes(",") ? m[3].replace(/\./g, "").replace(",", ".") : m[3]); return (m[1] || m[2]) ? -v : v; };
 function lerOrcamentoTexto(txt){
   const linhas = String(txt || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n").map(l => l.replace(/\s+$/, "")).filter(l => l.trim());
   const cab = /OP[ÇC][ÃA]O\s+([A-Z])\b/i; const segs = []; let atual = null;
@@ -261,29 +262,55 @@ function lerOrcamentoTexto(txt){
       const tl = l.trim();
       const tot = tl.match(/VALOR TOTAL\s*:?\s*(.*)$/i); if (tot){ total = dinheiroT(tot[1]); mensal = /POR M[ÊE]S/i.test(tot[1]); naTabela = false; continue; }
       if (/^DESCRI[ÇC][ÃA]O\b/i.test(tl)){ naTabela = true; continue; }
+      // na foto o cabeçalho branco sobre fundo escuro some: a tabela começa na primeira linha que termina em R$
+      if (!naTabela && /R\s?[$S5]\s*-?[\d.]+,\d{2}\s*$/i.test(tl) && !ROT.test(tl)) naTabela = true;
       if (!naTabela){
         // título: as linhas em maiúsculas logo depois do "OPÇÃO A", até CLIENTE, DATA ou a tabela (pode quebrar em duas linhas)
         const ehTitulo = !ROT.test(tl) && /[A-ZÁÉÍÓÚÂÊÔÃÕÇ]{4}/.test(tl) && tl === tl.toUpperCase() && !/^\(?\d{2}\)/.test(tl) && !/^\d{2}\/\d{2}\/\d{4}$/.test(tl);
         if (!tituloFechado && ehTitulo) titulo = (titulo + " " + tl.replace(/\s{2,}.*$/, "")).trim(); else if (titulo || ROT.test(tl)) tituloFechado = tituloFechado || !!titulo || /^\s*(CLIENTE|CPF|MENTOR)\s*:/i.test(tl);
         continue; }
-      const v = tl.match(/(-\s*R\$\s*[\d.]+,\d{2}|R\$\s*-?[\d.]+,\d{2}|a definir)\s*$/i);
-      if (v){ const antes = tl.slice(0, v.index).trim(); const cols = antes.split(/\s{2,}/); const desc = cols.length > 1 ? cols.slice(0, -1).join(" ") : cols[0]; const conta = cols.length > 1 ? cols[cols.length - 1] : "";
+      const v = tl.match(/(-\s*R\s?[$S5]\s*[\d.]+,\d{2}|R\s?[$S5]\s*-?[\d.]+,\d{2}|a definir)\s*$/i);
+      if (v){ const antes = tl.slice(0, v.index).trim(); const cols = antes.split(/\s{2,}/); let desc = cols.length > 1 ? cols.slice(0, -1).join(" ") : cols[0]; let conta = cols.length > 1 ? cols[cols.length - 1] : "";
+        // foto: as colunas vêm separadas por um espaço só. A quantidade é a conta no fim ("100,00 + 35 X 8,50", "35 X 6,50", "1 mês", "1")
+        if (!conta){ const q = desc.match(/\s((?:[\d.]+,\d{2}\s*\+\s*)?\d+\s*[xX×]\s*[\d.]+,\d{2}|\d+\s+m[eê]s(?:es)?|\d{1,2})$/); if (q){ conta = q[1]; desc = desc.slice(0, q.index).trim(); } }
         its.push({ desc:desc.replace(/\s+20\d\d:/, ":"), conta, valor:/a definir/i.test(v[1]) ? null : dinheiroT(v[1]) }); }
       else if (its.length) its[its.length - 1].desc = (its[its.length - 1].desc + " " + tl).replace(/\s+20\d\d:/, ":");
     }
     const linhasOk = its.filter(i => i.desc);
+    titulo = titulo.replace(/VITAE\s*[I|l1]\s*CURR/i, "VITAE/CURR");
     return { letra:sg.letra, titulo:titulo || `OPÇÃO ${sg.letra}`, linhas:linhasOk, totalPdf:total, total:total != null ? total : r2(linhasOk.reduce((s, l) => s + (l.valor || 0), 0)), mensal,
       tipos:/MENTORIA MENSAL/i.test(titulo) ? ["mentoria"] : /MENTORIA INDIVIDUAL/i.test(titulo) ? ["mentoriaInd"] : /LATTES/i.test(titulo) && !/VITAE/i.test(titulo) ? ["lattes", "certificados"] : /LATTES/i.test(titulo) ? ["vitae", "lattes"] : /^AN[ÁA]LISE CURRICULAR$/i.test(titulo.trim()) ? ["analise"] : ["vitae"] };
   }).filter(o => o.linhas.length || o.totalPdf != null);
 }
+/* Foto do orçamento: lê o texto da imagem no próprio navegador (Tesseract, em português). Nada sobe para servidor. */
+const TESS = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+let _tess = null;
+async function tesseract(){
+  if (_tess) return _tess;
+  await new Promise((ok, erro) => { const s = document.createElement("script"); s.src = TESS; s.onload = ok; s.onerror = () => erro(new Error("Não consegui carregar o leitor de fotos. Confira a internet")); document.head.appendChild(s); });
+  return _tess = window.Tesseract;
+}
+async function textoDaImagem(f){
+  const T = await tesseract();
+  // Preto e branco com mais contraste, e ampliada até uns 2500 pixels de largura: sem isso a tabela por cima da marca d'água some
+  const img = await createImageBitmap(f); const esc = Math.max(1, Math.min(3, 2500 / img.width));
+  const c = document.createElement("canvas"); c.width = Math.round(img.width * esc); c.height = Math.round(img.height * esc);
+  const x = c.getContext("2d"); x.filter = "grayscale(1) contrast(1.6)"; x.drawImage(img, 0, 0, c.width, c.height);
+  const w = await T.createWorker("por", 1, { workerPath:"https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js", corePath:"https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1", langPath:"https://cdn.jsdelivr.net/npm/@tesseract.js-data/por@1.0.0/4.0.0_best_int" });
+  try { await w.setParameters({ preserve_interword_spaces:"1" }); const r = await w.recognize(c);
+    // traços e barras que a leitura põe entre as colunas viram espaço de coluna
+    return (r.data.text || "").split("\n").map(l => l.replace(/\s+[—–|]+\s+/g, "     ").replace(/\s+[—–|]+(?=\s*(?:-\s*)?R\s?[$S5])/g, "     ")).join("\n"); }
+  finally { await w.terminate(); }
+}
 async function importarOrcPdf(input){
   const t = triDe(S.sel); const f = input.files && input.files[0]; input.value = ""; if (!t || !f) return;
-  toast("Lendo o orçamento");
+  const foto = /^image\//i.test(f.type) || /\.(jpe?g|png|webp|heic)$/i.test(f.name);
+  toast(foto ? "Lendo a foto do orçamento. Pode levar uns 20 segundos" : "Lendo o orçamento");
   try {
-    const ops = lerOrcamentoTexto(await textoDoPdf(f));
-    if (!ops.length) throw new Error("Não achei as opções e os valores nesse PDF. Ele precisa ter as linhas com R$ e o VALOR TOTAL");
-    t.orcImportado = { arquivo:f.name, em:Date.now(), opcoes:ops }; t.ajuste = {}; salvarTri(t); S.orcEdit = false; render();
-    toast(`Orçamento lido: ${ops.map(o => `opção ${o.letra} ${brl(o.total)}${o.mensal ? " por mês" : ""}`).join(", ")}`);
+    const ops = lerOrcamentoTexto(foto ? await textoDaImagem(f) : await textoDoPdf(f));
+    if (!ops.length) throw new Error(foto ? "Não consegui ler as opções e os valores nessa foto. Tente uma foto mais reta e nítida, ou o PDF" : "Não achei as opções e os valores nesse PDF. Ele precisa ter as linhas com R$ e o VALOR TOTAL");
+    t.orcImportado = { arquivo:f.name, em:Date.now(), opcoes:ops, foto }; t.ajuste = {}; salvarTri(t); S.orcEdit = false; render();
+    toast(`Orçamento lido: ${ops.map(o => `opção ${o.letra} ${brl(o.total)}${o.mensal ? " por mês" : ""}`).join(", ")}${foto ? ". Confira os valores, a leitura de foto pode errar" : ""}`);
   } catch (e) { toast(e.message || "Não consegui ler o PDF"); }
 }
 const A_ORC = {
@@ -325,7 +352,7 @@ function triagemItemView(){
       <label class="f"><span>Observações</span><textarea class="in" data-tri="obs" rows="2">${esc(t.obs || "")}</textarea></label></div></section>
     <section class="card" id="triProvas"><div class="card-h"><h2>Provas</h2></div>${c.provas.length ? `<div class="list">${c.provas.map(p => { const cp = calcDe(c, p); return `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${ANO}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) + " (" + quando(p.prazoEnvio) + ")" : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div></div>${cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : ""}</div>`; }).join("")}</div>` : `<div class="empty">Marque as provas acima</div>`}</section>
    </div><div class="stack">
-    <section class="card" id="triOrc"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${t.orcImportado ? `<span class="pill gold" title="${esc(t.orcImportado.arquivo || "")}">Do PDF</span><button class="btn sm ghost" data-a="orcAuto">Voltar ao automático</button>` : `<label class="btn sm" style="cursor:pointer" title="Usa as opções e os valores de um orçamento em PDF que já foi feito">Usar PDF pronto<input type="file" accept=".pdf,application/pdf" hidden data-orcpdf="1"></label>`}${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
+    <section class="card" id="triOrc"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${t.orcImportado ? `<span class="pill gold" title="${esc(t.orcImportado.arquivo || "")}">${t.orcImportado.foto ? "Da foto" : "Do PDF"}</span><button class="btn sm ghost" data-a="orcAuto">Voltar ao automático</button>` : `<label class="btn sm" style="cursor:pointer" title="Usa as opções e os valores de um orçamento que já foi feito, em PDF ou foto">Usar orçamento pronto<input type="file" accept=".pdf,application/pdf,image/*" hidden data-orcpdf="1"></label>`}${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
       ${ops.length && S.orcEdit ? orcEditor(t, ops) : ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}${o.mensal ? " por mês" : ""}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${esc(foraTxt(l))}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
       <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, msgOrc(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
     ${analiseCard(c)}
