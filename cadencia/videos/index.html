@@ -1,0 +1,10 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css"></head>
+<body><script src="motor.js"></script><script>
+const v = new URLSearchParams(location.search).get('v');
+const sc = document.createElement('script'); sc.src = v + '.js';
+sc.onload = async () => { montar(); await document.fonts.ready; await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
+  const urls = VIDEO.cenas.flatMap(c => c.blocos.filter(b => b.img).map(b => b.img));
+  await Promise.all(urls.map(u => new Promise(r => { const i = new Image(); i.onload = i.onerror = r; i.src = u; })));
+  render(0); window.PRONTO = true; };
+document.body.appendChild(sc);
+</script></body></html>

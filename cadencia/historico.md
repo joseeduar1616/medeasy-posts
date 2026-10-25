@@ -37,3 +37,4 @@ O agente do meme publica o primeiro daqui antes de criar outro (veja AGENTES.md)
 
 | Meme | JSON | Design do Canva |
 |---|---|---|
+- 25/10: o José mandou dois vídeos de referência (texto animado em cima de fundo escuro, palavra por palavra, com destaque colorido) e pediu vídeos nesse estilo com as informações do site. Feitos 4 (plantão, quanto custa, o app em 30 segundos, internato e ENAMED) em `publicado/2026-10-25-videos/`, com o gerador em `videos/` e as legendas em `videos/legendas.md`. O José posta na mão. Quando saírem, anotar aqui o alcance pra comparar com os memes de foto da IA, que estão com 89% de pulo.
