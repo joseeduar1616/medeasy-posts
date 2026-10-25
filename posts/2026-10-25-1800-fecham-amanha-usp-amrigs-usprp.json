@@ -1,0 +1,33 @@
+{
+ "slug": "2026-10-25-1800-fecham-amanha-usp-amrigs-usprp",
+ "pillar": "calendário e prazos",
+ "header": ["PRAZO", "FECHA AMANHÃ"],
+ "verified_on": "2026-10-25",
+ "sources": [
+  "https://www.fuvest.br/residencia-medica-2027/ e Edital COREME/FM nº 02/2026 (USP-SP: inscrições até 26/10 às 12h, taxa R$ 620, prova 06/12, avaliação curricular peso 1 com envio de 04 a 12/01), conferido em posts/2026-10-12-1200-usp-2027-enamed-curriculo.json",
+  "https://ipmeducacao.com.br/wp-content/uploads/2026/10/1111-Edital08-2026_Adendo-ProrrogainscriAAes_6ad63c10dd1f0.pdf (AMRIGS, Edital nº 08/2026 Fundatec: inscrições até 26/10, boleto e Currículo Online até 27/10, prova 22/11 às 9h, análise curricular 10% nas instituições que adotam)",
+  "https://www.medway.com.br/conteudos/residencia-medica-usp-rp/ e https://med.estrategia.com/portal/noticias/usp-rp-inscricoes-residencia-medica-2027/ (USP-RP: inscrições até 26/10 às 16h, boleto até 26/10, R$ 800 acesso direto, 218 vagas, prova 20/11, currículo 10% em 16 programas, envio 27/11 a 01/12)",
+  "log/news_seen.md, varredura de 25/10 17h e busca de 25/10 17h45: sem prorrogação nova de USP-SP, AMRIGS ou USP-RP"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "ÚLTIMO DIA", "title": ["FECHA", "<span class='g glow'>AMANHÃ</span>"], "body": "Três provas de 2027 encerram as inscrições nesta <b>segunda, 26/10</b>. Veja o horário de cada uma e se precisa de currículo.", "bullets": ["USP-SP até <b>12h</b>", "USP-RP até <b>16h</b>", "AMRIGS até <b>26/10</b>"]},
+  {"type": "rows", "label": "Segunda, 26/10", "title": ["ATÉ QUE <span class='y'>HORAS?</span>"], "sub": "Último dia de inscrição, horário de Brasília", "rows": [
+    {"name": "USP-SP (FMUSP)", "sub": "Só pelo site da FUVEST. Taxa R$ 620", "value": "12h"},
+    {"name": "USP-RP (HCFMRP)", "sub": "Boleto vence no mesmo dia. Taxa R$ 800", "value": "16h"},
+    {"name": "AMRIGS", "sub": "Pela Fundatec. Boleto até 27/10", "value": "26/10"}
+  ], "note": "Na USP-SP o prazo acaba ao <b>meio-dia</b>. Não deixe para a tarde."},
+  {"type": "rows", "label": "Provas", "title": ["QUANDO É A <span class='g'>PROVA</span>"], "sub": "Datas dos editais 2027", "rows": [
+    {"name": "USP-RP", "sub": "Às 13h, em Ribeirão Preto", "value": "20/11"},
+    {"name": "AMRIGS", "sub": "Às 9h, prova unificada AMRIGS, ACM e AMMS", "value": "22/11"},
+    {"name": "USP-SP", "sub": "Mesmo dia da SES-GO", "value": "06/12"}
+  ], "note": "AMRIGS e PSU-MG caem no <b>mesmo dia</b>, 22/11."},
+  {"type": "rows", "label": "Currículo", "title": ["PRECISA DE <span class='y'>CURRÍCULO?</span>"], "sub": "Conforme os editais 2027", "rows": [
+    {"name": "USP-SP", "sub": "Peso 1, enviado em PDF de 04 a 12/01", "value": "SIM"},
+    {"name": "USP-RP", "sub": "10% em 16 programas, envio 27/11 a 01/12", "value": "DEPENDE"},
+    {"name": "AMRIGS", "sub": "10% nas instituições que adotam", "value": "DEPENDE"}
+  ], "note": "Na AMRIGS, o <b>Currículo Online</b> é cadastrado até <b>27/10</b>, logo depois da inscrição."},
+  {"type": "cta", "title": ["MANDA PARA", "<span class='g glow'>QUEM VAI PRESTAR</span>"], "pill": "SALVA", "body": "antes que o prazo<br>acabe amanhã.", "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.", "small": "Fontes: Edital COREME/FM nº 02/2026 (FMUSP/FUVEST), Edital nº 08/2026 da Fundatec (AMRIGS) e edital de acesso direto HCFMRP-USP 2027. Confira o edital do seu programa."}
+ ],
+ "story": {"kicker": "FECHA AMANHÃ", "cta": "USP-SP, USP-RP e AMRIGS<br>até <span>segunda, 26/10</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "⏰ FECHA AMANHÃ: USP-SP, USP-RP E AMRIGS\n\nTrês provas de residência 2027 encerram as inscrições nesta segunda, 26/10. Na USP-SP o prazo acaba ao meio-dia, pelo site da FUVEST, com taxa de R$ 620. Na USP-RP vai até as 16h, no site do HCFMRP-USP, e o boleto de R$ 800 vence no mesmo dia. Na AMRIGS as inscrições vão até 26/10 na Fundatec, com boleto e Currículo Online até 27/10.\n\nAs provas: USP-RP em 20/11, AMRIGS em 22/11 (mesmo dia do PSU-MG) e USP-SP em 06/12 (mesmo dia da SES-GO).\n\nPrecisa de currículo? Na USP-SP sim, com peso 1 e envio em janeiro. Na USP-RP depende do programa: 16 dos 22 usam currículo com 10%. Na AMRIGS, 10% nas instituições que adotam a análise.\n\nSalva e manda para quem ainda não se inscreveu 📌\n\nJá fez a sua inscrição? Em qual prova? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #residencia2027 #usp #amrigs #usprp #medicina"
+}
