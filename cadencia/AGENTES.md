@@ -1,14 +1,19 @@
 # Agentes do Cadência Med
 
-Três agentes rodam todo dia, sozinhos, por pedido do José (22/10 e 25/10/2026):
+Os agentes rodam sozinhos, sozinhos, por pedido do José (22/10 e 25/10/2026):
 
 | Agente | Horário (Brasília) | O que faz |
 |---|---|---|
 | Carrossel do dia | 09:52 | Carrossel de 7 slides no estilo de lançamento (dor na capa e telas reais do app) |
 | Meme do dia | 14:52 | Meme que divulga o Cadência Med, feito aqui em alta, no feed e no story |
+| Comentários | 20:23 | Responde os comentários novos dos posts com o tom da marca e esconde spam (skill `insta-comunidade`) |
+| Viralização e plano da semana | domingo 17:44 | Lê os números, tira os padrões e escreve o plano da semana em `viralizacao.md` (skill `insta-viralizacao`) |
 | Turbinar | 19:47 | Coloca o meme novo como anúncio no conjunto certo (nicho ou geral), tira os que não rendem e põe mais dinheiro no conjunto que dá visita mais barata, com teto de R$ 15 por dia |
 
-Os três começam igual a qualquer rotina daqui: leia antes o `LEIA-ME.md`
+Antes de criar post, leia o `viralizacao.md` (padrões e plano da semana). Os skills `insta-criador`,
+`insta-viralizacao` e `insta-comunidade` (do José) explicam cada função com mais detalhe.
+
+Todos começam igual a qualquer rotina daqui: leia antes o `LEIA-ME.md`
 (começo da execução, regras de texto e como subir arquivos).
 
 ## O que funciona (até 25/10/2026)
@@ -215,3 +220,19 @@ Se já houver carrossel publicado hoje, não publique outro.
    ser refeito.
 8. Registre em `turbinadas.md` (data, meme, ids do vídeo e do anúncio, o que foi pausado, ajuste de dinheiro
    e por quê). Commit e push.
+
+---
+
+## 4. Comentários (20:23)
+
+Siga o skill `insta-comunidade` (ou, sem ele, este resumo): leia os comentários dos últimos 3 dias no
+Windsor (`comment_id`, `comment_text`, `media_id`), pule os que já estão em `comentarios.md`, responda com
+`reply_to_comment` (até 2 frases, 1 emoji, tom de estudante, informação certa do app) e esconda spam com
+`hide_comment`. Anote tudo em `comentarios.md`. Se a resposta for recusada, deixe como "pendente" e avise.
+Pergunta que aparece mais de uma vez vira pauta no `pautas.md`.
+
+## 5. Viralização e plano da semana (domingo 17:44)
+
+Siga o skill `insta-viralizacao`: números dos últimos 30 dias (orgânico e anúncios), perfis do nicho no
+`instagram_public` quando o José conectar, padrões (gancho no 1º segundo, quebra de padrão aos 3 s,
+recompensa antes do loop), plano dos 7 dias em `viralizacao.md` e pautas novas no `pautas.md`.

@@ -23,6 +23,9 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 13. Domingo à noite, sem saber como vai ser a semana, e o mentor de IA montando ela. Prints: assistente, rotina
 14. Revisão no Anki, cronograma na planilha, cronômetro em outro app: tudo num lugar. Prints: hoje, revisoes, foco
 15. Quanto custa organizar a preparação inteira: 3 dias grátis, R$ 39 ou R$ 300 no anual. Prints: planos, hoje
+16. (pra salvar) Checklist da semana de plantão: o que fazer antes, no dia e depois do plantão pra não perder a revisão. Prints: rotina, hoje
+17. (pra salvar) Plano de 7 dias pra tirar o atraso sem largar as revisões. Prints: revisoes, assistente
+18. (pra salvar) Cronograma de revisão de 30 dias: o que volta em 1 semana e em 1 mês. Prints: revisoes, hoje
 
 ## Reels (14:55)
 
