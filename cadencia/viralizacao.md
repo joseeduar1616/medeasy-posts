@@ -20,6 +20,19 @@ Os agentes diários leem este arquivo antes de criar o post.
    flashcards e ranking com os amigos. Comece grátis aqui👇". Sugestão: "App de estudos pra residência e
    internato · cronograma, revisão e flashcards num lugar só · 3 dias grátis, sem cartão 👇" (o José troca no app).
 
+## Perfis do nicho no Windsor (`instagram_public`, desde 25/10)
+
+Trazem dados: `estrategiamed`, `medway.residenciamedica`, `grupomedcof`, `mentoria.residencia`,
+`memesforstressedmedstudents`. Vêm vazios (perfil pessoal ou sem post recente): `memesmedicina`,
+`med.residenciamedica`, `medicalinmemes`. Peça os 10 posts com mais curtidas + comentários de cada um nos
+últimos 60 dias (a resposta é grande: peça só `account_name`, `media_type`, `media_like_count`,
+`media_comments_count`, `media_caption`, `media_permalink` e resuma num script).
+
+Primeira leitura (25/10, últimos 60 dias): os campeões são notícia oficial que mexe com a rotina (receita
+digital, "OAB da Medicina", nova diretriz), concorrência do ENARE com número, "Você sobreviveria a um dia
+sendo R1?" (vídeo de identificação, 10,6 mil curtidas) e "Caderno de prova liberado" do ENAMED com pedido de
+comentário (8,3 mil comentários). Comentário pra receber algo é o que mais puxa conversa.
+
 ## O que mudar a partir de 26/10
 
 - Meme: foto da IA saiu. Entram o meme com tela real (foto em alta) e o meme animado (Reel com frase grande
