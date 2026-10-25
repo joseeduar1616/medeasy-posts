@@ -1,0 +1,146 @@
+{
+  "id": "2026-10-25-nao-lembro-nada",
+  "legenda": "Estudou mês passado e hoje parece que nunca viu? 😶\n\nO cronograma empurra pra aula nova, e a aula de um mês atrás fica lá atrás, sem ninguém lembrar dela. Na hora da questão, você reconhece o tema mas some o detalhe que a prova cobra.\n\nO que segura a matéria é revisar no dia certo, antes de esquecer. No Cadência Med cada aula marcada entra numa escada de revisão (1 semana, 1 mês, 2, 4 e 6 meses), a tela Hoje mostra o que venceu e os flashcards voltam junto.\n\nSalva esse post e manda pra quem tá com a matéria acumulada 📌\n\nQual matéria some mais rápido da sua cabeça? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #revisaoespacada",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "REVISÃO ESPAÇADA",
+      "titulo": "ESTUDEI MÊS PASSADO E {g}NÃO LEMBRO NADA{/g}",
+      "texto": "Se já aconteceu com você, arrasta pra ver <b>como segurar o que você estudou</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 410,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "VOCÊ ESTUDA E {g}SEGUE EM FRENTE{/g}",
+      "texto": "O cronograma empurra pra aula nova. A aula de um mês atrás fica lá atrás, <b>sem ninguém lembrar dela</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Aulas que ficaram pra trás",
+        "itens": [
+          {
+            "titulo": "Insuficiência cardíaca",
+            "sub": "Cardiologia · sem revisão",
+            "selo": "há 5 semanas",
+            "cor": "#A86BFF",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Pré-natal de baixo risco",
+            "sub": "Obstetrícia · sem revisão",
+            "selo": "há 6 semanas",
+            "cor": "#46D9F5",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Vigilância epidemiológica",
+            "sub": "Preventiva · sem revisão",
+            "selo": "há 2 meses",
+            "cor": "#F5A524",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "NA HORA DA QUESTÃO, {g}DEU BRANCO{/g}",
+      "texto": "Você reconhece o tema, mas o detalhe que a prova cobra sumiu. E a sensação é de <b>ter perdido aquelas horas</b>.",
+      "ui": {
+        "tipo": "cartao",
+        "frente": "Qual a tríade da síndrome nefrítica?",
+        "verso": "Hematúria, hipertensão e edema."
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "A REVISÃO TEM {g}DIA CERTO PRA VOLTAR{/g}",
+      "texto": "Cada aula marcada entra numa escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>. Você revisa antes de esquecer.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Escada de revisão"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "O QUE VENCEU {g}APARECE SOZINHO{/g}",
+      "texto": "Abriu o app, a tela Hoje já mostra a revisão do dia. <b>Sem planilha e sem lembrete no celular</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Tela Hoje"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "FLASHCARDS",
+      "tag": "FLASHCARDS",
+      "titulo": "E OS CARTÕES {g}VOLTAM JUNTO{/g}",
+      "texto": "Faça os seus, traga do Anki ou deixe a IA montar do seu PDF. Cada resposta decide <b>quando aquele cartão volta</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cartoes_ia",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Flashcards com IA"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "ESTUDOU UMA VEZ, {g}A REVISÃO CUIDA DO RESTO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {
+            "titulo": "Escada de revisão",
+            "texto": "1 semana, 1 mês, 2, 4 e 6 meses"
+          },
+          {
+            "titulo": "Tela Hoje",
+            "texto": "o que venceu aparece sozinho"
+          },
+          {
+            "titulo": "Flashcards com IA",
+            "texto": "montados a partir do seu PDF"
+          },
+          {
+            "titulo": "Caderno de erros",
+            "texto": "o que você erra volta pra revisão"
+          }
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
