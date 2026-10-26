@@ -1,0 +1,158 @@
+{
+ "slug": "2026-10-26-1800-abertas-depois-de-hoje",
+ "pillar": "calendário e prazos",
+ "header": [
+  "INSCRIÇÕES",
+  "5 PROVAS 2027"
+ ],
+ "verified_on": "2026-10-26",
+ "sources": [
+  "posts/2026-10-20-1200-unifesp-2027-guia.json (edital Unifesp 2027 Vunesp: inscrições até 30/10 23h59, R$ 726, prova 29/11 13h, currículo peso 1 depois da prova)",
+  "posts/2026-10-09-1800-sesgo-2027-edital.json (Edital nº 24/2026 COREME SES-GO: inscrições até 03/11 17h, R$ 500 para 1 programa, prova 06/12, currículo 100 pontos na 2ª fase)",
+  "posts/2026-10-18-1800-sussp-2027-abre-terca.json e posts/2026-10-26-1200-sussp-2026-concorrencia.json (vunesp.com.br/SESA2601: inscrições até 05/11, R$ 120, prova 13/12 etapa única)",
+  "posts/2026-10-22-1200-unesp-2027-guia.json (edital UNESP FMB 2027 Vunesp: inscrições até 06/11, R$ 648, prova 12/12 14h, 90% prova e 10% currículo na maioria)",
+  "posts/2026-10-23-1800-sesdf-2027-um-programa.json (Edital RM-1/SES/DF/2027 IADES: inscrições até 18/11 23h59, R$ 120, prova 12/12, sem análise curricular)",
+  "log/news_seen.md, varredura de 26/10 17h: nenhuma retificação ou prorrogação nova"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica 2027",
+   "pill": "5 PROVAS",
+   "title": [
+    "AINDA",
+    "<span class='g glow'>ABERTAS</span>"
+   ],
+   "body": "USP-SP, AMRIGS e USP-RP fecharam hoje. Estas <b>cinco provas</b> ainda aceitam inscrição.",
+   "bullets": [
+    "Último dia e taxa",
+    "Data da prova",
+    "Precisa de currículo?"
+   ]
+  },
+  {
+   "type": "rows",
+   "label": "Inscrições",
+   "title": [
+    "QUEM FECHA <span class='y'>PRIMEIRO</span>"
+   ],
+   "sub": "Último dia de inscrição e taxa",
+   "rows": [
+    {
+     "name": "Unifesp",
+     "sub": "Até 23h59, Vunesp, R$ 726",
+     "value": "30/10"
+    },
+    {
+     "name": "SES-GO",
+     "sub": "Até 17h, Verbena, R$ 500",
+     "value": "03/11"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "Vunesp, R$ 120",
+     "value": "05/11"
+    },
+    {
+     "name": "UNESP",
+     "sub": "Vunesp, R$ 648",
+     "value": "06/11"
+    },
+    {
+     "name": "SES-DF",
+     "sub": "Até 23h59, IADES, R$ 120",
+     "value": "18/11"
+    }
+   ],
+   "note": "A Unifesp fecha <b>nesta sexta</b>, 30/10."
+  },
+  {
+   "type": "rows",
+   "label": "Provas",
+   "title": [
+    "QUANDO É A <span class='g'>PROVA</span>"
+   ],
+   "sub": "Datas dos editais 2027",
+   "rows": [
+    {
+     "name": "Unifesp",
+     "sub": "Às 13h",
+     "value": "29/11"
+    },
+    {
+     "name": "SES-GO",
+     "sub": "Mesmo dia da USP-SP",
+     "value": "06/12"
+    },
+    {
+     "name": "UNESP",
+     "sub": "Às 14h, mesmo dia da SES-DF",
+     "value": "12/12"
+    },
+    {
+     "name": "SES-DF",
+     "sub": "Mesmo dia da UNESP",
+     "value": "12/12"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "Etapa única",
+     "value": "13/12"
+    }
+   ],
+   "note": "UNESP e SES-DF caem no <b>mesmo dia</b>. Escolha uma das duas."
+  },
+  {
+   "type": "rows",
+   "label": "Currículo",
+   "title": [
+    "PRECISA DE <span class='y'>CURRÍCULO?</span>"
+   ],
+   "sub": "Conforme os editais 2027",
+   "rows": [
+    {
+     "name": "SES-DF",
+     "sub": "Sem análise curricular",
+     "value": "NÃO"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "A prova objetiva é a etapa única",
+     "value": "NÃO"
+    },
+    {
+     "name": "Unifesp",
+     "sub": "Peso 1, depois da prova",
+     "value": "SIM"
+    },
+    {
+     "name": "SES-GO",
+     "sub": "100 pontos na 2ª fase",
+     "value": "SIM"
+    },
+    {
+     "name": "UNESP",
+     "sub": "10% na maioria dos programas",
+     "value": "SIM"
+    }
+   ],
+   "note": "Na UNESP, Clínica Médica e Ortopedia <b>não</b> têm currículo."
+  },
+  {
+   "type": "cta",
+   "title": [
+    "SALVA PARA",
+    "<span class='g glow'>NÃO PERDER</span>"
+   ],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: editais 2027 de Unifesp (Vunesp), SES-GO (Instituto Verbena/UFG, Edital nº 24/2026), SUS-SP (Vunesp), UNESP FMB (Vunesp) e SES-DF (IADES, Edital RM-1/2027). Confira o edital do seu programa."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "Ainda abertas: <span>5 provas de 2027</span>.<br>Veja no feed da @med_easyy."
+ },
+ "caption": "⏰ AINDA ABERTAS: 5 PROVAS DE 2027\n\nUSP-SP, AMRIGS e USP-RP fecharam hoje. Quem ainda vai se inscrever tem Unifesp (até 30/10 às 23h59), SES-GO (03/11 às 17h), SUS-SP (05/11), UNESP (06/11) e SES-DF (18/11 às 23h59).\n\nAtenção: UNESP e SES-DF têm prova no mesmo dia, 12/12.\n\nSES-DF e SUS-SP não têm análise curricular. Unifesp, SES-GO e UNESP avaliam o currículo depois da prova (na UNESP, na maioria dos programas). Arrasta para ver taxas e datas 📌\n\nSalva e manda para quem vai prestar com você. Em qual dessas você ainda vai se inscrever? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #residencia2027 #unifesp #sesgo #sesdf #unesp"
+}
