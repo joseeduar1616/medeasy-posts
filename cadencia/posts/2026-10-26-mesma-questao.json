@@ -1,0 +1,136 @@
+{
+  "id": "2026-10-26-mesma-questao",
+  "legenda": "Errou a mesma questão de novo? 😩\n\nVocê erra, lê o comentário, entende na hora e segue pra próxima. Um mês depois a mesma pegadinha aparece e você marca a mesma alternativa errada.\n\nO erro só para de voltar quando ele volta pra você antes da prova. No Cadência Med o que você erra vai pro caderno de erros e entra na revisão, a tela Hoje mostra o que venceu e o mentor de IA ajuda a decidir o que priorizar.\n\nSalva esse post e manda pro amigo que sempre cai na mesma pegadinha 📌\n\nQual tema você mais erra? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #cadernodeerros",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "CADERNO DE ERROS",
+      "titulo": "ERRA SEMPRE A {g}MESMA QUESTÃO?{/g}",
+      "texto": "Se já aconteceu com você, arrasta pra ver <b>como fazer o erro parar de voltar</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 410,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "VOCÊ ERRA, LÊ O COMENTÁRIO E {g}SEGUE EM FRENTE{/g}",
+      "texto": "Na hora parece que entendeu. Mas ninguém <b>traz aquela questão de volta</b> depois.",
+      "ui": {
+        "tipo": "questao",
+        "enunciado": "Qual o antídoto da intoxicação por paracetamol?",
+        "alternativas": ["Flumazenil", "N-acetilcisteína", "Naloxona", "Atropina"],
+        "certa": 1,
+        "comentario": "Você marcou C de novo. A N-acetilcisteína repõe a glutationa do fígado."
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "NA PROVA, {g}O MESMO ERRO VOLTA{/g}",
+      "texto": "A pegadinha que você já viu aparece de novo e você <b>marca a mesma alternativa errada</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Erros que se repetem",
+        "itens": [
+          {
+            "titulo": "Antídotos",
+            "sub": "Toxicologia · errou de novo",
+            "selo": "3ª vez",
+            "cor": "#A86BFF",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Critérios de Jones",
+            "sub": "Pediatria · errou de novo",
+            "selo": "2ª vez",
+            "cor": "#46D9F5",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Sensibilidade e especificidade",
+            "sub": "Preventiva · errou de novo",
+            "selo": "3ª vez",
+            "cor": "#F5A524",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "O ERRO VIRA {g}REVISÃO MARCADA{/g}",
+      "texto": "O que você erra vai pro caderno de erros e volta na escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Escada de revisão"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "O QUE VENCEU {g}APARECE SOZINHO{/g}",
+      "texto": "Abriu o app, a tela Hoje já mostra a revisão do dia. <b>Você não precisa lembrar de nada</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 520,
+        "foco": "center",
+        "nota": "Tela Hoje"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "MENTOR DE IA",
+      "tag": "MENTOR DE IA",
+      "titulo": "E O MENTOR TE AJUDA A {g}PRIORIZAR{/g}",
+      "texto": "Pergunte o que estudar na semana. Ele responde <b>olhando o seu painel</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Mentor de IA"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "ERROU UMA VEZ, {g}ELE VOLTA PRA REVISÃO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Caderno de erros", "texto": "o que você erra volta pra revisão"},
+          {"titulo": "Escada de revisão", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Provas comentadas", "texto": "pra treinar e achar seus erros"},
+          {"titulo": "Desempenho por área", "texto": "veja onde você mais erra"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
