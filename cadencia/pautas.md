@@ -11,7 +11,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 1. ~~Atrasou o cronograma? 4 passos pra recuperar~~ *(saiu em 16/10, formato antigo de dica)*
 2. ~~Plantão de 12h e a aula ficou pra depois~~ *(saiu em 21/10)*. Prints: cronograma, rotina, assistente, hoje
 3. ~~"Estudei isso mês passado e não lembro nada" e a escada de revisão~~ *(saiu em 25/10)*. Prints: revisoes, hoje
-4. Errou a mesma questão pela terceira vez e o caderno de erros que vira revisão. Prints: revisoes, hoje
+4. ~~Errou a mesma questão pela terceira vez e o caderno de erros que vira revisão~~ *(saiu em 26/10)*. Prints: revisoes, hoje
 5. 23h, cansado, montando flashcard na mão e a IA montando do PDF. Prints: cartoes_ia, revisoes
 6. Mandou o cronograma do cursinho num PDF e ele virou painel. Prints: cronograma, materias
 7. Abriu o caderno e não sabe por onde começar e a tela Hoje. Prints: hoje, rotina

@@ -9,13 +9,16 @@
 | 04/10/2026 | 22:27 | Reel | Tudo num app só | https://www.instagram.com/reel/DeGBo_etZpk/ | 390 contas, 92% de pulo |
 | 08/10/2026 | 16:41 | Carrossel | ENARE 98 mil inscrições | https://www.instagram.com/p/DePtUxTDOA6/ | 55 contas |
 | 11/10/2026 | 08:50 a 14:55 | 5 Reels de meme | Atraso, 1 mês pra prova, confiança, revisão, ranking | perfil | 165 a 300 contas, 66% a 78% de pulo |
-| 16/10/2026 | 15:18 | Carrossel 6 slides | Atrasou o cronograma? | https://www.instagram.com/p/DekKKhMiJxZ/ | 47 contas |
-| 21/10/2026 | 11:32 | Carrossel 7 slides (estilo lançamento) | Plantão de 12h e a aula ficou pra depois (`posts/2026-10-21-semana-com-plantao.json`, media_id 18118727726062342) | https://www.instagram.com/p/DewoWY_DZOm/ | 40 contas, 1 visita (37 em 26 h) |
-| 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | 39 contas, 77 views, 82% de pulo, 14 s de média (3 dias) |
+| 16/10/2026 | 15:18 | Carrossel 6 slides | Atrasou o cronograma? | https://www.instagram.com/p/DekKKhMiJxZ/ | 50 contas, 1 visita (10 dias) |
+| 21/10/2026 | 11:32 | Carrossel 7 slides (estilo lançamento) | Plantão de 12h e a aula ficou pra depois (`posts/2026-10-21-semana-com-plantao.json`, media_id 18118727726062342) | https://www.instagram.com/p/DewoWY_DZOm/ | 42 contas, 1 visita (5 dias) |
+| 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | 40 contas, 81 views, 81% de pulo, 13 s de média (4 dias) |
 | 22/10/2026 | 18:15 | Story meme IA (teste) | Eu às 3h da manhã jurando que amanhã eu começo a revisar direito (`posts/2026-10-22-teste-ia.json`, Canva `DAHYxSBc_kA` página 2, story 18428106304159152) | story | (teste, só story) |
-| 23/10/2026 | 14:54 | Reel meme IA + story (nicho) | Eu entrando no internato jurando que ia estudar depois do plantão (`posts/2026-10-22-internato-meme.json`, Canva `DAHYxZ0zSRk`, Reel 18128083216860041, story 18564470875075324) | https://www.instagram.com/reel/De2JAQzjdBZ/ | 63 contas, 111 views, 88% de pulo, 4,9 s de média (2 dias) |
-| 24/10/2026 | 14:55 | Reel meme IA + story (nicho) | Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões (`posts/2026-10-22-enamed-meme.json`, Canva `DAHYxWGZ_yg`, Reel 18014643902975818, story 17914682283285618) | https://www.instagram.com/reel/De4t0dtj__s/ | 41 contas, 91 views, 83% de pulo, 3,2 s de média em 24 h |
-| 25/10/2026 | 14:56 | Reel meme IA + story (nicho) | Quando a coordenação manda o e-mail do ENAMED e você ainda tá no ciclo clínico (`posts/2026-10-25-email-enamed-meme.json`, Canva `DAHZCcJ58IA`, foto IA MAHZCbHzu5w, Reel 17930907531422957, story 18341781508257955) | perfil (link a conferir) | (preencher) |
+| 23/10/2026 | 14:54 | Reel meme IA + story (nicho) | Eu entrando no internato jurando que ia estudar depois do plantão (`posts/2026-10-22-internato-meme.json`, Canva `DAHYxZ0zSRk`, Reel 18128083216860041, story 18564470875075324) | https://www.instagram.com/reel/De2JAQzjdBZ/ | 65 contas, 117 views, 89% de pulo, 4,7 s de média (3 dias) |
+| 24/10/2026 | 14:55 | Reel meme IA + story (nicho) | Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões (`posts/2026-10-22-enamed-meme.json`, Canva `DAHYxWGZ_yg`, Reel 18014643902975818, story 17914682283285618) | https://www.instagram.com/reel/De4t0dtj__s/ | 45 contas, 98 views, 83% de pulo, 3 s de média (2 dias) |
+| 25/10/2026 | 14:56 | Reel meme IA + story (nicho) | Quando a coordenação manda o e-mail do ENAMED e você ainda tá no ciclo clínico (`posts/2026-10-25-email-enamed-meme.json`, Canva `DAHZCcJ58IA`, foto IA MAHZCbHzu5w, Reel 17930907531422957, story 18341781508257955) | https://www.instagram.com/reel/De7S1wZlLqE/ | 103 contas, 138 views, 97% de pulo, 1,8 s de média (1 dia) |
+| 25/10/2026 | 15:13 | Carrossel 7 slides | Estudei mês passado e não lembro nada (`posts/2026-10-25-nao-lembro-nada.json`, media_id 18103448012039978) | https://www.instagram.com/p/De7UwULEU5G/ | 27 contas, 137 views, 1 visita (1 dia) |
+| 25/10/2026 | 16:53 | Reel animado + story (nicho) | Você sobreviveria a uma semana de internato? (`videos/v6.js`, Reel 18111723626143786, story 18160572910550048) | https://www.instagram.com/reel/De7gOmigGRy/ | 593 contas, 772 views, 90% de pulo, 1,9 s de média, 1 compartilhamento (1 dia) |
+| 26/10/2026 | 10:00 | Carrossel 7 slides | Erra sempre a mesma questão? Caderno de erros (pauta 4, `posts/2026-10-26-mesma-questao.json`, media_id 18088885742696548) | https://www.instagram.com/p/De9V0VtCBQS/ | (preencher) |
 
 ## Anotações de desempenho
 
@@ -32,6 +35,7 @@
 - 24/10: o meme de internato (23/10) teve 60 contas em 21 h, com 89% de pulo e 4 s de média. Publicado o meme do ENAMED que estava na fila (segundo meme de nicho seguido). A fila ficou vazia, então amanhã volta o caminho A com pauta nova.
 - 23/10: o Reel tweet de 22/10 teve só 39 contas em 21 h, com 81% de pulo, mas quem ficou assistiu 14 s em média. Primeiro meme da fila (internato, nicho) publicado às 14:54 com o mp4 e o jpg exportados do Canva.
 - 25/10: o meme do ENAMED (24/10) ficou com 41 contas e 3,2 s de média, abaixo do de internato (63). Os três memes de foto da IA estão entre 39 e 63 contas, com 82% a 88% de pulo. Pastas do Drive vazias, então saiu o caminho A de novo, com a pauta de nicho 4 (terceiro meme de nicho da semana).
+- 26/10: o Reel animado "Você sobreviveria a uma semana de internato?" (25/10) chegou a 593 contas em 1 dia, o maior alcance desde o lançamento, mas com 90% de pulo. O carrossel de 25/10 ficou com 27 contas. Os carrosséis seguem abaixo de 100 contas (42 e 27), então pela regra do LEIA-ME o gancho da capa já varia: hoje saiu com pergunta ("Erra sempre a mesma questão?").
 
 ## Memes prontos na fila
 
