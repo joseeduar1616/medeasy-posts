@@ -1,0 +1,91 @@
+{
+ "slug": "2026-10-26-1200-sussp-2026-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "header": ["CONCORRÊNCIA", "SUS-SP 2026"],
+ "verified_on": "2026-10-26",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/sus-sp-2026-saiba-a-concorrencia-por-especialidade-para-o-seletivo-de-residencia-medica/ (concorrência por especialidade a partir da lista oficial de inscritos do Instituto Quadrix, 27/11/2025)",
+  "https://www.medway.com.br/conteudos/concorrencia-residencia-medica-sus-sp/ (mesmos números de vagas e inscritos por especialidade; totais gerais divergem entre os portais e ficaram fora do post)",
+  "Edital SUS-SP 2027 (Vunesp, vunesp.com.br/SESA2601) e retificações no DOE-SP, conferidos nos posts de 18 e 19/10 e em log/news_seen.md",
+  "log/news_seen.md, varredura de 26/10 11h sem retificação nova do SUS-SP"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em São Paulo",
+   "pill": "SUS-SP",
+   "title": ["QUANTOS DISPUTAM", "<span class='y glow'>CADA VAGA</span>"],
+   "body": "Veja a concorrência por especialidade no SUS-SP 2026 antes de escolher o seu programa. As inscrições de 2027 vão até <b>05/11</b>.",
+   "bullets": ["As especialidades mais disputadas", "As grandes áreas", "Precisa de currículo?"]
+  },
+  {
+   "type": "rows",
+   "label": "Mais disputadas",
+   "title": ["ONDE A DISPUTA <span class='y'>FOI MAIOR</span>"],
+   "sub": "Candidatos por vaga no SUS-SP 2026",
+   "rows": [
+    {"name": "Otorrinolaringologia", "sub": "863 inscritos para 13 vagas", "value": "66,4"},
+    {"name": "Dermatologia", "sub": "1.407 inscritos para 24 vagas", "value": "58,6"},
+    {"name": "Oftalmologia", "sub": "1.049 inscritos para 20 vagas", "value": "52,5"},
+    {"name": "Neurocirurgia", "sub": "415 inscritos para 8 vagas", "value": "51,9"},
+    {"name": "Neurologia", "sub": "610 inscritos para 15 vagas", "value": "40,7"},
+    {"name": "Psiquiatria", "sub": "2.367 inscritos para 66 vagas", "value": "35,9"}
+   ],
+   "note": "Dermatologia teve mais de 1.400 inscritos para 24 vagas."
+  },
+  {
+   "type": "rows",
+   "label": "Grandes áreas",
+   "title": ["E NAS <span class='y'>GRANDES ÁREAS</span>"],
+   "sub": "Candidatos por vaga no SUS-SP 2026",
+   "rows": [
+    {"name": "Cirurgia Geral", "sub": "3.366 inscritos para 127 vagas", "value": "26,5"},
+    {"name": "Radiologia", "sub": "1.087 inscritos para 44 vagas", "value": "24,7"},
+    {"name": "Anestesiologia", "sub": "2.802 inscritos para 123 vagas", "value": "22,8"},
+    {"name": "Ginecologia e Obstetrícia", "sub": "2.754 inscritos para 147 vagas", "value": "18,7"},
+    {"name": "Ortopedia e Traumatologia", "sub": "1.352 inscritos para 89 vagas", "value": "15,2"},
+    {"name": "Clínica Médica", "sub": "3.436 inscritos para 245 vagas", "value": "14,0"}
+   ],
+   "note": "Clínica Médica é a que mais recebe inscritos, mas também a que tem mais vagas."
+  },
+  {
+   "type": "rows",
+   "label": "Menos disputadas",
+   "title": ["ONDE A DISPUTA <span class='g'>FOI MENOR</span>"],
+   "sub": "Candidatos por vaga no SUS-SP 2026",
+   "rows": [
+    {"name": "Pediatria", "sub": "1.835 inscritos para 131 vagas", "value": "14,0"},
+    {"name": "Medicina de Família", "sub": "426 inscritos para 39 vagas", "value": "10,9"},
+    {"name": "Medicina de Emergência", "sub": "141 inscritos para 17 vagas", "value": "8,3"},
+    {"name": "Infectologia", "sub": "221 inscritos para 28 vagas", "value": "7,9"},
+    {"name": "Medicina Intensiva", "sub": "222 inscritos para 30 vagas", "value": "7,4"}
+   ],
+   "note": "A concorrência de 2026 é referência, não previsão para 2027."
+  },
+  {
+   "type": "cards",
+   "label": "Formato da seleção",
+   "title": ["PRECISA DE <span class='g'>CURRÍCULO</span>?"],
+   "sub": "Resposta do edital do SUS-SP 2027",
+   "cards": [
+    {"num": "1", "h": "Não", "tag": "sem análise", "p": "O SUS-SP não tem análise curricular."},
+    {"num": "2", "h": "Só a prova", "tag": "etapa única", "p": "A prova objetiva é a etapa única, no dia <b>13/12</b>, em São Paulo."},
+    {"num": "3", "h": "Inscrição até 05/11", "tag": "R$ 120", "p": "Pelo site da <b>Vunesp</b>. São mais de <b>1.380 vagas</b> em <b>61 instituições</b>."}
+   ],
+   "note": "A SES-DF é no sábado, <b>12/12</b>, e o SUS-SP no domingo, <b>13/12</b>."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA PARA", "<span class='g glow'>COMPARAR</span>"],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar SUS-SP com você.",
+   "note": "Vai prestar USP-SP, Unifesp ou outra prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: lista oficial de inscritos do SUS-SP 2026 (Instituto Quadrix, 27/11/2025), conforme levantamentos de Estratégia MED e Medway (números iguais por especialidade). Edital SUS-SP 2027 (Vunesp)."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "SUS-SP: <span>66,4 por vaga</span> em Otorrino.<br>Veja onde a disputa foi maior no feed da @med_easyy."
+ },
+ "caption": "📊 QUANTOS DISPUTAM CADA VAGA NO SUS-SP\n\nNo SUS-SP 2026, Otorrinolaringologia foi a especialidade mais disputada, com 66,4 candidatos por vaga (863 inscritos para 13 vagas). Depois vêm Dermatologia (58,6), Oftalmologia (52,5) e Neurocirurgia (51,9).\n\nNas grandes áreas, Cirurgia Geral teve 26,5 por vaga, Anestesiologia 22,8 e GO 18,7. Clínica Médica e Pediatria ficaram com 14 por vaga, e Medicina Intensiva com 7,4.\n\nPrecisa de currículo? Não. No SUS-SP a prova objetiva é a etapa única, em 13/12. As inscrições de 2027 vão até 05/11 no site da Vunesp, com taxa de R$ 120. Arrasta para ver tudo e salva para comparar 📌\n\nQual especialidade você vai prestar no SUS-SP? Comenta aqui 👇\n\nPrecisa organizar o currículo para as outras provas? Chama a MedEasy no direct 💚\n\n#sussp #residenciamedica #saopaulo #vunesp #concorrencia #residencia2027"
+}
