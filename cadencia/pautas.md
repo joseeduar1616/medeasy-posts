@@ -103,7 +103,7 @@ O app tem cronograma do ciclo clínico, que é o que serve pra esse público.
 
 A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(saiu em DD/MM)*`.
 
-1. A1 · Eu fingindo que não vi as **revisões vencidas** pra conseguir dormir. Tela: revisoes *(pronto: `posts/2026-10-26-revisoes-vencidas-meme.json`)*
+1. ~~A1 · Eu fingindo que não vi as **revisões vencidas** pra conseguir dormir. Tela: revisoes~~ *(saiu em 26/10)*
 2. A2 · POV: saiu do internato às 23h e abriu o caderno. "E agora, estudo o quê?" O Cadência Med já separou a revisão de hoje. *(pronto: `posts/2026-10-27-meme-23h.json`)*
 3. A1 · Eu às 23h jogando o PDF da aula no **Cadência Med** e os **flashcards** saindo prontos. Tela: cartoes_ia *(pronto)*
 4. A1 · Meu amigo jurando que estudou **o dia todo**. O ranking da nossa sala no Cadência Med: (ranking) *(pronto)*

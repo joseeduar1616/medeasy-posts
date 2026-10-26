@@ -11,14 +11,15 @@
 | 11/10/2026 | 08:50 a 14:55 | 5 Reels de meme | Atraso, 1 mês pra prova, confiança, revisão, ranking | perfil | 165 a 300 contas, 66% a 78% de pulo |
 | 16/10/2026 | 15:18 | Carrossel 6 slides | Atrasou o cronograma? | https://www.instagram.com/p/DekKKhMiJxZ/ | 50 contas, 1 visita (10 dias) |
 | 21/10/2026 | 11:32 | Carrossel 7 slides (estilo lançamento) | Plantão de 12h e a aula ficou pra depois (`posts/2026-10-21-semana-com-plantao.json`, media_id 18118727726062342) | https://www.instagram.com/p/DewoWY_DZOm/ | 42 contas, 1 visita (5 dias) |
-| 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | 40 contas, 81 views, 81% de pulo, 13 s de média (4 dias) |
+| 22/10/2026 | 17:22 | Reel tweet 10 s | A paz de sair do plantão e a revisão do dia já estar lá (`posts/2026-10-22-pos-plantao-tweet.json`, media_id 18375838279215278) | https://www.instagram.com/reel/Dez1FU2Dv-N/ | 40 contas, 82 views, 80% de pulo, 12,9 s de média (4 dias) |
 | 22/10/2026 | 18:15 | Story meme IA (teste) | Eu às 3h da manhã jurando que amanhã eu começo a revisar direito (`posts/2026-10-22-teste-ia.json`, Canva `DAHYxSBc_kA` página 2, story 18428106304159152) | story | (teste, só story) |
 | 23/10/2026 | 14:54 | Reel meme IA + story (nicho) | Eu entrando no internato jurando que ia estudar depois do plantão (`posts/2026-10-22-internato-meme.json`, Canva `DAHYxZ0zSRk`, Reel 18128083216860041, story 18564470875075324) | https://www.instagram.com/reel/De2JAQzjdBZ/ | 65 contas, 117 views, 89% de pulo, 4,7 s de média (3 dias) |
-| 24/10/2026 | 14:55 | Reel meme IA + story (nicho) | Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões (`posts/2026-10-22-enamed-meme.json`, Canva `DAHYxWGZ_yg`, Reel 18014643902975818, story 17914682283285618) | https://www.instagram.com/reel/De4t0dtj__s/ | 45 contas, 98 views, 83% de pulo, 3 s de média (2 dias) |
-| 25/10/2026 | 14:56 | Reel meme IA + story (nicho) | Quando a coordenação manda o e-mail do ENAMED e você ainda tá no ciclo clínico (`posts/2026-10-25-email-enamed-meme.json`, Canva `DAHZCcJ58IA`, foto IA MAHZCbHzu5w, Reel 17930907531422957, story 18341781508257955) | https://www.instagram.com/reel/De7S1wZlLqE/ | 103 contas, 138 views, 97% de pulo, 1,8 s de média (1 dia) |
+| 24/10/2026 | 14:55 | Reel meme IA + story (nicho) | Eu no 4º ano lembrando que o ENAMED cobra as 5 áreas em 100 questões (`posts/2026-10-22-enamed-meme.json`, Canva `DAHYxWGZ_yg`, Reel 18014643902975818, story 17914682283285618) | https://www.instagram.com/reel/De4t0dtj__s/ | 45 contas, 98 views, 85% de pulo, 3 s de média (2 dias) |
+| 25/10/2026 | 14:56 | Reel meme IA + story (nicho) | Quando a coordenação manda o e-mail do ENAMED e você ainda tá no ciclo clínico (`posts/2026-10-25-email-enamed-meme.json`, Canva `DAHZCcJ58IA`, foto IA MAHZCbHzu5w, Reel 17930907531422957, story 18341781508257955) | https://www.instagram.com/reel/De7S1wZlLqE/ | 104 contas, 139 views, 97% de pulo, 1,8 s de média (1 dia) |
 | 25/10/2026 | 15:13 | Carrossel 7 slides | Estudei mês passado e não lembro nada (`posts/2026-10-25-nao-lembro-nada.json`, media_id 18103448012039978) | https://www.instagram.com/p/De7UwULEU5G/ | 27 contas, 137 views, 1 visita (1 dia) |
-| 25/10/2026 | 16:53 | Reel animado + story (nicho) | Você sobreviveria a uma semana de internato? (`videos/v6.js`, Reel 18111723626143786, story 18160572910550048) | https://www.instagram.com/reel/De7gOmigGRy/ | 593 contas, 772 views, 90% de pulo, 1,9 s de média, 1 compartilhamento (1 dia) |
-| 26/10/2026 | 10:00 | Carrossel 7 slides | Erra sempre a mesma questão? Caderno de erros (pauta 4, `posts/2026-10-26-mesma-questao.json`, media_id 18088885742696548) | https://www.instagram.com/p/De9V0VtCBQS/ | (preencher) |
+| 25/10/2026 | 16:53 | Reel animado + story (nicho) | Você sobreviveria a uma semana de internato? (`videos/v6.js`, Reel 18111723626143786, story 18160572910550048) | https://www.instagram.com/reel/De7gOmigGRy/ | 654 contas, 844 views, 89% de pulo, 1,9 s de média, 1 compartilhamento (1 dia) |
+| 26/10/2026 | 10:00 | Carrossel 7 slides | Erra sempre a mesma questão? Caderno de erros (pauta 4, `posts/2026-10-26-mesma-questao.json`, media_id 18088885742696548) | https://www.instagram.com/p/De9V0VtCBQS/ | 20 contas, 79 views, 3 visitas (5 h) |
+| 26/10/2026 | 14:56 | Meme com tela (A1, foto) + story | Eu fingindo que não vi as revisões vencidas pra conseguir dormir (fila, `posts/2026-10-26-revisoes-vencidas-meme.json`, post 17920917831451580, story 17992793052106581) | perfil (link sai no próximo dado do Windsor) | (preencher) |
 
 ## Anotações de desempenho
 
@@ -36,6 +37,7 @@
 - 23/10: o Reel tweet de 22/10 teve só 39 contas em 21 h, com 81% de pulo, mas quem ficou assistiu 14 s em média. Primeiro meme da fila (internato, nicho) publicado às 14:54 com o mp4 e o jpg exportados do Canva.
 - 25/10: o meme do ENAMED (24/10) ficou com 41 contas e 3,2 s de média, abaixo do de internato (63). Os três memes de foto da IA estão entre 39 e 63 contas, com 82% a 88% de pulo. Pastas do Drive vazias, então saiu o caminho A de novo, com a pauta de nicho 4 (terceiro meme de nicho da semana).
 - 26/10: o Reel animado "Você sobreviveria a uma semana de internato?" (25/10) chegou a 593 contas em 1 dia, o maior alcance desde o lançamento, mas com 90% de pulo. O carrossel de 25/10 ficou com 27 contas. Os carrosséis seguem abaixo de 100 contas (42 e 27), então pela regra do LEIA-ME o gancho da capa já varia: hoje saiu com pergunta ("Erra sempre a mesma questão?").
+- 26/10: o Reel animado de 25/10 subiu pra 654 contas (89% de pulo). O carrossel de hoje (caderno de erros) teve 20 contas em 5 h, mas já trouxe 3 visitas ao perfil, mais que os outros carrosséis. Saiu o primeiro meme da fila (A1, foto com a tela de revisões), primeiro meme em foto no feed: comparar com os Reels.
 
 ## Memes prontos na fila
 
@@ -43,7 +45,6 @@ O agente do meme publica o primeiro daqui antes de criar outro (veja AGENTES.md)
 
 | Meme | Formato | Arquivos |
 |---|---|---|
-| Eu fingindo que não vi as revisões vencidas pra conseguir dormir | A1, foto | `posts/2026-10-26-revisoes-vencidas-meme.json`, `publicado/2026-10-26-revisoes-vencidas-meme/` |
 | POV: saiu do internato às 23h e abriu o caderno (meme animado) | A2, Reel | `posts/2026-10-27-meme-23h.json`, `publicado/2026-10-27-meme-23h/` (reel.mp4 e capa.jpg) |
 | Eu às 23h jogando o PDF da aula no Cadência Med e os flashcards saindo prontos | A1, foto | `posts/2026-10-27-pdf-flashcards-meme.json`, `publicado/2026-10-27-pdf-flashcards-meme/` |
 - 25/10: o José mandou dois vídeos de referência (texto animado em cima de fundo escuro, palavra por palavra, com destaque colorido) e pediu vídeos nesse estilo com as informações do site. Feitos 4 (plantão, quanto custa, o app em 30 segundos, internato e ENAMED) em `publicado/2026-10-25-videos/`, com o gerador em `videos/` e as legendas em `videos/legendas.md`. O José posta na mão. Quando saírem, anotar aqui o alcance pra comparar com os memes de foto da IA, que estão com 89% de pulo.
