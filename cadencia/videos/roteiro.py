@@ -20,6 +20,9 @@ FRASES = [  # (texto com *destaque*, cena)
     ("Eu tô te *esperando.*", "fim"),
 ]
 DUR_SINT = 35.76
+# onde a voz faz pausa: (frase, palavra) que abre cada trecho falado
+UNIDADES = [(0, 0), (2, 0), (3, 0), (5, 0), (6, 0), (8, 0), (9, 0), (10, 0), (11, 0), (12, 0), (14, 0), (15, 0), (15, 6),
+            (16, 0), (18, 0), (18, 2), (19, 0), (19, 1), (20, 0), (21, 0), (22, 0), (23, 0), (23, 5), (24, 0)]
 FPS = 30
 
 
@@ -59,34 +62,37 @@ def main():
     if len(sys.argv) > 1:
         x, rms = envelope(sys.argv[1])
         dur = len(x) / 16000
-        lim = max(rms.max() * .06, np.percentile(rms, 20) * 1.5)
-        fala = rms > lim
-        # fecha buracos curtos (até 3 quadros) e acha os trechos de fala
-        idx = np.where(fala)[0]
-        trechos = []
-        for k in idx:
-            if trechos and k - trechos[-1][1] <= 4: trechos[-1][1] = k
-            else: trechos.append([k, k])
-        trechos = [(a / FPS, (b + 1) / FPS) for a, b in trechos]
-        # eixo de "tempo falado": letras distribuídas só dentro dos trechos de fala
-        total_fala = sum(b - a for a, b in trechos)
-        pesos = np.array([peso(w) for _, _, w in todas]); acum = np.concatenate([[0], np.cumsum(pesos)]) / pesos.sum()
-
-        def t_de(frac):
-            alvo = frac * total_fala
-            for a, b in trechos:
-                if alvo <= b - a: return a + alvo
-                alvo -= b - a
-            return trechos[-1][1]
-        tempos = [(t_de(acum[k]), t_de(acum[k + 1])) for k in range(len(todas))]
-        # encaixa o começo de cada frase no começo de trecho de fala mais perto (até 0,45 s)
-        inicios = [a for a, _ in trechos]
-        k = 0; ajust = {}
+        fala = rms > 10 ** (-38 / 20)
+        # trechos de fala separados por silêncio de 0,15 s ou mais; trecho curtinho (< 0,12 s) junta no seguinte
+        trechos, k, n = [], 0, len(fala)
+        while k < n:
+            if not fala[k]: k += 1; continue
+            a0 = k
+            while k < n:
+                if fala[k]: k += 1; continue
+                q = k
+                while q < n and not fala[q]: q += 1
+                if q - k >= 5 or q >= n: break
+                k = q
+            trechos.append([a0 / FPS, k / FPS])
+        junt = []
+        for t0, t1 in trechos:
+            if junt and junt[-1][1] - junt[-1][0] < .12: junt[-1][1] = t1
+            else: junt.append([t0, t1])
+        trechos = junt
+        # cada unidade falada (entre pausas) cai num trecho; dentro dele, as palavras dividem o tempo pelas letras
+        pos = {}; g = 0
         for i, (ws, _, _) in enumerate(fr):
-            s = tempos[k][0]
-            perto = min(inicios, key=lambda q: abs(q - s))
-            ajust[i] = perto if abs(perto - s) < .45 else s
-            k += len(ws)
+            for j in range(len(ws)): pos[(i, j)] = g; g += 1
+        ini = [pos[u] for u in UNIDADES] + [len(todas)]
+        if len(trechos) != len(UNIDADES):
+            sys.exit(f'achei {len(trechos)} trechos de fala e o texto tem {len(UNIDADES)} unidades: {trechos}')
+        tempos = []
+        for (t0, t1), u0, u1 in zip(trechos, ini, ini[1:]):
+            ps = [peso(todas[q][2]) for q in range(u0, u1)]; tot = sum(ps); acc = t0
+            for p in ps:
+                d = (t1 - t0) * p / tot; tempos.append((acc, acc + d)); acc += d
+        ajust = {}
         env = np.clip(rms / np.percentile(rms[fala], 95), 0, 1)
         env = np.convolve(env, np.ones(3) / 3, 'same')
     else:
