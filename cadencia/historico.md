@@ -20,6 +20,7 @@
 | 25/10/2026 | 16:53 | Reel animado + story (nicho) | Você sobreviveria a uma semana de internato? (`videos/v6.js`, Reel 18111723626143786, story 18160572910550048) | https://www.instagram.com/reel/De7gOmigGRy/ | 664 contas, 858 views, 89% de pulo, 1,9 s de média, 1 compartilhamento (2 dias) |
 | 26/10/2026 | 10:00 | Carrossel 7 slides | Erra sempre a mesma questão? Caderno de erros (pauta 4, `posts/2026-10-26-mesma-questao.json`, media_id 18088885742696548) | https://www.instagram.com/p/De9V0VtCBQS/ | 24 contas, 98 views, 3 visitas (1 dia) |
 | 26/10/2026 | 14:56 | Meme com tela (A1, foto) + story | Eu fingindo que não vi as revisões vencidas pra conseguir dormir (fila, `posts/2026-10-26-revisoes-vencidas-meme.json`, post 17920917831451580, story 17992793052106581) | https://www.instagram.com/p/De93qxWjfBp/ | 28 contas, 93 views, 0 visitas (19 h) |
+| 27/10/2026 | 10:02 | Carrossel 7 slides | (pra salvar) Salva esse antes do próximo plantão: checklist da semana de plantão (pauta 16, `posts/2026-10-27-checklist-plantao.json`, media_id 18095949476690349) | perfil (link sai no próximo dado do Windsor) | (preencher) |
 
 ## Anotações de desempenho
 
@@ -38,6 +39,7 @@
 - 25/10: o meme do ENAMED (24/10) ficou com 41 contas e 3,2 s de média, abaixo do de internato (63). Os três memes de foto da IA estão entre 39 e 63 contas, com 82% a 88% de pulo. Pastas do Drive vazias, então saiu o caminho A de novo, com a pauta de nicho 4 (terceiro meme de nicho da semana).
 - 26/10: o Reel animado "Você sobreviveria a uma semana de internato?" (25/10) chegou a 593 contas em 1 dia, o maior alcance desde o lançamento, mas com 90% de pulo. O carrossel de 25/10 ficou com 27 contas. Os carrosséis seguem abaixo de 100 contas (42 e 27), então pela regra do LEIA-ME o gancho da capa já varia: hoje saiu com pergunta ("Erra sempre a mesma questão?").
 - 26/10: o Reel animado de 25/10 subiu pra 654 contas (89% de pulo). O carrossel de hoje (caderno de erros) teve 20 contas em 5 h, mas já trouxe 3 visitas ao perfil, mais que os outros carrosséis. Saiu o primeiro meme da fila (A1, foto com a tela de revisões), primeiro meme em foto no feed: comparar com os Reels.
+- 27/10: o Reel animado de 25/10 chegou a 664 contas. Os carrosséis seguem baixos (24 contas o de 26/10, mas com 3 visitas ao perfil) e o meme A1 em foto de 26/10 ficou com 28 contas e nenhuma visita em 19 h, abaixo dos Reels. Saiu o primeiro carrossel "pra salvar" (checklist da semana de plantão, capa "Salva esse" com a tela da agenda): ver se gera salvamentos.
 
 ## Memes prontos na fila
 
