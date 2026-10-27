@@ -1,0 +1,58 @@
+{
+ "slug": "2026-10-26-2115-usp-prorrogada-sussp-anuladas",
+ "pillar": "novidade",
+ "header": ["NOVIDADE", "USP-SP E SUS-SP"],
+ "verified_on": "2026-10-26",
+ "sources": [
+  "https://fuvest.br/arquivos/coreme/rm2027-noticia-inscricoes-prorrogadas.pdf (comunicado FUVEST: inscrições da Residência Médica FMUSP 2027 prorrogadas até quarta-feira, 28 de outubro; taxa R$ 620; 1ª fase em 6 de dezembro)",
+  "https://www.correiobraziliense.com.br/euestudante/concursos/2026/10/7528305-inscricoes-para-residencia-medica-da-usp-sao-prorrogadas-ate-quarta-28.html (26/10/2026 17h52, mesma informação)",
+  "https://ipmeducacao.com.br/wp-content/uploads/2026/10/sussp-retificacao-anulacap.pdf (cópia da Retificação do edital SUS-SP 2027, CRH/SES-SP, DOE de 26/10/2026: itens 14.12, 11.1.2 e 11.1.3, com base na Resolução CNRM nº 4/2026)",
+  "https://med.estrategia.com/portal/noticias/sus-sp-2027-retificacao-questoes-anuladas/ e https://ipmeducacao.com.br/portal/sus-sp-retificacao-residencia-medica-2027-questoes-anuladas/ (as duas concordam; documento da Vunesp bloqueado por robots nesta execução)",
+  "posts/2026-10-12-1200-usp-2027-enamed-curriculo.json e posts/2026-10-26-1800-abertas-depois-de-hoje.json (currículo USP-SP peso 1 depois da prova; SUS-SP inscrições até 05/11, R$ 120, prova 13/12 etapa única)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em SP",
+   "pill": "NOVIDADE",
+   "title": ["USP-SP", "<span class='g glow'>PRORROGOU</span>"],
+   "body": "E o <b>SUS-SP</b> mudou a regra das questões anuladas. Duas novidades oficiais de hoje, 26/10.",
+   "bullets": ["USP-SP: inscrições até <b>quarta, 28/10</b>", "SUS-SP: anulada <b>não dá ponto</b>", "Precisa de currículo?"]
+  },
+  {
+   "type": "rows",
+   "label": "USP-SP 2027 (FUVEST)",
+   "title": ["MAIS <span class='y'>2 DIAS</span>"],
+   "sub": "Residência Médica FMUSP 2027",
+   "rows": [
+    {"name": "Inscrições", "sub": "Antes até 26/10. Só no site da FUVEST", "value": "28/10"},
+    {"name": "Taxa", "sub": "Para quem não tem isenção", "value": "R$ 620"},
+    {"name": "Prova (1ª fase)", "sub": "Data mantida", "value": "06/12"},
+    {"name": "Currículo", "sub": "2ª fase, peso 1, depois da prova", "value": "SIM"}
+   ],
+   "note": "Confira o <b>horário final e o boleto</b> na Área do Candidato da FUVEST."
+  },
+  {
+   "type": "cards",
+   "label": "SUS-SP 2027 (Retificação no DOE)",
+   "title": ["ANULADA <span class='g'>NÃO SOMA</span>"],
+   "sub": "O que muda na nota da prova",
+   "cards": [
+    {"num": "1", "h": "Antes", "tag": "Ponto para todos", "p": "Questão anulada dava o ponto para <b>todos os presentes</b>. Nota sobre o total de questões."},
+    {"num": "2", "h": "Agora", "tag": "Sai da conta", "p": "Questão anulada é <b>excluída</b>. Nota = acertos nas válidas x 100 / total de válidas."},
+    {"num": "3", "h": "Para passar", "tag": "50% das válidas", "p": "Habilitado quem acerta <b>pelo menos 50%</b> das questões válidas."}
+   ],
+   "note": "SUS-SP: inscrições até <b>05/11</b>, prova em <b>13/12</b>, sem análise de currículo."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA E", "<span class='g glow'>MANDA HOJE</span>"],
+   "pill": "SALVA",
+   "body": "para quem ia perder<br>a USP-SP.",
+   "note": "Vai fazer a USP-SP? O currículo conta. Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: comunicado da FUVEST (Residência Médica FMUSP 2027) e Retificação do edital SUS-SP 2027 (CRH/SES-SP, DOE de 26/10/2026), conferidos em 26/10/2026. Confira o edital do seu programa."
+  }
+ ],
+ "story": {"kicker": "NOVIDADE", "cta": "USP-SP 2027: <span>inscrições até 28/10</span>.<br>E a regra nova do SUS-SP no feed da @med_easyy."},
+ "caption": "🚨 USP-SP PRORROGOU E SUS-SP MUDOU A NOTA\n\nA FUVEST prorrogou as inscrições da residência médica da USP-SP (FMUSP) 2027 até quarta, 28/10. A taxa é R$ 620 e a 1ª fase continua em 06/12. Confira o horário final e o boleto na Área do Candidato da FUVEST.\n\nPrecisa de currículo? Na USP-SP, sim: a análise curricular é a 2ª fase, depois da prova.\n\nNo SUS-SP 2027, a retificação publicada hoje no Diário Oficial muda a regra das questões anuladas. Antes, todo mundo ganhava o ponto. Agora a questão anulada sai da conta, a nota é calculada só sobre as questões válidas e, para ser habilitado, é preciso acertar pelo menos 50% delas. O SUS-SP não tem análise de currículo e as inscrições vão até 05/11.\n\nSalva e manda para quem ia perder o prazo da USP 📌 Você vai fazer USP-SP ou SUS-SP? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #residencia2027 #uspsp #fmusp #sussp #fuvest"
+}
