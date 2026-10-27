@@ -19,8 +19,9 @@
 | 25/10/2026 | 15:13 | Carrossel 7 slides | Estudei mês passado e não lembro nada (`posts/2026-10-25-nao-lembro-nada.json`, media_id 18103448012039978) | https://www.instagram.com/p/De7UwULEU5G/ | 27 contas, 138 views, 1 visita (2 dias) |
 | 25/10/2026 | 16:53 | Reel animado + story (nicho) | Você sobreviveria a uma semana de internato? (`videos/v6.js`, Reel 18111723626143786, story 18160572910550048) | https://www.instagram.com/reel/De7gOmigGRy/ | 664 contas, 858 views, 89% de pulo, 1,9 s de média, 1 compartilhamento (2 dias) |
 | 26/10/2026 | 10:00 | Carrossel 7 slides | Erra sempre a mesma questão? Caderno de erros (pauta 4, `posts/2026-10-26-mesma-questao.json`, media_id 18088885742696548) | https://www.instagram.com/p/De9V0VtCBQS/ | 24 contas, 98 views, 3 visitas (1 dia) |
-| 26/10/2026 | 14:56 | Meme com tela (A1, foto) + story | Eu fingindo que não vi as revisões vencidas pra conseguir dormir (fila, `posts/2026-10-26-revisoes-vencidas-meme.json`, post 17920917831451580, story 17992793052106581) | https://www.instagram.com/p/De93qxWjfBp/ | 28 contas, 93 views, 0 visitas (19 h) |
-| 27/10/2026 | 10:02 | Carrossel 7 slides | (pra salvar) Salva esse antes do próximo plantão: checklist da semana de plantão (pauta 16, `posts/2026-10-27-checklist-plantao.json`, media_id 18095949476690349) | perfil (link sai no próximo dado do Windsor) | (preencher) |
+| 26/10/2026 | 14:56 | Meme com tela (A1, foto) + story | Eu fingindo que não vi as revisões vencidas pra conseguir dormir (fila, `posts/2026-10-26-revisoes-vencidas-meme.json`, post 17920917831451580, story 17992793052106581) | https://www.instagram.com/p/De93qxWjfBp/ | 28 contas, 94 views, 0 visitas (1 dia) |
+| 27/10/2026 | 10:02 | Carrossel 7 slides | (pra salvar) Salva esse antes do próximo plantão: checklist da semana de plantão (pauta 16, `posts/2026-10-27-checklist-plantao.json`, media_id 18095949476690349) | https://www.instagram.com/p/De_6uZFiMVc/ | 17 contas, 93 views, 2 visitas (5 h) |
+| 27/10/2026 | 14:57 | Meme animado (A2, Reel) + story (nicho) | POV: saiu do internato às 23h e abriu o caderno (fila, `posts/2026-10-27-meme-23h.json`, Reel 18113960660463781, story 18137338021650651) | perfil (link sai no próximo dado do Windsor) | (preencher) |
 
 ## Anotações de desempenho
 
@@ -40,6 +41,7 @@
 - 26/10: o Reel animado "Você sobreviveria a uma semana de internato?" (25/10) chegou a 593 contas em 1 dia, o maior alcance desde o lançamento, mas com 90% de pulo. O carrossel de 25/10 ficou com 27 contas. Os carrosséis seguem abaixo de 100 contas (42 e 27), então pela regra do LEIA-ME o gancho da capa já varia: hoje saiu com pergunta ("Erra sempre a mesma questão?").
 - 26/10: o Reel animado de 25/10 subiu pra 654 contas (89% de pulo). O carrossel de hoje (caderno de erros) teve 20 contas em 5 h, mas já trouxe 3 visitas ao perfil, mais que os outros carrosséis. Saiu o primeiro meme da fila (A1, foto com a tela de revisões), primeiro meme em foto no feed: comparar com os Reels.
 - 27/10: o Reel animado de 25/10 chegou a 664 contas. Os carrosséis seguem baixos (24 contas o de 26/10, mas com 3 visitas ao perfil) e o meme A1 em foto de 26/10 ficou com 28 contas e nenhuma visita em 19 h, abaixo dos Reels. Saiu o primeiro carrossel "pra salvar" (checklist da semana de plantão, capa "Salva esse" com a tela da agenda): ver se gera salvamentos.
+- 27/10, 14h57: o Reel do mentor de IA (14h30) ainda sem alcance no dado do Windsor (64 views). O carrossel checklist de plantão teve 17 contas e 2 visitas ao perfil em 5 h. Saiu o primeiro meme da fila (A2, POV 23h no internato), Reel e story. Na fila ficou o A1 dos flashcards.
 
 ## Memes prontos na fila
 
@@ -47,7 +49,6 @@ O agente do meme publica o primeiro daqui antes de criar outro (veja AGENTES.md)
 
 | Meme | Formato | Arquivos |
 |---|---|---|
-| POV: saiu do internato às 23h e abriu o caderno (meme animado) | A2, Reel | `posts/2026-10-27-meme-23h.json`, `publicado/2026-10-27-meme-23h/` (reel.mp4 e capa.jpg) |
 | Eu às 23h jogando o PDF da aula no Cadência Med e os flashcards saindo prontos | A1, foto | `posts/2026-10-27-pdf-flashcards-meme.json`, `publicado/2026-10-27-pdf-flashcards-meme/` |
 - 25/10: o José mandou dois vídeos de referência (texto animado em cima de fundo escuro, palavra por palavra, com destaque colorido) e pediu vídeos nesse estilo com as informações do site. Feitos 4 (plantão, quanto custa, o app em 30 segundos, internato e ENAMED) em `publicado/2026-10-25-videos/`, com o gerador em `videos/` e as legendas em `videos/legendas.md`. O José posta na mão. Quando saírem, anotar aqui o alcance pra comparar com os memes de foto da IA, que estão com 89% de pulo.
 - 25/10, 15h: o José viu o meme da IA no feed com o selo "Conteúdo de IA" e borrado, e pediu memes que divulguem o Cadência e o carrossel de volta. Saiu o caminho A (foto da IA no Canva). Agora os memes são feitos aqui em alta: A1 (tweet com tela real do app, foto 4:5 no feed e story) e A2 (meme animado em Reel, com o gerador de `videos/`). Carrossel "Estudei mês passado e não lembro nada" publicado às 15:15 (media_id 18103448012039978) e o carrossel diário das 09:52 voltou.
