@@ -28,5 +28,15 @@
     "publico": "raio de 25 km do centro de Goiânia, 19 a 27 anos, só Instagram",
     "orcamento_diario_brl": 9,
     "criado": "2026-10-22, ligado pelo pedido do José no mesmo dia"
+  },
+  "campanha_especial": {
+    "adset_id": "120251681261810345",
+    "nome": "Mentor de IA · 4 dias · R$ 25/dia (27 a 31/10)",
+    "ad_id": "120251681263180345",
+    "video_id": "1619889002843243",
+    "orcamento_diario_brl": 25,
+    "fim": "2026-10-31T14:30:00-03:00",
+    "publico": "cópia do conjunto geral (Brasil, 20 a 32 anos, só Instagram)",
+    "observacao": "Pedido do José em 27/10: R$ 25 por dia por 4 dias, fora do teto de R$ 15. O agente não mexe no dinheiro, não adia o fim, não põe meme novo aqui e não pausa. Só anota os números em turbinadas.md. Termina sozinho em 31/10."
   }
 }

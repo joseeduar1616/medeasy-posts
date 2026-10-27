@@ -180,6 +180,11 @@ Se já houver carrossel publicado hoje, não publique outro.
   (passo 4) e nunca passa de R$ 15 no total. Não cria campanha nem conjunto novo e não liga conjunto que
   esteja pausado (se o José pausou, ele quis assim).
 
+- **Campanha especial (pedido do José em 27/10):** conjunto "Mentor de IA · 4 dias · R$ 25/dia (27 a 31/10)"
+  (`120251681261810345`), com o Reel do mentor de IA (anúncio `120251681263180345`), R$ 25 por dia até 31/10 às 14h30.
+  Fica fora do teto de R$ 15 e das regras dos passos 3 a 6: não mexa no dinheiro, não adie o fim, não ponha meme
+  novo nele e não pause. Só anote gasto, visitas e custo por visita em `turbinadas.md`. Ele termina sozinho.
+
 ### Passo a passo
 
 1. Leia os anúncios dos dois conjuntos no Windsor (conector `facebook`, campos `ad_name`, `ad_id`, `ad_status`,
