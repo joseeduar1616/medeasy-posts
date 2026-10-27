@@ -1,0 +1,119 @@
+{
+  "id": "2026-10-27-checklist-plantao",
+  "legenda": "Plantão na semana e a revisão sempre fica pra depois? 😮‍💨\n\nVocê sai cansado, a aula vira \"amanhã eu vejo\" e a revisão que venceu no dia do plantão some da cabeça. No fim da semana, a pilha cresceu sozinha.\n\nO checklist ajuda: antes do plantão você deixa a semana montada, no dia você só faz o que cabe, e no dia seguinte começa pela revisão que venceu. No Cadência Med o plantão entra primeiro na agenda (dá pra puxar a escala do Google Agenda), o estudo vai nos espaços que sobram e a tela Hoje mostra a revisão do dia.\n\nSalva esse checklist e manda pra quem divide plantão com você 📌\n\nQuantos plantões você tem essa semana? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #plantao",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "SEMANA DE PLANTÃO",
+      "titulo": "SALVA ESSE ANTES DO {g}PRÓXIMO PLANTÃO{/g}",
+      "texto": "O checklist de antes, durante e depois do plantão pra <b>não perder a revisão da semana</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "rotina",
+        "altura": 410,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "1 DE 3",
+      "tag": "ANTES DO PLANTÃO",
+      "titulo": "MONTE A SEMANA {g}COM O PLANTÃO DENTRO{/g}",
+      "texto": "O plantão entra primeiro. O estudo vai <b>nos espaços que sobram de verdade</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Plantão e aulas da faculdade na agenda", "feito": true},
+          {"texto": "Revisão que vence no dia do plantão puxada pra antes", "feito": true},
+          {"texto": "Um bloco curto separado pro dia seguinte", "feito": true},
+          {"texto": "Dormir antes de entrar", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "2 DE 3",
+      "tag": "NO DIA DO PLANTÃO",
+      "titulo": "SÓ O QUE {g}CABE NO PLANTÃO{/g}",
+      "texto": "Dia de plantão é dia de plantão. Tentar compensar a aula perdida <b>só aumenta a culpa</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Nada de aula nova", "feito": true},
+          {"texto": "Sobrou um tempo? Flashcards do dia", "feito": true},
+          {"texto": "Anote a dúvida do caso pra estudar depois", "feito": true},
+          {"texto": "Descanse quando der", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "3 DE 3",
+      "tag": "DEPOIS DO PLANTÃO",
+      "titulo": "COMECE PELA {g}REVISÃO QUE VENCEU{/g}",
+      "texto": "Descansou? Abra primeiro o que venceu e deixe <b>a aula nova pro fim</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Revisões vencidas primeiro", "feito": true},
+          {"texto": "Um bloco curto de questões", "feito": true},
+          {"texto": "Erros pro caderno de erros", "feito": true},
+          {"texto": "Remontar o resto da semana", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "AGENDA",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "O PLANTÃO {g}ENTRA PRIMEIRO{/g}",
+      "texto": "Puxe a escala do Google Agenda e clique em montar. O app reparte o estudo <b>no tempo que sobra</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "rotina",
+        "altura": 540,
+        "foco": "bottom",
+        "nota": "Agenda da semana"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "TELA HOJE",
+      "tag": "NO DIA SEGUINTE",
+      "titulo": "A REVISÃO DO DIA {g}JÁ ESTÁ NA TELA{/g}",
+      "texto": "Abriu o app, a tela Hoje mostra a agenda e o ritmo. <b>Sem decidir nada cansado</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Tela Hoje"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "PLANTÃO NA AGENDA, {g}REVISÃO NO DIA CERTO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Agenda da semana", "texto": "plantão, aula e estudo num lugar só"},
+          {"titulo": "Google Agenda", "texto": "puxe a sua escala de lá"},
+          {"titulo": "Tela Hoje", "texto": "a revisão do dia aparece sozinha"},
+          {"titulo": "Mentor de IA", "texto": "ajuda a montar a semana com os plantões"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
