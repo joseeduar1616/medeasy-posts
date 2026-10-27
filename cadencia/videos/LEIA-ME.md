@@ -49,5 +49,5 @@ Arquivos: `agente.html`, `agente.js`, `roteiro.py`, `render-agente.mjs`, `fazer-
 A esfera pulsa com a voz, a legenda entra palavra por palavra e as telas do app aparecem conforme a fala.
 1. Gere a voz no ElevenLabs (voz Lucas, `7lu3ze7orhWaNeSPowWx`) com o texto das frases do `roteiro.py`.
 2. Baixe o MP3 (o servidor do áudio não abre daqui, então o José anexa na conversa).
-3. `./fazer-agente.sh voz.mp3` encaixa as frases nas pausas da voz, faz a trilha baixinha por baixo e gera `saida/cadencia-agente.mp4`.
+3. `./fazer-agente.sh voz.mp3` (ou `TEMA=claro ./fazer-agente.sh voz.mp3` pro fundo claro) encaixa as frases nas pausas da voz, faz a trilha baixinha por baixo e gera `saida/cadencia-agente.mp4`.
 Sem MP3, `python3 roteiro.py` monta um tempo de teste e `node render-agente.mjs previa 2,10,20` tira quadros soltos.

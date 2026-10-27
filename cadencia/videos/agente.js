@@ -4,6 +4,7 @@
    cena: 'orb' (esfera grande), 'painel', 'rotina', 'cartoes', 'escada', 'fim'. */
 const W = 1080, H = 1920, FPS = 30;
 const R = window.ROTEIRO;
+const CLARO = location.search.includes('claro');
 const lerp = (a, b, k) => a + (b - a) * k;
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const ease = k => 1 - Math.pow(1 - clamp(k), 3);
@@ -23,6 +24,20 @@ const vis = (c, t, f = .35) => c ? Math.min(sm((t - c.s) / f), sm((c.e - t) / f)
 /* ── fundo ── */
 const bg = document.getElementById('bg'), bx = bg.getContext('2d');
 function fundo(t) {
+  if (CLARO) {
+    bx.fillStyle = '#F3F2F9'; bx.fillRect(0, 0, W, H);
+    const c1 = bx.createRadialGradient(540, 700, 0, 540, 700, 1000);
+    c1.addColorStop(0, 'rgba(168,107,255,.20)'); c1.addColorStop(1, 'rgba(168,107,255,0)');
+    bx.fillStyle = c1; bx.fillRect(0, 0, W, H);
+    const c2 = bx.createRadialGradient(900 + 60 * Math.sin(t * .2), 1600, 0, 900, 1600, 900);
+    c2.addColorStop(0, 'rgba(70,217,245,.16)'); c2.addColorStop(1, 'rgba(70,217,245,0)');
+    bx.fillStyle = c2; bx.fillRect(0, 0, W, H);
+    bx.strokeStyle = 'rgba(20,18,42,.045)'; bx.lineWidth = 1;
+    const off = (t * 6) % 72;
+    for (let x = -72 + off; x < W; x += 72) { bx.beginPath(); bx.moveTo(x, 0); bx.lineTo(x, H); bx.stroke(); }
+    for (let y = -72 + off; y < H; y += 72) { bx.beginPath(); bx.moveTo(0, y); bx.lineTo(W, y); bx.stroke(); }
+    return;
+  }
   bx.fillStyle = '#06040d'; bx.fillRect(0, 0, W, H);
   const g1 = bx.createRadialGradient(540, 700, 0, 540, 700, 1100);
   g1.addColorStop(0, 'rgba(91,33,182,.42)'); g1.addColorStop(1, 'transparent');
@@ -58,10 +73,10 @@ function orb(t) {
   ox.clearRect(0, 0, W, H);
   // halo
   const hg = ox.createRadialGradient(o.x, o.y, o.r * .2, o.x, o.y, o.r * 1.9);
-  hg.addColorStop(0, `rgba(168,85,247,${.22 + a * .35})`); hg.addColorStop(1, 'transparent');
+  if (CLARO) { hg.addColorStop(0, `rgba(168,107,255,${.14 + a * .22})`); hg.addColorStop(1, 'rgba(168,107,255,0)'); } else { hg.addColorStop(0, `rgba(168,85,247,${.22 + a * .35})`); hg.addColorStop(1, 'transparent'); }
   ox.fillStyle = hg; ox.beginPath(); ox.arc(o.x, o.y, o.r * 1.9, 0, 6.29); ox.fill();
   // anel
-  ox.strokeStyle = `rgba(103,232,249,${.12 + a * .35})`; ox.lineWidth = 2;
+  ox.strokeStyle = CLARO ? `rgba(124,58,237,${.14 + a * .3})` : `rgba(103,232,249,${.12 + a * .35})`; ox.lineWidth = 2;
   ox.beginPath(); ox.arc(o.x, o.y, o.r * (1.18 + a * .12), 0, 6.29); ox.stroke();
   const ry = t * .45, rx = .35 + Math.sin(t * .3) * .15, cy = Math.cos(ry), sy = Math.sin(ry), cx = Math.cos(rx), sx = Math.sin(rx);
   const lista = [];
@@ -79,10 +94,10 @@ function orb(t) {
   for (const [x, y, z, v, b] of lista) {
     const prof = (z + 1) / 2;
     if (!v && prof < .55) continue;
-    const s = (v ? 2.1 + 2.6 * prof : 1.1 + prof) * (o.r / 300) * (1 + a * .4);
-    const al = v ? .25 + .75 * prof : .12 * prof;
+    const s = (v ? 2.1 + 2.6 * prof : 1.1 + prof) * Math.max(o.r / 300, CLARO ? .55 : 0) * (1 + a * .4) * (CLARO ? 1.3 : 1);
+    const al = CLARO ? (v ? .30 + .70 * prof : .10 * prof) : (v ? .25 + .75 * prof : .12 * prof);
     const mix = clamp((y + 1) / 2);
-    const rr = Math.round(lerp(103, 192, mix)), gg = Math.round(lerp(232, 132, mix)), bb = Math.round(lerp(249, 252, mix));
+    const rr = Math.round(CLARO ? lerp(47, 124, mix) : lerp(103, 192, mix)), gg = Math.round(CLARO ? lerp(160, 58, mix) : lerp(232, 132, mix)), bb = Math.round(CLARO ? lerp(234, 237, mix) : lerp(249, 252, mix));
     ox.fillStyle = `rgba(${rr},${gg},${bb},${al})`;
     ox.beginPath(); ox.arc(o.x + x * o.r, o.y + y * o.r, s, 0, 6.29); ox.fill();
   }

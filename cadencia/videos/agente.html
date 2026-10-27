@@ -41,7 +41,30 @@ canvas{position:absolute;inset:0}
 #c-fim .url{display:inline-block;margin-top:40px;font-weight:800;font-size:48px;padding:26px 50px;border-radius:999px;color:#0b0618;background:linear-gradient(90deg,#67e8f9,#c084fc);box-shadow:0 0 50px rgba(168,85,247,.6)}
 .topo{position:absolute;left:0;right:0;top:150px;text-align:center;font:600 22px M;letter-spacing:.24em;color:#cbbff5;text-transform:uppercase;z-index:6}
 .topo i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#f43f5e;box-shadow:0 0 10px #f43f5e;margin-right:12px;vertical-align:2px}
+
+/* tema claro: ?tema=claro */
+.claro body,body.claro{background:#F3F2F9;color:#14122A}
+body.claro .vin{background:radial-gradient(ellipse 110% 80% at 50% 45%,transparent 60%,rgba(124,58,237,.08))}
+body.claro .frase{text-shadow:none}
+body.claro .frase .hl{color:#7C3AED;text-shadow:none}
+body.claro .tela{border:2px solid rgba(20,18,42,.10);box-shadow:0 30px 80px rgba(60,40,120,.28),0 0 0 10px rgba(255,255,255,.7)}
+body.claro .chip{background:#fff;border-color:rgba(20,18,42,.10);color:#14122A;box-shadow:0 10px 30px rgba(60,40,120,.10)}
+body.claro .chip b{border-color:rgba(20,18,42,.18)}
+body.claro .chip.ok{border-color:rgba(124,58,237,.55)}
+body.claro .chip.ok b{background:#7C3AED;border-color:#7C3AED;color:#fff}
+body.claro .selo{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.45);color:#6D28D9}
+body.claro .escada .trilho{background:rgba(20,18,42,.10)}
+body.claro .escada .enche{background:linear-gradient(90deg,#2F7BEA,#7C3AED);box-shadow:none}
+body.claro .escada .bola{background:#fff;border-color:rgba(20,18,42,.14);color:#8B87A6;box-shadow:0 8px 24px rgba(60,40,120,.10)}
+body.claro .escada .no.on .bola{background:linear-gradient(135deg,#7C3AED,#2F7BEA);border-color:transparent;color:#fff;box-shadow:0 10px 30px rgba(124,58,237,.40)}
+body.claro .escada .leg2{color:#4A4763}
+body.claro .escada .tit,body.claro .topo{color:#7A7695}
+body.claro #c-fim img{filter:drop-shadow(0 6px 18px rgba(124,58,237,.35))}
+body.claro #c-fim .a em{color:#7C3AED;text-shadow:none}
+body.claro #c-fim .b{color:#7A7695}
+body.claro #c-fim .url{color:#fff;background:linear-gradient(90deg,#7C3AED,#2F7BEA);box-shadow:0 16px 40px rgba(124,58,237,.35)}
 </style></head><body>
+<script>if(location.search.includes("claro"))document.body.classList.add("claro")</script>
 <canvas id="bg" width="1080" height="1920"></canvas>
 <canvas id="orb" width="1080" height="1920"></canvas>
 <div class="vin"></div>
