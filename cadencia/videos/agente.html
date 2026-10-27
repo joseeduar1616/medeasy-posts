@@ -1,0 +1,95 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:J;font-weight:400;src:url(node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff2)}
+@font-face{font-family:J;font-weight:700;src:url(node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2)}
+@font-face{font-family:J;font-weight:800;src:url(node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-800-normal.woff2)}
+@font-face{font-family:M;src:url(node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-600-normal.woff2)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#06040d;font-family:J,sans-serif;color:#f4f1ff}
+canvas{position:absolute;inset:0}
+.vin{position:absolute;inset:0;background:radial-gradient(ellipse 110% 80% at 50% 45%,transparent 55%,rgba(0,0,0,.7));pointer-events:none}
+#leg{position:absolute;left:70px;right:70px;text-align:center;z-index:5}
+.frase{font-weight:800;font-size:68px;line-height:1.18;letter-spacing:-.01em;text-shadow:0 4px 24px rgba(0,0,0,.6)}
+.frase span{display:inline-block}
+.frase .hl{color:#c4a1ff;text-shadow:0 0 26px rgba(168,85,247,.8)}
+.c{position:absolute;left:90px;right:90px;top:225px;opacity:0;z-index:4}
+.tela{border-radius:28px;overflow:hidden;border:2px solid rgba(196,181,253,.4);box-shadow:0 0 70px rgba(124,58,237,.45),0 30px 80px rgba(0,0,0,.6);background:#0b0a18}
+.tela .barra{height:44px;background:#141127;display:flex;align-items:center;gap:10px;padding:0 18px}
+.tela .barra i{width:13px;height:13px;border-radius:50%;background:#3a3358}
+.tela .barra span{margin-left:12px;font:600 18px M;letter-spacing:.12em;color:#9d93c8;text-transform:uppercase}
+.tela .img{width:100%;background-repeat:no-repeat}
+.chips{margin-top:28px;display:flex;flex-direction:column;gap:18px}
+.chip{display:flex;align-items:center;gap:18px;padding:22px 28px;border-radius:22px;background:rgba(20,16,40,.85);border:2px solid rgba(196,181,253,.28);font-weight:700;font-size:38px}
+.chip b{margin-left:auto;width:46px;height:46px;border-radius:50%;border:3px solid rgba(196,181,253,.35);display:flex;align-items:center;justify-content:center;font-size:28px;color:transparent}
+.chip.ok{border-color:rgba(103,232,249,.6)}
+.chip.ok b{background:#67e8f9;border-color:#67e8f9;color:#06121a}
+.selo{display:inline-flex;margin-top:26px;gap:14px;align-items:center;padding:20px 30px;border-radius:999px;background:rgba(103,232,249,.12);border:2px solid rgba(103,232,249,.55);font-weight:800;font-size:36px;color:#a5f3fc}
+.escada{position:relative;margin-top:250px}
+.escada .trilho{position:absolute;left:75px;right:75px;top:73px;height:8px;border-radius:4px;background:rgba(196,181,253,.18)}
+.escada .enche{position:absolute;inset:0;background:linear-gradient(90deg,#67e8f9,#a855f7);transform-origin:left;transform:scaleX(0);border-radius:4px;box-shadow:0 0 18px rgba(34,211,238,.7)}
+.escada .nos{position:relative;display:flex;justify-content:space-between}
+.escada .no{width:150px;text-align:center}
+.escada .bola{width:150px;height:150px;border-radius:50%;border:3px solid rgba(196,181,253,.35);background:#0d0b1d;display:flex;align-items:center;justify-content:center;font:600 40px M;color:#8d84b3}
+.escada .no.on .bola{background:#67e8f9;border-color:#67e8f9;color:#04131a;box-shadow:0 0 36px rgba(34,211,238,.75)}
+.escada .leg2{margin-top:22px;font:600 30px M;color:#d7d0f5;text-transform:uppercase}
+.escada .tit{font:600 26px M;letter-spacing:.2em;color:#b9b0dc;text-transform:uppercase;margin-bottom:40px;text-align:center}
+#c-fim{top:330px;text-align:center}
+#c-fim img{height:150px;filter:drop-shadow(0 0 30px rgba(168,85,247,.7))}
+#c-fim .a{font-weight:800;font-size:112px;line-height:1.02;margin-top:40px;letter-spacing:-.02em}
+#c-fim .a em{font-style:normal;color:#c4a1ff;text-shadow:0 0 40px rgba(168,85,247,.8)}
+#c-fim .b{font:600 32px M;letter-spacing:.16em;color:#d7d0f5;text-transform:uppercase;margin-top:26px}
+#c-fim .url{display:inline-block;margin-top:40px;font-weight:800;font-size:48px;padding:26px 50px;border-radius:999px;color:#0b0618;background:linear-gradient(90deg,#67e8f9,#c084fc);box-shadow:0 0 50px rgba(168,85,247,.6)}
+.topo{position:absolute;left:0;right:0;top:150px;text-align:center;font:600 22px M;letter-spacing:.24em;color:#cbbff5;text-transform:uppercase;z-index:6}
+.topo i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#f43f5e;box-shadow:0 0 10px #f43f5e;margin-right:12px;vertical-align:2px}
+</style></head><body>
+<canvas id="bg" width="1080" height="1920"></canvas>
+<canvas id="orb" width="1080" height="1920"></canvas>
+<div class="vin"></div>
+<div class="topo"><i></i>Mentor de IA · Cadência Med</div>
+
+<div class="c" id="c-painel">
+  <div class="tela"><div class="barra"><i></i><i></i><i></i><span>Seu painel</span></div><div class="img" id="img-hoje"></div></div>
+  <div class="chips">
+    <div class="chip">Revisões que venceram<b>✓</b></div>
+    <div class="chip">Matéria abaixo da média<b>✓</b></div>
+    <div class="chip">Plantões da semana<b>✓</b></div>
+  </div>
+</div>
+<div class="c" id="c-rotina">
+  <div class="tela"><div class="barra"><i></i><i></i><i></i><span>Sua semana</span></div><div class="img" id="img-rotina"></div></div>
+  <div class="selo">✓ Semana montada em volta da escala</div>
+</div>
+<div class="c" id="c-cartoes">
+  <div class="tela"><div class="barra"><i></i><i></i><i></i><span>Flashcards com IA</span></div><div class="img" id="img-cartoes"></div></div>
+  <div class="selo">✓ PDF virou flashcard</div>
+</div>
+<div class="c" id="c-escada">
+  <div class="escada"><div class="tit">Escada de revisão</div>
+    <div class="trilho"><div class="enche"></div></div>
+    <div class="nos">
+      <div class="no"><div class="bola">1</div><div class="leg2">1 sem</div></div>
+      <div class="no"><div class="bola">2</div><div class="leg2">1 mês</div></div>
+      <div class="no"><div class="bola">3</div><div class="leg2">2 meses</div></div>
+      <div class="no"><div class="bola">4</div><div class="leg2">4 meses</div></div>
+      <div class="no"><div class="bola">5</div><div class="leg2">6 meses</div></div>
+    </div><div style="text-align:center"><div class="selo" style="margin-top:90px">✓ Volta sozinha, sem você lembrar</div></div></div>
+</div>
+<div class="c" id="c-fim">
+  <img src="marca.png" data-k="0"><div class="a" data-k=".2">Teste <em>3 dias</em> grátis</div>
+  <div class="b" data-k=".45">Sem cartão · tudo liberado</div><div class="url" data-k=".7">cadenciamed.com.br</div>
+</div>
+<div id="leg"></div>
+<script>
+function recorte(id, src, iw, ih, x, y, w, h, larg) {
+  const el = document.getElementById(id), alt = Math.round(larg * h / w), k = larg / w;
+  el.style.height = alt + 'px'; el.style.backgroundImage = `url(${src})`;
+  el.style.backgroundSize = `${iw * k}px ${ih * k}px`; el.style.backgroundPosition = `${-x * k}px ${-y * k}px`;
+}
+const LARG = 896;
+recorte('img-hoje', 'prints/hoje.jpg', 1440, 900, 0, 200, 900, 560, LARG);
+recorte('img-rotina', 'prints/rotina.jpg', 1080, 675, 205, 378, 520, 297, LARG);
+recorte('img-cartoes', 'prints/cartoes_ia.jpg', 1080, 675, 215, 0, 830, 450, LARG);
+</script>
+<script src="roteiro.js"></script>
+<script src="agente.js"></script>
+</body></html>

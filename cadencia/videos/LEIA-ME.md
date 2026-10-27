@@ -42,3 +42,12 @@ em vermelho, pode pegar várias palavras), `relogio`, `chips`, `carimbo`, `tela`
 Regras de texto do `../LEIA-ME.md`: sem travessão, sem "não é X, é Y", só função que existe no
 app, nenhum número inventado (os de cada vídeo vêm do site, da tela de planos e do edital do ENAMED).
 Deixe o conteúdo entre y 230 e y 1500: em cima fica o nome do perfil e embaixo a legenda do Reels.
+
+## Vídeo do agente que fala (esfera de pontos e voz)
+
+Arquivos: `agente.html`, `agente.js`, `roteiro.py`, `render-agente.mjs`, `fazer-agente.sh`.
+A esfera pulsa com a voz, a legenda entra palavra por palavra e as telas do app aparecem conforme a fala.
+1. Gere a voz no ElevenLabs (voz Lucas, `7lu3ze7orhWaNeSPowWx`) com o texto das frases do `roteiro.py`.
+2. Baixe o MP3 (o servidor do áudio não abre daqui, então o José anexa na conversa).
+3. `./fazer-agente.sh voz.mp3` encaixa as frases nas pausas da voz, faz a trilha baixinha por baixo e gera `saida/cadencia-agente.mp4`.
+Sem MP3, `python3 roteiro.py` monta um tempo de teste e `node render-agente.mjs previa 2,10,20` tira quadros soltos.
