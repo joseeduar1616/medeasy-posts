@@ -77,6 +77,19 @@ async function notion(env, caminho, metodo, corpo) {
   if (!r.ok) throw new Error(`Notion ${r.status}: ${j.message || ""}`);
   return j;
 }
+// Linha criada nas últimas 2 horas com o mesmo nome e o mesmo telefone (8 últimos dígitos)
+async function clienteRecente(env, dbc, props) {
+  const nome = semAcento(props.Cliente?.title?.[0]?.text?.content || "").replace(/\s+/g, " ").trim();
+  const tel = String(props.Telefone?.phone_number || "").replace(/\D/g, "").slice(-8);
+  if (!nome || tel.length < 8) return null;
+  try {
+    const desde = new Date(Date.now() - 2 * 3600 * 1000).toISOString();
+    const j = await notion(env, `databases/${dbc}/query`, "POST", { filter: { timestamp: "created_time", created_time: { on_or_after: desde } }, page_size: 100 });
+    return (j.results || []).find(pg => { const pp = pg.properties || {};
+      const n = semAcento((pp.Cliente?.title || []).map(t => t.plain_text).join("")).replace(/\s+/g, " ").trim();
+      return n === nome && String(pp.Telefone?.phone_number || "").replace(/\D/g, "").slice(-8) === tel; }) || null;
+  } catch { return null; }
+}
 async function sincronizar(env) {
   if (!env.GITHUB_TOKEN || !env.GITHUB_REPO) return { ok: false, motivo: "sem GITHUB_TOKEN" };
   const r = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/actions/workflows/portal-notion.yml/dispatches`, { method: "POST", headers: { Authorization: `Bearer ${env.GITHUB_TOKEN}`, Accept: "application/vnd.github+json", "User-Agent": "medeasy-ponte", "Content-Type": "application/json" }, body: JSON.stringify({ ref: "main" }) });
@@ -233,6 +246,8 @@ export default {
       if (!props.props.Cliente) return resposta({ erro: "falta o nome do cliente" }, 400, h);
       try {
         const dbc = String(env.CLIENTES_DB).replace(/-/g, "");
+        // Dois toques no botão, ou a mesma triagem aberta em dois aparelhos: não cria a linha de novo
+        if (!corpo.outraLinha) { const ja = await clienteRecente(env, dbc, props.props); if (ja) return resposta({ ok: true, id: ja.id, url: ja.url, jaExistia: true }, 200, h); }
         const j = await notion(env, "pages", "POST", { parent: { database_id: dbc }, properties: await ajustarOpcoes(env, dbc, props.props) });
         const sync = await sincronizar(env);
         return resposta({ ok: true, id: j.id, url: j.url, gravadas: Object.keys(props.props), recusadas: props.recusadas, sincronizar: sync }, 200, h);

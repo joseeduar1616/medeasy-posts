@@ -73,14 +73,19 @@ async function criarClienteNotion(){
   const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t);
   const letra = document.getElementById("triOpFechar")?.value || "A"; const o = ops.find(x => x.letra === letra) || ops[0];
   if (!String(t.nome || "").trim() || !t.whats){ toast("Preencha o nome e o WhatsApp antes"); return; }
-  if (t.clienteNotion && !confirm("Esse cliente já foi criado no Notion. Criar outra linha?")) return;
+  if (S.criandoCliente) return;
+  const outraLinha = !!t.clienteNotion; if (outraLinha && !confirm("Esse cliente já foi criado no Notion. Criar outra linha?")) return;
   const c = clienteDaTriagem(t); const ct = ctrlDe(c);
   const tipos = (o?.tipos || tiposDe(t.servico)).map(x => SERVICO_NOTION[x]).filter(Boolean);
   const props = { "Cliente":t.nome.trim(), "Telefone":t.whats, "Tipo de serviço":[...tipos, ...c.provas.map(p => p.nome)], "Mentor":S.mentor?.nome || "", "Status":"Não iniciada", "Pagamento":"Não pago",
     "Valor total":o ? o.total : null, "Data de início ":isoLocal(), "Certificados por item":textoCont(c, carregarCont(c).provas) || "", "Controle de certificados":temCtrl(ct) ? textoCtrl(ct) : "" };
+  // Trava o botão até a ponte responder: dois toques criavam duas linhas
+  S.criandoCliente = true; const bt = document.querySelector("[data-a=criarClienteNotion]"); if (bt){ bt.disabled = true; bt.textContent = "Criando..."; }
   toast("Criando o cliente no Notion");
-  try { const j = await pontePedido("/cliente", { props }); t.clienteNotion = j.url; t.clienteNotionId = String(j.id || "").replace(/-/g, ""); t.valorNotion = o ? o.total : null; t.opcaoNotion = o ? o.letra : ""; t.etapa = "fechado"; salvarTri(t); render(); toast("Cliente criado no Notion. Entra no painel com o código de acesso em 1 ou 2 minutos"); }
+  try { const j = await pontePedido("/cliente", { props, outraLinha }); t.clienteNotion = j.url; t.clienteNotionId = String(j.id || "").replace(/-/g, ""); t.valorNotion = o ? o.total : null; t.opcaoNotion = o ? o.letra : ""; t.etapa = "fechado"; salvarTri(t);
+    toast(j.jaExistia ? "Esse cliente já tinha sido criado no Notion agora há pouco. A triagem ficou ligada a essa linha, sem criar outra" : "Cliente criado no Notion. Entra no painel com o código de acesso em 1 ou 2 minutos"); }
   catch (e) { toast("Não criou: " + e.message); }
+  finally { S.criandoCliente = false; render(); }
 }
 const novoIdTri = () => "t:" + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3);
 function editalJS(nome){ const E = S.eq?.editais || {}; const k = kP(nome); const e = Object.entries(E).find(([kk]) => k.startsWith(kk) || (kk.startsWith(k) && k.length >= 3)); return e ? e[1] : null; }
