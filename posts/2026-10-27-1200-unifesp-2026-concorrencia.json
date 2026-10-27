@@ -1,0 +1,90 @@
+{
+ "slug": "2026-10-27-1200-unifesp-2026-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "header": ["CONCORRÊNCIA", "UNIFESP 2026"],
+ "verified_on": "2026-10-27",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/unifesp-divulga-concorrencia-do-processo-seletivo-para-residencia-medica-2026/ (a partir do documento oficial Candidato por vaga 2025/2026 da Unifesp)",
+  "https://www.medway.com.br/conteudos/concorrencia-residencia-medica-unifesp/ (mesmos números de vagas e inscritos por especialidade do acesso direto; totais gerais divergem entre os portais e ficaram fora do post)",
+  "Edital Unifesp 2027 (Vunesp, vunesp.com.br/UFSP2602), conferido nos posts de 14 e 20/10 (inscrições até 30/10 23h59, R$ 726, 248 vagas de acesso direto, prova 29/11, análise curricular peso 1, Lattes até 04/12)",
+  "log/news_seen.md, varreduras de 27/10 sem prorrogação nova da Unifesp"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em São Paulo",
+   "pill": "UNIFESP",
+   "title": ["QUANTOS DISPUTAM", "<span class='y glow'>CADA VAGA</span>"],
+   "body": "Veja a concorrência por especialidade na Unifesp 2026 antes de escolher o seu programa. As inscrições de 2027 fecham na sexta, <b>30/10</b>.",
+   "bullets": ["As especialidades mais disputadas", "As grandes áreas", "Precisa de currículo?"]
+  },
+  {
+   "type": "rows",
+   "label": "Mais disputadas",
+   "title": ["ONDE A DISPUTA <span class='y'>FOI MAIOR</span>"],
+   "sub": "Candidatos por vaga na Unifesp 2026, acesso direto",
+   "rows": [
+    {"name": "Neurocirurgia", "sub": "204 inscritos para 3 vagas", "value": "68,0"},
+    {"name": "Dermatologia", "sub": "370 inscritos para 8 vagas", "value": "46,3"},
+    {"name": "Cirurgia Geral", "sub": "704 inscritos para 16 vagas", "value": "44,0"},
+    {"name": "Otorrinolaringologia", "sub": "260 inscritos para 6 vagas", "value": "43,3"},
+    {"name": "Ginecologia e Obstetrícia", "sub": "454 inscritos para 12 vagas", "value": "37,8"},
+    {"name": "Neurologia", "sub": "260 inscritos para 7 vagas", "value": "37,1"}
+   ],
+   "note": "Cirurgia Geral e GO, que costumam ter mais vagas, ficaram entre as mais disputadas."
+  },
+  {
+   "type": "rows",
+   "label": "Grandes áreas",
+   "title": ["E NAS <span class='y'>OUTRAS ÁREAS</span>"],
+   "sub": "Candidatos por vaga na Unifesp 2026, acesso direto",
+   "rows": [
+    {"name": "Oftalmologia", "sub": "443 inscritos para 12 vagas", "value": "36,9"},
+    {"name": "Psiquiatria", "sub": "552 inscritos para 15 vagas", "value": "36,8"},
+    {"name": "Anestesiologia", "sub": "339 inscritos para 10 vagas", "value": "33,9"},
+    {"name": "Ortopedia e Traumatologia", "sub": "319 inscritos para 16 vagas", "value": "19,9"},
+    {"name": "Radiologia", "sub": "232 inscritos para 12 vagas", "value": "19,3"},
+    {"name": "Clínica Médica", "sub": "905 inscritos para 52 vagas", "value": "17,4"}
+   ],
+   "note": "Clínica Médica é a que mais recebe inscritos, mas também a que tem mais vagas."
+  },
+  {
+   "type": "rows",
+   "label": "Menos disputadas",
+   "title": ["ONDE A DISPUTA <span class='g'>FOI MENOR</span>"],
+   "sub": "Candidatos por vaga na Unifesp 2026, acesso direto",
+   "rows": [
+    {"name": "Pediatria", "sub": "310 inscritos para 18 vagas", "value": "17,2"},
+    {"name": "Medicina de Família", "sub": "34 inscritos para 4 vagas", "value": "8,5"},
+    {"name": "Medicina de Emergência", "sub": "64 inscritos para 11 vagas", "value": "5,8"},
+    {"name": "Medicina Intensiva", "sub": "56 inscritos para 10 vagas", "value": "5,6"}
+   ],
+   "note": "A concorrência de 2026 é referência, não previsão para 2027."
+  },
+  {
+   "type": "cards",
+   "label": "Formato da seleção",
+   "title": ["PRECISA DE <span class='g'>CURRÍCULO</span>?"],
+   "sub": "Resposta do edital da Unifesp 2027",
+   "cards": [
+    {"num": "1", "h": "Sim", "tag": "peso 1", "p": "A análise curricular entra na nota final, depois da prova objetiva."},
+    {"num": "2", "h": "Lattes até 04/12", "tag": "atualizado", "p": "O Lattes precisa estar atualizado até <b>04/12</b>. A análise é de 04 a 21/01."},
+    {"num": "3", "h": "Inscrição até 30/10", "tag": "R$ 726", "p": "Até as <b>23h59</b>, pelo site da <b>Vunesp</b>. São <b>248 vagas</b> de acesso direto."}
+   ],
+   "note": "A prova é em <b>29/11</b>, o mesmo dia do PSU-GO."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA PARA", "<span class='g glow'>COMPARAR</span>"],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar Unifesp com você.",
+   "note": "Vai prestar Unifesp? Chama a <b>MedEasy</b> no direct para organizar o seu currículo e o Lattes.",
+   "small": "Fontes: documento oficial Candidato por vaga 2025/2026 da Unifesp, conforme levantamentos de Estratégia MED e Medway (números iguais por especialidade). Edital Unifesp 2027 (Vunesp)."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "Unifesp: <span>68 por vaga</span> em Neurocirurgia.<br>Veja onde a disputa foi maior no feed da @med_easyy."
+ },
+ "caption": "📊 QUANTOS DISPUTAM CADA VAGA NA UNIFESP\n\nNa residência médica da Unifesp 2026, Neurocirurgia foi a mais disputada no acesso direto, com 68 candidatos por vaga (204 inscritos para 3 vagas). Depois vêm Dermatologia (46,3), Cirurgia Geral (44) e Otorrino (43,3).\n\nGO teve 37,8 por vaga, Psiquiatria 36,8 e Anestesiologia 33,9. Clínica Médica ficou com 17,4 e Pediatria com 17,2. Medicina Intensiva e Emergência tiveram menos de 6 por vaga.\n\nPrecisa de currículo? Sim. A análise curricular tem peso 1 e acontece depois da prova, com o Lattes atualizado até 04/12. As inscrições de 2027 fecham nesta sexta, 30/10, às 23h59, no site da Vunesp, com taxa de R$ 726. A prova é em 29/11, mesmo dia do PSU-GO. Arrasta para ver tudo e salva para comparar 📌\n\nQual especialidade você vai prestar na Unifesp? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#unifesp #residenciamedica #saopaulo #vunesp #concorrencia #residencia2027"
+}
