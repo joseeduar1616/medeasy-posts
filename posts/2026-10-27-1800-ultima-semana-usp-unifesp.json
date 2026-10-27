@@ -1,0 +1,50 @@
+{
+ "slug": "2026-10-27-1800-ultima-semana-usp-unifesp",
+ "pillar": "calendário e prazos",
+ "header": ["INSCRIÇÕES", "ÚLTIMA SEMANA"],
+ "verified_on": "2026-10-27",
+ "sources": [
+  "https://fuvest.br/arquivos/coreme/rm2027-noticia-inscricoes-prorrogadas.pdf (comunicado FUVEST: Residência Médica FMUSP 2027 prorrogada até 28/10, taxa R$ 620, 1ª fase 06/12), conferido em 26/10 e sem mudança nas varreduras de 27/10 (log/news_seen.md, 17h)",
+  "https://www.correiobraziliense.com.br/euestudante/concursos/2026/10/7528305-inscricoes-para-residencia-medica-da-usp-sao-prorrogadas-ate-quarta-28.html",
+  "posts/2026-10-12-1200-usp-2027-enamed-curriculo.json (currículo USP-SP peso 1 na 2ª fase)",
+  "posts/2026-10-20-1200-unifesp-2027-guia.json (edital Unifesp 2027 Vunesp: inscrições até 30/10 23h59, R$ 726, prova 29/11, currículo peso 1 depois da prova)",
+  "posts/2026-10-09-1800-sesgo-2027-edital.json (Edital nº 24/2026 COREME SES-GO: até 03/11 17h, R$ 500, currículo 100 pontos na 2ª fase)",
+  "posts/2026-10-26-1800-abertas-depois-de-hoje.json (SUS-SP até 05/11 R$ 120 sem currículo; UNESP até 06/11 R$ 648, 10% currículo na maioria; SES-DF até 18/11 23h59 R$ 120 sem análise curricular)"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "ÚLTIMA SEMANA",
+   "title": ["FECHA", "<span class='g glow'>AMANHÃ</span>"],
+   "body": "A <b>USP-SP</b> fecha amanhã, 28/10, e a <b>Unifesp</b> na sexta, 30/10. Depois vêm SES-GO, SUS-SP, UNESP e SES-DF.",
+   "bullets": ["Último dia e taxa", "O que ainda fica aberto", "Precisa de currículo?"]},
+  {"type": "rows", "label": "Esta semana", "title": ["NÃO DEIXA <span class='y'>PASSAR</span>"], "sub": "As duas que fecham primeiro",
+   "rows": [
+    {"name": "USP-SP (FUVEST)", "sub": "Prorrogada. Taxa R$ 620. Prova 06/12", "value": "28/10"},
+    {"name": "Unifesp (Vunesp)", "sub": "Até 23h59. Taxa R$ 726. Prova 29/11", "value": "30/10"}
+   ],
+   "note": "Confira o <b>horário final e o boleto</b> na área do candidato de cada banca."},
+  {"type": "rows", "label": "Ainda abertas", "title": ["DEPOIS <span class='g'>DELAS</span>"], "sub": "Último dia de inscrição e taxa",
+   "rows": [
+    {"name": "SES-GO", "sub": "Até 17h, Verbena, R$ 500", "value": "03/11"},
+    {"name": "SUS-SP", "sub": "Vunesp, R$ 120", "value": "05/11"},
+    {"name": "UNESP", "sub": "Vunesp, R$ 648", "value": "06/11"},
+    {"name": "SES-DF", "sub": "Até 23h59, IADES, R$ 120", "value": "18/11"}
+   ],
+   "note": "UNESP e SES-DF têm prova no <b>mesmo dia</b>, 12/12."},
+  {"type": "rows", "label": "Currículo", "title": ["PRECISA DE <span class='y'>CURRÍCULO?</span>"], "sub": "Conforme os editais 2027",
+   "rows": [
+    {"name": "USP-SP", "sub": "2ª fase, peso 1", "value": "SIM"},
+    {"name": "Unifesp", "sub": "Peso 1, depois da prova", "value": "SIM"},
+    {"name": "SES-GO", "sub": "100 pontos na 2ª fase", "value": "SIM"},
+    {"name": "UNESP", "sub": "10% na maioria dos programas", "value": "SIM"},
+    {"name": "SUS-SP", "sub": "Prova objetiva em etapa única", "value": "NÃO"},
+    {"name": "SES-DF", "sub": "Sem análise curricular", "value": "NÃO"}
+   ],
+   "note": "Quem passa para a 2ª fase tem <b>poucos dias</b> para mandar os comprovantes."},
+  {"type": "cta", "title": ["SALVA E", "<span class='g glow'>MANDA HOJE</span>"], "pill": "SALVA",
+   "body": "para quem ainda não<br>se inscreveu.",
+   "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: comunicado da FUVEST (Residência Médica FMUSP 2027) e editais 2027 de Unifesp e UNESP (Vunesp), SES-GO (Instituto Verbena/UFG, Edital nº 24/2026), SUS-SP (Vunesp) e SES-DF (IADES, Edital RM-1/2027). Confira o edital do seu programa."}
+ ],
+ "story": {"kicker": "POST NOVO", "cta": "USP-SP fecha <span>amanhã, 28/10</span>.<br>Veja no feed da @med_easyy o que ainda está aberto."},
+ "caption": "⏰ FECHA AMANHÃ: USP-SP\n\nAs inscrições da USP-SP (FUVEST) foram prorrogadas e terminam amanhã, 28/10. A taxa é de R$ 620 e a 1ª fase é no dia 06/12. A Unifesp fecha logo depois, na sexta, 30/10, às 23h59 (R$ 726).\n\nDepois delas ainda ficam abertas SES-GO (03/11 às 17h), SUS-SP (05/11), UNESP (06/11) e SES-DF (18/11 às 23h59). Atenção: UNESP e SES-DF têm prova no mesmo dia, 12/12.\n\nUSP-SP, Unifesp, SES-GO e UNESP avaliam o currículo depois da prova. SUS-SP e SES-DF não têm análise curricular. Arrasta para ver tudo 📌\n\nSalva e manda hoje para quem ainda não se inscreveu. Qual dessas você vai fazer? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #uspsp #unifesp #sesgo #residencia2027 #medicina"
+}
