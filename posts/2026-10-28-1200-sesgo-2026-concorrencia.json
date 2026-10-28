@@ -1,0 +1,102 @@
+{
+ "slug": "2026-10-28-1200-sesgo-2026-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "header": ["CONCORRÊNCIA", "SES-GO"],
+ "verified_on": "2026-10-28",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/ses-go-2026-veja-a-relacao-candidato-vaga-para-residencia-medica/ (21/11/2025, a partir da homologação definitiva das inscrições da SES-GO de 19/11/2025: 8.655 inscrições, 205 vagas)",
+  "https://www.grupomedcof.com.br/blog/?p=31818 (21/11/2025: 8.655 inscritos para 205 vagas, mesmo total)",
+  "https://sistemas.institutoverbena.ufg.br/2027/coreme-ses/sistema/arquivos/editais/EDITAL_DE_ABERTURA_COREME_SES_2027.pdf (Edital nº 24/2026 COREME SES-GO 2027, conferido nos posts de 09 e 21/10)",
+  "https://portal.estrategia.com/medicina/residencia-medica/ses-go-2027-oferece-219-vagas-em-residencia-medica/ (219 vagas em 2027)",
+  "log/news_seen.md, varredura de 28/10 11h sem retificação nova da SES-GO",
+  "Fora do post: concorrência por programa de 2026 (só uma fonte, Estratégia MED, sem segunda fonte nem o documento oficial acessível)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em Goiás",
+   "pill": "SES-GO",
+   "title": ["QUANTOS DISPUTAM", "<span class='y glow'>CADA VAGA</span>"],
+   "body": "Na SES-GO 2026 foram <b>8.655 inscrições</b> para <b>205 vagas</b>. Para 2027 as inscrições vão até <b>terça, 03/11</b>.",
+   "bullets": [
+    "A disputa de 2026 em números",
+    "Precisa de currículo?",
+    "Prazos e taxas de 2027"
+   ]
+  },
+  {
+   "type": "grid",
+   "label": "SES-GO 2026",
+   "title": ["<span class='y'>42,2</span> POR VAGA"],
+   "sub": "Inscrições homologadas na seleção de 2026",
+   "cells": [
+    {"v": "8.655", "k": "Inscrições em 2026"},
+    {"v": "205", "k": "Vagas em 2026"},
+    {"v": "42,2", "k": "Inscrições por vaga"},
+    {"v": "219", "k": "Vagas em 2027"}
+  ],
+   "box": {
+    "h": "ATENÇÃO",
+    "x": "O número conta inscrições, não pessoas: dá para se inscrever em mais de um programa. Em 2027 são 14 vagas a mais que em 2026."
+   }
+  },
+  {
+   "type": "cards",
+   "label": "Formato da seleção",
+   "title": ["PRECISA DE <span class='g'>CURRÍCULO</span>?"],
+   "sub": "Resposta do edital da SES-GO 2027",
+   "cards": [
+    {"num": "1", "h": "Sim, na 2ª fase", "tag": "100 pontos", "p": "A análise do currículo vale <b>100 pontos</b> e é só para quem for classificado na prova."},
+    {"num": "2", "h": "Prova objetiva", "tag": "100 pontos", "p": "<b>100 questões</b> no acesso direto. Quem fizer menos de <b>50 pontos</b> é eliminado."},
+    {"num": "3", "h": "Envio depois", "tag": "pelo portal", "p": "Os convocados enviam currículo e comprovantes pelo portal do Instituto Verbena/UFG, no prazo do cronograma."}
+   ],
+   "note": "Os comprovantes precisam estar prontos quando sair a convocação."
+  },
+  {
+   "type": "grid",
+   "label": "Análise do currículo",
+   "title": ["O QUE <span class='g'>MAIS PONTUA</span>"],
+   "sub": "Pontuação máxima de cada item, de um total de 100",
+   "cells": [
+    {"v": "20", "k": "Histórico escolar"},
+    {"v": "15", "k": "Pesquisa ou extensão"},
+    {"v": "12", "k": "Instituição de origem"},
+    {"v": "10", "k": "Monitoria"},
+    {"v": "10", "k": "Artigos publicados"},
+    {"v": "6", "k": "Trabalhos em eventos"}
+   ],
+   "box": {
+    "h": "E TAMBÉM",
+    "x": "Ligas e centros acadêmicos (5), proficiência em Medicina (5), capítulo de livro (5), ouvinte em eventos (5), cursos como ATLS, ACLS e BLS (4) e estágio extracurricular (3)."
+   }
+  },
+  {
+   "type": "rows",
+   "label": "SES-GO 2027",
+   "title": ["ANOTA <span class='y'>AÍ</span>"],
+   "sub": "Cronograma e taxas do edital",
+   "rows": [
+    {"name": "Inscrições", "sub": "Até 17h, no Instituto Verbena/UFG", "value": "até 03/11"},
+    {"name": "Taxa: 1 programa", "value": "R$ 500"},
+    {"name": "Taxa: 2 programas", "sub": "Valor por inscrição", "value": "R$ 400"},
+    {"name": "Taxa: 3 ou mais", "sub": "Valor por inscrição", "value": "R$ 300"},
+    {"name": "Prova objetiva", "sub": "Em Goiânia, mesmo dia da USP-SP", "value": "06/12"},
+    {"name": "Resultado final", "sub": "Previsto no cronograma", "value": "17/02/2027"}
+   ],
+   "note": "As inscrições e a emissão do boleto fecham às <b>17h (Brasília)</b> do último dia."
+  },
+  {
+   "type": "cta",
+   "title": ["VAI PRESTAR", "<span class='g glow'>SES-GO</span>?"],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar com você.",
+   "note": "O currículo vale 100 pontos na 2ª fase. Precisa de ajuda para organizar? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: inscrições homologadas da SES-GO 2026 (19/11/2025), com levantamentos de Estratégia MED e MedCof (mesmo total). Edital de Abertura nº 24/2026 COREME SES-GO 2027 (Instituto Verbena/UFG). Confira o edital antes de se inscrever."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "SES-GO: <span>42,2 inscrições por vaga</span> em 2026.<br>Inscrições até 03/11. Veja no feed da @med_easyy."
+ },
+ "caption": "📊 QUANTOS DISPUTAM CADA VAGA NA SES-GO\n\nNa seleção de residência médica 2026 da SES-GO foram 8.655 inscrições para 205 vagas: 42,2 por vaga. O número conta inscrições, não pessoas, porque dá para se inscrever em mais de um programa. Para 2027 são 219 vagas na rede estadual de Goiás.\n\nPrecisa de currículo? Sim. A prova objetiva vale 100 pontos, com mínimo de 50, e quem for classificado passa para a análise do currículo, que vale mais 100. Histórico escolar, pesquisa ou extensão e instituição de origem são os itens que mais pontuam.\n\nAs inscrições vão até terça, 03/11, às 17h, no Instituto Verbena/UFG, e a prova é em 06/12, mesmo dia da USP-SP. Arrasta para ver taxas e a tabela do currículo. Salva e manda para quem vai prestar com você 📌\n\nQual hospital da SES-GO é o seu alvo? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#sesgo #residenciamedica #goiania #goias #concorrencia #residencia2027"
+}
