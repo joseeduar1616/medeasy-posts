@@ -77,17 +77,18 @@ async function notion(env, caminho, metodo, corpo) {
   if (!r.ok) throw new Error(`Notion ${r.status}: ${j.message || ""}`);
   return j;
 }
-// Linha criada nas últimas 2 horas com o mesmo nome e o mesmo telefone (8 últimos dígitos)
+// Linha criada nos últimos 2 dias com o mesmo nome, o mesmo telefone (8 últimos dígitos) e o mesmo Tipo de serviço
 async function clienteRecente(env, dbc, props) {
   const nome = semAcento(props.Cliente?.title?.[0]?.text?.content || "").replace(/\s+/g, " ").trim();
   const tel = String(props.Telefone?.phone_number || "").replace(/\D/g, "").slice(-8);
+  const tipos = (props["Tipo de serviço"]?.multi_select || []).map(o => semAcento(o.name)).sort().join(",");
   if (!nome || tel.length < 8) return null;
   try {
-    const desde = new Date(Date.now() - 2 * 3600 * 1000).toISOString();
+    const desde = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
     const j = await notion(env, `databases/${dbc}/query`, "POST", { filter: { timestamp: "created_time", created_time: { on_or_after: desde } }, page_size: 100 });
     return (j.results || []).find(pg => { const pp = pg.properties || {};
       const n = semAcento((pp.Cliente?.title || []).map(t => t.plain_text).join("")).replace(/\s+/g, " ").trim();
-      return n === nome && String(pp.Telefone?.phone_number || "").replace(/\D/g, "").slice(-8) === tel; }) || null;
+      return n === nome && String(pp.Telefone?.phone_number || "").replace(/\D/g, "").slice(-8) === tel && (pp["Tipo de serviço"]?.multi_select || []).map(o => semAcento(o.name)).sort().join(",") === tipos; }) || null;
   } catch { return null; }
 }
 async function sincronizar(env) {

@@ -74,7 +74,11 @@ async function criarClienteNotion(){
   const letra = document.getElementById("triOpFechar")?.value || "A"; const o = ops.find(x => x.letra === letra) || ops[0];
   if (!String(t.nome || "").trim() || !t.whats){ toast("Preencha o nome e o WhatsApp antes"); return; }
   if (S.criandoCliente) return;
-  const outraLinha = !!t.clienteNotion; if (outraLinha && !confirm("Esse cliente já foi criado no Notion. Criar outra linha?")) return;
+  if (t.clienteNotion && !confirm("Esse cliente já foi criado no Notion. Criar outra linha?")) return;
+  // Cliente criado direto no Notion ou por outro aparelho: acha pelo telefone e pergunta antes de criar de novo
+  const ja = t.clienteNotion ? null : servicoNotionTri(t).svc;
+  if (ja && !confirm(`Esse cliente já tem uma linha no Notion: ${ja.nome}${ja.total ? ", " + brl(ja.total) : ""}. Criar outra linha mesmo assim?`)) return;
+  const outraLinha = !!t.clienteNotion || !!ja;
   const c = clienteDaTriagem(t); const ct = ctrlDe(c);
   const tipos = (o?.tipos || tiposDe(t.servico)).map(x => SERVICO_NOTION[x]).filter(Boolean);
   const props = { "Cliente":t.nome.trim(), "Telefone":t.whats, "Tipo de serviço":[...tipos, ...c.provas.map(p => p.nome)], "Mentor":S.mentor?.nome || "", "Status":"Não iniciada", "Pagamento":"Não pago",
