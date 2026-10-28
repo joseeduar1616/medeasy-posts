@@ -37,6 +37,10 @@ for (const l of linhas) { const k = sem(txt(l.properties.Cliente)) + "|" + txt(l
 for (const g of porCli.values()) { if (g.length < 2) continue; g.sort((a, b) => Date.parse(a.created_time) - Date.parse(b.created_time));
   for (let i = 1; i < g.length; i++) { const a = g[i - 1], b = g[i]; const dif = Date.parse(b.created_time) - Date.parse(a.created_time);
     const muda = CAMPOS.filter(k => sem(txt(a.properties[k])) !== sem(txt(b.properties[k])));
-    if (!muda.length && dif > 30 * 60 * 1000) console.log(`Iguais, mas criadas em horas diferentes (não apago sozinho): ...${a.id.slice(-6)} (${a.created_time}) e ...${b.id.slice(-6)} (${b.created_time})`);
+    if (!muda.length && dif > 30 * 60 * 1000) console.log(`Iguais, mas criadas em horas diferentes (não apago sozinho): ...${a.id.slice(-6)} (${a.created_time}${ligadas.has(a.id.replace(/-/g, "")) ? ", ligada à triagem" : ""}) e ...${b.id.slice(-6)} (${b.created_time}${ligadas.has(b.id.replace(/-/g, "")) ? ", ligada à triagem" : ""}). Mentor ${txt(a.properties.Mentor)}, ${txt(a.properties["Tipo de serviço"])}, valor ${txt(a.properties["Valor total"])}, ${txt(a.properties.Pagamento) || "sem pagamento"}`);
     else if (muda.length && dif <= 24 * 3600 * 1000) console.log(`Parecidas: ...${a.id.slice(-6)} (${a.created_time}) e ...${b.id.slice(-6)} (${b.created_time}), mesmo cliente e telefone. Muda: ${muda.join(", ")}`); } }
+const ESCOLHIDA = (process.argv.find(a => a.startsWith("--linha=")) || "").slice(8).replace(/\W/g, "");
+if (ESCOLHIDA.length >= 6) { const l = linhas.filter(l => l.id.replace(/-/g, "").endsWith(ESCOLHIDA));
+  if (l.length !== 1) console.log(`Linha ...${ESCOLHIDA}: achei ${l.length}, não apaguei nada`);
+  else { await api(`pages/${l[0].id}`, { archived: true }, "PATCH"); console.log(`Linha ...${ESCOLHIDA} foi para a lixeira do Notion`); } }
 console.log(n ? (APAGAR ? "Pronto." : "Nada apagado. Rode com apagar marcado para mandar as de sobra para a lixeira.") : `Nenhuma linha repetida (${linhas.length} linhas conferidas).`);
