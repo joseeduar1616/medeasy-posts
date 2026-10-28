@@ -31,4 +31,11 @@ for (const g of grupos.values()) {
   console.log(`Grupo ${n}: ${g.length} linhas iguais criadas em ${g.map(l => l.created_time).join(", ")}. Fica ...${fica.id.slice(-6)} (${ligadas.has(fica.id.replace(/-/g, "")) ? "ligada à triagem" : "a mais antiga"}). Sobra: ${sai.map(l => "..." + l.id.slice(-6)).join(", ")}`);
   if (APAGAR) for (const l of sai) { await api(`pages/${l.id}`, { archived: true }, "PATCH"); console.log(`  ...${l.id.slice(-6)} foi para a lixeira do Notion`); }
 }
+// Também mostra (sem apagar) linhas com o mesmo cliente e telefone criadas no mesmo dia que não ficaram iguais, e o que muda entre elas
+const CAMPOS = ["Mentor", "Tipo de serviço", "Valor total", "Pagamento", "Status"]; const porCli = new Map();
+for (const l of linhas) { const k = sem(txt(l.properties.Cliente)) + "|" + txt(l.properties.Telefone); if (k.startsWith("|")) continue; (porCli.get(k) || porCli.set(k, []).get(k)).push(l); }
+for (const g of porCli.values()) { if (g.length < 2) continue; g.sort((a, b) => Date.parse(a.created_time) - Date.parse(b.created_time));
+  for (let i = 1; i < g.length; i++) { const a = g[i - 1], b = g[i]; if (Date.parse(b.created_time) - Date.parse(a.created_time) > 24 * 3600 * 1000) continue;
+    const muda = CAMPOS.filter(k => sem(txt(a.properties[k])) !== sem(txt(b.properties[k])));
+    if (muda.length) console.log(`Parecidas: ...${a.id.slice(-6)} (${a.created_time}) e ...${b.id.slice(-6)} (${b.created_time}), mesmo cliente e telefone. Muda: ${muda.join(", ")}`); } }
 console.log(n ? (APAGAR ? "Pronto." : "Nada apagado. Rode com apagar marcado para mandar as de sobra para a lixeira.") : `Nenhuma linha repetida (${linhas.length} linhas conferidas).`);
