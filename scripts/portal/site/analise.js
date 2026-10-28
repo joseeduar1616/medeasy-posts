@@ -155,6 +155,10 @@ function pedidoClaude(c){
 
 Para cada item, diga quantos pontos ele faz hoje (sem passar do máximo), quais comprovantes contam e o que ele pode fazer para aumentar a nota.
 
+Quem decide o que vale é o mentor da MedEasy, que conhece a banca. Conte como válido todo comprovante que eu mandar, no item em que ele se encaixa. Não tire ponto por detalhe de formato, como falta de assinatura, carimbo, QR code, papel timbrado, carga horária ou data. Se algum detalhe puder ser cobrado, conte o ponto mesmo assim e deixe só uma dica curta em "Como aumentar" (por exemplo, "se der, peça a versão assinada"), sem dizer que o comprovante não conta. Só deixe de contar um comprovante se ele não tiver nada a ver com o item ou se eu disser que não vale. Se eu escrever o que considero válido, isso manda mais que a sua leitura do edital.
+
+Esse texto aparece para o cliente no portal. Escreva simples e em tom positivo.
+
 Responda só com ${provas.length > 1 ? "os blocos abaixo, um por prova" : "o bloco abaixo"}, preenchido, sem nada antes nem depois. Não use negrito nem tabela formatada. Não mude a primeira coluna (número do item) nem a ordem. Use vírgula decimal. Separe as colunas com " | " e os comprovantes com ";". Deixe vazio o que não tiver. Na linha "Nota", coloque a soma dos pontos.
 
 ${provas.map(bloco).join("\n\n")}
