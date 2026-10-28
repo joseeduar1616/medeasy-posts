@@ -80,6 +80,7 @@ Escreva em português simples, sem travessão e sem ponto e vírgula, com vírgu
 - Lattes: Categoria A 7 / 6,5 / 6. Categoria B 12 / 11,5 / 11.
 - Lattes com Certificados e sem Vitae equivale ao plano B: o documento já está incluso e a prova cobra só a análise (100, ou 90 cada com 2 ou mais).
 - Modelo por prova:
+  - B: IPSEMG (tem marcação)
   - D: PSU-GO e PSU-MG
   - C: HPP, Santa Casa SP, FMABC, UNITAU, IDOR, PUC-Campinas e HCPA
   - E: CET

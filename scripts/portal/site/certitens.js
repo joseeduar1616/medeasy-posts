@@ -4,7 +4,7 @@ const r2 = n => Math.round((Number(n) || 0) * 100) / 100;
 const PRECO = { taxa:100, taxaMaisDeDuas:90, artigo:12.5, analise1:100, analise2:90,
   mentoria:{ mensal:250, reuniao:150 },
   vitae:{ A:[9, 8.5, 8], B:[9.5, 9, 8.5], C:[8, 7.5, 7], D:[9, 8.5, 8], E:[9, 8.5, 8] }, lattes:{ A:[7, 6.5, 6], B:[12, 11.5, 11] } };
-const MODELO = { psugo:"D", psumg:"D", hpp:"C", santacasasp:"C", scmsp:"C", fmabc:"C", unitau:"C", idor:"C", puccamp:"C", hcpa:"C", enare:"C", sesdf:"C", cet:"E" };
+const MODELO = { psugo:"D", psumg:"D", ipsemg:"B", hpp:"C", santacasasp:"C", scmsp:"C", fmabc:"C", unitau:"C", idor:"C", puccamp:"C", hcpa:"C", enare:"C", sesdf:"C", cet:"E" };
 const faixaQ = q => q >= 50 ? 2 : q >= 31 ? 1 : 0;
 const br2 = v => (Number(v) || 0).toFixed(2).replace(".", ",");
 const modeloDe = nome => { const k = kP(nome); return MODELO[k] || (Object.entries(MODELO).find(([kk]) => k.startsWith(kk)) || [, "A"])[1]; };
