@@ -1,0 +1,25 @@
+name: Portal MedEasy - linhas repetidas no Notion
+
+# Roda à mão. Sem marcar "apagar", só mostra o que achou.
+on:
+  workflow_dispatch:
+    inputs:
+      apagar:
+        description: "Mandar as linhas de sobra para a lixeira do Notion"
+        type: boolean
+        default: false
+
+jobs:
+  duplicadas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Conferir
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB: ${{ secrets.NOTION_DB }}
+        run: node scripts/portal/duplicadas.mjs ${{ inputs.apagar && '--apagar' || '' }}
