@@ -10,9 +10,14 @@ const br2 = v => (Number(v) || 0).toFixed(2).replace(".", ",");
 const modeloDe = nome => { const k = kP(nome); return MODELO[k] || (Object.entries(MODELO).find(([kk]) => k.startsWith(kk)) || [, "A"])[1]; };
 
 /* Itens de uma prova: da análise curricular lida (se houver) ou da ficha do edital */
+/* Item da análise sem a lista de comprovantes (o leitor não achou no PDF): conta o mínimo de certificados para chegar na nota, como no "Ler currículo pronto" */
+const nPelaNota = (pts, unit) => pts > 0 ? (unit > 0 ? Math.max(1, Math.round(pts / unit)) : 1) : 0;
+const codItemC = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?\d?)\b/i) || [])[1]?.toLowerCase() || "";
 function itensDaProva(p){
   const an = (p.itens || []).filter(i => i.max != null && p.fonte !== "contagem");
-  if (an.length) return an.map(i => { const unit = num(i.porAtividade) || null, n = (i.comprovantes || []).length;
+  // Valor por certificado do edital, quando a análise não trouxe "por atividade"
+  const ficha = (p.edital && p.edital.ficha) || []; const unitEd = nome => { const k = codItemC(nome); const x = k && ficha.find(x => codItemC(x.item) === k); return x && x.unit != null ? num(x.unit) : null; };
+  if (an.length) return an.map(i => { const unit = num(i.porAtividade) || unitEd(i.nome) || null, n = (i.comprovantes || []).length || nPelaNota(num(i.pontos), unit);
     return { key:i.nome, item:i.nome, pontos:i.regra || "", maxN:num(i.max), unit, artigo:/artigo completo|cap[ií]tulo/i.test(i.nome), com:i.comentario || "", sit:i.situacao || "", ganhoBase:num(i.ganho),
       base:{ n, lista:i.comprovantes || [], pts: unit && Math.abs(Math.min(num(i.max), n * unit) - num(i.pontos)) < 0.01 ? "" : num(i.pontos) } }; });
   return ((p.edital && p.edital.ficha) || []).filter(x => x.maxN != null).map(x => ({ key:x.item, item:x.item, pontos:x.pontos || "", maxN:num(x.maxN), unit:x.unit == null ? null : num(x.unit), artigo:!!x.artigo, grupo:x.grupo || "", grupoMax:x.grupoMax == null ? null : num(x.grupoMax) }));
