@@ -16,7 +16,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 6. Mandou o cronograma do cursinho num PDF e ele virou painel. Prints: cronograma, materias
 7. Abriu o caderno e não sabe por onde começar e a tela Hoje. Prints: hoje, rotina
 8. Estudar sozinho cansa e a sala com os amigos, com ranking por horas. Prints: foco, hoje (bloco desenhado pro ranking)
-9. Internato e residência ao mesmo tempo: o ciclo clínico junto com o cronograma. Prints: cronograma, materias
+9. ~~Internato e residência ao mesmo tempo: o ciclo clínico junto com o cronograma~~ *(saiu em 28/10)*. Prints: cronograma, materias
 10. Fez o simulado, viu a nota e não sabe o que fazer depois. Prints: revisoes, assistente
 11. Estudou 3 horas e parece que não rendeu e o Foco que registra cada sessão. Prints: foco, hoje
 12. "Será que dá tempo de fechar tudo antes da prova?" e o ritmo com projeção. Prints: hoje, cronograma

@@ -22,6 +22,7 @@
 | 26/10/2026 | 14:56 | Meme com tela (A1, foto) + story | Eu fingindo que não vi as revisões vencidas pra conseguir dormir (fila, `posts/2026-10-26-revisoes-vencidas-meme.json`, post 17920917831451580, story 17992793052106581) | https://www.instagram.com/p/De93qxWjfBp/ | 33 contas, 112 views, 0 visitas (2 dias) |
 | 27/10/2026 | 10:02 | Carrossel 7 slides | (pra salvar) Salva esse antes do próximo plantão: checklist da semana de plantão (pauta 16, `posts/2026-10-27-checklist-plantao.json`, media_id 18095949476690349) | https://www.instagram.com/p/De_6uZFiMVc/ | 24 contas, 120 views, 2 visitas, 0 salvamentos (1 dia) |
 | 27/10/2026 | 14:57 | Meme animado (A2, Reel) + story (nicho) | POV: saiu do internato às 23h e abriu o caderno (fila, `posts/2026-10-27-meme-23h.json`, Reel 18113960660463781, story 18137338021650651) | https://www.instagram.com/reel/DfAcnrFGCiT/ | 27 contas, 55 views, 76% de pulo, 3,8 s de média (19 h) |
+| 28/10/2026 | 10:00 | Carrossel 7 slides | (nicho) Dá pra fazer internato e estudar pro ENAMED junto? (pauta 9, `posts/2026-10-28-internato-enamed.json`, media_id 18093236855669761) | https://www.instagram.com/p/DfCfYIdgkSX/ | (preencher) |
 
 ## Anotações de desempenho
 
@@ -42,6 +43,7 @@
 - 26/10: o Reel animado de 25/10 subiu pra 654 contas (89% de pulo). O carrossel de hoje (caderno de erros) teve 20 contas em 5 h, mas já trouxe 3 visitas ao perfil, mais que os outros carrosséis. Saiu o primeiro meme da fila (A1, foto com a tela de revisões), primeiro meme em foto no feed: comparar com os Reels.
 - 27/10: o Reel animado de 25/10 chegou a 664 contas. Os carrosséis seguem baixos (24 contas o de 26/10, mas com 3 visitas ao perfil) e o meme A1 em foto de 26/10 ficou com 28 contas e nenhuma visita em 19 h, abaixo dos Reels. Saiu o primeiro carrossel "pra salvar" (checklist da semana de plantão, capa "Salva esse" com a tela da agenda): ver se gera salvamentos.
 - 27/10, 14h57: o Reel do mentor de IA (14h30) ainda sem alcance no dado do Windsor (64 views). O carrossel checklist de plantão teve 17 contas e 2 visitas ao perfil em 5 h. Saiu o primeiro meme da fila (A2, POV 23h no internato), Reel e story. Na fila ficou o A1 dos flashcards.
+- 28/10: o Reel do mentor de IA (27/10, turbinado) chegou a 317 contas, com 91% de pulo. O meme A2 do POV 23h teve 27 contas, mas o menor pulo dos memes recentes (76%). Os três carrosséis da semana seguem baixos (29, 27 e 24 contas) e nenhum foi salvo, nem o "pra salvar" do checklist de plantão. Saiu o carrossel de nicho internato e ENAMED, com capa em pergunta e a tela do cronograma.
 
 ## Memes prontos na fila
 
