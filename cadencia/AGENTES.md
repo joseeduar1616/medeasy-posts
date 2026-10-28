@@ -213,7 +213,7 @@ Se já houver carrossel publicado hoje, não publique outro.
      conjuntos ativos que gastaram pelo menos R$ 10 nesse período;
    - se o melhor custa 70% ou menos do pior, tire R$ 2 por dia do pior e ponha no melhor
      (`set_adset_budget`, valor em centavos: R$ 9 = 900);
-   - cada conjunto ativo fica entre R$ 4 e R$ 11 por dia, e a soma fica em R$ 15;
+   - cada conjunto ativo fica entre R$ 6 e R$ 11 por dia (o Meta recusa menos de R$ 5,13, 28/10), e a soma fica em R$ 15;
    - se a diferença for menor que isso, não mexa (o Meta precisa de dias estáveis pra aprender);
    - anote o ajuste e o motivo em `turbinadas.md`.
    Quando o site tiver o Pixel com o evento de conta criada, o critério passa a ser custo por conta criada.
