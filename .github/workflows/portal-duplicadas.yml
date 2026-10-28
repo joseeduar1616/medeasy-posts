@@ -8,6 +8,10 @@ on:
         description: "Mandar as linhas de sobra para a lixeira do Notion"
         type: boolean
         default: false
+      linha:
+        description: "Final do id de uma linha para mandar para a lixeira (como aparece no registro)"
+        type: string
+        default: ""
 
 jobs:
   duplicadas:
@@ -22,4 +26,5 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DB: ${{ secrets.NOTION_DB }}
-        run: node scripts/portal/duplicadas.mjs ${{ inputs.apagar && '--apagar' || '' }}
+          LINHA: ${{ inputs.linha }}
+        run: node scripts/portal/duplicadas.mjs ${{ inputs.apagar && '--apagar' || '' }} "--linha=$LINHA"
