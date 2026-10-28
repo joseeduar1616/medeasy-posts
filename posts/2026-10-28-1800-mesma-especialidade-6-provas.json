@@ -1,0 +1,246 @@
+{
+ "slug": "2026-10-28-1800-mesma-especialidade-6-provas",
+ "pillar": "notas de corte e concorrência",
+ "header": [
+  "CONCORRÊNCIA",
+  "6 PROVAS"
+ ],
+ "verified_on": "2026-10-28",
+ "sources": [
+  "PSU-GO 2026: relação candidato/vaga da AREMG via med.estrategia.com e medway.com.br (conferido no post de 25/10)",
+  "PSU-MG 2026: relação candidato/vaga da AREMG via med.estrategia.com e medway.com.br (conferido no post de 13/10)",
+  "SES-DF 2026: inscrições homologadas da SES-DF via med.estrategia.com e medway.com.br (conferido no post de 12/10)",
+  "USP-SP 2026: relação da FMUSP via med.estrategia.com e grupomedcof.com.br (conferido no post de 21/10)",
+  "Unifesp 2026: documento Candidato por vaga 2025/2026 via med.estrategia.com e medway.com.br (conferido no post de 27/10)",
+  "SUS-SP 2026: lista de inscritos do Instituto Quadrix via med.estrategia.com e medway.com.br (conferido no post de 26/10)",
+  "Currículo: editais 2027 de PSU-GO (AGRM/AREMG), PSU-MG (AREMG), SES-DF (IADES, Edital RM-1/2027), USP-SP (COREME/FM nº 02/2026), Unifesp e SUS-SP (Vunesp), conferidos nos posts de 10, 12, 20, 21 e 27/10"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica 2026",
+   "pill": "COMPARATIVO",
+   "title": [
+    "MESMA ESPECIALIDADE,",
+    "<span class='y glow'>OUTRA DISPUTA</span>"
+   ],
+   "body": "A concorrência de uma especialidade muda muito de uma prova para outra. Veja <b>4 especialidades</b> em <b>6 provas</b> de GO, MG, DF e SP.",
+   "bullets": [
+    "Dermatologia e Otorrino",
+    "Cirurgia Geral e Psiquiatria",
+    "Precisa de currículo?"
+   ]
+  },
+  {
+   "type": "rows",
+   "label": "Especialidade 1 de 4",
+   "title": [
+    "<span class='y'>DERMATOLOGIA</span>"
+   ],
+   "sub": "Candidatos por vaga em 2026, acesso direto",
+   "rows": [
+    {
+     "name": "PSU-MG",
+     "sub": "305 inscrições para 3 vagas",
+     "value": "101,7"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "1.407 inscritos para 24 vagas",
+     "value": "58,6"
+    },
+    {
+     "name": "USP-SP",
+     "sub": "486 inscritos para 10 vagas",
+     "value": "48,6"
+    },
+    {
+     "name": "Unifesp",
+     "sub": "370 inscritos para 8 vagas",
+     "value": "46,3"
+    },
+    {
+     "name": "PSU-GO",
+     "sub": "177 inscrições para 4 vagas",
+     "value": "44,3"
+    }
+   ],
+   "note": "O SUS-SP teve mais inscritos, mas também mais vagas."
+  },
+  {
+   "type": "rows",
+   "label": "Especialidade 2 de 4",
+   "title": [
+    "<span class='y'>OTORRINO</span>"
+   ],
+   "sub": "Candidatos por vaga em 2026, acesso direto",
+   "rows": [
+    {
+     "name": "PSU-MG",
+     "sub": "1.063 inscrições para 7 vagas",
+     "value": "151,9"
+    },
+    {
+     "name": "SES-DF",
+     "sub": "143 inscritos para 2 vagas",
+     "value": "71,5"
+    },
+    {
+     "name": "USP-SP",
+     "sub": "283 inscritos para 4 vagas",
+     "value": "70,8"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "863 inscritos para 13 vagas",
+     "value": "66,4"
+    },
+    {
+     "name": "PSU-GO",
+     "sub": "105 inscrições para 2 vagas",
+     "value": "52,5"
+    },
+    {
+     "name": "Unifesp",
+     "sub": "260 inscritos para 6 vagas",
+     "value": "43,3"
+    }
+   ],
+   "note": "Nas 6 provas, Otorrino passou de 40 por vaga."
+  },
+  {
+   "type": "rows",
+   "label": "Especialidade 3 de 4",
+   "title": [
+    "<span class='y'>CIRURGIA GERAL</span>"
+   ],
+   "sub": "Candidatos por vaga em 2026, acesso direto",
+   "rows": [
+    {
+     "name": "PSU-GO",
+     "sub": "819 inscrições para 10 vagas",
+     "value": "81,9"
+    },
+    {
+     "name": "Unifesp",
+     "sub": "704 inscritos para 16 vagas",
+     "value": "44,0"
+    },
+    {
+     "name": "USP-SP",
+     "sub": "931 inscritos para 22 vagas",
+     "value": "42,3"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "3.366 inscritos para 127 vagas",
+     "value": "26,5"
+    },
+    {
+     "name": "SES-DF",
+     "sub": "759 inscritos para 36 vagas",
+     "value": "21,1"
+    }
+   ],
+   "note": "No PSU-GO, a disputa foi quase 4 vezes a da SES-DF."
+  },
+  {
+   "type": "rows",
+   "label": "Especialidade 4 de 4",
+   "title": [
+    "<span class='y'>PSIQUIATRIA</span>"
+   ],
+   "sub": "Candidatos por vaga em 2026, acesso direto",
+   "rows": [
+    {
+     "name": "PSU-MG",
+     "sub": "1.110 inscrições para 11 vagas",
+     "value": "100,9"
+    },
+    {
+     "name": "PSU-GO",
+     "sub": "485 inscrições para 8 vagas",
+     "value": "60,6"
+    },
+    {
+     "name": "USP-SP",
+     "sub": "731 inscritos para 18 vagas",
+     "value": "40,6"
+    },
+    {
+     "name": "Unifesp",
+     "sub": "552 inscritos para 15 vagas",
+     "value": "36,8"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "2.367 inscritos para 66 vagas",
+     "value": "35,9"
+    },
+    {
+     "name": "SES-DF",
+     "sub": "419 inscritos para 16 vagas",
+     "value": "26,2"
+    }
+   ],
+   "note": "PSU-GO e PSU-MG contam inscrições, não pessoas: dá para se inscrever em mais de um programa."
+  },
+  {
+   "type": "rows",
+   "label": "Currículo",
+   "title": [
+    "PRECISA DE <span class='y'>CURRÍCULO?</span>"
+   ],
+   "sub": "Conforme os editais 2027",
+   "rows": [
+    {
+     "name": "PSU-GO",
+     "sub": "10 pontos, enviado na inscrição",
+     "value": "SIM"
+    },
+    {
+     "name": "PSU-MG",
+     "sub": "10% da nota, enviado na inscrição",
+     "value": "SIM"
+    },
+    {
+     "name": "USP-SP",
+     "sub": "2ª fase, peso 1",
+     "value": "SIM"
+    },
+    {
+     "name": "Unifesp",
+     "sub": "Peso 1, depois da prova",
+     "value": "SIM"
+    },
+    {
+     "name": "SUS-SP",
+     "sub": "Prova objetiva em etapa única",
+     "value": "NÃO"
+    },
+    {
+     "name": "SES-DF",
+     "sub": "Sem análise curricular",
+     "value": "NÃO"
+    }
+   ],
+   "note": "Onde a disputa é apertada, o currículo pode decidir a vaga."
+  },
+  {
+   "type": "cta",
+   "title": [
+    "SALVA PARA",
+    "<span class='g glow'>COMPARAR</span>"
+   ],
+   "pill": "SALVA",
+   "body": "e manda para quem está<br>escolhendo onde prestar.",
+   "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: relações candidato/vaga 2026 de AREMG (PSU-GO e PSU-MG), SES-DF, FMUSP, Unifesp e SUS-SP (Quadrix), organizadas por Estratégia MED, Medway e MedCof. Editais 2027. A concorrência de 2026 é referência, não previsão."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "Otorrino no PSU-MG: <span>151,9 inscrições por vaga</span>.<br>Veja no feed da @med_easyy a mesma especialidade em 6 provas."
+ },
+ "caption": "📊 MESMA ESPECIALIDADE, OUTRA DISPUTA\n\nA concorrência de uma especialidade muda muito de uma prova para outra. Em 2026, Otorrino teve 151,9 inscrições por vaga no PSU-MG e 43,3 candidatos por vaga na Unifesp. Em Cirurgia Geral, o PSU-GO teve 81,9 por vaga e a SES-DF, 21,1.\n\nJuntamos Dermatologia, Otorrino, Cirurgia Geral e Psiquiatria em 6 provas: PSU-GO, PSU-MG, SES-DF, USP-SP, Unifesp e SUS-SP. No último slide, quais delas avaliam currículo. Os números de 2026 são referência, não previsão para 2027.\n\nSalva para comparar e manda para quem está escolhendo onde prestar 📌 Qual especialidade você vai tentar? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #psugo #psumg #sesdf #uspsp #residencia2027"
+}
