@@ -309,7 +309,9 @@ function estimar(c) {
   for (const p of provas) {
     const itens = p.itens || [];
     // Só os certificados válidos para esta prova: no item por atividade, até o número que ainda soma ponto
-    const comp = itens.flatMap(i => { const u = Number(i.porAtividade) || 0, mx = Number(i.max) || 0; const l = (i.comprovantes || []).map(t => ({ t, item: i.nome }));
+    const comp = itens.flatMap(i => { const u = Number(i.porAtividade) || 0, mx = Number(i.max) || 0; let l = (i.comprovantes || []).map(t => ({ t, item: i.nome }));
+      // Item com nota e sem a lista de comprovantes (o leitor não achou no PDF): o mínimo de certificados para chegar na nota
+      const pt = Number(i.pontos) || 0; if (!l.length && pt > 0) l = Array.from({ length: u > 0 ? Math.max(1, Math.round(pt / u)) : 1 }, () => ({ t: "", item: i.nome }));
       return u > 0 && mx > 0 ? l.slice(0, Math.ceil(mx / u - 1e-9)) : l; });
     let n = comp.length ? comp.filter(x => !ehArtigo(x.item) || !/na íntegra|completo/i.test(x.t)).length : c.nCert;
     let a = comp.length ? comp.filter(x => ehArtigo(x.item) && /artigo completo|cap[ií]tulo/i.test(x.item)).length : (c.nArtigos || 0);
