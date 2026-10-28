@@ -1,0 +1,123 @@
+{
+  "id": "2026-10-28-internato-enamed",
+  "legenda": "Internato o dia inteiro e o ENAMED chegando? Dá pra fazer os dois no mesmo ano 🩺\n\nO rodízio come a manhã, a tarde e às vezes a noite. Você estuda o que tá vendo no estágio, e as outras áreas ficam paradas desde o 3º ano. Só que a prova cobra as 5: Clínica Médica, Cirurgia, Pediatria, GO e Preventiva.\n\nO que ajuda é ter um cronograma só pras duas coisas. No Cadência Med você escolhe o ciclo clínico, o cronograma de residência ou os dois juntos. As matérias ficam separadas por área, e o mentor de IA monta a semana em volta dos seus horários do internato.\n\nSalva esse post e manda pra quem tá no internato com você 📌\n\nQue ano você tá? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #enamed",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "INTERNATO",
+      "tag": "INTERNATO E ENAMED",
+      "titulo": "DÁ PRA FAZER INTERNATO E {g}ESTUDAR PRO ENAMED JUNTO?{/g}",
+      "texto": "Arrasta pra ver <b>como encaixar as duas coisas no mesmo ano</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 410,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "O INTERNATO {g}COME O DIA INTEIRO{/g}",
+      "texto": "Ambulatório, enfermaria, plantão. Quando sobra um tempo, <b>você não sabe o que estudar primeiro</b>.",
+      "ui": {
+        "tipo": "semana",
+        "titulo": "Uma semana de internato",
+        "dias": [
+          {"d": "SEG", "blocos": [{"t": "Ambul.", "cor": "#A86BFF"}, {"t": "Enferm.", "cor": "#46D9F5"}]},
+          {"d": "TER", "blocos": [{"t": "Enferm.", "cor": "#46D9F5"}, {"t": "Aula", "cor": "#2DD4A0"}]},
+          {"d": "QUA", "blocos": [{"t": "Plantão 12h", "cor": "#F2557A"}]},
+          {"d": "QUI", "blocos": [{"t": "Ambul.", "cor": "#A86BFF"}, {"t": "Aula", "cor": "#2DD4A0"}]},
+          {"d": "SEX", "blocos": [{"t": "Enferm.", "cor": "#46D9F5"}, {"t": "Sessão", "cor": "#2DD4A0"}]},
+          {"d": "SÁB", "blocos": [{"t": "Plantão 12h", "cor": "#F2557A"}]},
+          {"d": "DOM", "blocos": [{"t": "ENAMED?", "cor": "#F5A524"}]}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "E O ENAMED COBRA {g}AS 5 ÁREAS{/g}",
+      "texto": "Você estuda o que tá vendo no rodízio. O resto fica <b>parado desde o 3º ano</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Como ficam as áreas",
+        "itens": [
+          {"titulo": "Clínica Médica", "sub": "rodízio de agora", "selo": "em dia", "cor": "#A86BFF", "cor_selo": "rgba(45,212,160,.16)", "cor_texto": "#14A37A"},
+          {"titulo": "Cirurgia", "sub": "último rodízio", "selo": "esfriando", "cor": "#46D9F5", "cor_selo": "rgba(245,165,36,.16)", "cor_texto": "#C27C0E"},
+          {"titulo": "Pediatria", "sub": "sem estudo", "selo": "desde o 3º ano", "cor": "#F5A524", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "GO", "sub": "sem estudo", "selo": "desde o 3º ano", "cor": "#F2557A", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Preventiva", "sub": "sem estudo", "selo": "desde o 3º ano", "cor": "#2DD4A0", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "UM CRONOGRAMA SÓ {g}PRAS DUAS COISAS{/g}",
+      "texto": "No Cadência Med você escolhe o <b>ciclo clínico, o de residência ou os dois juntos</b>. Pode usar o do cursinho também.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Qual cronograma você segue"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "POR ÁREA",
+      "tag": "MATÉRIAS",
+      "titulo": "CADA ÁREA {g}NO SEU LUGAR{/g}",
+      "texto": "Aulas e tópicos separados por área. Você filtra e vê <b>o que ainda falta em cada uma</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "materias",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Matérias e temas"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "MENTOR DE IA",
+      "tag": "MENTOR DE IA",
+      "titulo": "A SEMANA MONTADA {g}EM VOLTA DO ESTÁGIO{/g}",
+      "texto": "Conta seus horários do internato e pergunta o que priorizar. O mentor responde <b>com base no seu painel</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Mentor de IA"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "INTERNATO E ENAMED {g}NO MESMO PLANO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Ciclo clínico e residência", "texto": "os dois cronogramas juntos"},
+          {"titulo": "Matérias por área", "texto": "o que falta em cada uma"},
+          {"titulo": "Mentor de IA", "texto": "monta a semana com os seus horários"},
+          {"titulo": "Agenda", "texto": "conversa com o Google Agenda"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
