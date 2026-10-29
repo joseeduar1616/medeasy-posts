@@ -1,0 +1,81 @@
+{
+ "slug": "2026-10-29-1800-curriculo-depois-da-prova",
+ "pillar": "calendário e prazos",
+ "header": ["CURRÍCULO", "6 PROVAS"],
+ "verified_on": "2026-10-29",
+ "sources": [
+  "USP-RP 2027: editais do HCFMRP-USP via grupomedcof.com.br, medway.com.br, med.estrategia.com e otempo.com.br (prova 20/11, currículo 27/11 a 01/12, 10% em 16 de 22 programas), conferido no post de 24/10",
+  "Unicamp 2027: editais 001 a 006 da FCM Unicamp via med.estrategia.com, vestibulandoweb.com.br e medway.com.br (prova 15/11, classificados 02/12, currículo 04 a 08/12), conferido no post de 14/10",
+  "Unifesp 2027: edital Vunesp UFSP2602, itens 2.2, 10.1, 10.6 e 15.1.3 (prova 29/11, análise curricular peso 1, Lattes atualizado até 04/12, análise 04 a 21/01), conferido nos posts de 14, 20 e 27/10",
+  "UNESP 2027: edital Vunesp FMHO2602 via grupomedcof.com.br, med.estrategia.com e medgrupo.com.br (prova 12/12, convocação 21/12, currículo 22 e 23/12, 10%, sem currículo em CM, Ortopedia, Cirurgia Plástica e Cirurgia da Mão), conferido no post de 22/10",
+  "USP-SP 2027: Edital COREME/FM nº 02/2026 (prova 06/12, currículo peso 1, envio 04 a 12/01), conferido no post de 12/10",
+  "SES-GO 2027: Edital nº 24/2026 COREME SES-GO, Instituto Verbena/UFG (prova 06/12, currículo 100 pontos na 2ª fase só para classificados), conferido no post de 09/10",
+  "PSU-GO, PSU-MG (AREMG, currículo na inscrição), SES-DF (Edital RM-1/2027, sem análise curricular) e SUS-SP (Vunesp, etapa única), conferidos nos posts de 10, 14 e 18/10",
+  "log/news_seen.md até a varredura de 29/10 17h: nenhuma retificação nesses prazos"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica 2027",
+   "pill": "CURRÍCULO",
+   "title": ["PASSOU NA PROVA?", "<span class='g glow'>O CURRÍCULO VEM DEPOIS</span>"],
+   "body": "Em <b>6 provas</b> de 2027, o currículo não foi na inscrição: ele entra só para quem passar na prova. E alguns prazos de envio são de <b>poucos dias</b>.",
+   "bullets": ["Quando enviar em cada prova", "Quanto o currículo vale", "Onde não tem currículo"]
+  },
+  {
+   "type": "rows",
+   "label": "Prazos de envio",
+   "title": ["QUANDO ENVIAR O <span class='y'>CURRÍCULO</span>"],
+   "sub": "Só para quem passar na prova, conforme os editais",
+   "rows": [
+    {"name": "USP-RP", "sub": "Prova em 20/11", "value": "27/11 a 01/12"},
+    {"name": "Unicamp", "sub": "Prova em 15/11, lista em 02/12", "value": "04 a 08/12"},
+    {"name": "Unifesp", "sub": "Prova em 29/11. Lattes atualizado até", "value": "04/12"},
+    {"name": "UNESP", "sub": "Prova em 12/12, convocação em 21/12", "value": "22 e 23/12"},
+    {"name": "USP-SP", "sub": "Prova em 06/12", "value": "04 a 12/01"},
+    {"name": "SES-GO", "sub": "Prova em 06/12. Envio na 2ª fase", "value": "2ª FASE"}
+   ],
+   "note": "Na USP-RP, na Unicamp e na UNESP a janela é de <b>2 a 5 dias</b>. Não dá tempo de juntar tudo depois do resultado."
+  },
+  {
+   "type": "rows",
+   "label": "Peso na nota",
+   "title": ["QUANTO O CURRÍCULO <span class='y'>VALE?</span>"],
+   "sub": "Conforme os editais 2027",
+   "rows": [
+    {"name": "SES-GO", "sub": "Só para classificados na prova", "value": "100 PONTOS"},
+    {"name": "USP-SP", "sub": "A prova tem peso 9", "value": "PESO 1"},
+    {"name": "Unifesp", "sub": "Junto com prova e prova prática", "value": "PESO 1"},
+    {"name": "USP-RP", "sub": "Em 16 dos 22 programas", "value": "10%"},
+    {"name": "UNESP", "sub": "Na maioria dos programas", "value": "10%"}
+   ],
+   "note": "Na UNESP, Clínica Médica, Ortopedia, Cirurgia Plástica e Cirurgia da Mão não têm currículo. Na USP-RP, Anestesio, Cirurgia Geral, Oftalmo e Ortopedia também não."
+  },
+  {
+   "type": "rows",
+   "label": "E as outras provas?",
+   "title": ["PRECISA DE <span class='y'>CURRÍCULO?</span>"],
+   "sub": "Onde o currículo já foi ou não existe",
+   "rows": [
+    {"name": "PSU-GO", "sub": "Foi junto com a inscrição, sem troca", "value": "JÁ FOI"},
+    {"name": "PSU-MG", "sub": "Foi junto com a inscrição, sem troca", "value": "JÁ FOI"},
+    {"name": "SES-DF", "sub": "Sem análise curricular", "value": "NÃO"},
+    {"name": "SUS-SP", "sub": "Prova objetiva em etapa única", "value": "NÃO"}
+   ],
+   "note": "Vai fazer mais de uma prova com currículo? Deixe os comprovantes prontos <b>antes da primeira prova</b>."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA E", "<span class='g glow'>MANDA HOJE</span>"],
+   "pill": "SALVA",
+   "body": "para quem vai prestar<br>com você.",
+   "note": "Quer o currículo pronto antes da prova? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: editais 2027 de HCFMRP-USP, FCM Unicamp, Unifesp e UNESP (Vunesp), COREME/FM USP, SES-GO (Instituto Verbena/UFG), AREMG, SES-DF e SUS-SP, com conferência em Estratégia MED, Medway e MedCof. Confira o edital do seu programa."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "Passou na prova? <span>O currículo vem depois</span>.<br>Veja no feed da @med_easyy quando enviar em 6 provas."
+ },
+ "caption": "📝 PASSOU NA PROVA? O CURRÍCULO VEM DEPOIS\n\nEm 6 provas de 2027, o currículo não foi na inscrição. Ele entra só para quem passar na prova: USP-RP (27/11 a 01/12), Unicamp (04 a 08/12), Unifesp (Lattes atualizado até 04/12), UNESP (22 e 23/12), USP-SP (04 a 12/01) e SES-GO (na 2ª fase).\n\nNa USP-RP, na Unicamp e na UNESP a janela de envio é de 2 a 5 dias. Quem deixa para juntar os comprovantes depois do resultado corre o risco de perder ponto. No PSU-GO e no PSU-MG o currículo já foi com a inscrição, e SES-DF e SUS-SP não têm análise curricular.\n\nSalva e manda para quem vai prestar com você 📌 Quais dessas provas você vai fazer? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #curriculo #residencia2027 #unifesp #unicamp #sesgo"
+}
