@@ -1,0 +1,97 @@
+{
+ "slug": "2026-10-29-1200-enare-centro-oeste-vagas",
+ "pillar": "mapa de vagas",
+ "header": ["ENARE", "CENTRO-OESTE"],
+ "verified_on": "2026-10-29",
+ "sources": [
+  "https://ipmeducacao.com.br/portal/instituicoes-enare/ (vagas por instituição, divulgação oficial de 10/06/2026 na página do Enare/FGV; somas do Centro-Oeste: 407 acesso direto e 130 pré-requisito)",
+  "https://ipmeducacao.com.br/portal/vagas-enare/ (vagas por estado: MS 238, DF 187, MT 108, GO 4)",
+  "https://www.medway.com.br/conteudos/vagas-e-instituicoes-do-enare/ (Centro-Oeste: 407 acesso direto e 130 pré-requisito, bate com a soma por instituição; 6.036 vagas de acesso direto)",
+  "https://med.estrategia.com/portal/residencia-medica/enare-relacao-candidato-vaga/ e https://www.medway.com.br/conteudos/concorrencia-residencia-medica-enare/ (concorrência oficial FGV/HU Brasil de 08/09, acesso direto, números iguais nas duas)",
+  "https://sanarmed.com/concorrencia-enamed-enare-2026-2027-veja-as-especialidades-mais-disputadas/ (89.933 inscrições no acesso direto, 6.036 vagas, 14,9 por vaga; Otorrino, Dermato e Cirurgia Geral iguais)",
+  "posts/2026-10-22-1800-enare-2027-proximas-datas.json (sem análise curricular; resultado final do Enamed previsto para 04/12; 1ª escolha de vagas prevista para 11 e 12/01/2027)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Enare 2026/2027",
+   "pill": "MAPA DE VAGAS",
+   "title": ["ENARE NO", "<span class='g glow'>CENTRO-OESTE</span>"],
+   "body": "São <b>537 vagas</b> na região, 407 delas de acesso direto. Veja onde estão e qual especialidade foi mais disputada.",
+   "bullets": ["Vagas por estado", "Hospitais com mais vagas", "Precisa de currículo?"]
+  },
+  {
+   "type": "rows",
+   "label": "Por estado",
+   "title": ["ONDE ESTÃO <span class='y'>AS VAGAS</span>"],
+   "sub": "Total de vagas, acesso direto e pré-requisito",
+   "rows": [
+    {"name": "Mato Grosso do Sul", "sub": "201 de acesso direto", "value": "238"},
+    {"name": "Distrito Federal", "sub": "108 de acesso direto", "value": "187"},
+    {"name": "Mato Grosso", "sub": "94 de acesso direto", "value": "108"},
+    {"name": "Goiás", "sub": "Só em Itumbiara", "value": "4"}
+   ],
+   "note": "Em Goiás, as grandes seleções são o <b>PSU-GO</b> e a <b>SES-GO</b>, não o Enare."
+  },
+  {
+   "type": "rows",
+   "label": "Instituições",
+   "title": ["QUEM MAIS <span class='g'>OFERECE</span>"],
+   "sub": "Vagas totais e de acesso direto (AD)",
+   "rows": [
+    {"name": "Universidade de Brasília", "sub": "Brasília, 68 AD", "value": "120"},
+    {"name": "UFMS", "sub": "Campo Grande, 62 AD", "value": "78"},
+    {"name": "UFMT", "sub": "Cuiabá, 47 AD", "value": "61"},
+    {"name": "Santa Casa de Campo Grande", "sub": "Campo Grande, 42 AD", "value": "53"},
+    {"name": "SMS de Campo Grande", "sub": "Campo Grande, 41 AD", "value": "41"},
+    {"name": "HU da UFGD", "sub": "Dourados, 32 AD", "value": "40"},
+    {"name": "Hospital das Forças Armadas", "sub": "Brasília, 26 AD", "value": "34"}
+   ],
+   "note": "Só essas 7 somam <b>427 das 537 vagas</b> da região."
+  },
+  {
+   "type": "table",
+   "label": "Concorrência",
+   "title": ["QUANTOS <span class='y'>POR VAGA</span>"],
+   "sub": "Acesso direto, no país todo, Enare 2026/2027",
+   "headers": ["ESPECIALIDADE", "VAGAS", "POR VAGA"],
+   "rows": [
+    ["Otorrinolaringologia", "68", "38,9"],
+    ["Dermatologia", "108", "32,2"],
+    ["Cirurgia Geral", "487", "23,1"],
+    ["Anestesiologia", "367", "18,5"],
+    ["Ortopedia", "302", "18,1"],
+    ["Ginecologia e Obstetrícia", "554", "17,9"],
+    ["Clínica Médica", "1.100", "12,2"],
+    ["Pediatria", "727", "10,7"],
+    ["Medicina de Família", "994", "7,8"]
+   ],
+   "note": "No total, <b>89.933 inscrições</b> para 6.036 vagas: <b>14,9 por vaga</b>. A disputa é nacional, por especialidade."
+  },
+  {
+   "type": "cards",
+   "label": "Formato da seleção",
+   "title": ["PRECISA DE <span class='g'>CURRÍCULO</span>?"],
+   "sub": "Como funciona o Enare 2026/2027",
+   "cards": [
+    {"num": "1", "h": "Não", "tag": "só a nota", "p": "No Enare <b>não há análise curricular</b>. A classificação sai da nota da prova."},
+    {"num": "2", "h": "Nota do Enamed", "tag": "previsto 04/12", "p": "No acesso direto, a nota vem do Enamed. O resultado final do Inep está <b>previsto para 04/12</b>."},
+    {"num": "3", "h": "Escolha de vagas", "tag": "previsto jan/27", "p": "A 1ª escolha está <b>prevista para 11 e 12/01/2027</b>. Quem tem nota maior escolhe primeiro a instituição."}
+   ],
+   "note": "Monte desde já sua lista de hospitais em ordem de preferência."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA PARA", "<span class='g glow'>A ESCOLHA</span>"],
+   "pill": "SALVA",
+   "body": "e manda para quem fez<br>o Enare com você.",
+   "note": "Vai prestar provas com currículo, como PSU-GO e SES-GO? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fontes: mapa de vagas do Enare 2026/2027 (FGV, divulgação de 10/06/2026) via IPM Educação e Medway; concorrência oficial do acesso direto (FGV/HU Brasil, 08/09/2026) via Estratégia MED, Medway e Sanarmed. Vagas podem mudar por retificação. Confira na página oficial do Enare."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "Enare no Centro-Oeste: <span>537 vagas</span>.<br>Veja onde estão no feed da @med_easyy."
+ },
+ "caption": "📍 ENARE NO CENTRO-OESTE: ONDE ESTÃO AS 537 VAGAS\n\nO Enare 2026/2027 tem 537 vagas no Centro-Oeste, 407 de acesso direto. Mato Grosso do Sul lidera com 238, depois vêm Distrito Federal (187) e Mato Grosso (108). Goiás tem só 4, em Itumbiara: aqui as grandes seleções são o PSU-GO e a SES-GO.\n\nA UnB é quem mais oferece na região, com 120 vagas (68 de acesso direto). Depois vêm UFMS (78), UFMT (61) e Santa Casa de Campo Grande (53).\n\nPrecisa de currículo? Não. No Enare a classificação sai da nota, sem análise curricular. No país todo foram 89.933 inscrições no acesso direto, 14,9 por vaga, e Otorrino foi a mais disputada (38,9). A 1ª escolha de vagas está prevista para 11 e 12/01/2027. Arrasta para ver tudo e salva para montar sua lista 📌\n\nQual hospital do Centro-Oeste está na sua lista? Comenta aqui 👇\n\nPrecisa organizar o currículo para as outras provas? Chama a MedEasy no direct 💚\n\n#enare #residenciamedica #residencia2027 #brasilia #campogrande #cuiaba"
+}
