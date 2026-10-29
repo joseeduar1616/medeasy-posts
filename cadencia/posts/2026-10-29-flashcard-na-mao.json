@@ -1,0 +1,146 @@
+{
+  "id": "2026-10-29-flashcard-na-mao",
+  "legenda": "Quanto tempo você gasta montando flashcard depois da aula? 😮‍💨\n\nSão 23h, a aula acabou e ainda falta passar tudo pro cartão: copiar a pergunta, achar a resposta no PDF, colar a imagem. Quando termina, o tempo de revisar já foi embora.\n\nNo Cadência Med você joga o PDF ou o Word da aula e a IA monta os flashcards, com as imagens do documento junto. Você confere, ajusta o que quiser, e cada cartão entra na revisão: volta no dia certo, conforme você responde.\n\nSalva esse post e manda pra quem ainda faz cartão na mão 📌\n\nQuantos flashcards você faz por dia? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #flashcards",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "FLASHCARDS",
+      "tag": "FLASHCARDS COM IA",
+      "titulo": "QUANTO TEMPO VOCÊ GASTA {g}MONTANDO FLASHCARD?{/g}",
+      "texto": "Se a sua noite acaba no cartão, arrasta pra ver <b>como sobrar tempo pra revisar</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cartoes_ia",
+        "altura": 410,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "23H E O CARTÃO {g}AINDA NÃO SAIU{/g}",
+      "texto": "A aula acabou, mas falta passar tudo pro flashcard. <b>Uma pergunta de cada vez</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Depois da aula de hoje",
+        "itens": [
+          {
+            "titulo": "Copiar a pergunta",
+            "sub": "Slide por slide",
+            "selo": "na mão",
+            "cor": "#A86BFF",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Achar a resposta no PDF",
+            "sub": "Rolando a apostila",
+            "selo": "na mão",
+            "cor": "#46D9F5",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Colar a imagem",
+            "sub": "Print, recorte, cola",
+            "selo": "na mão",
+            "cor": "#F5A524",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "O TEMPO DE REVISAR {g}FOI PRO CARTÃO{/g}",
+      "texto": "Você termina cansado, com os cartões prontos e <b>nenhum deles revisado</b>. Amanhã tem aula nova.",
+      "ui": {
+        "tipo": "cartao",
+        "frente": "Qual a tríade da síndrome nefrítica?",
+        "verso": "Hematúria, hipertensão e edema."
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "JOGA O PDF E {g}A IA MONTA OS CARTÕES{/g}",
+      "texto": "PDF ou Word da aula. A IA separa em pergunta e resposta, <b>com as imagens do documento junto</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cartoes_ia",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Flashcards com IA"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "REVISÃO",
+      "tag": "REVISÃO ESPAÇADA",
+      "titulo": "CADA CARTÃO {g}VOLTA NO DIA CERTO{/g}",
+      "texto": "A sua resposta decide quando ele volta. E a aula entra na escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Escada de revisão"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "ABRIU O APP, {g}A REVISÃO TÁ LÁ{/g}",
+      "texto": "A tela Hoje mostra o que venceu. <b>Você só senta e revisa</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Tela Hoje"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "MENOS TEMPO NO CARTÃO, {g}MAIS TEMPO REVISANDO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {
+            "titulo": "Flashcards com IA",
+            "texto": "montados a partir do seu PDF ou Word"
+          },
+          {
+            "titulo": "Escada de revisão",
+            "texto": "1 semana, 1 mês, 2, 4 e 6 meses"
+          },
+          {
+            "titulo": "Tela Hoje",
+            "texto": "o que venceu aparece sozinho"
+          },
+          {
+            "titulo": "Caderno de erros",
+            "texto": "o que você erra volta pra revisão"
+          }
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
