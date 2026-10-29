@@ -1,0 +1,78 @@
+{
+ "slug": "2026-10-29-1915-unicamp-2027-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "origem": "novidade",
+ "header": ["CONCORRÊNCIA", "UNICAMP 2027"],
+ "verified_on": "2026-10-29",
+ "sources": [
+  "Relação candidato/vaga da Comissão de Residência Médica da FCM Unicamp, divulgada em 29/10/2026, via med.estrategia.com/portal/noticias/concorrencia-unicamp-residencia-medica-2027/ (PDF cdn.medblog.estrategiaeducacional.com.br/wp-content/uploads/2026/10/concorrencia_unicamp2027.pdf)",
+  "Mesma relação via ipmeducacao.com.br/portal/unicamp-concorrencia-residencia-medica-2027/ (acesso direto 4.572 inscritos, 207 vagas, 22,09 por vaga; prova 15/11), números iguais aos do Estratégia programa por programa",
+  "portal.fcm.unicamp.br/residencias-em-saude/residencia-medica/processo-seletivo-2027/ (página oficial, citada pelos dois portais)",
+  "Etapas e currículo: editais FCM Unicamp 2027 conferidos no post de 14/10 (prova 15/11, classificados 02/12, envio do currículo 04 a 08/12)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica 2027",
+   "pill": "SAIU HOJE",
+   "title": ["UNICAMP 2027", "<span class='g glow'>22 POR VAGA</span>"],
+   "body": "A Unicamp divulgou a concorrência: <b>4.572 inscritos</b> para <b>207 vagas</b> no acesso direto. A prova é em <b>15/11</b>.",
+   "bullets": ["As mais disputadas", "As grandes áreas", "Precisa de currículo?"]
+  },
+  {
+   "type": "rows",
+   "label": "Acesso direto",
+   "title": ["AS MAIS <span class='y'>DISPUTADAS</span>"],
+   "sub": "Candidatos por vaga (vagas entre parênteses)",
+   "rows": [
+    {"name": "Neurocirurgia", "sub": "147 inscritos (3 vagas)", "value": "49,0"},
+    {"name": "Dermatologia", "sub": "274 inscritos (6 vagas)", "value": "45,7"},
+    {"name": "Otorrino", "sub": "261 inscritos (6 vagas)", "value": "43,5"},
+    {"name": "Psiquiatria", "sub": "345 inscritos (8 vagas)", "value": "43,1"},
+    {"name": "Cirurgia Geral", "sub": "536 inscritos (15 vagas)", "value": "35,7"},
+    {"name": "Oftalmologia", "sub": "340 inscritos (10 vagas)", "value": "34,0"}
+   ],
+   "note": "Neurologia (32,3) e Ginecologia e Obstetrícia (32,6) vêm logo atrás."
+  },
+  {
+   "type": "rows",
+   "label": "Acesso direto",
+   "title": ["E AS <span class='y'>GRANDES ÁREAS?</span>"],
+   "sub": "Candidatos por vaga (vagas entre parênteses)",
+   "rows": [
+    {"name": "Ortopedia", "sub": "218 inscritos (8 vagas)*", "value": "27,3"},
+    {"name": "Radiologia", "sub": "209 inscritos (8 vagas)", "value": "26,1"},
+    {"name": "Anestesiologia", "sub": "218 inscritos (10 vagas)", "value": "21,8"},
+    {"name": "Clínica Médica", "sub": "548 inscritos (35 vagas)*", "value": "15,7"},
+    {"name": "Pediatria", "sub": "237 inscritos (16 vagas)", "value": "14,8"},
+    {"name": "MFC", "sub": "192 inscritos (15 vagas)", "value": "12,8"}
+   ],
+   "note": "*Já sem as vagas reservadas, segundo a Unicamp. Medicina de Emergência tem a menor disputa entre as grandes: 4,6 por vaga."
+  },
+  {
+   "type": "rows",
+   "label": "Unicamp 2027",
+   "title": ["PRECISA DE <span class='y'>CURRÍCULO?</span>"],
+   "sub": "Sim, mas só para quem passar na prova",
+   "rows": [
+    {"name": "Prova objetiva", "sub": "Em Campinas", "value": "15/11"},
+    {"name": "Classificados", "sub": "Lista para a 2ª fase", "value": "02/12"},
+    {"name": "Envio do currículo", "sub": "Janela de 5 dias", "value": "04 a 08/12"}
+   ],
+   "note": "Entre a lista e o fim do envio são <b>6 dias</b>. Deixe os comprovantes prontos <b>antes da prova</b>."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA E", "<span class='g glow'>MANDA HOJE</span>"],
+   "pill": "SALVA",
+   "body": "para quem vai prestar<br>Unicamp com você.",
+   "note": "Quer o currículo pronto antes de 02/12? Chama a <b>MedEasy</b> no direct.",
+   "small": "Fonte: relação candidato/vaga da Comissão de Residência Médica da FCM Unicamp (29/10/2026), com conferência em Estratégia MED e IPM Educação, e editais FCM Unicamp 2027. O edital prevê que o número de vagas pode mudar."
+  }
+ ],
+ "story": {
+  "kicker": "SAIU HOJE",
+  "cta": "Unicamp 2027: <span>22 candidatos por vaga</span> no acesso direto.<br>Veja no feed da @med_easyy as mais disputadas."
+ },
+ "caption": "🔥 UNICAMP 2027: SAIU A CONCORRÊNCIA\n\nA Comissão de Residência Médica da Unicamp divulgou hoje a relação candidato/vaga: 4.572 inscritos para 207 vagas no acesso direto, uma média de 22,1 por vaga. A prova é em 15/11.\n\nAs mais disputadas: Neurocirurgia (49,0), Dermatologia (45,7), Otorrino (43,5), Psiquiatria (43,1), Cirurgia Geral (35,7) e Oftalmologia (34,0). Nas grandes áreas, Clínica Médica tem 15,7 por vaga, Pediatria 14,8 e MFC 12,8.\n\nPrecisa de currículo? Sim, só para quem passar: a lista de classificados sai em 02/12 e o envio vai de 04 a 08/12. Quem deixa para juntar os comprovantes depois da lista tem poucos dias.\n\nSalva e manda para quem vai prestar com você 📌 Qual especialidade você vai tentar na Unicamp? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #unicamp #residencia2027 #concorrencia #residenciasp"
+}
