@@ -24,6 +24,7 @@
 | 27/10/2026 | 14:57 | Meme animado (A2, Reel) + story (nicho) | POV: saiu do internato às 23h e abriu o caderno (fila, `posts/2026-10-27-meme-23h.json`, Reel 18113960660463781, story 18137338021650651) | https://www.instagram.com/reel/DfAcnrFGCiT/ | 30 contas, 60 views, 79% de pulo, 3,6 s de média (2 dias) |
 | 28/10/2026 | 10:00 | Carrossel 7 slides | (nicho) Dá pra fazer internato e estudar pro ENAMED junto? (pauta 9, `posts/2026-10-28-internato-enamed.json`, media_id 18093236855669761) | https://www.instagram.com/p/DfCfYIdgkSX/ | 25 contas, 104 views, 1 visita, 0 salvamentos (1 dia) |
 | 28/10/2026 | 14:55 | Meme com tela (A1, foto) + story | Eu às 23h jogando o PDF da aula no Cadência Med e os flashcards saindo prontos (fila, `posts/2026-10-27-pdf-flashcards-meme.json`, post 18229236607336883, story 18128467672854664) | https://www.instagram.com/p/DfDBGVtDAXD/ | 29 contas, 62 views, 0 visitas (19 h) |
+| 29/10/2026 | 09:57 | Carrossel 7 slides | Quanto tempo você gasta montando flashcard? (pauta 5, `posts/2026-10-29-flashcard-na-mao.json`, media_id 18118157582049890) | perfil (link ainda não saiu no Windsor) | (preencher) |
 
 ## Anotações de desempenho
 
@@ -46,6 +47,7 @@
 - 27/10, 14h57: o Reel do mentor de IA (14h30) ainda sem alcance no dado do Windsor (64 views). O carrossel checklist de plantão teve 17 contas e 2 visitas ao perfil em 5 h. Saiu o primeiro meme da fila (A2, POV 23h no internato), Reel e story. Na fila ficou o A1 dos flashcards.
 - 28/10: o Reel do mentor de IA (27/10, turbinado) chegou a 317 contas, com 91% de pulo. O meme A2 do POV 23h teve 27 contas, mas o menor pulo dos memes recentes (76%). Os três carrosséis da semana seguem baixos (29, 27 e 24 contas) e nenhum foi salvo, nem o "pra salvar" do checklist de plantão. Saiu o carrossel de nicho internato e ENAMED, com capa em pergunta e a tela do cronograma.
 - 28/10, 14h55: o Reel do mentor de IA chegou a 362 contas (91% de pulo). O meme A1 em foto de 26/10 parou em 33 contas e nenhuma visita, e o A2 do POV 23h em 29 contas com 78% de pulo. O carrossel de nicho de hoje teve 23 contas e 1 visita em 5 h. Saiu o meme da fila (A1, flashcards do PDF), feed e story. A fila ficou vazia. O A1 do ranking (pauta 4) já tem arquivos em `publicado/2026-10-28-ranking-meme/`, mas pela alternância o próximo é A2.
+- 29/10: os carrosséis da semana seguem entre 25 e 28 contas e nenhum foi salvo, mas o de caderno de erros (26/10) trouxe 3 visitas ao perfil. O Reel do mentor de IA (turbinado) chegou a 363 contas e o Reel animado de 25/10 parou em 665. O meme A1 dos flashcards (28/10) teve 29 contas e nenhuma visita em 19 h. Saiu o carrossel dos flashcards com IA (pauta 5), capa em pergunta com a tela de flashcards com IA.
 
 ## Memes prontos na fila
 
