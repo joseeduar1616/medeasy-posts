@@ -115,7 +115,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 10. A2 · "Vou revisar depois" × o Cadência Med com a revisão marcada pra daqui 1 semana, 1 mês, 2, 4 e 6 meses.
 11. A1 · Pagar **R$ 25 por mês** no anual e parar de montar cronograma na mão. Tela: planos
 12. A2 · POV: seu amigo te chamou pra sala do Cadência Med e agora você tá em **último** no ranking.
-13. A2 · (nicho) "Você sobreviveria a um dia de 4º ano com o ENAMED chegando?" 7h ambulatório, 13h aula, 19h plantão, 23h Pediatria parada desde o 3º ano. Fim: a semana montada no Cadência Med com o ciclo clínico.
+13. ~~A2 · (nicho) "Você sobreviveria a um dia de 4º ano com o ENAMED chegando?" 7h ambulatório, 13h aula, 19h plantão, 23h Pediatria parada desde o 3º ano. Fim: a semana montada no Cadência Med com o ciclo clínico.~~ *(saiu em 29/10)*
 14. A2 · "Você sobreviveria a uma semana com a revisão atrasada?" Segunda 3 vencidas, quarta 9, sexta 15. Fim: a tela Hoje do Cadência Med com a revisão do dia.
 15. A1 · Eu explicando pra turma que **não monto cronograma** desde que comecei a usar o **Cadência Med**. Tela: cronograma
 16. A2 · POV: primeiro dia de internato com o Cadência Med já sabendo a sua escala. (horários aparecendo e a semana pronta)

@@ -13,6 +13,8 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v3.js` | O app em 30 segundos: cronograma, ciclo clínico, revisão, flashcards, foco e ranking | 36 s |
 | `v4.js` | Nicho internato e ENAMED: 100 questões, 20 por área | 32 s |
 | `v5.js` | Meme animado (caminho A2 do AGENTES.md): POV 23h, "e agora, estudo o quê?" | 16 s |
+| `v6.js` | Nicho: você sobreviveria a uma semana de internato? | 19 s |
+| `v7.js` | Meme animado de nicho: você sobreviveria a um dia de 4º ano com o ENAMED chegando? | 18 s |
 
 ## Como gerar
 
