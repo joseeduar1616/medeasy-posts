@@ -26,6 +26,7 @@
 | 28/10/2026 | 14:55 | Meme com tela (A1, foto) + story | Eu às 23h jogando o PDF da aula no Cadência Med e os flashcards saindo prontos (fila, `posts/2026-10-27-pdf-flashcards-meme.json`, post 18229236607336883, story 18128467672854664) | https://www.instagram.com/p/DfDBGVtDAXD/ | 33 contas, 74 views, 1 visita (2 dias) |
 | 29/10/2026 | 09:57 | Carrossel 7 slides | Quanto tempo você gasta montando flashcard? (pauta 5, `posts/2026-10-29-flashcard-na-mao.json`, media_id 18118157582049890) | https://www.instagram.com/p/DfFDuyMDjJa/ | 25 contas, 85 views, 1 visita, 0 salvamentos (1 dia) |
 | 29/10/2026 | 15:00 | Meme animado (A2, Reel) + story (nicho) | Você sobreviveria a um dia de 4º ano com o ENAMED chegando? (pauta 13, `posts/2026-10-29-sobreviveria-4ano.json`, `videos/v7.js`, Reel 17870063391659081, story 18220005955348399) | https://www.instagram.com/reel/DfFma_2Dwdz/ | 24 contas, 46 views, 65% de pulo, 5,8 s de média (1 dia) |
+| 30/10/2026 | 09:58 | Carrossel 7 slides | (pra salvar) Atrasou? Salva esse plano de 7 dias (pauta 17, `posts/2026-10-30-plano-7-dias.json`, media_id 18145664137585393) | https://www.instagram.com/p/DfHorNwjV7i/ | (preencher) |
 
 ## Anotações de desempenho
 
@@ -50,6 +51,7 @@
 - 28/10, 14h55: o Reel do mentor de IA chegou a 362 contas (91% de pulo). O meme A1 em foto de 26/10 parou em 33 contas e nenhuma visita, e o A2 do POV 23h em 29 contas com 78% de pulo. O carrossel de nicho de hoje teve 23 contas e 1 visita em 5 h. Saiu o meme da fila (A1, flashcards do PDF), feed e story. A fila ficou vazia. O A1 do ranking (pauta 4) já tem arquivos em `publicado/2026-10-28-ranking-meme/`, mas pela alternância o próximo é A2.
 - 29/10: os carrosséis da semana seguem entre 25 e 28 contas e nenhum foi salvo, mas o de caderno de erros (26/10) trouxe 3 visitas ao perfil. O Reel do mentor de IA (turbinado) chegou a 363 contas e o Reel animado de 25/10 parou em 665. O meme A1 dos flashcards (28/10) teve 29 contas e nenhuma visita em 19 h. Saiu o carrossel dos flashcards com IA (pauta 5), capa em pergunta com a tela de flashcards com IA.
 - 29/10, 15h: o Windsor ainda mostra os mesmos números de manhã (plano de teste, sem atualização forçada). Pastas do Drive vazias e fila vazia, então pela alternância saiu o A2 de nicho do plano ("Você sobreviveria a um dia de 4º ano com o ENAMED chegando?"), no padrão do Reel animado de 25/10 (665 contas), com a tela real do ciclo clínico. Reel e story. Comparar com o de 25/10.
+- 30/10: os carrosséis da semana seguem entre 25 e 29 contas e nenhum foi salvo. O de caderno de erros (26/10) segue com mais visitas ao perfil (3). O meme A1 dos flashcards (28/10) subiu pra 33 contas e 1 visita, e o A2 de 4º ano (29/10) teve 24 contas em 1 dia, mas o menor pulo dos memes até agora (65%, 5,8 s de média). Saiu o carrossel pra salvar do plano (plano de 7 dias pra tirar o atraso, pauta 17), com o print do mentor de IA na capa (ontem foi cartoes_ia).
 
 ## Memes prontos na fila
 
