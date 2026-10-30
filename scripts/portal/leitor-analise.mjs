@@ -24,7 +24,8 @@ function seloL(texto) {
   return "";
 }
 function cabItemL(l) {
-  let m = l.match(/^\s*ITEM\s*0?(\d{1,2}[a-z]?)\b\s*[-–:.]?\s*(.*)$/i); if (m) return { n: m[1], resto: m[2], forte: true };
+  // "ITEM 3a" ou, em edital que numera com letra (HCPA), "ITEM A" e "ITEM E1"
+  let m = l.match(/^\s*ITEM\s*0?(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?=[\s\-–:.]|$)\s*[-–:.]?\s*(.*)$/i); if (m) return { n: /^[a-z]/i.test(m[1]) ? m[1].toUpperCase() : m[1], resto: m[2], forte: true };
   m = l.match(/^\s*0?(\d{1,2}[a-z]?)(?:\s*[.)\-–:]\s*|\s{2,}|\s*$)(.*)$/); if (m && !/^\d/.test(m[2])) return { n: m[1], resto: m[2], forte: false };
   return null;
 }
@@ -170,7 +171,7 @@ export function lerTextoAnalise(texto) {
   // Reserva: tabela "Análise resumida" (número, item, nota / máximo, situação)
   const iRes = linhas.findIndex(l => /AN[AÁ]LISE RESUMIDA/i.test(l));
   if (iRes >= 0) {
-    const reTab = new RegExp("^\\s*0?(\\d{1,2}[a-z]?)[.)]?\\s+(.+?)\\s{2,}(" + NUM_L + ")\\s*(?:\\/|de)\\s*(" + NUM_L + ")(?:\\s{2,}(.+))?$");
+    const reTab = new RegExp("^\\s*0?(\\d{1,2}[a-z]?|[A-Z]\\d{0,2})[.)]?\\s+(.+?)\\s{2,}(" + NUM_L + ")\\s*(?:\\/|de)\\s*(" + NUM_L + ")(?:\\s{2,}(.+))?$");
     for (const l of linhas.slice(iRes + 1)) { const m = l.match(reTab); if (!m) continue;
       const ja = itens.find(x => String(x.n) === m[1]);
       if (ja) { if (!ja.max && !ja.pontos) { ja.pontos = numL(m[3]); ja.max = numL(m[4]); ja.ganho = ja.ganho || Math.max(0, ja.max - ja.pontos); } if (!ja.situacao) ja.situacao = seloL(m[5] || ""); }

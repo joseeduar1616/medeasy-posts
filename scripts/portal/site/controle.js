@@ -31,8 +31,10 @@ const certDe = (ct, id) => ct.certs.find(x => x.id === id);
 function contaItem(it, lista, ct){
   const certs = lista.map(a => ({ ...a, c:certDe(ct, a.id) })).filter(a => a.c);
   const n = e => certs.filter(a => a.estado === e).length;
-  const real = it.unit != null ? Math.min(it.maxN, n("pontua") * it.unit) : 0;
-  const ideal = it.unit != null ? Math.min(it.maxN, (n("pontua") + n("risco") + n("tentativa")) * it.unit) : 0;
+  // Item que não é por certificado (histórico, ENADE, proficiência): com um comprovante, vale a nota da análise ou o máximo
+  const cheio = num(it.base && it.base.pts) || it.maxN;
+  const real = it.unit != null ? Math.min(it.maxN, n("pontua") * it.unit) : n("pontua") ? cheio : 0;
+  const ideal = it.unit != null ? Math.min(it.maxN, (n("pontua") + n("risco") + n("tentativa")) * it.unit) : n("pontua") + n("risco") + n("tentativa") ? cheio : 0;
   return { certs, nPontua:n("pontua"), nRisco:n("risco"), nTent:n("tentativa"), nRes:n("reserva"), real:r2(real), ideal:r2(ideal), risco:r2(ideal - real) };
 }
 function resumoProva(c, p, ct){
@@ -105,7 +107,7 @@ function ctCerts(c, ct, provas){
 function ctProva(c, ct, p){
   const pk = kP(p.nome); const itens = itensDaProva(p); const r = resumoProva(c, p, ct);
   const usadosAqui = new Set(Object.values(ct.aloc[pk] || {}).flat().map(a => a.id));
-  return `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Projeção real</div><div class="v">${d1(r.real)}<small class="muted" style="font-size:16px"> / ${d1(r.max)}</small></div><div class="d">só o que está pontuando</div></div><div class="kpi"><div class="label">Projeção ideal</div><div class="v gold">${d1(r.ideal)}</div><div class="d">${r.risco} com risco · ${r.tent} tentativas</div></div><div class="kpi"><div class="label">Certificados usados</div><div class="v">${usadosAqui.size}</div><div class="d">de ${ct.certs.length} cadastrados · ${r.res} em reserva</div></div></div>
+  return `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Projeção real</div><div class="v">${d1(r.real)}<small class="muted" style="font-size:16px"> / ${d1(r.max)}</small></div><div class="d">${!usadosAqui.size && calcDe(c, p).total > 0 ? `nenhum certificado ligado aos itens ainda · na análise: ${d1(calcDe(c, p).total)}` : "só o que está pontuando"}</div></div><div class="kpi"><div class="label">Projeção ideal</div><div class="v gold">${d1(r.ideal)}</div><div class="d">${r.risco} com risco · ${r.tent} tentativas</div></div><div class="kpi"><div class="label">Certificados usados</div><div class="v">${usadosAqui.size}</div><div class="d">de ${ct.certs.length} cadastrados · ${r.res} em reserva</div></div></div>
    ${ct.certs.length ? "" : `<div class="wait small" style="margin-bottom:12px">Cadastre os certificados na aba Certificados para poder alocar aqui.</div>`}
    <div class="stack" style="gap:10px">${itens.map(it => { const lista = alocDe(ct, pk, it.key); const a = contaItem(it, lista, ct); const m = it.grupo && it.grupoMax != null ? Math.min(it.maxN, it.grupoMax) : it.maxN;
      const livres = ct.certs.filter(x => !lista.some(l => l.id === x.id));

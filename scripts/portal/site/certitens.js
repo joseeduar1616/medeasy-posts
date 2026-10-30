@@ -12,13 +12,19 @@ const modeloDe = nome => { const k = kP(nome); return MODELO[k] || (Object.entri
 /* Itens de uma prova: da análise curricular lida (se houver) ou da ficha do edital */
 /* Item da análise sem a lista de comprovantes (o leitor não achou no PDF): conta o mínimo de certificados para chegar na nota, como no "Ler currículo pronto" */
 const nPelaNota = (pts, unit) => pts > 0 ? (unit > 0 ? Math.max(1, Math.round(pts / unit)) : 1) : 0;
-const codItemC = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?\d?)\b/i) || [])[1]?.toLowerCase() || "";
+const codItemC = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?=[\s.)\-–:]|$)/) || [])[1]?.toLowerCase() || "";
+// Nome vazio ou genérico ("Item", "A.", "3.") vindo da análise: usa o nome da ficha do edital
+const nomeVazioC = s => !String(s || "").replace(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})[.)\-–:]?\s*/, "").replace(/^item\s*$/i, "").trim();
 function itensDaProva(p){
   const an = (p.itens || []).filter(i => i.max != null && p.fonte !== "contagem");
   // Valor por certificado do edital, quando a análise não trouxe "por atividade"
-  const ficha = (p.edital && p.edital.ficha) || []; const unitEd = nome => { const k = codItemC(nome); const x = k && ficha.find(x => codItemC(x.item) === k); return x && x.unit != null ? num(x.unit) : null; };
-  if (an.length) return an.map(i => { const unit = num(i.porAtividade) || unitEd(i.nome) || null, n = (i.comprovantes || []).length || nPelaNota(num(i.pontos), unit);
-    return { key:i.nome, item:i.nome, pontos:i.regra || "", maxN:num(i.max), unit, artigo:/artigo completo|cap[ií]tulo/i.test(i.nome), com:i.comentario || "", sit:i.situacao || "", ganhoBase:num(i.ganho),
+  const ficha = ((p.edital && p.edital.ficha) || []).filter(x => x.maxN != null);
+  // Item da ficha pelo código, pelo nome ou, se a análise segue a ficha item por item, pela posição
+  const naFicha = (i, j) => { const k = codItemC(i.n != null ? String(i.n) : i.nome); return (k && ficha.find(x => codItemC(x.item) === k))
+    || ficha.find(x => kP(x.item) === kP(i.nome)) || (an.length === ficha.length && ficha[j] && Math.abs(num(ficha[j].maxN) - num(i.max)) < 0.001 ? ficha[j] : null); };
+  if (an.length) return an.map((i, j) => { const f = naFicha(i, j); const unit = num(i.porAtividade) || (f && f.unit != null ? num(f.unit) : null) || null, n = (i.comprovantes || []).length || nPelaNota(num(i.pontos), unit);
+    const nome = nomeVazioC(i.nome) && f ? f.item : i.nome;
+    return { key:i.nome, item:nome, pontos:i.regra || (f && f.pontos) || "", maxN:num(i.max), unit, artigo:/artigo completo|cap[ií]tulo/i.test(i.nome), com:i.comentario || "", sit:i.situacao || "", ganhoBase:num(i.ganho),
       base:{ n, lista:i.comprovantes || [], pts: unit && Math.abs(Math.min(num(i.max), n * unit) - num(i.pontos)) < 0.01 ? "" : num(i.pontos) } }; });
   return ((p.edital && p.edital.ficha) || []).filter(x => x.maxN != null).map(x => ({ key:x.item, item:x.item, pontos:x.pontos || "", maxN:num(x.maxN), unit:x.unit == null ? null : num(x.unit), artigo:!!x.artigo, grupo:x.grupo || "", grupoMax:x.grupoMax == null ? null : num(x.grupoMax) }));
 }
