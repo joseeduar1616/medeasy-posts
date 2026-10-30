@@ -1,0 +1,117 @@
+{
+  "id": "2026-10-30-plano-7-dias",
+  "legenda": "Atrasou o cronograma e não sabe por onde recomeçar? 😮‍💨\n\nA vontade é tirar o atraso todo num fim de semana. Aí você empilha aula nova, deixa as revisões vencidas de lado e na segunda já está cansado e mais atrasado.\n\nO plano de 7 dias vai por partes: nos dias 1 e 2 você só limpa as revisões que venceram, do dia 3 ao 5 entra uma aula atrasada por dia depois da revisão, e nos dias 6 e 7 você remonta a semana com o tempo que tem de verdade. No Cadência Med o filtro mostra só as revisões atrasadas, o mentor de IA diz o que priorizar olhando o seu painel e a agenda monta a semana com você.\n\nSalva esse plano e manda pra quem tá atrasado com você 📌\n\nQuantas aulas você tem atrasadas? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #cronogramadeestudos",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "PLANO DE 7 DIAS",
+      "titulo": "ATRASOU? {g}SALVA ESSE PLANO DE 7 DIAS{/g}",
+      "texto": "Um passo de cada vez pra <b>voltar pro ritmo sem largar as revisões</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 410,
+        "foco": "center"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "DIAS 1 E 2",
+      "tag": "DIAS 1 E 2",
+      "titulo": "PRIMEIRO, {g}AS REVISÕES VENCIDAS{/g}",
+      "texto": "Aula nova espera dois dias. Antes, limpe o que já venceu <b>enquanto ainda lembra um pouco</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Liste só as revisões atrasadas", "feito": true},
+          {"texto": "Comece pelas mais antigas", "feito": true},
+          {"texto": "Blocos curtos com questões do tema", "feito": true},
+          {"texto": "Nada de aula nova ainda", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "DIAS 3 A 5",
+      "tag": "DIAS 3 A 5",
+      "titulo": "UMA AULA ATRASADA {g}POR DIA{/g}",
+      "texto": "Revisão do dia primeiro, aula atrasada depois. Tentar ver três de uma vez <b>só cria outra pilha</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Revisão que venceu hoje", "feito": true},
+          {"texto": "Uma aula atrasada", "feito": true},
+          {"texto": "Erros pro caderno de erros", "feito": true},
+          {"texto": "Flashcards da aula nova", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "DIAS 6 E 7",
+      "tag": "DIAS 6 E 7",
+      "titulo": "REMONTE A SEMANA {g}COM O TEMPO REAL{/g}",
+      "texto": "Plantão, aula da faculdade e descanso entram primeiro. O estudo fica <b>no espaço que sobra de verdade</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "rotina",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Agenda da semana"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "REVISÕES",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "SÓ OS ATRASADOS, {g}NUM CLIQUE{/g}",
+      "texto": "Na tela de revisões, o filtro mostra só o que venceu. <b>Você já sabe por onde começar</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Revisões vencidas"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "TELA HOJE",
+      "tag": "TODO DIA",
+      "titulo": "O PLANO DO DIA {g}JÁ ESTÁ NA TELA{/g}",
+      "texto": "A tela Hoje mostra a agenda, o tempo estudado e o ritmo. <b>Dá pra ver se você voltou pro trilho</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Tela Hoje"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "SETE DIAS PRA {g}VOLTAR PRO RITMO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Revisões atrasadas", "texto": "o filtro mostra só o que venceu"},
+          {"titulo": "Mentor de IA", "texto": "diz o que priorizar olhando o seu painel"},
+          {"titulo": "Agenda da semana", "texto": "montada com o tempo que você tem"},
+          {"titulo": "Tela Hoje", "texto": "o plano do dia aparece sozinho"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
