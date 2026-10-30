@@ -1949,10 +1949,13 @@ function lerTriagemJson(j){
     notaEstimada:numA(de(j, "nota_total", "nota", "pontuacao_total")) || Math.round(itens.reduce((a, i) => a + i.pontos, 0) * 100) / 100, notaPossivel:j.nota_possivel ? numA(j.nota_possivel) : "", notaMax:itens.reduce((a, i) => a + i.max, 0), prazoEnvio:isoDeA(j.envio && j.envio.prazo) || (j.envio && j.envio.prazo) || "",
     regras:[j.envio?.formato, j.envio?.tamanho_max ? "até " + j.envio.tamanho_max : "", j.envio?.ordem].filter(Boolean).join(". "), itens, fonte:"triagem" };
 }
-async function lerArquivoAnaliseSite(arquivo){
+async function lerArquivoAnaliseSite(arquivo, provaPadrao){
   if (/\.json$/i.test(arquivo.name)) return lerTriagemJson(JSON.parse(await arquivo.text()));
-  if (/\.txt$/i.test(arquivo.name)){ const prs = lerAnaliseTexto(await arquivo.text()); if (!prs.length) throw new Error("Esse texto não está no formato ANÁLISE MEDEASY"); return prs[0]; }
-  const pr = lerTextoAnalise(await textoDoPdf(arquivo));
+  // A resposta do Claude ("ANÁLISE MEDEASY") salva em .txt, Word ou PDF entra igual a colada
+  const txt = /\.txt$/i.test(arquivo.name) ? await arquivo.text() : /\.docx$/i.test(arquivo.name) ? await textoDoDocx(arquivo) : await textoDoPdf(arquivo);
+  const prs = lerAnaliseTexto(txt, provaPadrao); if (prs.length) return prs[0];
+  if (!/pdf$/i.test(arquivo.type) && !/\.pdf$/i.test(arquivo.name)) throw new Error("Esse texto não está no formato ANÁLISE MEDEASY");
+  const pr = lerTextoAnalise(txt);
   if (!pr.itens.length) throw new Error("Não achei os itens nesse PDF. Ele precisa ser a análise curricular MedEasy, com um card por item e a pontuação de cada um");
   return pr;
 }
@@ -2022,7 +2025,7 @@ function aplicarAnalises(c){
 async function importarAnalise(input){
   const c = clienteSel(); const f = input.files && input.files[0]; if (!c || !f) return;
   toast("Lendo o arquivo");
-  try { const pr = await lerArquivoAnaliseSite(f); pr.arquivo = f.name; guardarAnalise(c, pr); delete S.cont[c.id]; if (!c.triagem) aplicarAnalises(c); render(); toast(`Análise ${pr.nome} lida: ${d1(pr.notaEstimada)} pontos em ${pr.itens.length} itens`); }
+  const so = (c.provas || []).filter(p => p.nome); try { const pr = await lerArquivoAnaliseSite(f, so.length === 1 ? so[0].nome : ""); pr.arquivo = f.name; guardarAnalise(c, pr); delete S.cont[c.id]; if (!c.triagem) aplicarAnalises(c); render(); toast(`Análise ${pr.nome} lida: ${d1(pr.notaEstimada)} pontos em ${pr.itens.length} itens`); }
   catch (e) { if (!(await analiseLivre(c, f))) toast("Esse arquivo não está no formato da análise MedEasy e não achei as notas dos itens da ficha nele. Lance em Certificados por item (Completo, − e +)"); }
 }
 /* ---------- análise padrão em texto ----------
@@ -2038,18 +2041,29 @@ async function importarAnalise(input){
 // Código do item: número ("1", "3a", "7a1") ou letra do edital ("A", "E1", como no HCPA)
 const codItemA = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?=[\s.)\-–:]|$)/) || [])[1] || "";
 const semCodA = s => String(s || "").replace(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?:[.)\-–:]\s*|\s+)/, "").trim();
-function lerAnaliseTexto(txt){
-  const blocos = String(txt || "").replace(/\r/g, "").replace(/\*\*/g, "").split(/^\s*#*\s*AN[AÁ]LISE MEDEASY\s*$/im).slice(1);
+function lerAnaliseTexto(txt, provaPadrao){
+  const limpo = String(txt || "").replace(/\r/g, "").replace(/\*\*/g, "").replace(/\f/g, "\n");
+  let blocos = limpo.split(/^\s*#*\s*AN[AÁ]LISE MEDEASY\s*$/im).slice(1);
+  // Só a tabela, sem o título: vale se tiver o cabeçalho (Item, Pontos, Máximo) e a prova for conhecida
+  if (!blocos.length && /^\s*\|?\s*item\b.*pontos.*m[aá]ximo/im.test(semAcento(limpo).replace(/maximo/g, "máximo")) && (provaPadrao || /^\s*prova\s*:/im.test(limpo))) blocos = [limpo];
   const out = [];
   for (const b of blocos){
     const ls = b.split("\n").map(l => l.trim()).filter(Boolean);
     const campo = rot => { const l = ls.find(l => new RegExp("^" + rot + "\\s*:", "i").test(semAcento(l))); return l ? l.slice(l.indexOf(":") + 1).trim() : ""; };
-    const provaTxt = campo("prova"); if (!provaTxt) continue;
+    const provaTxt = campo("prova") || provaPadrao || ""; if (!provaTxt) continue;
+    const noCab = ls.findIndex(l => /^\|?\s*item\b/i.test(l) && /pontos/i.test(l));
     const nome = (typeof provaDoTitulo === "function" && provaDoTitulo(provaTxt)) || provaTxt.replace(/\s*20\d\d.*$/, "").trim();
     const ed = typeof editalJS === "function" ? editalJS(nome) : null; const ficha = ((ed && ed.ficha) || []).filter(x => x.maxN != null);
     const itens = [];
-    for (const l of ls){
-      if ((l.match(/\|/g) || []).length < 3) continue;
+    for (const [li, l] of ls.entries()){
+      // PDF e Word perdem o "|": as colunas viram 3 ou mais espaços ou tab. Só depois do cabeçalho da tabela.
+      if ((l.match(/\|/g) || []).length < 3){ if (noCab < 0 || li <= noCab || /^(nota|cliente|prova|especialidade)\s*:/i.test(semAcento(l))) continue;
+        const it = linhaSemBarras(l); if (!it) continue; const [cod, titulo, pts, max, comp, como] = it; const f = (cod && ficha.find(x => codItemA(x.item) && codItemA(x.item).toLowerCase() === cod.toLowerCase())) || ficha.find(x => kP(semCodA(x.item)) === kP(titulo));
+        const mx = numA(max) || (f ? numA(f.maxN) : 0), pt = Math.min(numA(pts), mx || Infinity);
+        itens.push({ n:cod, nome:f ? f.item : `${cod ? cod + ". " : ""}${titulo}`, regra:f ? f.pontos || "" : "", max:mx, porAtividade:f && f.unit != null ? numA(f.unit) : 0, pontos:pt,
+          ganho:Math.max(0, Math.round((mx - pt) * 100) / 100), comprovantes:String(comp || "").split(";").map(x => x.trim()).filter(Boolean), comentario:como || "",
+          situacao:mx && pt >= mx - 0.001 ? "Completo" : pt > 0 ? "Parcial" : como ? "Aumentar agora" : "" });
+        continue; }
       // Tabela markdown tem "|" nas pontas. Sem isso, a primeira célula vazia é o número do item em branco e não pode sumir.
       const cel = l.split("|").map(x => x.trim()); if (cel.length > 6 && cel[0] === "") cel.shift(); while (cel.length > 6 && cel[cel.length - 1] === "") cel.pop();
       if (/^item$/i.test(cel[0]) || /^nome$/i.test(cel[1]) || /^[-:\s]+$/.test(cel.join(""))) continue;
@@ -2069,6 +2083,14 @@ function lerAnaliseTexto(txt){
       notaMax:numA(ed && ed.maximo) || Math.round(itens.reduce((a, i) => a + i.max, 0) * 100) / 100, notaPossivel:"", itens, fonte:"texto" });
   }
   return out;
+}
+/* Linha da tabela sem "|" (PDF ou Word): código opcional, nome, pontos, máximo, comprovantes e como aumentar. Os dois primeiros números são pontos e máximo. */
+function linhaSemBarras(l){
+  const cel = l.split(/\t|\s{3,}/).map(x => x.trim()).filter(Boolean); if (cel.length < 3) return null;
+  const ehNum = x => /^\d{1,2}(?:[.,]\d{1,2})?$/.test(x); const i = cel.findIndex(ehNum); if (i < 1 || !ehNum(cel[i + 1] || "")) return null;
+  let cod = "", titulo = cel.slice(0, i).join(" ");
+  if (i > 1 && codItemA(cel[0]) === cel[0]) { cod = cel[0]; titulo = cel.slice(1, i).join(" "); } else if (codItemA(titulo)) { cod = codItemA(titulo); titulo = semCodA(titulo); }
+  return [cod, titulo, cel[i], cel[i + 1], cel[i + 2] || "", cel.slice(i + 3).join(" ")];
 }
 const ANO_AN = () => (typeof ANO !== "undefined" ? ANO : "2027");
 /* Pedido pronto para colar no Claude: já vai com a ficha de cada prova do cliente, com o número e o máximo de cada item */
@@ -2116,7 +2138,7 @@ async function analiseLivre(c, f){
     if (it.unit){ const q = Math.round(n.pts / it.unit); r.n = q; r.pts = Math.abs(Math.min(it.maxN, q * it.unit) - n.pts) < 0.001 ? "" : n.pts; } else r.pts = n.pts;
     if (n.conferir) r.com = r.com || "Conferir: a análise só trazia um número neste item"; }
   if (!c.triagem) reg.rascunho = true; reg.copiado = false; gravarRasc(c.id); S.ciProva[c.id] = pk; render();
-  toast(`Análise fora do padrão: li a nota de ${notas.length} de ${itens.length} itens de ${p.nome} (nota ${d1(calcDe(c, p).total)}). Confira em Certificados por item e salve`);
+  toast(`Análise fora do padrão: li a nota de ${notas.length} de ${itens.length} itens de ${p.nome} (nota ${d1(calcDe(c, p).total)}). Confira em Certificados por item e salve. Para ler tudo (comprovantes e como aumentar), use "Copiar pedido para o Claude" e cole a resposta em "Colar análise"`);
   return true;
 }
 function analiseCard(c){
@@ -2699,7 +2721,7 @@ app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if
 
 /* Versão nova do site: quem deixa a aba aberta continuava com o código antigo depois de uma correção.
    O montar-site grava a versão em site.txt. Ao voltar para a aba (e a cada 5 minutos) o site confere e oferece atualizar. */
-const VERSAO_SITE = "3d126ef497fb";
+const VERSAO_SITE = "b3a742eea367";
 /* Erro no site aparece na tela (com a versão), em vez de falhar calado. Ajuda a mandar print para o suporte. */
 window.addEventListener("error", e => { try { toast(`Erro no site: ${e.message} (versão ${VERSAO_SITE})`); } catch {} });
 window.addEventListener("unhandledrejection", e => { try { toast(`Erro no site: ${(e.reason && e.reason.message) || e.reason} (versão ${VERSAO_SITE})`); } catch {} });
