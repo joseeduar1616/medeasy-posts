@@ -1,0 +1,91 @@
+{
+"slug": "2026-10-30-1800-sesgo-2026-notas-de-corte",
+"pillar": "notas de corte e concorrência",
+"header": ["NOTA DE CORTE", "SES-GO"],
+"verified_on": "2026-10-30",
+"sources": [
+"https://med.estrategia.com/portal/residencia-medica/notas-de-corte-para-residencia-medica-goias/ (atualizado 16/04/2026, coluna 'Nota de corte 1ª etapa' da SES-GO)",
+"https://www.grupomedcof.com.br/blog/notas-de-corte-de-residencia-medica-da-regiao-centro-oeste/ (20/04/2026, coluna 'Notas de corte 2025/2026' da SES-GO, mesmos valores para HCN, HGG, CRESM e HUGOL)",
+"https://sistemas.institutoverbena.ufg.br/2027/coreme-ses/sistema/arquivos/editais/EDITAL_DE_ABERTURA_COREME_SES_2027.pdf (Edital nº 24/2026 COREME SES-GO 2027, conferido nos posts de 09, 21 e 28/10: prova 100 pontos com mínimo 50, currículo 100 pontos na 2ª fase, inscrições até 03/11 17h, prova 06/12)",
+"log/news_seen.md, varreduras de 30/10 sem retificação nova da SES-GO",
+"Fora do post: hospitais que só aparecem em uma das fontes (HUGO, HEMU, HEANA, HEAPA, HDT, HECAD, CRER), Neurocirurgia do HGG (as fontes divergem) e a coluna 'nota de aprovação' (só uma fonte)"
+],
+"slides": [
+{
+"type": "cover",
+"label": "Residência médica em Goiás",
+"pill": "SES-GO",
+"title": ["QUANTO PRECISOU", "<span class='y glow'>NA PROVA</span>"],
+"body": "Nota de corte da <b>1ª etapa</b> da SES-GO 2026 em HGG, HUGOL, HCN e CRESM. Para 2027 as inscrições vão até <b>terça, 03/11</b>.",
+"bullets": ["Cirurgia Geral, Anestesio e Clínica", "As notas mais altas", "Precisa de currículo?"]
+},
+{
+"type": "rows",
+"label": "SES-GO 2026, 1ª etapa",
+"title": ["<span class='y'>CIRURGIA</span> E ANESTESIO"],
+"sub": "Nota de corte na prova, de 0 a 100",
+"rows": [
+{"name": "Cirurgia Geral", "sub": "HUGOL", "value": "83"},
+{"name": "Cirurgia Geral", "sub": "HGG", "value": "81"},
+{"name": "Cirurgia Geral", "sub": "HCN", "value": "77"},
+{"name": "Anestesiologia", "sub": "HGG", "value": "77"},
+{"name": "Anestesiologia", "sub": "HUGOL", "value": "77"},
+{"name": "Anestesiologia", "sub": "HCN", "value": "73"}
+],
+"note": "Em Cirurgia Geral, 6 pontos separam o HUGOL do HCN."
+},
+{
+"type": "rows",
+"label": "SES-GO 2026, 1ª etapa",
+"title": ["<span class='y'>CLÍNICA</span> E INTENSIVA"],
+"sub": "Nota de corte na prova, de 0 a 100",
+"rows": [
+{"name": "Clínica Médica", "sub": "HGG", "value": "76"},
+{"name": "Clínica Médica", "sub": "HUGOL", "value": "74"},
+{"name": "Clínica Médica", "sub": "HCN", "value": "64"},
+{"name": "Medicina Intensiva", "sub": "HGG", "value": "70"},
+{"name": "Medicina Intensiva", "sub": "HUGOL", "value": "70"},
+{"name": "Ortopedia", "sub": "HUGOL", "value": "74"}
+],
+"note": "Na Clínica Médica, o HCN pediu 12 pontos a menos que o HGG."
+},
+{
+"type": "rows",
+"label": "SES-GO 2026, 1ª etapa",
+"title": ["AS NOTAS <span class='y'>MAIS ALTAS</span>"],
+"sub": "Acesso direto, nota de corte na prova",
+"rows": [
+{"name": "Otorrinolaringologia", "sub": "HGG", "value": "85"},
+{"name": "Neurologia", "sub": "HGG", "value": "81"},
+{"name": "Psiquiatria", "sub": "HGG", "value": "79"},
+{"name": "Psiquiatria", "sub": "CRESM", "value": "75"}
+],
+"note": "Com pré-requisito no HGG: Cirurgia Vascular 86, Cirurgia Plástica e Urologia 84."
+},
+{
+"type": "cards",
+"label": "Formato da seleção",
+"title": ["PRECISA DE <span class='g'>CURRÍCULO</span>?"],
+"sub": "Resposta do edital da SES-GO 2027",
+"cards": [
+{"num": "1", "h": "Sim, na 2ª fase", "tag": "100 pontos", "p": "A análise do currículo vale <b>100 pontos</b> e é só para quem for classificado na prova."},
+{"num": "2", "h": "Prova objetiva", "tag": "100 pontos", "p": "Quem fizer menos de <b>50 pontos</b> é eliminado. A prova é em <b>06/12</b>, em Goiânia."},
+{"num": "3", "h": "Inscrições", "tag": "até 03/11", "p": "Até <b>17h</b> de terça, no Instituto Verbena/UFG. Taxa de <b>R$ 500</b> para um programa."}
+],
+"note": "Com notas de corte tão próximas, o currículo pode decidir a vaga."
+},
+{
+"type": "cta",
+"title": ["SALVA PARA", "<span class='g glow'>MIRAR A NOTA</span>"],
+"pill": "SALVA",
+"body": "e manda para quem vai<br>prestar SES-GO com você.",
+"note": "O currículo vale 100 pontos na 2ª fase. Precisa de ajuda para organizar? Chama a <b>MedEasy</b> no direct.",
+"small": "Fontes: notas de corte da 1ª etapa da SES-GO 2026 levantadas por Estratégia MED e MedCof (mesmos valores). Edital de Abertura nº 24/2026 COREME SES-GO 2027 (Instituto Verbena/UFG). Notas de 2026 são referência, não previsão."
+}
+],
+"story": {
+"kicker": "POST NOVO",
+"cta": "SES-GO 2026: <span>quanto precisou na prova</span><br>em cada hospital. Veja no feed da @med_easyy."
+},
+"caption": "🎯 SES-GO: QUANTO PRECISOU NA PROVA\n\nNa SES-GO 2026, a nota de corte da 1ª etapa em Cirurgia Geral foi 83 no HUGOL, 81 no HGG e 77 no HCN, de 0 a 100. Em Clínica Médica foi 76 no HGG, 74 no HUGOL e 64 no HCN. Anestesiologia ficou em 77 no HGG e no HUGOL.\n\nAs mais altas no acesso direto foram Otorrino no HGG (85), Neurologia no HGG (81) e Psiquiatria no HGG (79). Os números de 2026 são referência, não previsão para 2027.\n\nPrecisa de currículo? Sim. A prova vale 100 pontos, com mínimo de 50, e quem for classificado passa para a análise do currículo, que vale mais 100. As inscrições de 2027 vão até terça, 03/11, às 17h, no Instituto Verbena/UFG, e a prova é em 06/12. Salva e manda para quem vai prestar com você 📌\n\nQual hospital da SES-GO é o seu alvo? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#sesgo #residenciamedica #goiania #notadecorte #residencia2027"
+}
