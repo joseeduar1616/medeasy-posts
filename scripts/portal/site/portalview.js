@@ -36,6 +36,7 @@ function portalView(p, preview){
       return `<section class="card"><div class="card-h"><div><h2>${esc(pv.nome)} ${esc(pv.ano || "")}</h2>${pv.area ? `<div class="sub">${esc(pv.area)}</div>` : ""}</div>${pv.link ? `<a class="btn sm" href="${esc(pv.link)}" target="_blank" rel="noopener">Edital</a>` : ""}</div>
         ${temNota ? `<div class="row" style="gap:24px;align-items:flex-end"><div><div class="label">Nota estimada</div><div class="score">${d1(num(pv.notaEstimada))}<small> / ${d1(num(pv.notaMax) || 100)}</small></div></div>${num(pv.notaPossivel) > num(pv.notaEstimada) ? `<div><div class="label gold">Possível até o prazo</div><div class="score gold" style="font-size:30px">${d1(num(pv.notaPossivel))}</div></div>` : ""}</div>
           <div class="bar" style="margin-top:12px;height:8px;position:relative"><i style="width:${Math.min(100, num(pv.notaEstimada) / (num(pv.notaMax) || 100) * 100)}%"></i></div>` : `<p class="muted small" style="margin:0">A projeção da nota aparece aqui depois da análise curricular</p>`}
+        ${pv.recado ? `<p class="small" style="margin:12px 0 0;white-space:pre-wrap">${esc(pv.recado)}</p>` : ""}
         ${pv.prazoEnvio || pv.dataProva ? `<div class="row small" style="margin-top:12px">${pv.prazoEnvio ? `<span class="pill gold">Envio até ${dBR(pv.prazoEnvio)}</span>` : ""}${pv.dataProva ? `<span class="pill info">Prova ${dBR(pv.dataProva)}</span>` : ""}</div>` : ""}
         ${pv.regras ? `<p class="small" style="margin:12px 0 0;color:var(--muted)">${esc(pv.regras)}</p>` : ""}
         ${pv.edital ? `<details style="margin-top:12px"><summary class="small" style="cursor:pointer;font-weight:600">Como o currículo conta nesta prova</summary><div class="small" style="margin-top:8px"><p style="margin:0 0 6px"><b>Peso:</b> ${esc(pv.edital.peso || "")}</p><p style="margin:0 0 6px"><b>Envio:</b> ${esc(pv.edital.envio || "")}</p><p style="margin:0 0 6px"><b>Formato:</b> ${esc(pv.edital.formato || "")}</p>${pv.edital.obs ? `<p style="margin:0 0 6px"><b>Atenção:</b> ${esc(pv.edital.obs)}</p>` : ""}${typeof fichaTabela === "function" ? fichaTabela(pv.edital) : ""}</div></details>` : ""}
@@ -95,6 +96,7 @@ function resumoNotasView(p){
 }
 /* Orçamento do cliente: o plano que ele escolheu vezes os certificados e artigos que já entraram. Atualiza sozinho. */
 function orcamentoClienteView(p){
+  if (p.orcamentoEnviado && (p.orcamentoEnviado.opcoes || []).length) return orcamentoEnviadoView(p);
   const e = p.orcamento !== undefined ? p.orcamento : (typeof estimarJS === "function" && (p.tipos || []).length ? estimarJS(clienteDoPortal(p)) : null);
   if (!e || !(e.linhas || []).length) return ""; const f = p.financeiro || {};
   return `<section class="card"><div class="card-h"><h2>Seu orçamento</h2>${e.completo ? `<span class="pill ok">Atualizado</span>` : `<span class="pill">Aguardando a contagem</span>`}</div>
@@ -112,4 +114,13 @@ function mentoriaCardView(p, ct, waTxt){
    ${m.valor ? `<div class="row between small" style="margin-top:4px"><span>Mensalidade</span><b class="num">${brl(m.valor)} por mês</b></div>` : ""}
    <p class="small muted" style="margin:10px 0 12px">Não tem prazo de entrega: o acompanhamento segue mês a mês com ${esc(ct.mentor)}. As suas notas, o que falta e as próximas datas aparecem aqui embaixo.</p>
    <a class="btn sm pri" target="_blank" rel="noopener" href="${waLink(ct.whats, waTxt)}">Falar com o mentor</a></section>`;
+}
+
+/* Orçamento que o cliente recebeu, como foi enviado. A opção fechada fica marcada. */
+function orcamentoEnviadoView(p){
+  const o = p.orcamentoEnviado; const ops = o.escolhida ? o.opcoes.filter(x => x.letra === o.escolhida) : o.opcoes; const f = p.financeiro || {};
+  return `<section class="card"><div class="card-h"><h2>Seu orçamento</h2>${o.escolhida ? `<span class="pill ok">Opção ${esc(o.escolhida)}</span>` : ""}</div>
+   ${(ops.length ? ops : o.opcoes).map(x => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>${o.escolhida ? esc(x.titulo || "Opção " + x.letra) : "Opção " + esc(x.letra)}</b><b class="num gold">${brl(x.total)}${x.mensal ? " por mês" : ""}</b></div>${!o.escolhida && x.titulo ? `<div class="xs muted">${esc(x.titulo)}</div>` : ""}
+     ${(x.linhas || []).length ? `<div class="tbl-wrap"><table class="tbl"><tbody>${x.linhas.map(l => `<tr><td class="small">${esc(l.desc)}${l.conta ? `<div class="xs muted">${esc(l.conta)}</div>` : ""}</td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div>` : ""}</div>`).join("")}
+   ${f.total ? `<p class="xs muted" style="margin:6px 0 0">Valor combinado: ${brl(f.total)}</p>` : ""}</section>`;
 }

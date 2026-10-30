@@ -21,7 +21,7 @@ function salvarCtrl(c){
   if (c.triagem){ const t = triDe(c.id); t.controle = ct; salvarTri(t); return; }
   try { localStorage.setItem(ctrlKey(c.id), JSON.stringify(ct)); } catch { toast("Não consegui guardar neste navegador"); }
 }
-const temCtrl = ct => ct.certs.length || ct.pend.length;
+const temCtrl = ct => ct.certs.length || ct.pend.length || Object.keys(ct.notas || {}).length || !!ct.orcamento;
 /* Texto que vai para o Notion: JSON compacto sem o rascunho local */
 function textoCtrl(ct){ const { notion, em, ...resto } = ct; return JSON.stringify(resto); }
 /* Alocação de um item: lista de {id, estado} */

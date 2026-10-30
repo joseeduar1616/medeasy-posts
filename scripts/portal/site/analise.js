@@ -239,3 +239,118 @@ function analiseCard(c){
    ${ks.length > 1 ? `<div class="row" style="margin-top:10px"><button class="btn sm ghost" data-a="apagarAnalises">Remover todas as ${ks.length} análises</button></div>` : ""}
    <p class="xs muted" style="margin:10px 0 0">${c.triagem ? (typeof triNoNotion === "function" && triNoNotion() ? "Fica guardada junto com a triagem, também no Notion." : "Fica guardada junto com a triagem neste navegador.") : "Fica só neste navegador. Para o cliente ver no portal dele e a equipe toda ver, anexe o mesmo PDF na coluna Análise do cliente no Notion. Na próxima sincronização entra para todos."}</p>` : `<div class="empty">Nenhuma análise importada${c.provas.some(p => p.fonte === "analise" && !ks.length) ? ". As provas abaixo já vieram com análise do Notion" : ""}</div>`}</section>`;
 }
+
+/* ---------- Nota e pendências: o mentor digita, o Claude só ajuda a escrever ----------
+   Fica no controle do cliente (ct.notas[prova]) e vai para o Notion junto com ele. As pendências viram pendências do cliente.
+   O orçamento usa os certificados válidos digitados aqui. O site não calcula nem interpreta a nota. */
+function notasDe(c){ const ct = ctrlDe(c); return ct.notas || (ct.notas = {}); }
+const maxPadrao = (c, p) => num(p.edital && p.edital.maximo) || calcDe(c, p).max || "";
+const numTxt = v => v === "" || v == null ? "" : String(v).replace(".", ",");
+function notaRasc(c, p){
+  const pk = kP(p.nome); const r = ((S.notaRasc ||= {})[c.id] ||= {});
+  if (!r[pk]){ const n = notasDe(c)[pk];
+    r[pk] = n ? { nota:numTxt(n.nota), max:numTxt(n.max), possivel:numTxt(n.possivel), recado:n.recado || "", pend:(n.pend || []).join("\n") }
+      : { nota:"", max:numTxt(maxPadrao(c, p)), possivel:"", recado:"", pend:"" }; }
+  return r[pk];
+}
+function notaInput(el){ const c = clienteSel(); if (!c) return; const p = (c.provas || []).find(x => kP(x.nome) === el.dataset.nota); if (p) notaRasc(c, p)[el.dataset.k] = el.value; }
+function notaCard(c){
+  const provas = (c.provas || []).filter(p => p.nome); const salvo = notasDe(c);
+  const cab = `<div class="card-h"><div><h2>Nota e pendências</h2><div class="sub">Você preenche a nota. O Claude só ajuda a escrever o recado e as pendências.</div></div>${provas.length ? `<div class="row" style="gap:6px"><button class="btn sm" data-a="notaPedido" title="Copia um pedido curto para colar no Claude junto com os certificados">Copiar pedido para o Claude</button><button class="btn sm ${S.colarNota ? "pri" : ""}" data-a="notaColarAbrir">Colar resposta</button></div>` : ""}</div>`;
+  if (!provas.length) return `<section class="card" id="notaCard">${cab}<div class="empty">Marque as provas do cliente primeiro</div></section>`;
+  return `<section class="card" id="notaCard">${cab}
+   ${S.colarNota ? `<div class="svc" style="margin-bottom:12px"><p class="small" style="margin:0 0 8px">Cole a resposta inteira do Claude. O site preenche os campos abaixo e você confere antes de salvar. O que ele não entender fica vazio para você digitar.</p><textarea class="in" id="notaColar" rows="6" placeholder="NOTA MEDEASY&#10;Prova: ...&#10;Nota: 8 de 10&#10;..."></textarea><div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="notaColarLer">Preencher os campos</button><button class="btn sm ghost" data-a="notaColarAbrir">Fechar</button></div></div>` : ""}
+   <div class="stack" style="gap:12px">${provas.map(p => { const pk = kP(p.nome); const r = notaRasc(c, p); const s = salvo[pk];
+     const campo = (k, rot, w, ph) => `<label class="f" style="width:${w};margin:0"><span>${rot}</span><input class="in" data-nota="${pk}" data-k="${k}" value="${esc(r[k] ?? "")}" inputmode="decimal" placeholder="${ph || ""}"></label>`;
+     return `<div class="svc"><div class="row between"><b>${esc(p.nome)} ${esc(p.ano || "")}</b>${s ? `<span class="pill ok">Salvo${s.em ? " em " + dBR(new Date(s.em).toISOString()) : ""}</span>` : `<span class="pill">Ainda sem nota</span>`}</div>
+       <div class="row" style="gap:8px;margin-top:8px;flex-wrap:wrap;align-items:flex-end">${campo("nota", "Nota", "80px", "8")}${campo("max", "de", "80px", "10")}${campo("possivel", "Possível", "90px", "8,5")}</div>
+       <label class="f" style="margin:8px 0 0"><span>Pendências do cliente (uma por linha)</span><textarea class="in" rows="3" data-nota="${pk}" data-k="pend" placeholder="Declaração de conclusão da liga de cardiologia">${esc(r.pend || "")}</textarea></label>
+       <label class="f" style="margin:8px 0 0"><span>Recado para o cliente</span><textarea class="in" rows="2" data-nota="${pk}" data-k="recado" placeholder="Sua nota hoje é 8 de 10. Se aceitarem a monitoria de 2021, vai para 8,5.">${esc(r.recado || "")}</textarea></label></div>`; }).join("")}</div>
+   <div class="row" style="margin-top:12px;align-items:center"><button class="btn sm pri" data-a="notaSalvar">${!c.triagem && typeof temPonte === "function" && temPonte() ? "Salvar no Notion" : "Salvar"}</button><span class="xs muted">O cliente vê a nota, o recado e as pendências no portal.</span></div></section>`;
+}
+/* Pendências da nota: cada linha vira uma pendência do cliente. As resolvidas ficam no histórico. */
+function sincPendNota(ct, p, linhas){
+  const pk = kP(p.nome), orig = "nota:" + pk; const ja = ct.pend.filter(x => x.origem === orig);
+  const novas = linhas.filter(l => !ja.some(x => x.texto === l)).map(l => ({ id:novoIdC(), data:hoje(), edital:pk, item:p.nome, texto:l, quem:"Cliente", situacao:"Aberta", resposta:"", origem:orig }));
+  ct.pend = [...novas, ...ct.pend.filter(x => x.origem !== orig || linhas.includes(x.texto) || x.situacao === "Resolvida")];
+}
+async function salvarNotas(){
+  const c = clienteSel(); if (!c) return; const ct = ctrlDe(c); const notas = notasDe(c); const erros = []; const prontas = [];
+  for (const p of (c.provas || []).filter(p => p.nome)){
+    const pk = kP(p.nome); const r = ((S.notaRasc || {})[c.id] || {})[pk]; if (!r) continue;
+    const vz = k => r[k] == null || String(r[k]).trim() === ""; const n = k => vz(k) ? "" : num(r[k]);
+    const nm = { nota:n("nota"), max:n("max"), possivel:n("possivel"), recado:String(r.recado || "").trim(),
+      pend:String(r.pend || "").split("\n").map(l => l.replace(/^\s*(?:[-•*▪◦]|\d{1,2}[.)])\s*/, "").trim()).filter(l => l && !/^nenhuma\.?$/i.test(l)) };
+    if (nm.nota !== "" && nm.max === "") erros.push(`${p.nome}: falta o máximo da nota`);
+    if (nm.max !== "" && nm.nota !== "" && nm.nota > nm.max) erros.push(`${p.nome}: a nota passa do máximo`);
+    if (nm.max !== "" && nm.possivel !== "" && nm.possivel > nm.max) erros.push(`${p.nome}: a nota possível passa do máximo`);
+    if (nm.nota !== "" && nm.possivel !== "" && nm.possivel < nm.nota) erros.push(`${p.nome}: a nota possível é menor que a nota`);
+    prontas.push({ p, pk, nm, vazio:nm.nota === "" && nm.possivel === "" && !nm.recado && !nm.pend.length });
+  }
+  if (erros.length){ toast(erros.join(". ")); return; }
+  if (!prontas.length){ toast("Nada para salvar"); return; }
+  for (const x of prontas){ if (x.vazio) delete notas[x.pk]; else notas[x.pk] = { ...x.nm, em:Date.now() }; sincPendNota(ct, x.p, x.vazio ? [] : x.nm.pend); }
+  delete S.notaRasc[c.id]; salvarCtrl(c); render();
+  if (!c.triagem && typeof temPonte === "function" && temPonte() && paginaDoCliente(c)){
+    try { await salvarNotion(paginaDoCliente(c), { "Controle de certificados":textoCtrl(ct) }, "Nota salva no Notion. O cliente vê no portal na próxima sincronização"); ct.notion = textoCtrl(ct); c.controle = JSON.parse(ct.notion); salvarCtrl(c); }
+    catch (e) { toast("A nota ficou neste navegador, mas não gravou no Notion: " + e.message); }
+  } else toast(c.triagem ? "Nota salva na triagem" : "Nota salva neste navegador. Sem a ponte, use Copiar controle para o Notion");
+}
+/* Pedido curto para o Claude: só a nota, o recado e as pendências. O orçamento não passa pelo Claude: vem do orçamento enviado ao cliente. */
+function pedidoNota(c){
+  const provas = (c.provas || []).filter(p => p.nome);
+  const regras = p => { const it = itensDaProva(p); return it.length ? `Como pontua cada item da ${p.nome}:\n` + it.map(i => `${i.item}: ${i.pontos || "ver edital"} (máximo ${String(i.maxN).replace(".", ",")})`).join("\n") : `A ficha da ${p.nome} não está no site: use o edital que vou mandar.`; };
+  return `Preciso da nota curricular de um cliente da MedEasy. Vou mandar os certificados dele${provas.some(p => !itensDaProva(p).length) ? " e o edital" : ""}.
+
+Quem decide o que vale é o mentor da MedEasy. Conte como válido todo comprovante que eu mandar, no item em que ele se encaixa. Não tire ponto por detalhe de formato, como falta de assinatura, carimbo, QR code, papel timbrado, carga horária ou data. O que estiver em dúvida entra na nota possível, não some. Se eu escrever o que considero válido, isso manda mais que a sua leitura do edital.
+
+O recado e as pendências aparecem para o cliente. Escreva simples e em tom positivo.
+
+Responda só com ${provas.length > 1 ? "um bloco por prova" : "o bloco abaixo"}, preenchido, sem nada antes nem depois. Use vírgula decimal.
+
+${provas.map(p => { const mx = maxPadrao(c, p); return `NOTA MEDEASY
+Prova: ${p.nome}
+Nota: (pontos que ele faz hoje) de ${mx ? numTxt(mx) : "(máximo do edital)"}
+Possível: (nota se aceitarem os comprovantes em dúvida, ou igual à nota)
+Recado: (2 ou 3 frases para o cliente com a nota e o que pode fazer ela subir)
+Pendências:
+- (uma por linha: o que o cliente precisa mandar ou resolver. Se não tiver, escreva Nenhuma)`; }).join("\n\n")}
+
+${provas.map(regras).join("\n\n")}`.trim();
+}
+/* Lê a resposta do Claude. Só preenche os campos que achar. Aceita negrito, títulos e "8/10" ou "8 de 10". */
+function lerNotaTexto(txt, c){
+  const limpo = String(txt || "").replace(/\r/g, "").replace(/\*\*|__|`/g, "").replace(/^\s*#+\s*/gm, "");
+  let blocos = limpo.split(/^\s*NOTA MEDEASY\s*:?\s*$/im).slice(1); if (!blocos.length) blocos = [limpo];
+  const provas = (c.provas || []).filter(p => p.nome); const out = [];
+  const ROT = /^(prova|nota|nota atual|possivel|nota possivel|maximo|nota maxima|certificados|certificados validos|artigos?|recado|pendencias)\s*:/;
+  const numDe = s => (String(s || "").match(/\d+(?:[.,]\d+)?/) || [])[0];
+  for (const b of blocos){
+    const ls = b.split("\n"); const rot = l => (semAcento(l).trim().match(ROT) || [])[1] || "";
+    const campo = (...nomes) => { const l = ls.find(l => nomes.includes(rot(l))); return l == null ? null : l.slice(l.indexOf(":") + 1).trim(); };
+    const provaTxt = campo("prova"); const kp = provaTxt ? kP(provaTxt.replace(/\s*20\d\d.*$/, "")) : "";
+    const p = kp ? provas.find(x => kp.startsWith(kP(x.nome)) || kP(x.nome).startsWith(kp)) : provas.length === 1 ? provas[0] : null;
+    if (!p) continue;
+    const r = {}; const nota = campo("nota", "nota atual");
+    if (nota != null){ const m = nota.match(/(\d+(?:[.,]\d+)?)\s*(?:de|\/|em)\s*(\d+(?:[.,]\d+)?)/i); if (m){ r.nota = m[1]; r.max = m[2]; } else if (numDe(nota)) r.nota = numDe(nota); }
+    const mx = campo("maximo", "nota maxima"); if (numDe(mx)) r.max = numDe(mx);
+    const pos = campo("possivel", "nota possivel"); if (numDe(pos)) r.possivel = numDe(pos);
+    // Recado: da linha "Recado:" até o próximo rótulo. Pendências: as linhas depois de "Pendências:".
+    const iR = ls.findIndex(l => rot(l) === "recado");
+    if (iR >= 0){ const partes = [ls[iR].slice(ls[iR].indexOf(":") + 1)]; for (const l of ls.slice(iR + 1)){ if (rot(l)) break; partes.push(l); } const t = partes.join(" ").replace(/\s+/g, " ").trim(); if (t) r.recado = t; }
+    const iP = ls.findIndex(l => rot(l) === "pendencias");
+    if (iP >= 0){ const linhas = [ls[iP].slice(ls[iP].indexOf(":") + 1), ...ls.slice(iP + 1)]; const pend = [];
+      for (const l of linhas){ if (rot(l) && rot(l) !== "pendencias") break; const t = l.replace(/^\s*(?:[-•*▪◦]|\d{1,2}[.)])\s*/, "").trim(); if (t && !/^nenhuma\.?$/i.test(t)) pend.push(t); }
+      r.pend = pend.join("\n"); }
+    if (Object.keys(r).length) out.push({ p, r });
+  }
+  return out;
+}
+function lerNotaColada(){
+  const c = clienteSel(); const el = document.getElementById("notaColar"); if (!c || !el) return;
+  const res = lerNotaTexto(el.value, c);
+  if (!res.length){ toast("Não achei a nota na resposta. Preencha os campos à mão"); return; }
+  for (const { p, r } of res) Object.assign(notaRasc(c, p), r);
+  S.colarNota = false; render();
+  toast(`Preenchi ${res.map(x => x.p.nome).join(", ")}. Confira os campos e clique em Salvar`);
+}
