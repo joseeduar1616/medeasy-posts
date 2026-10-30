@@ -106,7 +106,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 1. ~~A1 · Eu fingindo que não vi as **revisões vencidas** pra conseguir dormir. Tela: revisoes~~ *(saiu em 26/10)*
 2. ~~A2 · POV: saiu do internato às 23h e abriu o caderno. "E agora, estudo o quê?" O Cadência Med já separou a revisão de hoje.~~ *(saiu em 27/10)*
 3. ~~A1 · Eu às 23h jogando o PDF da aula no **Cadência Med** e os **flashcards** saindo prontos. Tela: cartoes_ia~~ *(saiu em 28/10)*
-4. A1 · Meu amigo jurando que estudou **o dia todo**. O ranking da nossa sala no Cadência Med: (ranking) *(pronto)*
+4. ~~A1 · Meu amigo jurando que estudou **o dia todo**. O ranking da nossa sala no Cadência Med: (ranking)~~ *(saiu em 30/10)*
 5. A2 · Eu antes do Cadência Med: planilha, Anki, cronômetro e caderno. Eu depois: uma tela. (etiquetas riscadas e tela Hoje)
 6. A1 · O mentor de IA do **Cadência Med** olhando meu painel antes de **montar minha semana**. Tela: assistente
 7. A2 · Níveis de cansaço no internato, do 1 ao 5, e o 5 é abrir o Cadência Med e a semana já estar montada. (escada com os níveis)
