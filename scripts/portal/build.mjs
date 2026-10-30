@@ -190,7 +190,7 @@ function juntarProva(provas, pr) {
 /* Coluna "Controle de certificados": JSON colado do site (certificados, alocação por item e pendências) */
 function lerControle(t) {
   if (!t) return null;
-  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], fichas: j.fichas || {}, analises: j.analises || {}, v: j.v || 1 }; }
+  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], fichas: j.fichas || {}, analises: j.analises || {}, notas: j.notas || {}, orcamento: j.orcamento || null, v: j.v || 1 }; }
   catch { console.warn("Controle de certificados com JSON inválido, ignorado"); return null; }
 }
 /* Coluna "Certificados por item": uma linha por prova, "PSU-GO: 2=2; 4=3; 9=/0,5" (item=certificados, /pontos digitados) */
@@ -341,12 +341,18 @@ function estimar(c) {
 }
 
 /* ---------- espelho do cliente ---------- */
+// Nota digitada pelo mentor no site (controle.notas): vale mais que a análise por item, e o recado vai junto
+function notaMentorBuild(c, p, pv) {
+  const n = ((c.controle && c.controle.notas) || {})[kProva(p.nome)];
+  if (!n || ((n.nota === "" || n.nota == null) && !n.recado)) return pv;
+  return { ...pv, notaEstimada: n.nota ?? "", notaMax: n.max || pv.notaMax || 10, notaPossivel: n.possivel ?? "", recado: n.recado || "", itens: [] };
+}
 function espelho(c, contato) {
   const pago = c.financeiro.pago, total = c.financeiro.total;
   return {
     id: c.id, nome: c.nome, mentores: c.mentores || [],
     servicos: c.servicos.map(s => ({ nome: s.nome, etapa: s.etapa, prazo: s.prazo, mensal: !!s.mensal })), mentoria: c.mentoria || null,
-    provas: c.provas.map(p => ({ nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [], edital: p.edital || null })),
+    provas: c.provas.map(p => notaMentorBuild(c, p, { nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [], edital: p.edital || null })),
     pendencias: [...c.pendencias.filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
       ...((c.controle && c.controle.pend) || []).filter(x => x.quem === "Cliente" && x.situacao !== "Resolvida").map(x => ({ texto: [x.item, x.texto].filter(Boolean).join(": "), feita: false, prazo: "" }))],
     atualizacoes: c.atualizacoes.filter(a => !a.interna).slice(-40),
@@ -356,7 +362,9 @@ function espelho(c, contato) {
     contagem: c.contagem || {},
     // Para o orçamento do cliente se atualizar no portal: plano (tipos), contagem e certificados do controle (sem as observações internas)
     tipos: c.tipos || [], nCert: c.nCert ?? null, nArtigos: c.nArtigos ?? null,
-    controle: c.controle ? { certs: (c.controle.certs || []).map(({ obs, ...x }) => x), aloc: c.controle.aloc || {}, pend: [] } : null,
+    controle: c.controle ? { certs: (c.controle.certs || []).map(({ obs, ...x }) => x), aloc: c.controle.aloc || {}, pend: [], notas: c.controle.notas || {} } : null,
+    // Orçamento que o cliente recebeu (PDF ou foto lido no site): o portal mostra este em vez da conta automática
+    orcamentoEnviado: (c.controle && c.controle.orcamento) || null,
     progresso: c.servicos.length ? Math.round(c.servicos.reduce((a, s) => a + s.etapa / 6, 0) / c.servicos.length * 100) : 0,
   };
 }

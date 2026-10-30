@@ -113,9 +113,13 @@ function textoCont(c, provasReg){ return (c.provas || []).filter(p => p.nome).ma
   return pares.length ? `${p.nome}: ${pares.join("; ")}` : ""; }).filter(Boolean).join("\n"); }
 function itensParaCliente(cp){ return cp.rows.map(x => ({ nome:x.item, regra:x.pontos, max:x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN, pontos:x.pts, ganho:x.ganhoBase || r2(Math.max(0, (x.grupo && x.grupoMax != null ? Math.min(x.maxN, x.grupoMax) : x.maxN) - x.pts)),
   situacao:x.sit || (x.maxN && x.pts >= x.maxN ? "Completo" : x.pts > 0 ? "Parcial" : ""), comprovantes:x.lista.length ? x.lista : Array.from({ length:x.n }, (_, i) => `Certificado ${i + 1}`), comentario:x.com || "" })); }
-function provasComContagem(c){ carregarCont(c); return (c.provas || []).map(p => { const cp = calcDe(c, p); if (!cp.tem || (p.fonte === "analise" && !regDe(c, p))) return p; return { ...p, itens:itensParaCliente(cp), notaEstimada:cp.total, notaMax:cp.max || num(p.notaMax) || 100, fonte:"contagem" }; }); }
+/* Nota digitada pelo mentor (cartão "Nota e pendências"): vale mais que a conta por item */
+function notaDoMentor(c, p){ const ct = typeof ctrlDe === "function" ? ctrlDe(c) : (c.controle || {}); const n = ((ct && ct.notas) || {})[kP(p.nome)];
+  return n && ((n.nota !== "" && n.nota != null) || n.recado) ? n : null; }
+const comNotaDoMentor = (p, n) => ({ ...p, notaEstimada:n.nota === "" || n.nota == null ? "" : n.nota, notaMax:n.max || num(p.notaMax) || 10, notaPossivel:n.possivel === "" || n.possivel == null ? "" : n.possivel, recado:n.recado || "", itens:[], fonte:"mentor" });
+function provasComContagem(c){ carregarCont(c); return (c.provas || []).map(p => { const nm = notaDoMentor(c, p); if (nm) return comNotaDoMentor(p, nm); const cp = calcDe(c, p); if (!cp.tem || (p.fonte === "analise" && !regDe(c, p))) return p; return { ...p, itens:itensParaCliente(cp), notaEstimada:cp.total, notaMax:cp.max || num(p.notaMax) || 100, fonte:"contagem" }; }); }
 /* No portal do cliente: monta os itens a partir da contagem que veio do Notion */
-function juntarContagemCliente(portal){ const temCont = portal.contagem && Object.keys(portal.contagem).length, temCtrl = portal.controle && (portal.controle.certs || []).length;
+function juntarContagemCliente(portal){ const temCont = portal.contagem && Object.keys(portal.contagem).length, temCtrl = portal.controle && ((portal.controle.certs || []).length || Object.keys(portal.controle.notas || {}).length);
   if (!temCont && !temCtrl) return; delete S.cont.cli; if (S.ctrl) delete S.ctrl.cli;
   portal.provas = provasComContagem({ id:"cli", provas:portal.provas || [], contagem:portal.contagem || {}, controle:portal.controle || null }); }
 /* Cliente "de mentira" a partir dos dados do portal, para calcular o orçamento com as mesmas regras do mentor */

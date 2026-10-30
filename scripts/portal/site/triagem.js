@@ -80,6 +80,8 @@ async function criarClienteNotion(){
   if (ja && !confirm(`Esse cliente já tem uma linha no Notion: ${ja.nome}${ja.total ? ", " + brl(ja.total) : ""}. Criar outra linha mesmo assim?`)) return;
   const outraLinha = !!t.clienteNotion || !!ja;
   const c = clienteDaTriagem(t); const ct = ctrlDe(c);
+  // O portal do cliente mostra o orçamento que ele recebeu, com a opção que fechou
+  if (ops.length) ct.orcamento = { arquivo:t.orcImportado ? t.orcImportado.arquivo : "Orçamento da triagem", em:Date.now(), opcoes:opcoesCurtas(ops), escolhida:o ? o.letra : "" };
   const tipos = (o?.tipos || tiposDe(t.servico)).map(x => SERVICO_NOTION[x]).filter(Boolean);
   const props = { "Cliente":t.nome.trim(), "Telefone":t.whats, "Tipo de serviço":[...tipos, ...c.provas.map(p => p.nome)], "Mentor":S.mentor?.nome || "", "Status":"Não iniciada", "Pagamento":"Não pago",
     "Valor total":o ? o.total : null, "Data de início ":isoLocal(), "Certificados por item":textoCont(c, carregarCont(c).provas) || "", "Controle de certificados":temCtrl(ct) ? textoCtrl(ct) : "" };
@@ -311,13 +313,20 @@ async function textoDaImagem(f){
     return (r.data.text || "").split("\n").map(l => l.replace(/\s+[—–|]+\s+/g, "     ").replace(/\s+[—–|]+(?=\s*(?:-\s*)?R\s?[$S5])/g, "     ")).join("\n"); }
   finally { await w.terminate(); }
 }
-async function importarOrcPdf(input){
-  const t = triDe(S.sel); const f = input.files && input.files[0]; input.value = ""; if (!t || !f) return;
+/* Lê o orçamento pronto (PDF ou foto) e devolve as opções. Serve para a triagem e para o orçamento enviado ao cliente. */
+async function lerOrcArquivo(f){
   const foto = /^image\//i.test(f.type) || /\.(jpe?g|png|webp|heic)$/i.test(f.name);
   toast(foto ? "Lendo a foto do orçamento. Pode levar uns 20 segundos" : "Lendo o orçamento");
+  const ops = lerOrcamentoTexto(foto ? await textoDaImagem(f) : await textoDoPdf(f));
+  if (!ops.length) throw new Error(foto ? "Não consegui ler as opções e os valores nessa foto. Tente uma foto mais reta e nítida, ou o PDF" : "Não achei as opções e os valores nesse PDF. Ele precisa ter as linhas com R$ e o VALOR TOTAL");
+  return { ops, foto };
+}
+/* Opções do orçamento no formato curto que vai para o controle (Notion) e para o portal do cliente */
+const opcoesCurtas = ops => ops.map(o => ({ letra:o.letra, titulo:o.titulo || "", total:o.total, mensal:!!o.mensal, linhas:(o.linhas || []).map(l => ({ desc:l.desc, conta:l.conta || "", valor:l.valor })) }));
+async function importarOrcPdf(input){
+  const t = triDe(S.sel); const f = input.files && input.files[0]; input.value = ""; if (!t || !f) return;
   try {
-    const ops = lerOrcamentoTexto(foto ? await textoDaImagem(f) : await textoDoPdf(f));
-    if (!ops.length) throw new Error(foto ? "Não consegui ler as opções e os valores nessa foto. Tente uma foto mais reta e nítida, ou o PDF" : "Não achei as opções e os valores nesse PDF. Ele precisa ter as linhas com R$ e o VALOR TOTAL");
+    const { ops, foto } = await lerOrcArquivo(f);
     t.orcImportado = { arquivo:f.name, em:Date.now(), opcoes:ops, foto }; t.ajuste = {}; salvarTri(t); S.orcEdit = false; render();
     toast(`Orçamento lido: ${ops.map(o => `opção ${o.letra} ${brl(o.total)}${o.mensal ? " por mês" : ""}`).join(", ")}${foto ? ". Confira os valores, a leitura de foto pode errar" : ""}`);
   } catch (e) { toast(e.message || "Não consegui ler o PDF"); }
@@ -364,8 +373,9 @@ function triagemItemView(){
     <section class="card" id="triOrc"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${t.orcImportado ? `<span class="pill gold" title="${esc(t.orcImportado.arquivo || "")}">${t.orcImportado.foto ? "Da foto" : "Do PDF"}</span><button class="btn sm ghost" data-a="orcAuto">Voltar ao automático</button>` : `<label class="btn sm" style="cursor:pointer" title="Usa as opções e os valores de um orçamento que já foi feito, em PDF ou foto">Usar orçamento pronto<input type="file" accept=".pdf,application/pdf,image/*" hidden data-orcpdf="1"></label>`}${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
       ${ops.length && S.orcEdit ? orcEditor(t, ops) : ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}${o.mensal ? " por mês" : ""}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${esc(foraTxt(l))}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
       <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, msgOrc(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
-    ${analiseCard(c)}
-    <section class="card"><div class="card-h"><h2>PDF da análise</h2></div><p class="xs muted" style="margin:0 0 10px">Sai da análise importada ou da contagem por item lá embaixo, com os comentários de cada item. Uma prova por vez.</p><div class="row">${c.provas.map(p => `<button class="btn sm ${calcDe(c, p).tem ? "pri" : ""}" data-a="pdfAnalise" data-v="${kP(p.nome)}">PDF ${esc(p.nome)}</button>`).join("") || `<span class="xs muted">Sem prova</span>`}</div></section>
+    ${notaCard(c)}
+    ${S.avancado ? analiseCard(c) : ""}
+    ${S.avancado ? `<section class="card"><div class="card-h"><h2>PDF da análise</h2></div><p class="xs muted" style="margin:0 0 10px">Sai da análise importada ou da contagem por item lá embaixo, com os comentários de cada item. Uma prova por vez.</p><div class="row">${c.provas.map(p => `<button class="btn sm ${calcDe(c, p).tem ? "pri" : ""}" data-a="pdfAnalise" data-v="${kP(p.nome)}">PDF ${esc(p.nome)}</button>`).join("") || `<span class="xs muted">Sem prova</span>`}</div></section>` : ""}
     <section class="card" id="triFechar"><div class="card-h"><h2>Quando fechar</h2>${t.clienteNotion ? `<a class="pill ok" href="${esc(t.clienteNotion)}" target="_blank" rel="noopener">Cliente no Notion</a>` : ""}</div>
       ${valorNotionTri(t, ops)}
       ${triNoNotion() ? `<p class="xs muted" style="margin:0 0 10px">Cria a linha do cliente no Controle cliente, com serviço, provas, valor, contagem por item e controle de certificados. Ele entra no painel com o código de acesso em 1 ou 2 minutos.</p>
@@ -373,7 +383,7 @@ function triagemItemView(){
       : `<p class="xs muted" style="margin:0 0 10px">Crie o cliente no Notion e cole o texto abaixo. Na próxima sincronização ele entra no painel com a contagem e o código de acesso.</p><button class="btn sm" data-a="copiarNotionTri">Copiar dados para o Notion</button>`}</section>
    </div></div>
    <div style="margin-top:16px">${controleView(c)}</div>
-   <div style="margin-top:16px">${certItensView(c)}</div>`;
+   ${avancadoView(c)}`;
 }
 function atualizarTriParcial(){
   try {
@@ -518,4 +528,28 @@ function pdfAnalise(t, pk){
     <div class="card"><div class="lbl" style="margin-bottom:6px">Datas importantes</div><ul>${p.prazoEnvio ? `<li>Fim do envio do currículo: ${dBR(p.prazoEnvio)}</li>` : ""}${p.dataProva ? `<li>Prova: ${dBR(p.dataProva)}</li>` : ""}${e.inscricao ? `<li>Inscrição: ${esc(e.inscricao)}</li>` : ""}${e.resultado ? `<li>Resultado: ${esc(e.resultado)}</li>` : ""}</ul></div>
     <p>A nota é uma estimativa feita a partir dos certificados que você enviou e das regras do edital. Quem decide a pontuação final é a banca. Qualquer dúvida, fale com o seu mentor.</p>
     <div class="rod">MedEasy · (62) 99515-5830 · medeasyy0@gmail.com · Goiânia, Goiás</div></section></body></html>`);
+}
+
+/* Tela do cliente: orçamento que ele recebeu (PDF ou foto). O portal mostra esse, em vez de calcular um novo. */
+function orcEnviadoCard(c){
+  const ct = ctrlDe(c); const o = ct.orcamento;
+  return `<section class="card"><div class="card-h"><div><h2>Orçamento enviado</h2><div class="sub">O portal do cliente mostra este orçamento. Sem ele, mostra a conta automática.</div></div><div class="row" style="gap:6px"><label class="btn sm ${o ? "" : "pri"}" style="cursor:pointer">${o ? "Trocar" : "Subir PDF ou foto"}<input type="file" accept=".pdf,application/pdf,image/*" hidden data-orcenv="1"></label>${o ? `<button class="btn sm ghost" data-a="orcEnvTirar">Tirar</button>` : ""}</div></div>
+   ${o ? `<div class="xs muted" style="margin-bottom:8px">${esc(o.arquivo || "")}${o.em ? " · lido em " + dBR(new Date(o.em).toISOString()) : ""}</div>${(o.opcoes || []).map(x => `<label class="li" style="cursor:pointer"><input type="radio" name="orcEsc" data-orcesc="${esc(x.letra)}" ${o.escolhida === x.letra ? "checked" : ""}><div class="grow"><div class="t">Opção ${esc(x.letra)}${x.titulo ? " · " + esc(x.titulo) : ""}</div></div><b class="num gold">${brl(x.total)}${x.mensal ? " por mês" : ""}</b></label>`).join("")}<p class="xs muted" style="margin:8px 0 0">Marque a opção que o cliente fechou.</p>` : `<div class="empty">Nenhum orçamento lido ainda</div>`}</section>`;
+}
+async function gravarOrcEnviado(c, msg){
+  salvarCtrl(c); render(); const ct = ctrlDe(c);
+  if (typeof temPonte === "function" && temPonte() && paginaDoCliente(c)){
+    try { await salvarNotion(paginaDoCliente(c), { "Controle de certificados":textoCtrl(ct) }, msg); ct.notion = textoCtrl(ct); c.controle = JSON.parse(ct.notion); salvarCtrl(c); }
+    catch (e) { toast("Ficou neste navegador, mas não gravou no Notion: " + e.message); }
+  } else toast("Salvo neste navegador. Sem a ponte, use Copiar controle para o Notion");
+}
+async function importarOrcEnviado(input){
+  const c = clienteSel(); const f = input.files && input.files[0]; input.value = ""; if (!c || !f) return;
+  try { const { ops, foto } = await lerOrcArquivo(f); const ct = ctrlDe(c);
+    // A opção fechada: a que bate com o Valor total do Notion, ou a única
+    const total = (c.servicos || []).reduce((a, s) => a + (s.mensal ? 0 : num(s.total)), 0);
+    const bate = ops.find(o => Math.abs(o.total - total) < 0.01);
+    ct.orcamento = { arquivo:f.name, em:Date.now(), foto, opcoes:opcoesCurtas(ops), escolhida:bate ? bate.letra : ops.length === 1 ? ops[0].letra : "" };
+    await gravarOrcEnviado(c, `Orçamento salvo no Notion: ${ops.map(o => `opção ${o.letra} ${brl(o.total)}`).join(", ")}${foto ? ". Confira os valores, a leitura de foto pode errar" : ""}`);
+  } catch (e) { toast(e.message || "Não consegui ler o orçamento"); }
 }
