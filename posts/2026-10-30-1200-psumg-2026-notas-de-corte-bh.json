@@ -1,0 +1,191 @@
+{
+ "slug": "2026-10-30-1200-psumg-2026-notas-de-corte-bh",
+ "pillar": "notas de corte e concorrência",
+ "header": [
+  "NOTA DE CORTE",
+  "PSU-MG 2026"
+ ],
+ "verified_on": "2026-10-30",
+ "sources": [
+  "https://med.estrategia.com/portal/residencia-medica/notas-de-corte-para-residencia-medica-minas-gerais/ (tabela NOTA DE CORTE 2026 do PSU-MG: nota final do último aprovado em 1ª chamada por programa; atualizada em 16/04/2026)",
+  "https://www.grupomedcof.com.br/blog/notas-de-corte-residencia-medica-minas-gerais/ (Notas de Corte 2025/2026 do PSU-MG, último aprovado em 1ª chamada; publicada em 20/04/2026; todos os números do post batem com o Estratégia MED)",
+  "https://www.otempo.com.br/educacao/2026/10/24/quanto-precisa-tirar-para-passar-em-pediatria-no-hmtj (nota final do PSU-MG = prova 90 + currículo 10, a partir das listas de convocação da AREMG)",
+  "posts/2026-10-10-1200-psumg-2027-guia.json e posts/2026-10-18-0715-psumg-2027-prorrogada.json (edital PSU-MG 2027 e Retificação nº 4 da AREMG: prova 22/11, mínimo de 50% na prova, currículo 10% enviado na inscrição, já conferidos)",
+  "Fora do post por divergência ou por estar em uma fonte só: Cirurgia Geral no Felício Rocho (só Estratégia) e Dermatologia no HMTJ em ampla concorrência (O Tempo 85,6 x portais 86,7)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em Minas",
+   "pill": "NOTA DE CORTE",
+   "title": [
+    "QUANTO PRECISOU",
+    "<span class='y glow'>PARA PASSAR</span>"
+   ],
+   "body": "Nota final do último aprovado na <b>1ª chamada do PSU-MG 2026</b>, em hospitais de BH e nas especialidades mais disputadas. A prova de 2027 é em <b>22/11</b>.",
+   "bullets": [
+    "Clínica Médica em BH",
+    "Anestesio, GO, Cirurgia e Ortopedia",
+    "Precisa de currículo?"
+   ]
+  },
+  {
+   "type": "rows",
+   "label": "Clínica Médica",
+   "title": [
+    "CLÍNICA MÉDICA <span class='y'>EM BH</span>"
+   ],
+   "sub": "Nota de corte no PSU-MG 2026, 1ª chamada",
+   "rows": [
+    {
+     "name": "Hospital Felício Rocho",
+     "sub": "Belo Horizonte",
+     "value": "86,2"
+    },
+    {
+     "name": "Mater Dei Contorno",
+     "sub": "Belo Horizonte",
+     "value": "83,2"
+    },
+    {
+     "name": "Hospital Madre Teresa",
+     "sub": "Belo Horizonte",
+     "value": "83"
+    },
+    {
+     "name": "Mater Dei Santo Agostinho",
+     "sub": "Belo Horizonte",
+     "value": "80,7"
+    }
+   ],
+   "note": "A nota final vai até 100: prova com peso 90 e currículo com peso 10."
+  },
+  {
+   "type": "rows",
+   "label": "Outras grandes áreas",
+   "title": [
+    "ANESTESIO, GO <span class='y'>E CIRURGIA</span>"
+   ],
+   "sub": "Nota de corte no PSU-MG 2026, 1ª chamada",
+   "rows": [
+    {
+     "name": "Anestesiologia, Felício Rocho",
+     "sub": "Belo Horizonte",
+     "value": "89,2"
+    },
+    {
+     "name": "Anestesiologia, Madre Teresa",
+     "sub": "Belo Horizonte",
+     "value": "88"
+    },
+    {
+     "name": "GO, Mater Dei Santo Agostinho",
+     "sub": "Belo Horizonte",
+     "value": "84,3"
+    },
+    {
+     "name": "Ortopedia, Madre Teresa",
+     "sub": "Belo Horizonte",
+     "value": "84"
+    },
+    {
+     "name": "Cirurgia Geral, Mater Dei",
+     "sub": "Unidade Santo Agostinho",
+     "value": "83,4"
+    },
+    {
+     "name": "Pediatria, Mater Dei",
+     "sub": "Unidade Santo Agostinho",
+     "value": "80,2"
+    }
+   ],
+   "note": "No mesmo hospital, a nota muda bastante de uma especialidade para outra."
+  },
+  {
+   "type": "rows",
+   "label": "As mais disputadas",
+   "title": [
+    "AS NOTAS <span class='y'>MAIS ALTAS</span>"
+   ],
+   "sub": "Nota de corte no PSU-MG 2026, 1ª chamada",
+   "rows": [
+    {
+     "name": "Radiologia, Felício Rocho",
+     "sub": "Belo Horizonte",
+     "value": "90"
+    },
+    {
+     "name": "Oftalmo, Hospital Evangélico",
+     "sub": "Belo Horizonte",
+     "value": "87,7"
+    },
+    {
+     "name": "Dermatologia, HMTJ",
+     "sub": "Juiz de Fora",
+     "value": "86,7"
+    },
+    {
+     "name": "Oftalmo, Instituto Viva Mais",
+     "sub": "Programa do PSU-MG",
+     "value": "86,4"
+    },
+    {
+     "name": "Psiquiatria, Regional de Betim",
+     "sub": "Betim",
+     "value": "86,02"
+    },
+    {
+     "name": "Psiquiatria, Samuel Libânio",
+     "sub": "Pouso Alegre",
+     "value": "83,45"
+    }
+   ],
+   "note": "Notas de 2026 são referência, não previsão para 2027."
+  },
+  {
+   "type": "cards",
+   "label": "Formato da seleção",
+   "title": [
+    "PRECISA DE <span class='g'>CURRÍCULO</span>?"
+   ],
+   "sub": "Resposta do edital do PSU-MG 2027",
+   "cards": [
+    {
+     "num": "1",
+     "h": "Sim, 10%",
+     "tag": "da nota final",
+     "p": "A prova objetiva vale <b>90%</b> e a análise curricular vale <b>10%</b>."
+    },
+    {
+     "num": "2",
+     "h": "Já foi enviado",
+     "tag": "sem troca",
+     "p": "O currículo foi junto com a inscrição, no modelo da AREMG. Depois do envio, nada pode ser incluído ou alterado."
+    },
+    {
+     "num": "3",
+     "h": "Prova em 22/11",
+     "tag": "mínimo de 50%",
+     "p": "Quem não acertar pelo menos <b>50%</b> da prova está fora. É o mesmo dia da prova da AMRIGS."
+    }
+   ],
+   "note": "Com cortes acima de 80, cada ponto do currículo pesa na classificação."
+  },
+  {
+   "type": "cta",
+   "title": [
+    "SALVA PARA",
+    "<span class='g glow'>MIRAR A NOTA</span>"
+   ],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar PSU-MG com você.",
+   "note": "Vai prestar uma prova que ainda avalia o currículo depois? Chama a <b>MedEasy</b> no direct para organizar o seu.",
+   "small": "Fontes: notas de corte do PSU-MG 2026 (último aprovado em 1ª chamada) nos levantamentos de Estratégia MED e MedCof, números iguais nos dois. Edital PSU-MG 2027 e Retificação nº 4 (AREMG). Confira o edital do seu programa."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "PSU-MG 2026: <span>quanto precisou para passar</span> em BH.<br>Veja as notas no feed da @med_easyy."
+ },
+ "caption": "🎯 PSU-MG: QUANTO PRECISOU PARA PASSAR\n\nNo PSU-MG 2026, o último aprovado na 1ª chamada de Clínica Médica no Hospital Felício Rocho teve nota final 86,2. No Mater Dei Contorno foi 83,2 e no Madre Teresa, 83. Em Anestesiologia o corte chegou a 89,2 no Felício Rocho, e Radiologia no mesmo hospital fechou em 90.\n\nA nota final vai até 100: a prova vale 90% e o currículo, 10%. Com cortes acima de 80, cada ponto do currículo pesa na classificação. No PSU-MG 2027 o currículo já foi enviado com a inscrição, e agora a diferença está na prova, no dia 22/11, com mínimo de 50% de acertos.\n\nArrasta para ver as notas de GO, Cirurgia, Ortopedia, Pediatria, Oftalmo, Dermato e Psiquiatria. Os números de 2026 são referência, não previsão para 2027.\n\nSalva e manda para quem vai prestar PSU-MG com você 📌 Qual nota você quer bater? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#psumg #residenciamedica #residencia2027 #belohorizonte #notadecorte #aremg"
+}
