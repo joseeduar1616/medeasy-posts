@@ -23,10 +23,20 @@ const isoDeA = s => { const m = String(s || "").match(/(\d{1,2})\/(\d{1,2})\/(\d
 const limpaA = s => String(s || "").replace(/\s+/g, " ").trim();
 /* Leitor do texto da análise: vem de scripts/portal/leitor-analise.mjs na montagem (o mesmo do build) */
 __LEITOR_ANALISE__
+/* triagem.json da skill, ou um JSON parecido feito à mão ou por outro Claude: aceita outros nomes de campo */
 function lerTriagemJson(j){
-  return { nome:j.sigla || j.prova || "Prova", ano:(String(j.prova || j.edital || "").match(/20\d\d/) || [""])[0], area:j.area || "", cliente:j.cliente || "", notaEstimada:numA(j.nota_total), notaPossivel:j.nota_possivel ? numA(j.nota_possivel) : "", notaMax:(j.itens || []).reduce((a, i) => a + numA(i.maximo), 0), prazoEnvio:isoDeA(j.envio && j.envio.prazo) || (j.envio && j.envio.prazo) || "",
-    regras:[j.envio?.formato, j.envio?.tamanho_max ? "até " + j.envio.tamanho_max : "", j.envio?.ordem].filter(Boolean).join(". "),
-    itens:(j.itens || []).map(i => ({ n:i.n, nome:`${i.n ? i.n + ". " : ""}${i.titulo || "Item"}`, situacao:i.situacao || "", regra:i.regra || "", max:numA(i.maximo), porAtividade:numA(i.por_atividade), pontos:numA(i.nota), ganho:numA(i.ganho_possivel), comprovantes:(i.certificados || []).filter(c => !c.reserva).map(c => [c.evento, [c.data, c.ch].filter(Boolean).join(", ")].filter(Boolean).join(" (") + (c.data || c.ch ? ")" : "")), comentario:i.risco || "" })), fonte:"triagem" };
+  const de = (o, ...ks) => { for (const k of ks) if (o && o[k] != null && o[k] !== "") return o[k]; return undefined; };
+  const lista = de(j, "itens", "items", "criterios") || [];
+  const comps = i => { const c = de(i, "certificados", "comprovantes", "documentos") || [];
+    return (Array.isArray(c) ? c : String(c).split(";")).filter(x => x && !(typeof x === "object" && x.reserva))
+      .map(x => typeof x === "object" ? [de(x, "evento", "nome", "titulo", "descricao") || "", [x.data, x.ch].filter(Boolean).join(", ")].filter(Boolean).join(" (") + (x.data || x.ch ? ")" : "") : String(x).trim()).filter(Boolean); };
+  const itens = lista.map(i => { const n = de(i, "n", "numero", "codigo", "cod"); const t = de(i, "titulo", "item", "nome", "descricao", "criterio") || "";
+    return { n, nome:`${n != null && !String(t).startsWith(String(n)) ? n + ". " : ""}${t || "Item"}`, situacao:i.situacao || "", regra:de(i, "regra", "pontuacao_regra") || "",
+      max:numA(de(i, "maximo", "max", "pontuacao_maxima", "maximo_item")), porAtividade:numA(de(i, "por_atividade", "porAtividade", "por_certificado", "unidade")),
+      pontos:numA(de(i, "nota", "pontos", "pontuacao", "nota_atual", "pontuacao_pessoal")), ganho:numA(de(i, "ganho_possivel", "ganho")), comprovantes:comps(i), comentario:de(i, "risco", "comentario", "como_aumentar") || "" }; });
+  return { nome:j.sigla || j.prova || "Prova", ano:(String(j.prova || j.edital || "").match(/20\d\d/) || [""])[0], area:j.area || "", cliente:j.cliente || "",
+    notaEstimada:numA(de(j, "nota_total", "nota", "pontuacao_total")) || Math.round(itens.reduce((a, i) => a + i.pontos, 0) * 100) / 100, notaPossivel:j.nota_possivel ? numA(j.nota_possivel) : "", notaMax:itens.reduce((a, i) => a + i.max, 0), prazoEnvio:isoDeA(j.envio && j.envio.prazo) || (j.envio && j.envio.prazo) || "",
+    regras:[j.envio?.formato, j.envio?.tamanho_max ? "até " + j.envio.tamanho_max : "", j.envio?.ordem].filter(Boolean).join(". "), itens, fonte:"triagem" };
 }
 async function lerArquivoAnaliseSite(arquivo){
   if (/\.json$/i.test(arquivo.name)) return lerTriagemJson(JSON.parse(await arquivo.text()));
@@ -114,7 +124,9 @@ async function importarAnalise(input){
      Item | Nome | Pontos | Máximo | Comprovantes | Como aumentar
      2 | Monitoria | 0,25 | 0,5 | Monitoria de Anatomia 2023 | Fazer mais uma monitoria
      Nota: 2,2 */
-const codItemA = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?)\b/i) || [])[1] || "";
+// Código do item: número ("1", "3a", "7a1") ou letra do edital ("A", "E1", como no HCPA)
+const codItemA = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?=[\s.)\-–:]|$)/) || [])[1] || "";
+const semCodA = s => String(s || "").replace(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?:[.)\-–:]\s*|\s+)/, "").trim();
 function lerAnaliseTexto(txt){
   const blocos = String(txt || "").replace(/\r/g, "").replace(/\*\*/g, "").split(/^\s*#*\s*AN[AÁ]LISE MEDEASY\s*$/im).slice(1);
   const out = [];
@@ -127,10 +139,14 @@ function lerAnaliseTexto(txt){
     const itens = [];
     for (const l of ls){
       if ((l.match(/\|/g) || []).length < 3) continue;
-      const cel = l.replace(/^\|/, "").replace(/\|$/, "").split("|").map(x => x.trim());
-      if (/^item$/i.test(cel[0]) || /^[-:\s]+$/.test(cel.join(""))) continue;
-      const [cod, titulo, pts, max, comp, como] = cel; if (!titulo && !cod) continue;
-      const f = ficha.find(x => codItemA(x.item) && codItemA(x.item).toLowerCase() === String(cod).toLowerCase());
+      // Tabela markdown tem "|" nas pontas. Sem isso, a primeira célula vazia é o número do item em branco e não pode sumir.
+      const cel = l.split("|").map(x => x.trim()); if (cel.length > 6 && cel[0] === "") cel.shift(); while (cel.length > 6 && cel[cel.length - 1] === "") cel.pop();
+      if (/^item$/i.test(cel[0]) || /^nome$/i.test(cel[1]) || /^[-:\s]+$/.test(cel.join(""))) continue;
+      let [cod, titulo, pts, max, comp, como] = cel; if (!titulo && !cod) continue;
+      // Número do item escrito junto do nome ("A Histórico escolar")
+      if (!cod && codItemA(titulo)) { cod = codItemA(titulo); titulo = semCodA(titulo); }
+      const f = (cod && ficha.find(x => codItemA(x.item) && codItemA(x.item).toLowerCase() === String(cod).toLowerCase()))
+        || ficha.find(x => titulo && kP(semCodA(x.item)) === kP(titulo));
       const mx = numA(max) || (f ? numA(f.maxN) : 0), pt = Math.min(numA(pts), mx || Infinity);
       itens.push({ n:cod, nome:f ? f.item : `${cod ? cod + ". " : ""}${titulo}`, regra:f ? f.pontos || "" : "", max:mx, porAtividade:f && f.unit != null ? numA(f.unit) : 0, pontos:pt,
         ganho:Math.max(0, Math.round((mx - pt) * 100) / 100), comprovantes:String(comp || "").split(";").map(x => x.trim()).filter(Boolean), comentario:como || "",
@@ -149,7 +165,7 @@ function pedidoClaude(c){
   const provas = (c.provas || []).filter(p => p.nome);
   const bloco = p => { const it = itensDaProva(p);
     return `ANÁLISE MEDEASY\nCliente: ${c.nome || ""}\nProva: ${p.nome} ${ANO_AN()}\nEspecialidade: ${c.area || ""}\nItem | Nome | Pontos | Máximo | Comprovantes | Como aumentar\n` +
-      (it.length ? it.map(i => `${codItemA(i.item) || ""} | ${i.item.replace(/^\s*\d{1,2}[a-z]?[.)]?\s*/i, "")} |  | ${String(i.maxN).replace(".", ",")} |  | `).join("\n") : "(a ficha desta prova não está no site: use os itens do edital, um por linha)") + "\nNota: "; };
+      (it.length ? it.map(i => `${codItemA(i.item) || ""} | ${codItemA(i.item) ? semCodA(i.item) : i.item} |  | ${String(i.maxN).replace(".", ",")} |  | `).join("\n") : "(a ficha desta prova não está no site: use os itens do edital, um por linha)") + "\nNota: "; };
   const regras = p => { const it = itensDaProva(p); return it.length ? `Como pontua cada item da ${p.nome}:\n` + it.map(i => `${i.item}: ${i.pontos || "ver edital"} (máximo ${String(i.maxN).replace(".", ",")})`).join("\n") : ""; };
   return `Preciso da análise curricular de um cliente da MedEasy no formato padrão do Portal MedEasy. Vou mandar junto os certificados e o currículo dele${provas.some(p => !itensDaProva(p).length) ? " e o edital" : ""}.
 

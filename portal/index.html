@@ -521,13 +521,19 @@ const modeloDe = nome => { const k = kP(nome); return MODELO[k] || (Object.entri
 /* Itens de uma prova: da análise curricular lida (se houver) ou da ficha do edital */
 /* Item da análise sem a lista de comprovantes (o leitor não achou no PDF): conta o mínimo de certificados para chegar na nota, como no "Ler currículo pronto" */
 const nPelaNota = (pts, unit) => pts > 0 ? (unit > 0 ? Math.max(1, Math.round(pts / unit)) : 1) : 0;
-const codItemC = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?\d?)\b/i) || [])[1]?.toLowerCase() || "";
+const codItemC = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?=[\s.)\-–:]|$)/) || [])[1]?.toLowerCase() || "";
+// Nome vazio ou genérico ("Item", "A.", "3.") vindo da análise: usa o nome da ficha do edital
+const nomeVazioC = s => !String(s || "").replace(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})[.)\-–:]?\s*/, "").replace(/^item\s*$/i, "").trim();
 function itensDaProva(p){
   const an = (p.itens || []).filter(i => i.max != null && p.fonte !== "contagem");
   // Valor por certificado do edital, quando a análise não trouxe "por atividade"
-  const ficha = (p.edital && p.edital.ficha) || []; const unitEd = nome => { const k = codItemC(nome); const x = k && ficha.find(x => codItemC(x.item) === k); return x && x.unit != null ? num(x.unit) : null; };
-  if (an.length) return an.map(i => { const unit = num(i.porAtividade) || unitEd(i.nome) || null, n = (i.comprovantes || []).length || nPelaNota(num(i.pontos), unit);
-    return { key:i.nome, item:i.nome, pontos:i.regra || "", maxN:num(i.max), unit, artigo:/artigo completo|cap[ií]tulo/i.test(i.nome), com:i.comentario || "", sit:i.situacao || "", ganhoBase:num(i.ganho),
+  const ficha = ((p.edital && p.edital.ficha) || []).filter(x => x.maxN != null);
+  // Item da ficha pelo código, pelo nome ou, se a análise segue a ficha item por item, pela posição
+  const naFicha = (i, j) => { const k = codItemC(i.n != null ? String(i.n) : i.nome); return (k && ficha.find(x => codItemC(x.item) === k))
+    || ficha.find(x => kP(x.item) === kP(i.nome)) || (an.length === ficha.length && ficha[j] && Math.abs(num(ficha[j].maxN) - num(i.max)) < 0.001 ? ficha[j] : null); };
+  if (an.length) return an.map((i, j) => { const f = naFicha(i, j); const unit = num(i.porAtividade) || (f && f.unit != null ? num(f.unit) : null) || null, n = (i.comprovantes || []).length || nPelaNota(num(i.pontos), unit);
+    const nome = nomeVazioC(i.nome) && f ? f.item : i.nome;
+    return { key:i.nome, item:nome, pontos:i.regra || (f && f.pontos) || "", maxN:num(i.max), unit, artigo:/artigo completo|cap[ií]tulo/i.test(i.nome), com:i.comentario || "", sit:i.situacao || "", ganhoBase:num(i.ganho),
       base:{ n, lista:i.comprovantes || [], pts: unit && Math.abs(Math.min(num(i.max), n * unit) - num(i.pontos)) < 0.01 ? "" : num(i.pontos) } }; });
   return ((p.edital && p.edital.ficha) || []).filter(x => x.maxN != null).map(x => ({ key:x.item, item:x.item, pontos:x.pontos || "", maxN:num(x.maxN), unit:x.unit == null ? null : num(x.unit), artigo:!!x.artigo, grupo:x.grupo || "", grupoMax:x.grupoMax == null ? null : num(x.grupoMax) }));
 }
@@ -1766,7 +1772,8 @@ function seloL(texto) {
   return "";
 }
 function cabItemL(l) {
-  let m = l.match(/^\s*ITEM\s*0?(\d{1,2}[a-z]?)\b\s*[-–:.]?\s*(.*)$/i); if (m) return { n: m[1], resto: m[2], forte: true };
+  // "ITEM 3a" ou, em edital que numera com letra (HCPA), "ITEM A" e "ITEM E1"
+  let m = l.match(/^\s*ITEM\s*0?(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?=[\s\-–:.]|$)\s*[-–:.]?\s*(.*)$/i); if (m) return { n: /^[a-z]/i.test(m[1]) ? m[1].toUpperCase() : m[1], resto: m[2], forte: true };
   m = l.match(/^\s*0?(\d{1,2}[a-z]?)(?:\s*[.)\-–:]\s*|\s{2,}|\s*$)(.*)$/); if (m && !/^\d/.test(m[2])) return { n: m[1], resto: m[2], forte: false };
   return null;
 }
@@ -1912,7 +1919,7 @@ function lerTextoAnalise(texto) {
   // Reserva: tabela "Análise resumida" (número, item, nota / máximo, situação)
   const iRes = linhas.findIndex(l => /AN[AÁ]LISE RESUMIDA/i.test(l));
   if (iRes >= 0) {
-    const reTab = new RegExp("^\\s*0?(\\d{1,2}[a-z]?)[.)]?\\s+(.+?)\\s{2,}(" + NUM_L + ")\\s*(?:\\/|de)\\s*(" + NUM_L + ")(?:\\s{2,}(.+))?$");
+    const reTab = new RegExp("^\\s*0?(\\d{1,2}[a-z]?|[A-Z]\\d{0,2})[.)]?\\s+(.+?)\\s{2,}(" + NUM_L + ")\\s*(?:\\/|de)\\s*(" + NUM_L + ")(?:\\s{2,}(.+))?$");
     for (const l of linhas.slice(iRes + 1)) { const m = l.match(reTab); if (!m) continue;
       const ja = itens.find(x => String(x.n) === m[1]);
       if (ja) { if (!ja.max && !ja.pontos) { ja.pontos = numL(m[3]); ja.max = numL(m[4]); ja.ganho = ja.ganho || Math.max(0, ja.max - ja.pontos); } if (!ja.situacao) ja.situacao = seloL(m[5] || ""); }
@@ -1927,10 +1934,20 @@ function lerTextoAnalise(texto) {
   };
 }
 
+/* triagem.json da skill, ou um JSON parecido feito à mão ou por outro Claude: aceita outros nomes de campo */
 function lerTriagemJson(j){
-  return { nome:j.sigla || j.prova || "Prova", ano:(String(j.prova || j.edital || "").match(/20\d\d/) || [""])[0], area:j.area || "", cliente:j.cliente || "", notaEstimada:numA(j.nota_total), notaPossivel:j.nota_possivel ? numA(j.nota_possivel) : "", notaMax:(j.itens || []).reduce((a, i) => a + numA(i.maximo), 0), prazoEnvio:isoDeA(j.envio && j.envio.prazo) || (j.envio && j.envio.prazo) || "",
-    regras:[j.envio?.formato, j.envio?.tamanho_max ? "até " + j.envio.tamanho_max : "", j.envio?.ordem].filter(Boolean).join(". "),
-    itens:(j.itens || []).map(i => ({ n:i.n, nome:`${i.n ? i.n + ". " : ""}${i.titulo || "Item"}`, situacao:i.situacao || "", regra:i.regra || "", max:numA(i.maximo), porAtividade:numA(i.por_atividade), pontos:numA(i.nota), ganho:numA(i.ganho_possivel), comprovantes:(i.certificados || []).filter(c => !c.reserva).map(c => [c.evento, [c.data, c.ch].filter(Boolean).join(", ")].filter(Boolean).join(" (") + (c.data || c.ch ? ")" : "")), comentario:i.risco || "" })), fonte:"triagem" };
+  const de = (o, ...ks) => { for (const k of ks) if (o && o[k] != null && o[k] !== "") return o[k]; return undefined; };
+  const lista = de(j, "itens", "items", "criterios") || [];
+  const comps = i => { const c = de(i, "certificados", "comprovantes", "documentos") || [];
+    return (Array.isArray(c) ? c : String(c).split(";")).filter(x => x && !(typeof x === "object" && x.reserva))
+      .map(x => typeof x === "object" ? [de(x, "evento", "nome", "titulo", "descricao") || "", [x.data, x.ch].filter(Boolean).join(", ")].filter(Boolean).join(" (") + (x.data || x.ch ? ")" : "") : String(x).trim()).filter(Boolean); };
+  const itens = lista.map(i => { const n = de(i, "n", "numero", "codigo", "cod"); const t = de(i, "titulo", "item", "nome", "descricao", "criterio") || "";
+    return { n, nome:`${n != null && !String(t).startsWith(String(n)) ? n + ". " : ""}${t || "Item"}`, situacao:i.situacao || "", regra:de(i, "regra", "pontuacao_regra") || "",
+      max:numA(de(i, "maximo", "max", "pontuacao_maxima", "maximo_item")), porAtividade:numA(de(i, "por_atividade", "porAtividade", "por_certificado", "unidade")),
+      pontos:numA(de(i, "nota", "pontos", "pontuacao", "nota_atual", "pontuacao_pessoal")), ganho:numA(de(i, "ganho_possivel", "ganho")), comprovantes:comps(i), comentario:de(i, "risco", "comentario", "como_aumentar") || "" }; });
+  return { nome:j.sigla || j.prova || "Prova", ano:(String(j.prova || j.edital || "").match(/20\d\d/) || [""])[0], area:j.area || "", cliente:j.cliente || "",
+    notaEstimada:numA(de(j, "nota_total", "nota", "pontuacao_total")) || Math.round(itens.reduce((a, i) => a + i.pontos, 0) * 100) / 100, notaPossivel:j.nota_possivel ? numA(j.nota_possivel) : "", notaMax:itens.reduce((a, i) => a + i.max, 0), prazoEnvio:isoDeA(j.envio && j.envio.prazo) || (j.envio && j.envio.prazo) || "",
+    regras:[j.envio?.formato, j.envio?.tamanho_max ? "até " + j.envio.tamanho_max : "", j.envio?.ordem].filter(Boolean).join(". "), itens, fonte:"triagem" };
 }
 async function lerArquivoAnaliseSite(arquivo){
   if (/\.json$/i.test(arquivo.name)) return lerTriagemJson(JSON.parse(await arquivo.text()));
@@ -2018,7 +2035,9 @@ async function importarAnalise(input){
      Item | Nome | Pontos | Máximo | Comprovantes | Como aumentar
      2 | Monitoria | 0,25 | 0,5 | Monitoria de Anatomia 2023 | Fazer mais uma monitoria
      Nota: 2,2 */
-const codItemA = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?)\b/i) || [])[1] || "";
+// Código do item: número ("1", "3a", "7a1") ou letra do edital ("A", "E1", como no HCPA)
+const codItemA = s => (String(s || "").match(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?=[\s.)\-–:]|$)/) || [])[1] || "";
+const semCodA = s => String(s || "").replace(/^\s*(\d{1,2}[a-z]?\d?|[A-Z]\d{0,2})(?:[.)\-–:]\s*|\s+)/, "").trim();
 function lerAnaliseTexto(txt){
   const blocos = String(txt || "").replace(/\r/g, "").replace(/\*\*/g, "").split(/^\s*#*\s*AN[AÁ]LISE MEDEASY\s*$/im).slice(1);
   const out = [];
@@ -2031,10 +2050,14 @@ function lerAnaliseTexto(txt){
     const itens = [];
     for (const l of ls){
       if ((l.match(/\|/g) || []).length < 3) continue;
-      const cel = l.replace(/^\|/, "").replace(/\|$/, "").split("|").map(x => x.trim());
-      if (/^item$/i.test(cel[0]) || /^[-:\s]+$/.test(cel.join(""))) continue;
-      const [cod, titulo, pts, max, comp, como] = cel; if (!titulo && !cod) continue;
-      const f = ficha.find(x => codItemA(x.item) && codItemA(x.item).toLowerCase() === String(cod).toLowerCase());
+      // Tabela markdown tem "|" nas pontas. Sem isso, a primeira célula vazia é o número do item em branco e não pode sumir.
+      const cel = l.split("|").map(x => x.trim()); if (cel.length > 6 && cel[0] === "") cel.shift(); while (cel.length > 6 && cel[cel.length - 1] === "") cel.pop();
+      if (/^item$/i.test(cel[0]) || /^nome$/i.test(cel[1]) || /^[-:\s]+$/.test(cel.join(""))) continue;
+      let [cod, titulo, pts, max, comp, como] = cel; if (!titulo && !cod) continue;
+      // Número do item escrito junto do nome ("A Histórico escolar")
+      if (!cod && codItemA(titulo)) { cod = codItemA(titulo); titulo = semCodA(titulo); }
+      const f = (cod && ficha.find(x => codItemA(x.item) && codItemA(x.item).toLowerCase() === String(cod).toLowerCase()))
+        || ficha.find(x => titulo && kP(semCodA(x.item)) === kP(titulo));
       const mx = numA(max) || (f ? numA(f.maxN) : 0), pt = Math.min(numA(pts), mx || Infinity);
       itens.push({ n:cod, nome:f ? f.item : `${cod ? cod + ". " : ""}${titulo}`, regra:f ? f.pontos || "" : "", max:mx, porAtividade:f && f.unit != null ? numA(f.unit) : 0, pontos:pt,
         ganho:Math.max(0, Math.round((mx - pt) * 100) / 100), comprovantes:String(comp || "").split(";").map(x => x.trim()).filter(Boolean), comentario:como || "",
@@ -2053,7 +2076,7 @@ function pedidoClaude(c){
   const provas = (c.provas || []).filter(p => p.nome);
   const bloco = p => { const it = itensDaProva(p);
     return `ANÁLISE MEDEASY\nCliente: ${c.nome || ""}\nProva: ${p.nome} ${ANO_AN()}\nEspecialidade: ${c.area || ""}\nItem | Nome | Pontos | Máximo | Comprovantes | Como aumentar\n` +
-      (it.length ? it.map(i => `${codItemA(i.item) || ""} | ${i.item.replace(/^\s*\d{1,2}[a-z]?[.)]?\s*/i, "")} |  | ${String(i.maxN).replace(".", ",")} |  | `).join("\n") : "(a ficha desta prova não está no site: use os itens do edital, um por linha)") + "\nNota: "; };
+      (it.length ? it.map(i => `${codItemA(i.item) || ""} | ${codItemA(i.item) ? semCodA(i.item) : i.item} |  | ${String(i.maxN).replace(".", ",")} |  | `).join("\n") : "(a ficha desta prova não está no site: use os itens do edital, um por linha)") + "\nNota: "; };
   const regras = p => { const it = itensDaProva(p); return it.length ? `Como pontua cada item da ${p.nome}:\n` + it.map(i => `${i.item}: ${i.pontos || "ver edital"} (máximo ${String(i.maxN).replace(".", ",")})`).join("\n") : ""; };
   return `Preciso da análise curricular de um cliente da MedEasy no formato padrão do Portal MedEasy. Vou mandar junto os certificados e o currículo dele${provas.some(p => !itensDaProva(p).length) ? " e o edital" : ""}.
 
@@ -2139,8 +2162,10 @@ const certDe = (ct, id) => ct.certs.find(x => x.id === id);
 function contaItem(it, lista, ct){
   const certs = lista.map(a => ({ ...a, c:certDe(ct, a.id) })).filter(a => a.c);
   const n = e => certs.filter(a => a.estado === e).length;
-  const real = it.unit != null ? Math.min(it.maxN, n("pontua") * it.unit) : 0;
-  const ideal = it.unit != null ? Math.min(it.maxN, (n("pontua") + n("risco") + n("tentativa")) * it.unit) : 0;
+  // Item que não é por certificado (histórico, ENADE, proficiência): com um comprovante, vale a nota da análise ou o máximo
+  const cheio = num(it.base && it.base.pts) || it.maxN;
+  const real = it.unit != null ? Math.min(it.maxN, n("pontua") * it.unit) : n("pontua") ? cheio : 0;
+  const ideal = it.unit != null ? Math.min(it.maxN, (n("pontua") + n("risco") + n("tentativa")) * it.unit) : n("pontua") + n("risco") + n("tentativa") ? cheio : 0;
   return { certs, nPontua:n("pontua"), nRisco:n("risco"), nTent:n("tentativa"), nRes:n("reserva"), real:r2(real), ideal:r2(ideal), risco:r2(ideal - real) };
 }
 function resumoProva(c, p, ct){
@@ -2213,7 +2238,7 @@ function ctCerts(c, ct, provas){
 function ctProva(c, ct, p){
   const pk = kP(p.nome); const itens = itensDaProva(p); const r = resumoProva(c, p, ct);
   const usadosAqui = new Set(Object.values(ct.aloc[pk] || {}).flat().map(a => a.id));
-  return `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Projeção real</div><div class="v">${d1(r.real)}<small class="muted" style="font-size:16px"> / ${d1(r.max)}</small></div><div class="d">só o que está pontuando</div></div><div class="kpi"><div class="label">Projeção ideal</div><div class="v gold">${d1(r.ideal)}</div><div class="d">${r.risco} com risco · ${r.tent} tentativas</div></div><div class="kpi"><div class="label">Certificados usados</div><div class="v">${usadosAqui.size}</div><div class="d">de ${ct.certs.length} cadastrados · ${r.res} em reserva</div></div></div>
+  return `<div class="kpis" style="margin-bottom:12px"><div class="kpi hl"><div class="label">Projeção real</div><div class="v">${d1(r.real)}<small class="muted" style="font-size:16px"> / ${d1(r.max)}</small></div><div class="d">${!usadosAqui.size && calcDe(c, p).total > 0 ? `nenhum certificado ligado aos itens ainda · na análise: ${d1(calcDe(c, p).total)}` : "só o que está pontuando"}</div></div><div class="kpi"><div class="label">Projeção ideal</div><div class="v gold">${d1(r.ideal)}</div><div class="d">${r.risco} com risco · ${r.tent} tentativas</div></div><div class="kpi"><div class="label">Certificados usados</div><div class="v">${usadosAqui.size}</div><div class="d">de ${ct.certs.length} cadastrados · ${r.res} em reserva</div></div></div>
    ${ct.certs.length ? "" : `<div class="wait small" style="margin-bottom:12px">Cadastre os certificados na aba Certificados para poder alocar aqui.</div>`}
    <div class="stack" style="gap:10px">${itens.map(it => { const lista = alocDe(ct, pk, it.key); const a = contaItem(it, lista, ct); const m = it.grupo && it.grupoMax != null ? Math.min(it.maxN, it.grupoMax) : it.maxN;
      const livres = ct.certs.filter(x => !lista.some(l => l.id === x.id));
@@ -2674,7 +2699,7 @@ app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if
 
 /* Versão nova do site: quem deixa a aba aberta continuava com o código antigo depois de uma correção.
    O montar-site grava a versão em site.txt. Ao voltar para a aba (e a cada 5 minutos) o site confere e oferece atualizar. */
-const VERSAO_SITE = "2bc85bdc8075";
+const VERSAO_SITE = "3d126ef497fb";
 /* Erro no site aparece na tela (com a versão), em vez de falhar calado. Ajuda a mandar print para o suporte. */
 window.addEventListener("error", e => { try { toast(`Erro no site: ${e.message} (versão ${VERSAO_SITE})`); } catch {} });
 window.addEventListener("unhandledrejection", e => { try { toast(`Erro no site: ${(e.reason && e.reason.message) || e.reason} (versão ${VERSAO_SITE})`); } catch {} });
