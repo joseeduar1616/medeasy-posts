@@ -261,17 +261,34 @@ function orcInput(el){
 // "R$" na foto pode sair como "RS" ou "R5" na leitura da imagem
 const dinheiroT = s => { const m = String(s || "").match(/(-)?\s*R\s?[$S5]\s*(-)?\s*([\d.]+,\d{2}|\d+(?:\.\d{2})?)/); if (!m) return null; const v = Number(m[3].includes(",") ? m[3].replace(/\./g, "").replace(",", ".") : m[3]); return (m[1] || m[2]) ? -v : v; };
 function lerOrcamentoTexto(txt){
-  const linhas = String(txt || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n").map(l => l.replace(/\s+$/, "")).filter(l => l.trim());
+  // linha em branco fica como "" (separa as linhas da tabela no PDF). Rótulos numa linha e valores na de baixo ("TOTAL NO PIX :" e "R$1.542,92") viram uma linha só
+  const brutas = String(txt || "").replace(/\r/g, "").replace(/\f/g, "\n").split("\n").map(l => l.replace(/\s+$/, ""));
+  const linhas = []; const DIN = /^-?\s*R\s?[$S5]\s*-?\s*[\d.]+,\d{2}$/;
+  for (let i = 0; i < brutas.length; i++){ const l = brutas[i]; if (!l.trim()){ if (linhas.length && linhas[linhas.length - 1] !== "") linhas.push(""); continue; }
+    const rot = l.trim().split(/\s{2,}/), val = (brutas[i + 1] || "").trim().split(/\s{2,}/);
+    if (rot.length && rot.every(r => /:\s*$/.test(r)) && val.length === rot.length && val.every(v => DIN.test(v))){ linhas.push(rot.map((r, k) => r + " " + val[k]).join("   ")); i++; continue; }
+    linhas.push(l); }
   const cab = /OP[ÇC][ÃA]O\s+([A-Z])\b/i; const segs = []; let atual = null;
-  for (const l of linhas){ const m = l.match(cab); if (m && (/OR[ÇC]AMENTO/i.test(l) || l.trim().length < 40)){ atual = { letra:m[1].toUpperCase(), ls:[] }; if (!segs.some(s => s.letra === atual.letra)) segs.push(atual); else atual = segs.find(s => s.letra === atual.letra);
+  for (const l of linhas){ if (!l){ if (atual) atual.ls.push(""); continue; } const m = l.match(cab); if (m && (/OR[ÇC]AMENTO/i.test(l) || l.trim().length < 40)){ atual = { letra:m[1].toUpperCase(), ls:[] }; if (!segs.some(s => s.letra === atual.letra)) segs.push(atual); else atual = segs.find(s => s.letra === atual.letra);
     // o título pode vir na mesma linha do "OPÇÃO A" (depois dele, sem a data)
     const resto = l.replace(/^.*?OP[ÇC][ÃA]O\s+[A-Z]\b/i, "").replace(/DATA:.*$/i, "").replace(/\d{2}\/\d{2}\/\d{4}/, "").trim(); if (/[A-ZÁÉÍÓÚÂÊÔÃÕÇ]{4}/.test(resto)) atual.ls.push(resto); continue; } (atual || (segs[0] ||= (atual = { letra:"A", ls:[] }))).ls.push(l); }
   const ROT = /^\s*((DATA|CLIENTE|CPF|MENTOR)\s*:|DESCRI[ÇC][ÃA]O|QUANTIDADE|VALOR\b)/i;
   return segs.map(sg => {
-    let titulo = "", total = null, mensal = false; const its = []; let naTabela = false, tituloFechado = false;
-    for (const l of sg.ls){
+    let titulo = "", total = null, mensal = false, jaPago = 0; const its = []; let naTabela = false, tituloFechado = false, fim = false;
+    // pend: texto da linha da tabela antes do valor (no PDF a descrição quebra e o valor fica na linha do meio). item: o item desta linha da tabela
+    let pend = [], item = null;
+    const fechar = () => { if (pend.length && its.length) its[its.length - 1].desc += " " + pend.join(" "); pend = []; item = null; };
+    for (const l of [...sg.ls, ""]){
       const tl = l.trim();
+      if (!tl){ fechar(); continue; }
+      const jp = tl.match(/J[ÁA]\s+PAGO\s*(?:\([^)]*\))?\s*:?\s*(-?\s*(?:R\s?[$S5])?\s*-?\s*[\d.]+,\d{2})/i);
+      if (jp){ jaPago = Math.max(jaPago, Math.abs(dinheiroT(/R\s?[$S5]/.test(jp[1]) ? jp[1] : "R$" + jp[1].replace(/[-\s]/g, "")) || 0)); }
       const tot = tl.match(/VALOR TOTAL\s*:?\s*(.*)$/i); if (tot){ total = dinheiroT(tot[1]); mensal = /POR M[ÊE]S/i.test(tot[1]); naTabela = false; continue; }
+      // resumo depois da tabela: TOTAL NO PIX, JÁ PAGO, RESTANTE, "VALOR USP-RP : R$917,50"
+      const tot2 = tl.match(/\bTOTAL(?:\s+NO\s+PIX|\s+NO\s+CART[ÃA]O|\s+[ÀA]\s+VISTA|\s+COM\s+DESCONTO)?\s*:\s*(R\s?[$S5]\s*[\d.]+,\d{2})/i);
+      if (tot2 && total == null) total = dinheiroT(tot2[1]);
+      if (jp || tot2 || /\b(RESTANTE|SALDO)\s*:/i.test(tl) || /^VALOR\s+[^:]{2,30}:\s*R\s?[$S5]/i.test(tl)){ if (tot2 || !jp || !naTabela) fim = true; fechar(); continue; }
+      if (fim) continue;
       if (/^DESCRI[ÇC][ÃA]O\b/i.test(tl)){ naTabela = true; continue; }
       // na foto o cabeçalho branco sobre fundo escuro some: a tabela começa na primeira linha que termina em R$
       if (!naTabela && /R\s?[$S5]\s*-?[\d.]+,\d{2}\s*$/i.test(tl) && !ROT.test(tl)) naTabela = true;
@@ -280,16 +297,25 @@ function lerOrcamentoTexto(txt){
         const ehTitulo = !ROT.test(tl) && /[A-ZÁÉÍÓÚÂÊÔÃÕÇ]{4}/.test(tl) && tl === tl.toUpperCase() && !/^\(?\d{2}\)/.test(tl) && !/^\d{2}\/\d{2}\/\d{4}$/.test(tl);
         if (!tituloFechado && ehTitulo) titulo = (titulo + " " + tl.replace(/\s{2,}.*$/, "")).trim(); else if (titulo || ROT.test(tl)) tituloFechado = tituloFechado || !!titulo || /^\s*(CLIENTE|CPF|MENTOR)\s*:/i.test(tl);
         continue; }
-      const v = tl.match(/(-\s*R\s?[$S5]\s*[\d.]+,\d{2}|R\s?[$S5]\s*-?[\d.]+,\d{2}|a definir)\s*$/i);
-      if (v){ const antes = tl.slice(0, v.index).trim(); const cols = antes.split(/\s{2,}/); let desc = cols.length > 1 ? cols.slice(0, -1).join(" ") : cols[0]; let conta = cols.length > 1 ? cols[cols.length - 1] : "";
+      // valor no fim da linha: com R$, ou sem R$ separado por espaço de coluna ("1 X 100,00   100,00", "- 68,50")
+      const v = tl.match(/(-\s*R\s?[$S5]\s*[\d.]+,\d{2}|R\s?[$S5]\s*-?[\d.]+,\d{2}|a definir)\s*$/i) || tl.match(/(?:^|\s{2,})(-\s*[\d.]+,\d{2}|[\d.]+,\d{2})\s*$/);
+      if (v){ const antes = tl.slice(0, v.index).trim(); const cols = antes ? antes.split(/\s{2,}/) : [""]; let desc = cols.length > 1 ? cols.slice(0, -1).join(" ") : cols[0]; let conta = cols.length > 1 ? cols[cols.length - 1] : "";
+        const CONTA = /^(?:[\d.]+,\d{2}\s*\+\s*)?\d+\s*[xX×]\s*[\d.]+,\d{2}$/;
+        if (!conta && CONTA.test(desc)){ conta = desc; desc = ""; }
+        // sem descrição na linha do valor: a descrição é o texto de cima. Com descrição, o texto de cima era continuação do item anterior
+        if (!desc){ desc = pend.join(" "); pend = []; } else if (pend.length){ if (its.length) its[its.length - 1].desc += " " + pend.join(" "); else desc = pend.join(" ") + " " + desc; pend = []; }
+        const vv = /R\s?[$S5]|a definir/i.test(v[1]) ? v[1] : (v[1].trim().startsWith("-") ? "-R$" : "R$") + v[1].replace(/[-\s]/g, "");
         // foto: as colunas vêm separadas por um espaço só. A quantidade é a conta no fim ("100,00 + 35 X 8,50", "35 X 6,50", "1 mês", "1")
         if (!conta){ const q = desc.match(/\s((?:[\d.]+,\d{2}\s*\+\s*)?\d+\s*[xX×]\s*[\d.]+,\d{2}|\d+\s+m[eê]s(?:es)?|\d{1,2})$/); if (q){ conta = q[1]; desc = desc.slice(0, q.index).trim(); } }
-        its.push({ desc:desc.replace(/\s+20\d\d:/, ":"), conta, valor:/a definir/i.test(v[1]) ? null : dinheiroT(v[1]) }); }
-      else if (its.length) its[its.length - 1].desc = (its[its.length - 1].desc + " " + tl).replace(/\s+20\d\d:/, ":");
+        item = { desc:desc.replace(/\s+20\d\d:/, ":"), conta, valor:/a definir/i.test(vv) ? null : dinheiroT(vv) }; its.push(item); }
+      else if (item) item.desc = (item.desc + " " + tl).replace(/\s+20\d\d:/, ":");
+      else pend.push(tl);
     }
+    its.forEach(i => { i.desc = i.desc.replace(/\s+20\d\d:/, ":").replace(/\s{2,}/g, " ").trim(); });
     const linhasOk = its.filter(i => i.desc);
+    if (/^OR[ÇC]AMENTO$/i.test(titulo.trim())) titulo = "";
     titulo = titulo.replace(/VITAE\s*[I|l1]\s*CURR/i, "VITAE/CURR");
-    return { letra:sg.letra, titulo:titulo || `OPÇÃO ${sg.letra}`, linhas:linhasOk, totalPdf:total, total:total != null ? total : r2(linhasOk.reduce((s, l) => s + (l.valor || 0), 0)), mensal,
+    return { letra:sg.letra, titulo:titulo || (segs.length === 1 && !linhas.some(l => cab.test(l)) ? "Orçamento" : `OPÇÃO ${sg.letra}`), linhas:linhasOk, totalPdf:total, total:total != null ? total : r2(linhasOk.reduce((s, l) => s + (l.valor || 0), 0)), mensal, jaPago:r2(jaPago),
       tipos:/MENTORIA MENSAL/i.test(titulo) ? ["mentoria"] : /MENTORIA INDIVIDUAL/i.test(titulo) ? ["mentoriaInd"] : /LATTES/i.test(titulo) && !/VITAE/i.test(titulo) ? ["lattes", "certificados"] : /LATTES/i.test(titulo) ? ["vitae", "lattes"] : /^AN[ÁA]LISE CURRICULAR$/i.test(titulo.trim()) ? ["analise"] : ["vitae"] };
   }).filter(o => o.linhas.length || o.totalPdf != null);
 }
@@ -314,11 +340,11 @@ async function textoDaImagem(f){
   finally { await w.terminate(); }
 }
 /* Lê o orçamento pronto (PDF ou foto) e devolve as opções. Serve para a triagem e para o orçamento enviado ao cliente. */
-const ESQ_ORC = { type:"OBJECT", required:["opcoes"], properties:{ opcoes:{ type:"ARRAY", items:{ type:"OBJECT", required:["letra", "total", "linhas"], properties:{ letra:ESQ_TXT, titulo:ESQ_TXT, total:ESQ_NUM, mensal:{ type:"BOOLEAN" },
+const ESQ_ORC = { type:"OBJECT", required:["opcoes"], properties:{ opcoes:{ type:"ARRAY", items:{ type:"OBJECT", required:["letra", "total", "linhas"], properties:{ letra:ESQ_TXT, titulo:ESQ_TXT, total:ESQ_NUM, jaPago:ESQ_NUM, mensal:{ type:"BOOLEAN" },
   linhas:{ type:"ARRAY", items:{ type:"OBJECT", required:["desc", "valor"], properties:{ desc:ESQ_TXT, conta:ESQ_TXT, valor:ESQ_NUM } } } } } } } };
 async function orcamentoGemini(f){
-  const j = await geminiLer([f], `Este arquivo é um orçamento da MedEasy (PDF ou foto). Leia todas as opções (Opção A, Opção B e assim por diante). Para cada opção devolva: a letra, o título (o texto que vem depois de "OPÇÃO X"), cada linha da tabela com a descrição, a conta da coluna de quantidade (por exemplo "100,00 + 35 X 8,50") e o valor em reais, e o total da opção (o VALOR TOTAL, já com desconto). Desconto entra como uma linha com valor negativo. Marque mensal como verdadeiro quando o valor for por mês. Nos números, use ponto como separador decimal e não use separador de milhar. Não invente valores: copie o que está escrito.`, ESQ_ORC, { rapido:true, aviso:"Lendo o orçamento com o Gemini" });
-  return (j.opcoes || []).filter(o => o && o.letra && num(o.total) > 0).map(o => ({ letra:String(o.letra).trim().toUpperCase().slice(0, 2), titulo:String(o.titulo || "").trim(), total:r2(num(o.total)), mensal:!!o.mensal,
+  const j = await geminiLer([f], `Este arquivo é um orçamento da MedEasy (PDF ou foto). Leia todas as opções (Opção A, Opção B e assim por diante). Se o orçamento não tem opções com letra, devolva uma opção só, com a letra A. Para cada opção devolva: a letra, o título (o texto que vem depois de "OPÇÃO X"), cada linha da tabela com a descrição, a conta da coluna de quantidade (por exemplo "100,00 + 35 X 8,50") e o valor em reais, e o total da opção (o VALOR TOTAL ou TOTAL NO PIX, já com desconto e antes de tirar o que o cliente já pagou). Desconto entra como uma linha com valor negativo. O valor que o cliente já pagou (VALOR JÁ PAGO, JÁ PAGO) não entra nas linhas nem tira do total: devolva em jaPago, ou 0. Marque mensal como verdadeiro quando o valor for por mês. Nos números, use ponto como separador decimal e não use separador de milhar. Não invente valores: copie o que está escrito.`, ESQ_ORC, { rapido:true, aviso:"Lendo o orçamento com o Gemini" });
+  return (j.opcoes || []).filter(o => o && num(o.total) > 0).map((o, i) => ({ letra:String(o.letra || "ABCDEFGH"[i]).trim().toUpperCase().slice(0, 2), titulo:String(o.titulo || "").trim(), total:r2(num(o.total)), jaPago:r2(Math.abs(num(o.jaPago))), mensal:!!o.mensal,
     linhas:(o.linhas || []).map(l => ({ desc:String(l.desc || "").trim(), conta:String(l.conta || "").trim(), valor:l.valor == null ? null : r2(num(l.valor)) })) }));
 }
 async function lerOrcArquivo(f){
@@ -538,11 +564,29 @@ function pdfAnalise(t, pk){
     <div class="rod">MedEasy · (62) 99515-5830 · medeasyy0@gmail.com · Goiânia, Goiás</div></section></body></html>`);
 }
 
+/* Orçamento atualizado: oferece trocar o Valor total no Notion pelo do orçamento e lançar o que ele diz que já foi pago */
+async function depoisDoOrcamento(c, o, jaPago){
+  if (typeof temPonte !== "function" || !temPonte()) return;
+  const svs = svcsPagaveis(c); const notion = r2(svs.reduce((a, s) => a + num(s.total), 0));
+  if (o && !o.mensal && Math.abs(notion - o.total) > 0.009){
+    if (svs.length === 1){
+      if (confirm(`O orçamento lido dá ${brl(o.total)} e no Notion o Valor total está ${brl(notion)}. Trocar o Valor total no Notion para ${brl(o.total)}?`)){
+        try { const j = await salvarNotion(svs[0].id, { "Valor total":o.total }, "Valor total atualizado no Notion");
+          if (!(j.recusadas || []).includes("Valor total")){ svs[0].total = o.total; (c.financeiro ||= {}).total = r2(svcsPagaveis(c).reduce((a, s) => a + num(s.total), 0)); render(); } }
+        catch (e) { toast("Não trocou o Valor total: " + e.message); }
+      }
+    } else setTimeout(() => toast(`O orçamento dá ${brl(o.total)} e as linhas no Notion somam ${brl(notion)}. Ajuste o Valor total da linha certa no Notion`), 2600);
+  }
+  if (jaPago > 0 && !pagsDe(c).length && confirm(`O orçamento diz que o cliente já pagou ${brl(jaPago)}. Lançar esse valor em Pagamento do cliente?`)){
+    const ct = ctrlDe(c); (ct.pagamentos ||= []).push({ id:"pg" + Date.now().toString(36), valor:jaPago, data:"", servico:svs.length === 1 ? svs[0].id : "", forma:"", nota:"já pago no orçamento" });
+    await gravarPagamentos(c, `Pagamento de ${brl(jaPago)} lançado`);
+  }
+}
 /* Tela do cliente: orçamento que ele recebeu (PDF ou foto). O portal mostra esse, em vez de calcular um novo. */
 function orcEnviadoCard(c){
   const ct = ctrlDe(c); const o = ct.orcamento;
   return `<section class="card"><div class="card-h"><div><h2>Orçamento enviado</h2><div class="sub">O portal do cliente mostra este orçamento. Sem ele, mostra a conta automática.</div></div><div class="row" style="gap:6px"><label class="btn sm ${o ? "" : "pri"}" style="cursor:pointer">${o ? "Trocar" : "Subir PDF ou foto"}<input type="file" accept=".pdf,application/pdf,image/*" hidden data-orcenv="1"></label>${o ? `<button class="btn sm ghost" data-a="orcEnvTirar">Tirar</button>` : ""}</div></div>
-   ${o ? `<div class="xs muted" style="margin-bottom:8px">${esc(o.arquivo || "")}${o.em ? " · lido em " + dBR(new Date(o.em).toISOString()) : ""}</div>${(o.opcoes || []).map(x => `<label class="li" style="cursor:pointer"><input type="radio" name="orcEsc" data-orcesc="${esc(x.letra)}" ${o.escolhida === x.letra ? "checked" : ""}><div class="grow"><div class="t">Opção ${esc(x.letra)}${x.titulo ? " · " + esc(x.titulo) : ""}</div></div><b class="num gold">${brl(x.total)}${x.mensal ? " por mês" : ""}</b></label>`).join("")}<p class="xs muted" style="margin:8px 0 0">Marque a opção que o cliente fechou.</p>` : `<div class="empty">Nenhum orçamento lido ainda</div>`}</section>`;
+   ${o ? `<div class="xs muted" style="margin-bottom:8px">${esc(o.arquivo || "")}${o.em ? " · lido em " + dBR(new Date(o.em).toISOString()) : ""}</div>${(o.opcoes || []).map(x => `<label class="li" style="cursor:pointer"><input type="radio" name="orcEsc" data-orcesc="${esc(x.letra)}" ${o.escolhida === x.letra ? "checked" : ""}><div class="grow"><div class="t">Opção ${esc(x.letra)}${x.titulo ? " · " + esc(x.titulo) : ""}</div></div><b class="num gold">${brl(x.total)}${x.mensal ? " por mês" : ""}</b></label>`).join("")}${o.jaPago ? `<div class="row between small" style="margin-top:6px"><span>Já pago no orçamento</span><b class="num neon">${brl(o.jaPago)}</b></div>` : ""}<p class="xs muted" style="margin:8px 0 0">Marque a opção que o cliente fechou.</p>` : `<div class="empty">Nenhum orçamento lido ainda</div>`}</section>`;
 }
 async function gravarOrcEnviado(c, msg){
   salvarCtrl(c); render(); const ct = ctrlDe(c);
@@ -557,7 +601,9 @@ async function importarOrcEnviado(input){
     // A opção fechada: a que bate com o Valor total do Notion, ou a única
     const total = (c.servicos || []).reduce((a, s) => a + (s.mensal ? 0 : num(s.total)), 0);
     const bate = ops.find(o => Math.abs(o.total - total) < 0.01);
-    ct.orcamento = { arquivo:f.name, em:Date.now(), foto, opcoes:opcoesCurtas(ops), escolhida:bate ? bate.letra : ops.length === 1 ? ops[0].letra : "" };
-    await gravarOrcEnviado(c, `Orçamento salvo no Notion: ${ops.map(o => `opção ${o.letra} ${brl(o.total)}`).join(", ")}${foto ? ". Confira os valores, a leitura de foto pode errar" : ""}`);
+    const jaPago = Math.max(0, ...ops.map(o => num(o.jaPago)));
+    ct.orcamento = { arquivo:f.name, em:Date.now(), foto, opcoes:opcoesCurtas(ops), escolhida:bate ? bate.letra : ops.length === 1 ? ops[0].letra : "", ...(jaPago ? { jaPago } : {}) };
+    await gravarOrcEnviado(c, `Orçamento salvo no Notion: ${ops.map(o => `opção ${o.letra} ${brl(o.total)}`).join(", ")}${jaPago ? `, já pago ${brl(jaPago)}` : ""}${foto ? ". Confira os valores, a leitura de foto pode errar" : ""}`);
+    await depoisDoOrcamento(c, ops.find(o => o.letra === ct.orcamento.escolhida), jaPago);
   } catch (e) { toast(e.message || "Não consegui ler o orçamento"); }
 }
