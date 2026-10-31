@@ -26,7 +26,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 16. ~~(pra salvar) Checklist da semana de plantão: o que fazer antes, no dia e depois do plantão pra não perder a revisão~~ *(saiu em 27/10)*. Prints: rotina, hoje
 17. ~~(pra salvar) Plano de 7 dias pra tirar o atraso sem largar as revisões~~ *(saiu em 30/10)*. Prints: revisoes, assistente
 18. (pra salvar) Cronograma de revisão de 30 dias: o que volta em 1 semana e em 1 mês. Prints: revisoes, hoje
-19. (nicho, pra salvar) Mapa do ENAMED: 100 questões, 20 de cada área (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), prova de 5 horas, e como encaixar as 5 áreas no ciclo clínico. Capa com pergunta ou "salva esse". Prints: cronograma, materias
+19. ~~(nicho, pra salvar) Mapa do ENAMED: 100 questões, 20 de cada área (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), prova de 5 horas, e como encaixar as 5 áreas no ciclo clínico. Capa com pergunta ou "salva esse".~~ *(saiu em 31/10)* Prints: cronograma, materias
 20. (nicho) "Você sobreviveria ao internato estudando pra residência?" e a semana montada a partir da escala. Prints: rotina, assistente, hoje
 21. (pra salvar) Checklist do dia de revisão: o que fazer em 30 minutos quando o dia foi de plantão. Prints: revisoes, foco
 
