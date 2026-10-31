@@ -250,19 +250,17 @@ async function montar(linhas) {
     // Análises gravadas pelo site no controle do cliente (análise padrão colada ou PDF importado pelo mentor): entram nas provas e no portal
     const controle = lerControle(g.linhas.map(l => l.controleTexto).find(t => t && t.trim()));
     for (const pr of Object.values((controle && controle.analises) || {})) if (pr && pr.nome && Array.isArray(pr.itens) && pr.itens.length) juntarProva(provas, { ...pr, nome: pr.provaEscolhida || pr.nome });
-    // Pagamentos lançados pelo site (o que o cliente já pagou, parcela por parcela): valem mais que a conta pelo status do Pagamento
+    // Pagamentos lançados pelo site (o que o cliente já pagou, parcela por parcela): com algum lançado, o pago é só a soma deles,
+    // no lugar da conta pelo status. O que tem serviço marcado vai para ele, o do cliente todo preenche os serviços em ordem.
     const pgs = ((controle && controle.pagamentos) || []).filter(x => x && Number(x.valor) > 0);
     if (pgs.length) {
-      pago = 0; pagamentos.length = 0;
-      for (const s of servicos) {
-        if (s.mensal) continue;
-        const meus = pgs.filter(x => x.servico === s.id);
-        if (meus.length) s.pago = Math.round(meus.reduce((a, x) => a + Number(x.valor), 0) * 100) / 100;
-        pago += s.pago;
-      }
-      // Pagamento sem serviço (ou de uma linha que saiu do Notion) entra no total pago do cliente
-      pago += pgs.filter(x => !servicos.some(s => s.id === x.servico && !s.mensal)).reduce((a, x) => a + Number(x.valor), 0);
-      pago = Math.round(pago * 100) / 100;
+      const svs = servicos.filter(s => !s.mensal), m = {}; svs.forEach(s => { m[s.id] = 0; });
+      for (const x of pgs) if (x.servico && x.servico in m) m[x.servico] += Number(x.valor);
+      let solto = pgs.filter(x => !(x.servico && x.servico in m)).reduce((a, x) => a + Number(x.valor), 0);
+      for (const s of svs) { if (solto <= 0.009) break; const v = Math.min(Math.max(0, (s.total || 0) - m[s.id]), solto); m[s.id] += v; solto -= v; }
+      if (solto > 0.009 && svs.length) m[svs[svs.length - 1].id] += solto;
+      for (const s of svs) s.pago = Math.round(m[s.id] * 100) / 100;
+      pago = Math.round(pgs.reduce((a, x) => a + Number(x.valor), 0) * 100) / 100; pagamentos.length = 0;
       for (const x of pgs) pagamentos.push({ valor: Number(x.valor), forma: x.forma || "", data: x.data || "" });
     }
     const id = (await hmac("id:" + g.chave)).slice(0, 8).reduce((a, b) => a + b.toString(16).padStart(2, "0"), "");
