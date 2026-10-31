@@ -28,7 +28,7 @@
 | 29/10/2026 | 15:00 | Meme animado (A2, Reel) + story (nicho) | Você sobreviveria a um dia de 4º ano com o ENAMED chegando? (pauta 13, `posts/2026-10-29-sobreviveria-4ano.json`, `videos/v7.js`, Reel 17870063391659081, story 18220005955348399) | https://www.instagram.com/reel/DfFma_2Dwdz/ | 32 contas, 81.664 views, 0,2% de pulo, 21 s de média (2 dias; views e pulo parecem erro do dado, alcance segue baixo) |
 | 30/10/2026 | 09:58 | Carrossel 7 slides | (pra salvar) Atrasou? Salva esse plano de 7 dias (pauta 17, `posts/2026-10-30-plano-7-dias.json`, media_id 18145664137585393) | https://www.instagram.com/p/DfHorNwjV7i/ | 19 contas, 88 views, 0 visitas, 0 salvamentos (1 dia) |
 | 30/10/2026 | 14:54 | Meme com tela (A1, foto) + story | Meu amigo jurando que estudou o dia todo. O ranking da nossa sala no Cadência Med (pauta 4, plano de sex 30, `posts/2026-10-28-ranking-meme.json`, post 17954200908336747, story 18154923874545359) | https://www.instagram.com/p/DfIKiVLEV8Y/ | 31 contas, 67 views, 0 visitas (1 dia) |
-| 31/10/2026 | 10:00 | Carrossel 7 slides | (nicho, pra salvar) 100 questões, 5 áreas: salva esse mapa do ENAMED (pauta 19, `posts/2026-10-31-mapa-enamed.json`, media_id 17998518048047785) | perfil (link ainda não saiu no Windsor) | (preencher) |
+| 31/10/2026 | 09:56 | Carrossel 7 slides | (nicho, pra salvar) 100 questões, 5 áreas: salva esse mapa do ENAMED (pauta 19, `posts/2026-10-31-mapa-enamed.json`, media_id 17998518048047785) | perfil (link ainda não saiu no Windsor) | (preencher) |
 
 ## Anotações de desempenho
 
