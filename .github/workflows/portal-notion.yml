@@ -40,8 +40,15 @@ jobs:
         run: |
           git config user.name "medeasy-bot"
           git config user.email "medeasy-bot@users.noreply.github.com"
-          git add portal/data
-          if git diff --cached --quiet; then echo "Sem mudanças"; exit 0; fi
-          git commit -m "Portal: dados atualizados do Notion"
-          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
-          git push
+          # Duas rodadas seguidas davam conflito no equipe.json e a segunda não publicava nada (o site ficava com os dados velhos).
+          # Os dados são gerados inteiros a cada rodada, então esta rodada vai por cima do main mais novo, mexendo só em portal/data.
+          for i in 1 2 3 4; do
+            git fetch -q origin "$GITHUB_REF_NAME"
+            git reset -q FETCH_HEAD
+            git add portal/data
+            if git diff --cached --quiet; then echo "Sem mudanças"; exit 0; fi
+            git commit -q -m "Portal: dados atualizados do Notion"
+            if git push -q origin HEAD:"$GITHUB_REF_NAME"; then echo "Publicado"; exit 0; fi
+            echo "Outra rodada publicou antes. Tentando de novo"; sleep $((i * 5))
+          done
+          exit 1
