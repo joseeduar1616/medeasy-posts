@@ -45,6 +45,21 @@ jobs:
           if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$GEMINI_API_KEY" ]; then echo "Sem o secret GEMINI_API_KEY no GitHub. Nada a fazer."; exit 0; fi
           cd worker && printf '%s' "$GEMINI_API_KEY" | npx --yes wrangler@4 secret put GEMINI_API_KEY
 
+      - name: Testar o Gemini pela ponte
+        env:
+          SENHA: ${{ secrets.PORTAL_SENHA }}
+        run: |
+          sleep 20
+          curl -s "$PONTE/saude"; echo
+          case "$(curl -s "$PONTE/saude")" in *'"gemini":true'*) ;; *) echo "A ponte ainda não tem a chave do Gemini."; exit 0 ;; esac
+          for s in "$SENHA" "$(printf '%s' "$SENHA" | tr '[:upper:]' '[:lower:]')"; do
+            r=$(curl -s -X POST "$PONTE/gemini/gerar" -H "Authorization: Bearer $s" -H "Content-Type: application/json" -d '{"texto":"Responda só com a palavra funcionando.","rapido":true}')
+            case "$r" in *"senha da equipe"*) continue ;; esac
+            echo "Resposta do Gemini: $(printf '%s' "$r" | head -c 400)"
+            case "$r" in *'"texto"'*) echo "Gemini funcionando." ;; *) echo "::warning::O Gemini não respondeu. Confira a chave e a cobrança no Google AI Studio." ;; esac
+            exit 0
+          done
+
       - name: Verificar a versão no ar
         env:
           SENHA: ${{ secrets.PORTAL_SENHA }}
