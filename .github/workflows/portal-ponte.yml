@@ -36,6 +36,15 @@ jobs:
           fi
           cd worker && npx --yes wrangler@4 deploy
 
+      - name: Guardar a chave do Gemini na ponte
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$GEMINI_API_KEY" ]; then echo "Sem o secret GEMINI_API_KEY no GitHub. Nada a fazer."; exit 0; fi
+          cd worker && printf '%s' "$GEMINI_API_KEY" | npx --yes wrangler@4 secret put GEMINI_API_KEY
+
       - name: Verificar a versão no ar
         env:
           SENHA: ${{ secrets.PORTAL_SENHA }}

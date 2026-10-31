@@ -256,7 +256,7 @@ function notaRasc(c, p){
 function notaInput(el){ const c = clienteSel(); if (!c) return; const p = (c.provas || []).find(x => kP(x.nome) === el.dataset.nota); if (p) notaRasc(c, p)[el.dataset.k] = el.value; }
 function notaCard(c){
   const provas = (c.provas || []).filter(p => p.nome); const salvo = notasDe(c);
-  const cab = `<div class="card-h"><div><h2>Nota e pendências</h2><div class="sub">Você preenche a nota. O Claude só ajuda a escrever o recado e as pendências.</div></div>${provas.length ? `<div class="row" style="gap:6px"><button class="btn sm" data-a="notaPedido" title="Copia um pedido curto para colar no Claude junto com os certificados">Copiar pedido para o Claude</button><button class="btn sm ${S.colarNota ? "pri" : ""}" data-a="notaColarAbrir">Colar resposta</button></div>` : ""}</div>`;
+  const cab = `<div class="card-h"><div><h2>Nota e pendências</h2><div class="sub">Você preenche a nota. O Claude só ajuda a escrever o recado e as pendências.</div></div>${provas.length ? `<div class="row" style="gap:6px"><button class="btn sm" data-a="notaPedido" title="Copia um pedido curto para colar no Claude junto com os certificados">Copiar pedido para o Claude</button><button class="btn sm ${S.colarNota ? "pri" : ""}" data-a="notaColarAbrir">Colar resposta</button>${typeof temPonte === "function" && temPonte() && geminiOk !== false ? `<label class="btn sm pri" style="cursor:pointer" title="Escolha os certificados (e o edital, se a prova não estiver no site). O Gemini preenche os campos e você confere">Fazer com o Gemini<input type="file" accept=".pdf,.docx,application/pdf,image/*" multiple hidden data-notagem="1"></label>` : ""}</div>` : ""}</div>`;
   if (!provas.length) return `<section class="card" id="notaCard">${cab}<div class="empty">Marque as provas do cliente primeiro</div></section>`;
   return `<section class="card" id="notaCard">${cab}
    ${S.colarNota ? `<div class="svc" style="margin-bottom:12px"><p class="small" style="margin:0 0 8px">Cole a resposta inteira do Claude. O site preenche os campos abaixo e você confere antes de salvar. O que ele não entender fica vazio para você digitar.</p><textarea class="in" id="notaColar" rows="6" placeholder="NOTA MEDEASY&#10;Prova: ...&#10;Nota: 8 de 10&#10;..."></textarea><div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="notaColarLer">Preencher os campos</button><button class="btn sm ghost" data-a="notaColarAbrir">Fechar</button></div></div>` : ""}
@@ -353,4 +353,19 @@ function lerNotaColada(){
   for (const { p, r } of res) Object.assign(notaRasc(c, p), r);
   S.colarNota = false; render();
   toast(`Preenchi ${res.map(x => x.p.nome).join(", ")}. Confira os campos e clique em Salvar`);
+}
+
+/* Nota pelo Gemini: lê os certificados (e o edital, se mandar) com o mesmo pedido do Claude e preenche os campos. O mentor confere e salva. */
+const ESQ_NOTA = { type:"OBJECT", required:["provas"], properties:{ provas:{ type:"ARRAY", items:{ type:"OBJECT", required:["prova", "nota"], properties:{ prova:ESQ_TXT, nota:ESQ_NUM, max:ESQ_NUM, possivel:ESQ_NUM, recado:ESQ_TXT, pendencias:{ type:"ARRAY", items:ESQ_TXT } } } } } };
+async function notaGemini(input){
+  const c = clienteSel(); const fs = [...(input.files || [])]; input.value = ""; if (!c || !fs.length) return;
+  const provas = (c.provas || []).filter(p => p.nome); if (!provas.length){ toast("Marque a prova do cliente antes"); return; }
+  try {
+    const j = await geminiLer(fs, pedidoNota(c) + `\n\nOs certificados${provas.some(p => !itensDaProva(p).length) ? " e o edital" : ""} estão nos arquivos anexados. Responda no formato JSON pedido: um objeto por prova, com o nome da prova escrito como na lista acima, a nota, o máximo, a nota possível, o recado e as pendências (uma por item da lista).`, ESQ_NOTA, { aviso:"Fazendo a nota com o Gemini" });
+    let n = 0;
+    for (const x of j.provas || []){ const k = kP(String(x.prova || "").replace(/\s*20\d\d.*$/, "")); const p = provas.find(p => k && (k.startsWith(kP(p.nome)) || kP(p.nome).startsWith(k))) || (provas.length === 1 ? provas[0] : null); if (!p) continue;
+      const r = notaRasc(c, p); if (x.nota != null) r.nota = numTxt(x.nota); if (x.max) r.max = numTxt(x.max); if (x.possivel != null) r.possivel = numTxt(x.possivel); if (x.recado) r.recado = String(x.recado).trim();
+      if (Array.isArray(x.pendencias)) r.pend = x.pendencias.map(l => String(l).trim()).filter(l => l && !/^nenhuma\.?$/i.test(l)).join("\n"); n++; }
+    render(); toast(n ? `O Gemini preencheu ${n === 1 ? "a nota" : n + " provas"}. Confira os campos e clique em Salvar` : "O Gemini não devolveu a nota. Preencha à mão ou use o pedido para o Claude");
+  } catch (e) { toast("Não consegui fazer com o Gemini: " + e.message); }
 }

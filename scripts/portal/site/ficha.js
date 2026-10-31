@@ -106,30 +106,51 @@ function fichaAcoesView(c, p, itens){
   if (p.fonte === "analise") return `<div class="row" style="margin-bottom:10px">${doc}</div>`;
   return `<div class="row" style="margin-bottom:10px;gap:6px"><span class="xs muted">${p.edital && p.edital.fichaPropria ? "Ficha montada pelo mentor" : "Ficha do edital no site"}</span><button class="btn sm ghost" data-a="feEditar">Editar ficha</button><label class="btn sm ghost" style="cursor:pointer">Trocar pelo PDF do edital<input type="file" accept=".pdf,.docx,application/pdf" hidden data-edital="1"></label>${doc}</div>`;
 }
+const ESQ_FICHA = { type:"OBJECT", required:["itens"], properties:{ maximo:ESQ_NUM, itens:{ type:"ARRAY", items:{ type:"OBJECT", required:["item", "maxN"], properties:{ item:ESQ_TXT, pontos:ESQ_TXT, maxN:ESQ_NUM, unit:ESQ_NUM } } } } };
+async function fichaGemini(f){
+  const j = await geminiLer([f], `Este é o edital de uma prova de residência médica. Ache a tabela de pontuação da análise curricular (currículo) e devolva cada item: em "item", o número ou a letra do edital e um nome curto (por exemplo "3 Monitoria" ou "E1 Artigo indexado com JCR"), em "pontos" a regra em texto curto, em "maxN" a pontuação máxima do item e em "unit" quanto vale cada certificado ou atividade (0 quando o item não é por contagem). Em "maximo", a nota máxima do currículo. Use ponto como separador decimal. Copie os números do edital, não invente.`, ESQ_FICHA, { aviso:"Lendo o edital com o Gemini" });
+  const ficha = (j.itens || []).filter(x => x && x.item && num(x.maxN) > 0).map(x => ({ item:String(x.item).trim(), pontos:String(x.pontos || "").trim(), maxN:num(x.maxN), unit:num(x.unit) > 0 ? num(x.unit) : null }));
+  return { ficha, maximo:num(j.maximo) || null, gemini:true };
+}
 async function lerEditalArquivo(input){
   const c = clienteSel(); const f = input.files && input.files[0]; input.value = ""; if (!c || !f) return; const p = provaSelCI(c); if (!p) return;
   toast("Lendo o edital");
   try {
-    const r = lerFichaDoEdital(await textoDoArquivo(f));
+    let r = null;
+    if (await temGemini()){ try { r = await fichaGemini(f); if (!r.ficha.length) r = null; } catch (e) { toast("O Gemini não leu o edital (" + e.message + "). Tentando a leitura do site"); } }
+    if (!r) r = lerFichaDoEdital(await textoDoArquivo(f));
     S.fichaEd = { cid:c.id, pk:kP(p.nome), nome:p.nome, rows:r.ficha.length ? r.ficha : [{ item:"", pontos:"", unit:null, maxN:null }], maximo:r.maximo, arquivo:f.name,
-      fonte:r.ficha.length ? `Lida do arquivo ${f.name}: ${r.ficha.length} itens${r.maximo ? `, teto ${d1(r.maximo)}` : ""}.` : `Não achei a tabela de pontos em ${f.name}. Monte à mão olhando o edital.` };
+      fonte:r.ficha.length ? `Lida${r.gemini ? " pelo Gemini" : ""} do arquivo ${f.name}: ${r.ficha.length} itens${r.maximo ? `, teto ${d1(r.maximo)}` : ""}.` : `Não achei a tabela de pontos em ${f.name}. Monte à mão olhando o edital.` };
     render(); toast(r.ficha.length ? `${r.ficha.length} itens lidos. Confira e salve a ficha` : "Não achei a tabela de pontos nesse arquivo. Monte à mão");
   } catch (e) { toast(e.message || "Não consegui ler o arquivo"); }
+}
+/* Currículo pronto pelo Gemini: a nota de cada item da ficha e os certificados anexados nele */
+const esqCv = () => ({ type:"OBJECT", required:["itens"], properties:{ notaTotal:ESQ_NUM, itens:{ type:"ARRAY", items:{ type:"OBJECT", required:["indice"], properties:{ indice:{ type:"INTEGER" }, nota:ESQ_NUM,
+  certificados:{ type:"ARRAY", items:{ type:"OBJECT", required:["desc"], properties:{ desc:ESQ_TXT, tipo:{ type:"STRING", enum:TIPOS_CERT }, ano:ESQ_TXT, ch:ESQ_TXT, pagina:{ type:"INTEGER" } } } } } } } } });
+async function curriculoGemini(f, p, itens){
+  const j = await geminiLer([f], `Este é um currículo pronto (Vitae) de um candidato a residência médica, com a ficha de pontuação preenchida e os certificados anexados depois do título de cada item. A ficha da prova ${p.nome} tem estes itens:\n${itens.map((i, k) => `${k + 1}) ${i.item} (máximo ${String(i.maxN).replace(".", ",")})`).join("\n")}\n\nPara cada item da lista, devolva o índice (o número da lista acima), a nota que o currículo dá ao item na ficha preenchida (deixe vazio se não tiver) e os certificados anexados nesse item, cada um com uma descrição curta, o tipo, o ano, a carga horária em horas e a página. Ignore a capa, o Lattes, os documentos pessoais e a página da ficha. Em notaTotal, a nota total da ficha. Use ponto como separador decimal. Não invente.`, esqCv(), { aviso:"Lendo o currículo com o Gemini" });
+  const notas = [], porItem = {}; let total = 0;
+  for (const x of j.itens || []){ const idx = (x.indice | 0) - 1; if (!itens[idx]) continue;
+    if (x.nota != null && x.nota !== "") notas.push({ idx, pts:Math.min(itens[idx].maxN, num(x.nota)) });
+    const cs = (x.certificados || []).filter(c => c && c.desc); if (cs.length){ porItem[idx] = cs.map((c, k) => ({ cert:c, ref:c.pagina ? "p." + c.pagina : "certificado " + (k + 1) })); total += cs.length; } }
+  return { notas, cv:{ porItem, total, fora:0 }, total:j.notaTotal != null ? num(j.notaTotal) : null };
 }
 /* Currículo pronto: lê a ficha preenchida (última coluna é a nota do candidato) e vira a contagem por item, como rascunho */
 async function lerCurriculoArquivo(input){
   let c = clienteSel(); const f = input.files && input.files[0]; input.value = ""; if (!c || !f) return; let p = provaSelCI(c); if (!p) return; const pk = kP(p.nome);
   toast("Lendo o currículo");
   try {
-    const txt = await textoDoArquivo(f); let itens = itensDaProva(p); let notas, total = null;
+    let itens = itensDaProva(p); let notas, total = null; let cvGemini = null;
+    if (itens.length && await temGemini()){ try { const g = await curriculoGemini(f, p, itens); if (g.notas.length || g.cv.total){ notas = g.notas; total = g.total; cvGemini = g.cv; } } catch (e) { toast("O Gemini não leu o currículo (" + e.message + "). Tentando a leitura do site"); } }
+    const txt = cvGemini ? "" : await textoDoArquivo(f);
     if (!itens.length){
       const r = fichaDoCurriculo(txt); if (!r.ficha.length) throw new Error("Não achei a ficha de pontuação preenchida nesse currículo");
       await guardarFicha(c, pk, p.nome, r.ficha, `Tirada da ficha do currículo ${f.name}`, null);
       c = clienteSel(); p = (c.provas || []).find(x => kP(x.nome) === pk); itens = itensDaProva(p); notas = r.notas;
-    } else { const r = lerNotasDoCurriculo(txt, itens.map(i => ({ item:i.item, maxN:i.maxN }))); notas = r.notas; total = r.total; }
+    } else if (!cvGemini){ const r = lerNotasDoCurriculo(txt, itens.map(i => ({ item:i.item, maxN:i.maxN }))); notas = r.notas; total = r.total; }
     // Certificados do currículo: quantos vêm depois do título de cada item
-    let cv = { porItem:{}, total:0, fora:0 };
-    try { const blocos = /\.docx$/i.test(f.name) ? await blocosDoDocx(f) : await blocosDoPdf(f); cv = certificadosDoCurriculo(blocos, itens.map(i => ({ item:i.item }))); } catch (e) { console.warn(e); }
+    let cv = cvGemini || { porItem:{}, total:0, fora:0 };
+    if (!cvGemini) try { const blocos = /\.docx$/i.test(f.name) ? await blocosDoDocx(f) : await blocosDoPdf(f); cv = certificadosDoCurriculo(blocos, itens.map(i => ({ item:i.item }))); } catch (e) { console.warn(e); }
     if (!notas.length && !cv.total) throw new Error("Não achei as notas nem os certificados dos itens nesse currículo");
     const reg = carregarCont(c); const pr = (reg.provas[pk] ||= {});
     for (const n of notas){ const it = itens[n.idx]; if (!it) continue; const r = (pr[it.key] ||= { ...(it.base || {}) });
@@ -140,7 +161,7 @@ async function lerCurriculoArquivo(input){
       const ct = ctrlDe(c); const origem = "curriculo:" + pk; const velhos = new Set(ct.certs.filter(x => x.origem === origem).map(x => x.id));
       ct.certs = ct.certs.filter(x => !velhos.has(x.id)); for (const key of Object.keys(ct.aloc[pk] || {})) ct.aloc[pk][key] = ct.aloc[pk][key].filter(a => !velhos.has(a.id));
       for (const [idx, lista] of Object.entries(cv.porItem)){ const it = itens[idx]; if (!it) continue; const titulo = it.item.replace(/^\s*\d{1,2}[a-z]?[.)]?\s*/i, "");
-        lista.forEach((x, k) => { const base = x.texto ? certDoTexto(x.texto, `${f.name} (${x.ref})`) : { id:novoIdC(), desc:`${titulo}: certificado ${k + 1}`, tipo:(TIPO_POR_TEXTO.find(([re]) => re.test(titulo)) || [0, "Outro"])[1], ano:"", ch:"", obs:"Lido do currículo pronto, conferir", arquivo:`${f.name} (${x.ref})` };
+        lista.forEach((x, k) => { const base = x.cert ? { id:novoIdC(), desc:String(x.cert.desc).trim().slice(0, 140), tipo:TIPOS_CERT.includes(x.cert.tipo) ? x.cert.tipo : "Outro", ano:String(x.cert.ano || "").replace(/\D/g, "").slice(0, 4), ch:String(x.cert.ch || "").replace(/\D/g, "").slice(0, 4), obs:"", arquivo:`${f.name} (${x.ref})` } : x.texto ? certDoTexto(x.texto, `${f.name} (${x.ref})`) : { id:novoIdC(), desc:`${titulo}: certificado ${k + 1}`, tipo:(TIPO_POR_TEXTO.find(([re]) => re.test(titulo)) || [0, "Outro"])[1], ano:"", ch:"", obs:"Lido do currículo pronto, conferir", arquivo:`${f.name} (${x.ref})` };
           base.origem = origem; ct.certs.push(base); alocDe(ct, pk, it.key).push({ id:base.id, estado:"pontua" }); });
         // Contagem: o número de certificados do item. Se a nota da ficha for outra (algum não vale), ela fica como pontos.
         const r = (pr[it.key] ||= { ...(it.base || {}) }); const nota = notas.find(n => n.idx === +idx);

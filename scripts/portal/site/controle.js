@@ -164,6 +164,19 @@ async function certsDoArquivo(f){
   if (paginas.length > 1 && paginas.length <= 60 && comCert.length >= Math.max(2, paginas.length * 0.6)) return paginas.map((p, i) => certDoTexto(p, `${f.name} p.${i + 1}`)).filter(x => x.desc);
   return [certDoTexto(texto, f.name)];
 }
+/* Certificados pelo Gemini: um por arquivo, ou um por página quando o arquivo junta vários. Só descreve, não decide o item do edital. */
+const esqCert = () => ({ type:"OBJECT", required:["certificados"], properties:{ certificados:{ type:"ARRAY", items:{ type:"OBJECT", required:["arquivo", "desc", "tipo"], properties:{ arquivo:{ type:"INTEGER" }, pagina:{ type:"INTEGER" }, desc:ESQ_TXT, tipo:{ type:"STRING", enum:TIPOS_CERT }, ano:ESQ_TXT, ch:ESQ_TXT, obs:ESQ_TXT } } } } });
+async function certsComGemini(docs){
+  const out = [];
+  for (let i = 0; i < docs.length; i += 8){ const lote = docs.slice(i, i + 8);
+    const j = await geminiLer(lote, `Cada arquivo anexado traz um ou mais certificados ou declarações de um estudante de medicina, às vezes um por página. Para cada certificado devolva: o número do arquivo na lista, a página (quando o arquivo tiver mais de um certificado), uma descrição curta da atividade e do papel (por exemplo "Monitoria de Anatomia" ou "Ouvinte no Congresso Brasileiro de Cardiologia"), o tipo (um da lista), o ano (o mais recente que aparece) e a carga horária em horas (só o número, vazio se não tiver). Use obs só quando algo estiver ilegível ou faltando. Não invente: o que não der para ler fica vazio. Página que não é certificado (capa, verso, QR code) não entra.`, esqCert(), { rapido:true, aviso:"Lendo os certificados com o Gemini" });
+    const lista = (j.certificados || []).filter(x => x && lote[x.arquivo - 1]);
+    lote.forEach((f, k) => { const deste = lista.filter(x => x.arquivo === k + 1); const varios = deste.length > 1;
+      if (!deste.length) out.push({ ...certDoTexto("", f.name), obs:"O Gemini não achou certificado neste arquivo, conferir" });
+      deste.forEach((x, n) => out.push({ id:novoIdC(), desc:String(x.desc || "").trim().slice(0, 140) || f.name, tipo:TIPOS_CERT.includes(x.tipo) ? x.tipo : "Outro", ano:String(x.ano || "").replace(/\D/g, "").slice(0, 4), ch:String(x.ch || "").replace(/[^\d]/g, "").slice(0, 4), obs:String(x.obs || "").trim(), arquivo:varios ? `${f.name} p.${x.pagina || n + 1}` : f.name })); });
+  }
+  return out;
+}
 async function importarCtrl(input){
   const c = clienteSel(); const fs = [...(input.files || [])]; input.value = ""; if (!c || !fs.length) return;
   const jsons = fs.filter(f => /json$/i.test(f.type) || /\.json$/i.test(f.name)); const docs = fs.filter(f => !jsons.includes(f));
@@ -174,7 +187,10 @@ async function importarCtrl(input){
   if (docs.length){
     const ct = ctrlDe(c); const ja = new Set(ct.certs.map(x => x.arquivo).filter(Boolean)); let n = 0, rep = 0;
     toast(`Lendo ${docs.length} ${docs.length === 1 ? "arquivo" : "arquivos"}`);
-    for (const f of docs){ for (const x of await certsDoArquivo(f)){ if (ja.has(x.arquivo)){ rep++; continue; } ja.add(x.arquivo); ct.certs.push(x); n++; } }
+    let lidos = null;
+    if (await temGemini()){ try { lidos = await certsComGemini(docs); } catch (e) { toast("O Gemini não leu os certificados (" + e.message + "). Usando a leitura do site"); } }
+    if (!lidos){ lidos = []; for (const f of docs) lidos.push(...await certsDoArquivo(f)); }
+    for (const x of lidos){ if (ja.has(x.arquivo)){ rep++; continue; } ja.add(x.arquivo); ct.certs.push(x); n++; }
     salvarCtrl(c); delete S.cont[c.id]; (S.ctAba ||= {})[c.id] = "certs";
     toast(n ? `${n} ${n === 1 ? "certificado adicionado" : "certificados adicionados"}${rep ? `, ${rep} já ${rep === 1 ? "estava" : "estavam"}` : ""}. Confira o tipo e a carga horária` : `Nenhum certificado novo. ${rep === 1 ? "Esse arquivo já estava" : "Esses arquivos já estavam"} na lista`);
   }
