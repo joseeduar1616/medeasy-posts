@@ -109,7 +109,7 @@ async function modelosGeminiPara(env, rapido) {
   const ver = n => parseFloat((n.match(/gemini-(\d+(?:\.\d+)?)/) || [])[1] || "0");
   const doTipo = re => listaGemini.filter(n => re.test(n)).sort((a, b) => ver(b) - ver(a));
   const flash = doTipo(/^gemini-\d+(\.\d+)?-flash$/), pro = doTipo(/^gemini-\d+(\.\d+)?-pro$/), lite = doTipo(/^gemini-\d+(\.\d+)?-flash-lite$/);
-  const ordem = rapido ? [...flash.slice(0, 3), ...pro.slice(0, 2), ...lite.slice(0, 1)] : [...pro.slice(0, 3), ...flash.slice(0, 2)];
+  const ordem = rapido ? [...flash.slice(0, 2), ...lite.slice(0, 1), ...pro.slice(0, 1), ...flash.slice(2, 3)] : [...pro.slice(0, 2), ...flash.slice(0, 2)];
   return [...new Set([rapido ? env.GEMINI_MODEL_RAPIDO : env.GEMINI_MODEL, ...ordem].filter(Boolean))];
 }
 const sobrecarga = (st, msg) => st === 429 || st === 503 || st === 500 || /high demand|overloaded|unavailable|resource.?exhausted|try again later/i.test(msg || "");
@@ -133,31 +133,45 @@ async function geminiEstado(env, nome) {
   return r.ok ? [200, { estado: j.state, erro: j.error && j.error.message }] : [502, { erro: (j.error && j.error.message) || "O Gemini não respondeu" }];
 }
 // Leitura: o pedido, os arquivos já enviados e, se o site mandar, o formato da resposta (esquema JSON)
+// Cada chamada tem tempo máximo, e a leitura toda também: o site espera no máximo uns 100 segundos e, se o Gemini não responder, volta para o leitor dele
+const transitorio = st => st === 502 || st === 504 || st === 520 || st === 522 || st === 524 || st === 0;
 async function geminiGerar(env, corpo) {
   const texto = String(corpo.texto || "").slice(0, 400000); const arquivos = Array.isArray(corpo.arquivos) ? corpo.arquivos.slice(0, 80) : [];
   if (!texto) return [400, { erro: "falta o pedido" }];
+  const rapido = !!corpo.rapido;
   const partes = [{ text: texto }, ...arquivos.filter(a => a && /^https:\/\/generativelanguage\.googleapis\.com\//.test(a.uri)).map(a => ({ file_data: { mime_type: a.tipo || "application/pdf", file_uri: a.uri } }))];
   const config = { temperature: 0.1 }; if (corpo.esquema && typeof corpo.esquema === "object") { config.responseMimeType = "application/json"; config.responseSchema = corpo.esquema; }
-  const pedido = JSON.stringify({ contents: [{ role: "user", parts: partes }], generationConfig: config });
-  let ultimo = ""; const tentados = []; const modelos = await modelosGeminiPara(env, !!corpo.rapido);
+  // Pensar pouco: os modelos novos pensam muito antes de responder e a leitura passava de 2 minutos
+  const ver = m => parseFloat((m.match(/gemini-(\d+(?:\.\d+)?)/) || [])[1] || "0");
+  const pensar = m => ver(m) >= 3 ? { thinkingConfig: { thinkingLevel: "low" } } : /2\.5-flash/.test(m) ? { thinkingConfig: { thinkingBudget: rapido ? 0 : 2048 } } : {};
+  const pedidoPara = (m, semPensar) => JSON.stringify({ contents: [{ role: "user", parts: partes }], generationConfig: { ...config, ...(semPensar ? {} : pensar(m)) } });
+  let ultimo = ""; const tentados = [], log = []; const modelos = await modelosGeminiPara(env, rapido);
   if (!modelos.length) return [502, { erro: "A chave do Gemini não enxerga nenhum modelo. Confira a chave no Google AI Studio" }];
+  const t0 = Date.now(), limite = rapido ? 95000 : 170000, porChamada = rapido ? 45000 : 120000;
   for (const [k, modelo] of modelos.entries()) {
-    tentados.push(modelo);
+    tentados.push(modelo); let semPensar = false;
     for (let tentativa = 0; tentativa < (k === 0 ? 3 : 2); tentativa++) {
-      const r = await fetch(`${GEMINI}/v1beta/models/${modelo}:generateContent`, { method: "POST", headers: { "x-goog-api-key": env.GEMINI_API_KEY, "Content-Type": "application/json" }, body: pedido });
-      const j = await r.json().catch(() => ({})); const msg = (j.error && j.error.message) || "";
+      const resta = limite - (Date.now() - t0); if (resta < 8000) return [504, { erro: ultimo ? ultimo + ". O Gemini demorou demais" : "O Gemini demorou demais", tentados, log }];
+      const ab = new AbortController(); const tm = setTimeout(() => ab.abort(), Math.min(porChamada, resta)); const ti = Date.now();
+      let r, j = {};
+      try { r = await fetch(`${GEMINI}/v1beta/models/${modelo}:generateContent`, { method: "POST", headers: { "x-goog-api-key": env.GEMINI_API_KEY, "Content-Type": "application/json" }, body: pedidoPara(modelo, semPensar), signal: ab.signal }); j = await r.json().catch(() => ({})); }
+      catch (e) { r = { ok: false, status: 0 }; j = { error: { message: ab.signal.aborted ? "sem resposta em " + Math.round((Date.now() - ti) / 1000) + " segundos" : e.message } }; }
+      finally { clearTimeout(tm); }
+      const msg = (j.error && j.error.message) || ""; log.push({ modelo, st: r.status, s: Math.round((Date.now() - ti) / 100) / 10 });
       if (r.ok) {
-        const cand = (j.candidates || [])[0] || {}; const resposta = ((cand.content && cand.content.parts) || []).map(p => p.text || "").join("");
-        if (resposta) return [200, { texto: resposta, modelo }];
+        const cand = (j.candidates || [])[0] || {}; const resposta = ((cand.content && cand.content.parts) || []).filter(p => !p.thought).map(p => p.text || "").join("");
+        if (resposta) return [200, { texto: resposta, modelo, log }];
         ultimo = "O Gemini não devolveu texto" + (cand.finishReason ? " (" + cand.finishReason + ")" : ""); break;
       }
       ultimo = "Gemini: " + (msg || r.status);
+      if (r.status === 400 && /think/i.test(msg) && !semPensar) { semPensar = true; tentativa--; continue; } // modelo que não aceita o ajuste de pensar
       if (modeloFora(r.status, msg)) break; // modelo que a chave não tem: vai para o próximo
-      if (!sobrecarga(r.status, msg)) return [502, { erro: ultimo, modelo, tentados }];
+      if (transitorio(r.status)) break; // demorou ou caiu: tenta o próximo modelo
+      if (!sobrecarga(r.status, msg)) return [502, { erro: ultimo, modelo, tentados, log }];
       await new Promise(ok => setTimeout(ok, 1500 * (tentativa + 1)));
     }
   }
-  return [502, { erro: ultimo || "O Gemini não respondeu", tentados }];
+  return [502, { erro: ultimo || "O Gemini não respondeu", tentados, log }];
 }
 
 async function sincronizar(env) {

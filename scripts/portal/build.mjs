@@ -190,7 +190,7 @@ function juntarProva(provas, pr) {
 /* Coluna "Controle de certificados": JSON colado do site (certificados, alocação por item e pendências) */
 function lerControle(t) {
   if (!t) return null;
-  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], fichas: j.fichas || {}, analises: j.analises || {}, notas: j.notas || {}, orcamento: j.orcamento || null, v: j.v || 1 }; }
+  try { const j = JSON.parse(t); if (!j || !Array.isArray(j.certs)) return null; return { certs: j.certs, aloc: j.aloc || {}, pend: j.pend || [], fichas: j.fichas || {}, analises: j.analises || {}, notas: j.notas || {}, orcamento: j.orcamento || null, pagamentos: Array.isArray(j.pagamentos) ? j.pagamentos : [], v: j.v || 1 }; }
   catch { console.warn("Controle de certificados com JSON inválido, ignorado"); return null; }
 }
 /* Coluna "Certificados por item": uma linha por prova, "PSU-GO: 2=2; 4=3; 9=/0,5" (item=certificados, /pontos digitados) */
@@ -250,6 +250,21 @@ async function montar(linhas) {
     // Análises gravadas pelo site no controle do cliente (análise padrão colada ou PDF importado pelo mentor): entram nas provas e no portal
     const controle = lerControle(g.linhas.map(l => l.controleTexto).find(t => t && t.trim()));
     for (const pr of Object.values((controle && controle.analises) || {})) if (pr && pr.nome && Array.isArray(pr.itens) && pr.itens.length) juntarProva(provas, { ...pr, nome: pr.provaEscolhida || pr.nome });
+    // Pagamentos lançados pelo site (o que o cliente já pagou, parcela por parcela): valem mais que a conta pelo status do Pagamento
+    const pgs = ((controle && controle.pagamentos) || []).filter(x => x && Number(x.valor) > 0);
+    if (pgs.length) {
+      pago = 0; pagamentos.length = 0;
+      for (const s of servicos) {
+        if (s.mensal) continue;
+        const meus = pgs.filter(x => x.servico === s.id);
+        if (meus.length) s.pago = Math.round(meus.reduce((a, x) => a + Number(x.valor), 0) * 100) / 100;
+        pago += s.pago;
+      }
+      // Pagamento sem serviço (ou de uma linha que saiu do Notion) entra no total pago do cliente
+      pago += pgs.filter(x => !servicos.some(s => s.id === x.servico && !s.mensal)).reduce((a, x) => a + Number(x.valor), 0);
+      pago = Math.round(pago * 100) / 100;
+      for (const x of pgs) pagamentos.push({ valor: Number(x.valor), forma: x.forma || "", data: x.data || "" });
+    }
     const id = (await hmac("id:" + g.chave)).slice(0, 8).reduce((a, b) => a + b.toString(16).padStart(2, "0"), "");
     clientes.push({
       id, chave: g.chave, nome: g.nome, whatsapp: g.telefone, codigo: await codigoDe(g.chave),
