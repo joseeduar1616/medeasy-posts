@@ -1,0 +1,108 @@
+{
+"slug": "2026-10-31-1800-sesdf-2026-notas-de-corte",
+"pillar": "notas de corte e concorrência",
+"header": ["NOTA DE CORTE", "SES-DF"],
+"verified_on": "2026-10-31",
+"sources": [
+"https://med.estrategia.com/portal/residencia-medica/notas-de-corte-para-residencia-medica-distrito-federal/ (atualizado 17/04/2026, nota final do último convocado na ampla concorrência, coluna 2026)",
+"https://www.grupomedcof.com.br/blog/notas-de-corte-de-residencia-medica-da-regiao-centro-oeste/ (tabela Nota de corte SES-DF, coluna AC 2026, mesmos valores)",
+"https://med.estrategia.com/portal/noticias/ses-df-divulga-o-resultado-final-do-seletivo-de-residencia-medica-2026/ (2026: prova de 100 pontos, currículo de 10 pontos e possíveis bonificações na nota final)",
+"https://www.medway.com.br/conteudos/residencia-medica-ses-df/ (edital 2027: 100 questões, 1 ponto cada, bônus de 10% para MFC com teto de 100)",
+"Edital Normativo nº 1 RM-1/SES/DF/2027 (FEPECS/IADES), conferido nos posts de 10 e 23/10: sem análise curricular, mínimo 50 pontos, inscrições até 18/11 23h59, taxa R$ 120, prova 12/12",
+"Fora do post: Pediatria HRC (fonte única), coluna PCD, escala máxima exata da nota final de 2026 (bônus não detalhados)"
+],
+"slides": [
+{
+"type": "cover",
+"label": "Residência médica no DF",
+"pill": "SES-DF",
+"title": ["QUANTO PRECISOU", "<span class='y glow'>PARA PASSAR</span>"],
+"body": "Nota final do <b>último convocado</b> na ampla concorrência da SES-DF 2026. E por que em 2027 a conta muda.",
+"bullets": ["Cirurgia, Clínica, GO e Pediatria", "As notas mais altas", "Precisa de currículo?"]
+},
+{
+"type": "rows",
+"label": "SES-DF 2026, ampla concorrência",
+"title": ["<span class='y'>CIRURGIA</span> GERAL"],
+"sub": "Nota final do último convocado",
+"rows": [
+{"name": "Cirurgia Geral", "sub": "HRAN", "value": "105,05"},
+{"name": "Cirurgia Geral", "sub": "Hospital de Base", "value": "103,25"},
+{"name": "Cirurgia Geral", "sub": "HRT (Taguatinga)", "value": "102,40"},
+{"name": "Cirurgia Geral", "sub": "HRG (Gama)", "value": "102,25"},
+{"name": "Cirurgia Geral", "sub": "HRS (Sobradinho)", "value": "102,20"},
+{"name": "Cirurgia Geral", "sub": "HRC (Ceilândia)", "value": "101,70"}
+],
+"note": "Entre o HRAN e a Ceilândia, a diferença foi de 3,35 pontos."
+},
+{
+"type": "rows",
+"label": "SES-DF 2026, ampla concorrência",
+"title": ["<span class='y'>CLÍNICA</span> MÉDICA"],
+"sub": "Nota final do último convocado",
+"rows": [
+{"name": "Clínica Médica", "sub": "Hospital de Base", "value": "102,00"},
+{"name": "Clínica Médica", "sub": "HRAN", "value": "101,20"},
+{"name": "Clínica Médica", "sub": "HRT (Taguatinga)", "value": "100,50"},
+{"name": "Clínica Médica", "sub": "HRS (Sobradinho)", "value": "99,50"},
+{"name": "Clínica Médica", "sub": "HRG (Gama)", "value": "98,29"},
+{"name": "Clínica Médica", "sub": "Residência Integrada", "value": "97,80"}
+],
+"note": "Do Hospital de Base à Residência Integrada, 4,2 pontos de diferença."
+},
+{
+"type": "rows",
+"label": "SES-DF 2026, ampla concorrência",
+"title": ["<span class='y'>GO</span> E PEDIATRIA"],
+"sub": "Nota final do último convocado",
+"rows": [
+{"name": "Ginecologia e Obstetrícia", "sub": "HRAN", "value": "102,75"},
+{"name": "Ginecologia e Obstetrícia", "sub": "HRT (Taguatinga)", "value": "101,25"},
+{"name": "Ginecologia e Obstetrícia", "sub": "HMIB", "value": "101,20"},
+{"name": "Pediatria", "sub": "HMIB", "value": "101,48"},
+{"name": "Pediatria", "sub": "HRT (Taguatinga)", "value": "99,15"},
+{"name": "Pediatria", "sub": "HRS (Sobradinho)", "value": "98,15"}
+],
+"note": "No Paranoá, Pediatria fechou em 97,50 e GO em 99,75."
+},
+{
+"type": "rows",
+"label": "SES-DF 2026, ampla concorrência",
+"title": ["AS NOTAS <span class='y'>MAIS ALTAS</span>"],
+"sub": "Nota final do último convocado",
+"rows": [
+{"name": "Psiquiatria", "sub": "Hospital de Base", "value": "111,38"},
+{"name": "Dermatologia", "sub": "HRAN", "value": "110,00"},
+{"name": "Psiquiatria", "sub": "Residência Integrada", "value": "109,56"},
+{"name": "Oftalmologia", "sub": "Residência Integrada", "value": "107,53"},
+{"name": "Anestesiologia", "sub": "Hospital de Base", "value": "107,25"}
+],
+"note": "Em 2026 a nota final somava prova, currículo e bonificações, por isso passa de 100."
+},
+{
+"type": "cards",
+"label": "Formato da seleção",
+"title": ["PRECISA DE <span class='g'>CURRÍCULO</span>?"],
+"sub": "O que mudou de 2026 para 2027",
+"cards": [
+{"num": "1", "h": "Em 2026, sim", "tag": "10 pontos", "p": "A nota final somava a prova (até <b>100</b>), o currículo (até <b>10</b>) e possíveis bonificações."},
+{"num": "2", "h": "Em 2027, não", "tag": "só a prova", "p": "<b>100 questões</b>, 1 ponto cada, com mínimo de <b>50 pontos</b>. A prova é em <b>12/12</b>."},
+{"num": "3", "h": "Inscrições", "tag": "até 18/11", "p": "Até <b>23h59</b>, só no site do IADES. Taxa de <b>R$ 120</b> e um programa por candidato."}
+],
+"note": "Sem currículo em 2027, as notas de 2026 não servem como comparação direta."
+},
+{
+"type": "cta",
+"title": ["SALVA PARA", "<span class='g glow'>MIRAR A VAGA</span>"],
+"pill": "SALVA",
+"body": "e manda para quem vai<br>prestar SES-DF com você.",
+"note": "Vai prestar provas com análise curricular? Chama a <b>MedEasy</b> no direct.",
+"small": "Fontes: notas de corte da SES-DF 2026 (ampla concorrência) levantadas por Estratégia MED e MedCof (mesmos valores). Composição da nota 2026: Estratégia MED. Edital Normativo nº 1 RM-1/SES/DF/2027 (FEPECS/IADES). Notas de 2026 são referência, não previsão."
+}
+],
+"story": {
+"kicker": "POST NOVO",
+"cta": "SES-DF 2026: <span>quanto precisou para passar</span><br>em cada hospital. Veja no feed da @med_easyy."
+},
+"caption": "🎯 SES-DF: QUANTO PRECISOU PARA PASSAR\n\nNa SES-DF 2026, o último convocado na ampla concorrência de Cirurgia Geral teve nota final 105,05 no HRAN e 103,25 no Hospital de Base. Em Clínica Médica foi 102,00 no Hospital de Base e 101,20 no HRAN. As mais altas foram Psiquiatria no Hospital de Base (111,38) e Dermatologia no HRAN (110,00).\n\nPor que passa de 100? Em 2026 a nota final somava a prova (até 100), o currículo (até 10) e possíveis bonificações. Em 2027 a conta muda: não tem análise curricular, só a prova objetiva de 100 questões, com mínimo de 50 pontos. Por isso as notas de 2026 são referência, não previsão.\n\nAs inscrições vão até 18/11, às 23h59, no site do IADES, com taxa de R$ 120, e a prova é em 12/12. Arrasta para ver GO, Pediatria e as notas de cada hospital. Salva e manda para quem vai prestar com você 📌\n\nQual hospital da SES-DF é o seu alvo? Comenta aqui 👇\n\nPrecisa organizar o currículo para as outras provas? Chama a MedEasy no direct 💚\n\n#sesdf #residenciamedica #brasilia #notadecorte #residencia2027"
+}
