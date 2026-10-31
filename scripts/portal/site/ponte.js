@@ -63,51 +63,55 @@ const FORMAS_PAG = ["Pix", "Cartão", "Boleto", "Dinheiro", "Transferência"];
 const svcsPagaveis = c => (c.servicos || []).filter(s => !s.mensal && s.id);
 const pagsDe = c => { const ct = S.ctrl?.[c.id] || c.controle; return ct && Array.isArray(ct.pagamentos) ? ct.pagamentos.filter(x => x && num(x.valor) > 0) : []; };
 const somaPags = l => r2(l.reduce((a, x) => a + num(x.valor), 0));
-/* Total pago com os pagamentos lançados (null quando não há nenhum). Serviço sem lançamento fica com a conta pelo status. */
-function pagoLancado(c){
-  const p = pagsDe(c); if (!p.length) return null; const svs = c.servicos || []; let t = 0;
-  for (const s of svs){ if (s.mensal) continue; const m = p.filter(x => x.servico === s.id); t += m.length ? somaPags(m) : num(s.pago); }
-  return r2(t + somaPags(p.filter(x => !svs.some(s => s.id === x.servico && !s.mensal))));
+/* Divide os pagamentos entre os serviços: o que tem serviço marcado vai para ele, o do cliente todo preenche os serviços em ordem */
+function dividirPags(svs, pags){
+  const m = {}; svs.forEach(s => { m[s.id] = 0; });
+  for (const p of pags) if (p.servico && p.servico in m) m[p.servico] += num(p.valor);
+  let solto = pags.filter(p => !(p.servico && p.servico in m)).reduce((a, p) => a + num(p.valor), 0);
+  for (const s of svs){ if (solto <= 0.009) break; const v = Math.min(Math.max(0, num(s.total) - m[s.id]), solto); m[s.id] += v; solto -= v; }
+  if (solto > 0.009 && svs.length) m[svs[svs.length - 1].id] += solto;
+  for (const k in m) m[k] = r2(m[k]); return m;
 }
+/* Total pago: com algum pagamento lançado, é só a soma do que foi lançado (null quando não há nenhum, e aí vale a conta pelo status) */
+function pagoLancado(c){ const p = pagsDe(c); return p.length ? somaPags(p) : null; }
 function pagamentoCard(c){
   const f = fin(c); const lst = pagsDe(c).slice().sort((a, b) => String(b.data || "").localeCompare(String(a.data || ""))); const svs = svcsPagaveis(c);
   const nomeSvc = id => (svs.find(s => s.id === id) || {}).nome || "";
-  return `<section class="card"><div class="card-h"><h2>Pagamento do cliente</h2></div><div class="row between small"><span>Total</span><b class="num">${brl(f.total)}</b></div><div class="row between small"><span>Pago</span><b class="num neon">${brl(f.pago)}</b></div><div class="row between small"><span>Saldo</span><b class="num gold">${brl(f.saldo)}</b></div>
+  return `<section class="card"><div class="card-h"><h2>Pagamento do cliente</h2></div><div class="row between small"><span>Total</span><b class="num">${brl(f.total)}</b></div><div class="row between small"><span>Pago${lst.length ? "" : ` <span class="xs muted">(conta pelo status do Notion)</span>`}</span><b class="num neon">${brl(f.pago)}</b></div><div class="row between small"><span>Saldo</span><b class="num gold">${brl(f.saldo)}</b></div>
    ${lst.length ? `<div class="list" style="margin-top:10px">${lst.map(p => `<div class="li"><div class="grow"><div class="t">${brl(p.valor)}${p.forma ? " · " + esc(p.forma) : ""}</div><div class="xs muted">${p.data ? dBR(p.data) : "sem data"}${svs.length > 1 && nomeSvc(p.servico) ? " · " + esc(nomeSvc(p.servico)) : ""}</div></div><button class="btn sm ghost" data-a="pagTirar" data-id="${esc(p.id)}">Tirar</button></div>`).join("")}</div>` : ""}
-   ${svs.length ? `<div class="stack" style="margin-top:10px;gap:6px"><div class="row" style="gap:6px"><input class="in" id="pagValor" inputmode="decimal" placeholder="Valor pago${f.saldo > 0.009 ? " (falta " + brl(f.saldo) + ")" : ""}" style="flex:1;min-width:120px"><input class="in" id="pagData" type="date" value="${isoLocal()}" style="width:auto"></div>
-    <div class="row" style="gap:6px">${svs.length > 1 ? `<select class="in" id="pagSvc" style="flex:1;min-width:120px">${svs.map(s => `<option value="${esc(s.id)}">${esc(s.nome)}${s.total ? " · " + brl(s.total) : ""}</option>`).join("")}</select>` : ""}<select class="in" id="pagForma" style="width:auto">${["", ...FORMAS_PAG].map(x => `<option value="${x}">${x || "Forma"}</option>`).join("")}</select><button class="btn sm pri" data-a="pagLancar">Lançar pagamento</button></div>
-    <p class="xs muted" style="margin:0">${lst.length ? "" : "Lance também o que o cliente já tinha pago antes. "}O Pagamento no Notion muda sozinho: 1° parcela quando entra o primeiro valor e Pagamento finalizado quando chega no total.</p></div>` : ""}</section>`;
+   ${svs.length ? `<div class="stack" style="margin-top:10px;gap:6px"><div class="row" style="gap:6px"><input class="in" id="pagValor" inputmode="decimal" placeholder="Valor pago" style="flex:1;min-width:120px"><input class="in" id="pagData" type="date" value="${isoLocal()}" style="width:auto"></div>
+    <div class="row" style="gap:6px">${svs.length > 1 ? `<select class="in" id="pagSvc" style="flex:1;min-width:120px"><option value="">Cliente todo</option>${svs.map(s => `<option value="${esc(s.id)}">Só ${esc(s.nome)}${s.total ? " · " + brl(s.total) : ""}</option>`).join("")}</select>` : ""}<select class="in" id="pagForma" style="width:auto">${["", ...FORMAS_PAG].map(x => `<option value="${x}">${x || "Forma"}</option>`).join("")}</select><button class="btn sm pri" data-a="pagLancar">Lançar pagamento</button></div>
+    <p class="xs muted" style="margin:0">${lst.length ? "O Pago é a soma dos valores lançados." : "Depois do primeiro lançamento, o Pago passa a ser só a soma do que for lançado. Lance também o que o cliente já tinha pago antes."} O Pagamento no Notion muda sozinho: 1° parcela quando entra o primeiro valor e Pagamento finalizado quando chega no total.</p></div>` : ""}</section>`;
 }
 async function lancarPagamento(){
   const c = clienteSel(); if (!c) return; const svs = svcsPagaveis(c); if (!svs.length) return;
   const v = r2(num(document.getElementById("pagValor")?.value)); if (!(v > 0)){ toast("Digite o valor que o cliente pagou"); return; }
-  const sid = document.getElementById("pagSvc")?.value || svs[0].id;
+  const sid = svs.length > 1 ? document.getElementById("pagSvc")?.value || "" : svs[0].id;
   const ct = ctrlDe(c); (ct.pagamentos ||= []).push({ id:"pg" + Date.now().toString(36), valor:v, data:document.getElementById("pagData")?.value || isoLocal(), servico:sid, forma:document.getElementById("pagForma")?.value || "" });
-  await gravarPagamentos(c, sid, `Pagamento de ${brl(v)} lançado`);
+  await gravarPagamentos(c, `Pagamento de ${brl(v)} lançado`);
 }
 async function tirarPagamento(id){
   const c = clienteSel(); if (!c) return; const ct = ctrlDe(c); const p = (ct.pagamentos || []).find(x => x.id === id); if (!p) return;
   if (!confirm(`Tirar o pagamento de ${brl(p.valor)}${p.data ? " de " + dBR(p.data) : ""}?`)) return;
-  ct.pagamentos = ct.pagamentos.filter(x => x.id !== id); await gravarPagamentos(c, p.servico, "Pagamento tirado");
+  ct.pagamentos = ct.pagamentos.filter(x => x.id !== id); await gravarPagamentos(c, "Pagamento tirado");
 }
-async function gravarPagamentos(c, sid, msg){
-  const ct = ctrlDe(c); salvarCtrl(c);
-  // Novo status do Pagamento da linha, pela soma do que foi lançado nela
-  const s = svcsPagaveis(c).find(x => x.id === sid); let st = null;
-  if (s){ const soma = somaPags((ct.pagamentos || []).filter(x => x.servico === sid)); const tot = num(s.total);
-    st = soma <= 0 ? "Não pago" : tot > 0 && soma >= tot - 0.009 ? "Pagamento finalizado" : "1° parcela";
-    const antes = semAcento(s.pagamento || "");
-    if (antes.startsWith("pagamento finalizado") && st !== "Pagamento finalizado" && !confirm(`No Notion esse serviço está como Pagamento finalizado, mas o que foi lançado soma ${brl(soma)} de ${brl(tot)}. Mudar para ${st}?`)) st = null;
-    if (st && semAcento(st) === antes) st = null;
-    if (st){ s.pagamento = st; s.etapa = etapaDeJS(s.status, st); const r = (c.repasses || []).find(r => r.servico === sid && r.papel === "Mentor"); if (r) r.liberado = s.etapa === 6 && st === "Pagamento finalizado"; }
-    s.pago = soma; }
+async function gravarPagamentos(c, msg){
+  const ct = ctrlDe(c); salvarCtrl(c); const svs = svcsPagaveis(c);
+  // Novo status do Pagamento de cada linha, pelo que foi lançado nela
+  const div = dividirPags(svs, (ct.pagamentos || []).filter(x => x && num(x.valor) > 0));
+  let mud = svs.map(s => { const soma = div[s.id] || 0, tot = num(s.total);
+    return { s, soma, tot, st:soma <= 0 ? "Não pago" : tot > 0 && soma >= tot - 0.009 ? "Pagamento finalizado" : "1° parcela" }; }).filter(x => semAcento(x.st) !== semAcento(x.s.pagamento || ""));
+  const baixa = mud.filter(x => semAcento(x.s.pagamento || "").startsWith("pagamento finalizado"));
+  if (baixa.length && !confirm(`No Notion ${baixa.length === 1 ? "esse serviço está" : "esses serviços estão"} como Pagamento finalizado, mas o que foi lançado soma ${baixa.map(x => `${brl(x.soma)} de ${brl(x.tot)}`).join(" e ")}. Mudar para ${baixa[0].st}?`)) mud = mud.filter(x => !baixa.includes(x));
+  for (const s of svs) s.pago = div[s.id] || 0;
+  for (const { s, st } of mud){ s.pagamento = st; s.etapa = etapaDeJS(s.status, st); const r = (c.repasses || []).find(r => r.servico === s.id && r.papel === "Mentor"); if (r) r.liberado = s.etapa === 6 && st === "Pagamento finalizado"; }
   render();
   const pag = typeof temPonte === "function" && temPonte() ? paginaDoCliente(c) : "";
   if (!pag){ toast("Salvo neste navegador. Sem a ponte, use Copiar controle para o Notion"); return; }
-  const txt = textoCtrl(ct);
+  const txt = textoCtrl(ct); const daPag = mud.find(x => x.s.id === pag);
   try {
-    if (st && s.id !== pag) await salvarNotion(s.id, { "Pagamento":st }, "Pagamento atualizado no Notion");
-    await salvarNotion(pag, { "Controle de certificados":txt, ...(st && s.id === pag ? { "Pagamento":st } : {}) }, msg + (st ? ". Pagamento no Notion: " + st : ""));
+    for (const x of mud) if (x !== daPag) await salvarNotion(x.s.id, { "Pagamento":x.st }, "Pagamento atualizado no Notion");
+    await salvarNotion(pag, { "Controle de certificados":txt, ...(daPag ? { "Pagamento":daPag.st } : {}) }, msg + (mud.length === 1 ? ". Pagamento no Notion: " + mud[0].st : mud.length ? ". Pagamento atualizado no Notion" : ""));
     ct.notion = txt; c.controle = JSON.parse(txt); salvarCtrl(c);
   } catch (e) { toast("Ficou neste navegador, mas não gravou no Notion: " + e.message); }
 }
