@@ -1,0 +1,21 @@
+name: Portal MedEasy - conferir mentor pago
+
+# Roda à mão. Mostra as colunas de pagamento do Notion e quantos repasses pagos chegam ao site, sem nome de cliente.
+on:
+  workflow_dispatch:
+
+jobs:
+  conferir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Conferir
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB: ${{ secrets.NOTION_DB }}
+          PORTAL_SENHA: ${{ secrets.PORTAL_SENHA }}
+        run: node scripts/portal/teste/mentor-pago.mjs
