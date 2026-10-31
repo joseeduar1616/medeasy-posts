@@ -56,6 +56,108 @@ async function salvarServico(id){
 }
 function etapaDeJS(status, pagamento){ const s = semAcento(status); if (s.startsWith("concluido")) return 6; if (s.startsWith("em andamento")) return 3; if (s.startsWith("aguardando")) return 0; return !pagamento || semAcento(pagamento).startsWith("nao pago") ? 2 : 1; }
 function pagoDeJS(total, pagamento){ const p = semAcento(pagamento); if (p.startsWith("pagamento finalizado")) return total; if (p.startsWith("1")) return Math.round(total * 50) / 100; return 0; }
+/* ---------- Pagamentos do cliente: o que ele já pagou, parcela por parcela ----------
+   Ficam no controle do cliente (campo pagamentos, vai para o Notion em "Controle de certificados"). O build usa esses valores
+   no lugar da conta pelo status do Pagamento. Ao lançar, o Pagamento da linha muda sozinho: 1° parcela ou Pagamento finalizado. */
+const FORMAS_PAG = ["Pix", "Cartão", "Boleto", "Dinheiro", "Transferência"];
+const svcsPagaveis = c => (c.servicos || []).filter(s => !s.mensal && s.id);
+const pagsDe = c => { const ct = S.ctrl?.[c.id] || c.controle; return ct && Array.isArray(ct.pagamentos) ? ct.pagamentos.filter(x => x && num(x.valor) > 0) : []; };
+const somaPags = l => r2(l.reduce((a, x) => a + num(x.valor), 0));
+/* Total pago com os pagamentos lançados (null quando não há nenhum). Serviço sem lançamento fica com a conta pelo status. */
+function pagoLancado(c){
+  const p = pagsDe(c); if (!p.length) return null; const svs = c.servicos || []; let t = 0;
+  for (const s of svs){ if (s.mensal) continue; const m = p.filter(x => x.servico === s.id); t += m.length ? somaPags(m) : num(s.pago); }
+  return r2(t + somaPags(p.filter(x => !svs.some(s => s.id === x.servico && !s.mensal))));
+}
+function pagamentoCard(c){
+  const f = fin(c); const lst = pagsDe(c).slice().sort((a, b) => String(b.data || "").localeCompare(String(a.data || ""))); const svs = svcsPagaveis(c);
+  const nomeSvc = id => (svs.find(s => s.id === id) || {}).nome || "";
+  return `<section class="card"><div class="card-h"><h2>Pagamento do cliente</h2></div><div class="row between small"><span>Total</span><b class="num">${brl(f.total)}</b></div><div class="row between small"><span>Pago</span><b class="num neon">${brl(f.pago)}</b></div><div class="row between small"><span>Saldo</span><b class="num gold">${brl(f.saldo)}</b></div>
+   ${lst.length ? `<div class="list" style="margin-top:10px">${lst.map(p => `<div class="li"><div class="grow"><div class="t">${brl(p.valor)}${p.forma ? " · " + esc(p.forma) : ""}</div><div class="xs muted">${p.data ? dBR(p.data) : "sem data"}${svs.length > 1 && nomeSvc(p.servico) ? " · " + esc(nomeSvc(p.servico)) : ""}</div></div><button class="btn sm ghost" data-a="pagTirar" data-id="${esc(p.id)}">Tirar</button></div>`).join("")}</div>` : ""}
+   ${svs.length ? `<div class="stack" style="margin-top:10px;gap:6px"><div class="row" style="gap:6px"><input class="in" id="pagValor" inputmode="decimal" placeholder="Valor pago${f.saldo > 0.009 ? " (falta " + brl(f.saldo) + ")" : ""}" style="flex:1;min-width:120px"><input class="in" id="pagData" type="date" value="${isoLocal()}" style="width:auto"></div>
+    <div class="row" style="gap:6px">${svs.length > 1 ? `<select class="in" id="pagSvc" style="flex:1;min-width:120px">${svs.map(s => `<option value="${esc(s.id)}">${esc(s.nome)}${s.total ? " · " + brl(s.total) : ""}</option>`).join("")}</select>` : ""}<select class="in" id="pagForma" style="width:auto">${["", ...FORMAS_PAG].map(x => `<option value="${x}">${x || "Forma"}</option>`).join("")}</select><button class="btn sm pri" data-a="pagLancar">Lançar pagamento</button></div>
+    <p class="xs muted" style="margin:0">${lst.length ? "" : "Lance também o que o cliente já tinha pago antes. "}O Pagamento no Notion muda sozinho: 1° parcela quando entra o primeiro valor e Pagamento finalizado quando chega no total.</p></div>` : ""}</section>`;
+}
+async function lancarPagamento(){
+  const c = clienteSel(); if (!c) return; const svs = svcsPagaveis(c); if (!svs.length) return;
+  const v = r2(num(document.getElementById("pagValor")?.value)); if (!(v > 0)){ toast("Digite o valor que o cliente pagou"); return; }
+  const sid = document.getElementById("pagSvc")?.value || svs[0].id;
+  const ct = ctrlDe(c); (ct.pagamentos ||= []).push({ id:"pg" + Date.now().toString(36), valor:v, data:document.getElementById("pagData")?.value || isoLocal(), servico:sid, forma:document.getElementById("pagForma")?.value || "" });
+  await gravarPagamentos(c, sid, `Pagamento de ${brl(v)} lançado`);
+}
+async function tirarPagamento(id){
+  const c = clienteSel(); if (!c) return; const ct = ctrlDe(c); const p = (ct.pagamentos || []).find(x => x.id === id); if (!p) return;
+  if (!confirm(`Tirar o pagamento de ${brl(p.valor)}${p.data ? " de " + dBR(p.data) : ""}?`)) return;
+  ct.pagamentos = ct.pagamentos.filter(x => x.id !== id); await gravarPagamentos(c, p.servico, "Pagamento tirado");
+}
+async function gravarPagamentos(c, sid, msg){
+  const ct = ctrlDe(c); salvarCtrl(c);
+  // Novo status do Pagamento da linha, pela soma do que foi lançado nela
+  const s = svcsPagaveis(c).find(x => x.id === sid); let st = null;
+  if (s){ const soma = somaPags((ct.pagamentos || []).filter(x => x.servico === sid)); const tot = num(s.total);
+    st = soma <= 0 ? "Não pago" : tot > 0 && soma >= tot - 0.009 ? "Pagamento finalizado" : "1° parcela";
+    const antes = semAcento(s.pagamento || "");
+    if (antes.startsWith("pagamento finalizado") && st !== "Pagamento finalizado" && !confirm(`No Notion esse serviço está como Pagamento finalizado, mas o que foi lançado soma ${brl(soma)} de ${brl(tot)}. Mudar para ${st}?`)) st = null;
+    if (st && semAcento(st) === antes) st = null;
+    if (st){ s.pagamento = st; s.etapa = etapaDeJS(s.status, st); const r = (c.repasses || []).find(r => r.servico === sid && r.papel === "Mentor"); if (r) r.liberado = s.etapa === 6 && st === "Pagamento finalizado"; }
+    s.pago = soma; }
+  render();
+  const pag = typeof temPonte === "function" && temPonte() ? paginaDoCliente(c) : "";
+  if (!pag){ toast("Salvo neste navegador. Sem a ponte, use Copiar controle para o Notion"); return; }
+  const txt = textoCtrl(ct);
+  try {
+    if (st && s.id !== pag) await salvarNotion(s.id, { "Pagamento":st }, "Pagamento atualizado no Notion");
+    await salvarNotion(pag, { "Controle de certificados":txt, ...(st && s.id === pag ? { "Pagamento":st } : {}) }, msg + (st ? ". Pagamento no Notion: " + st : ""));
+    ct.notion = txt; c.controle = JSON.parse(txt); salvarCtrl(c);
+  } catch (e) { toast("Ficou neste navegador, mas não gravou no Notion: " + e.message); }
+}
+/* ---------- Novo serviço para um cliente que já existe (mentoria depois do Vitae, mês novo da mentoria, outra prova) ----------
+   Cria uma linha no Controle cliente com o mesmo nome e telefone, então o cliente volta para Em andamento e o portal mostra o serviço. */
+const NOVOS_SVC = [["mentoria", "Mentoria mensal"], ["mentoriaInd", "Mentoria individual"], ["vitae", "Currículo Vitae"], ["analise", "Análise curricular"], ["lattes", "Currículo Lattes"], ["certificados", "Certificados"]];
+function valorNovoSvc(tipo, reunioes){ return tipo === "mentoria" ? PRECO.mentoria.mensal : tipo === "mentoriaInd" ? PRECO.mentoria.reuniao * Math.max(1, reunioes || 1) : ""; }
+function novoServicoForm(c){
+  if (!S.novoSvc || S.novoSvc.id !== c.id) return "";
+  const n = S.novoSvc; const provas = (c.provas || []).map(p => p.nome);
+  return `<div class="svc" id="novoSvc" style="margin-top:8px"><div class="stack" style="gap:8px">
+    <div class="row" style="gap:6px"><select class="in" data-ns="tipo" style="flex:1">${NOVOS_SVC.map(([k, t]) => `<option value="${k}" ${n.tipo === k ? "selected" : ""}>${t}</option>`).join("")}</select>${n.tipo === "mentoriaInd" ? `<input class="in" data-ns="reunioes" type="number" min="1" value="${n.reunioes || 1}" style="width:80px" title="Reuniões">` : ""}</div>
+    ${provas.length ? `<div class="row" style="gap:10px;flex-wrap:wrap">${provas.map(p => `<label class="chk"><input type="checkbox" data-nsp="${esc(p)}" ${!n.fora?.includes(p) ? "checked" : ""}><span>${esc(p)}</span></label>`).join("")}</div>` : ""}
+    <div class="row" style="gap:6px"><input class="in" data-ns="valor" inputmode="decimal" placeholder="Valor total" value="${n.valor ?? ""}" style="flex:1;min-width:110px"><select class="in" data-ns="status" style="width:auto">${STATUS_NOTION.map(o => `<option ${(n.status || "Em andamento") === o ? "selected" : ""}>${o}</option>`).join("")}</select></div>
+    ${n.tipo === "mentoria" && provas.length - (n.fora || []).length > 2 ? `<p class="xs gold" style="margin:0">Com mais de 2 provas a mentoria mensal não tem valor definido. Combine com o cliente e ajuste o valor.</p>` : ""}
+    <div class="row" style="gap:6px"><button class="btn sm pri" data-a="novoSvcCriar">Criar no Notion</button><button class="btn sm ghost" data-a="novoSvcFechar">Cancelar</button></div>
+    <p class="xs muted" style="margin:0">Cria uma linha nova no Notion com o mesmo nome e telefone, Pagamento Não pago. O cliente volta para Em andamento e o portal dele mostra o serviço.</p></div></div>`;
+}
+function novoSvcLer(){
+  const n = S.novoSvc; if (!n) return; const box = document.getElementById("novoSvc"); if (!box) return;
+  box.querySelectorAll("[data-ns]").forEach(el => { n[el.dataset.ns] = el.value; });
+  n.fora = [...box.querySelectorAll("[data-nsp]")].filter(el => !el.checked).map(el => el.dataset.nsp);
+}
+function novoSvcMudou(el){
+  const n = S.novoSvc; if (!n) return; const tipoAntes = n.tipo, reuAntes = n.reunioes; novoSvcLer();
+  if (n.tipo !== tipoAntes || n.reunioes !== reuAntes) n.valor = valorNovoSvc(n.tipo, +n.reunioes);
+  if (el.dataset.ns === "tipo" || el.dataset.ns === "reunioes" || el.dataset.nsp) render();
+}
+async function criarNovoServico(){
+  const c = clienteSel(); const n = S.novoSvc; if (!c || !n) return; novoSvcLer();
+  if (S.criandoSvc) return;
+  const provas = (c.provas || []).map(p => p.nome).filter(p => !(n.fora || []).includes(p));
+  const valor = String(n.valor ?? "").trim() === "" ? null : r2(num(n.valor));
+  const mentor = (S.mentor && !S.admin ? S.mentor.nome : "") || c.mentor || S.mentor?.nome || "";
+  const props = { "Cliente":c.nome, "Telefone":c.whatsapp || "", "Tipo de serviço":[SERVICO_NOTION[n.tipo], ...provas].filter(Boolean), "Mentor":mentor, "Status":n.status || "Em andamento", "Pagamento":"Não pago", "Valor total":valor, "Data de início ":isoLocal() };
+  S.criandoSvc = true; const bt = document.querySelector("[data-a=novoSvcCriar]"); if (bt){ bt.disabled = true; bt.textContent = "Criando..."; }
+  try {
+    let j = await pontePedido("/cliente", { props });
+    if (j.jaExistia){
+      if (!confirm("Esse serviço já foi criado para esse cliente nos últimos 2 dias. Criar outra linha mesmo assim?")){ toast("Nada foi criado. A linha que já existe aparece aqui na próxima sincronização"); S.novoSvc = null; return; }
+      j = await pontePedido("/cliente", { props, outraLinha:true });
+    }
+    const nome = NOVOS_SVC.find(x => x[0] === n.tipo)[1];
+    // Aparece na hora, sem esperar a sincronização
+    (c.servicos ||= []).push({ id:String(j.id || "").replace(/-/g, ""), notion:j.url || "", nome:nome + (provas.length ? " · " + provas.join(", ") : ""), status:props.Status, pagamento:"Não pago", total:valor || 0, pago:0, mensal:n.tipo === "mentoria", etapa:etapaDeJS(props.Status, "Não pago"), inicio:isoLocal(), mentor });
+    if (c.financeiro && n.tipo !== "mentoria") c.financeiro.total = num(c.financeiro.total) + (valor || 0);
+    S.novoSvc = null; toast("Serviço criado no Notion. O site atualiza em 1 ou 2 minutos");
+  } catch (e) { toast("Não criou: " + e.message); }
+  finally { S.criandoSvc = false; render(); }
+}
 /* ---------- Gemini pela ponte: lê orçamento, certificados, currículo e edital, e faz a nota ----------
    O site sobe os arquivos para a ponte, e ela fala com o Gemini. A chave fica só na ponte. Sem a chave, cada leitura volta para o leitor do site. */
 let geminiOk = null;
@@ -81,7 +183,9 @@ async function geminiLer(arquivos, pedido, esquema, { rapido = false, aviso = "L
   for (const a of sub){ let n = 0; while (a.estado === "PROCESSING" && n++ < 45){ await new Promise(r => setTimeout(r, 2000)); a.estado = (await pontePedido("/gemini/estado", { nome:a.nome })).estado; }
     if (a.estado === "FAILED") throw new Error("o Gemini não conseguiu abrir um dos arquivos"); }
   toast(`${aviso}. Pode levar até 1 minuto`);
-  const j = await pontePedido("/gemini/gerar", { texto, arquivos:sub.map(a => ({ uri:a.uri, tipo:a.tipo })), esquema, rapido });
+  // Aviso a cada 10 segundos enquanto espera, para ninguém achar que travou
+  const t0 = Date.now(); const tick = setInterval(() => toast(`${aviso}: ${Math.round((Date.now() - t0) / 1000)} segundos`), 10000);
+  let j; try { j = await pontePedido("/gemini/gerar", { texto, arquivos:sub.map(a => ({ uri:a.uri, tipo:a.tipo })), esquema, rapido }); } finally { clearInterval(tick); }
   if (!esquema) return j.texto;
   try { return JSON.parse(String(j.texto).replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, "")); } catch { throw new Error("o Gemini respondeu fora do formato"); }
 }
