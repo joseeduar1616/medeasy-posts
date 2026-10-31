@@ -56,6 +56,8 @@ const brl = n => "R$ " + (Number(n) || 0).toLocaleString("pt-BR", { minimumFract
 const d1 = n => (Number(n) || 0).toLocaleString("pt-BR", { minimumFractionDigits:1, maximumFractionDigits:2 });
 function isoLocal(d = new Date()){ const z = d.getTimezoneOffset(); return new Date(d - z * 60000).toISOString().slice(0, 10); }
 const hoje = () => isoLocal();
+// Formato das respostas do Gemini (esquema JSON), usado nas leituras de arquivo
+const ESQ_TXT = { type:"STRING" }, ESQ_NUM = { type:"NUMBER" };
 const dBR = iso => iso ? String(iso).slice(0, 10).split("-").reverse().join("/") : "";
 function dias(iso){ if (!iso) return null; const a = new Date(hoje() + "T00:00"), b = new Date(String(iso).slice(0,10) + "T00:00"); const r = Math.round((b - a) / 86400000); return isFinite(r) ? r : null; }
 const mesNome = i => ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][i];
@@ -113,6 +115,8 @@ async function entrarMentor(nome, senha){
     if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
     if (S.importarCerts){ const k = S.importarCerts; S.importarCerts = null; importarCertsDoLink(k); }
     if (typeof pedirSincronizacao === "function") pedirSincronizacao();
+    // Sem a chave do Gemini na ponte, o botão "Fazer com o Gemini" some e as leituras usam o leitor do site
+    if (typeof temGemini === "function") temGemini().then(ok => { if (!ok) render(); });
     if (typeof juntarTriagemNotion === "function") juntarTriagemNotion();
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
@@ -344,7 +348,7 @@ Object.assign(A, A_CTRL, A_ORC, A_CERTCLI, A_FICHA, A_FB, {
   usarValorNotion: async () => { const c = clienteSel(); const e = estimarJS(c); const id = paginaDoCliente(c); if (!e || !id || !confirm(`Gravar ${brl(e.total)} como Valor total no Notion?`)) return;
     try { await salvarNotion(id, { "Valor total":e.total }, "Valor gravado no Notion"); const s = (c.servicos || []).find(x => x.id === id); if (s){ s.total = e.total; c.financeiro.total = (c.servicos || []).reduce((a, x) => a + (x.total || 0), 0); } render(); } catch (er) { toast("Não gravou: " + er.message); } },
 });
-app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.ci === "cheio") { ciInput(e.target); return; } if (e.target.dataset.orcpdf) { importarOrcPdf(e.target); return; } if (e.target.dataset.orcenv) { importarOrcEnviado(e.target); return; } if (e.target.dataset.orcesc) { const c = clienteSel(); const ct = ctrlDe(c); if (ct.orcamento){ ct.orcamento.escolhida = e.target.dataset.orcesc; gravarOrcEnviado(c, "Opção fechada salva no Notion"); } return; } if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
+app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.ci === "cheio") { ciInput(e.target); return; } if (e.target.dataset.orcpdf) { importarOrcPdf(e.target); return; } if (e.target.dataset.notagem) { notaGemini(e.target); return; } if (e.target.dataset.orcenv) { importarOrcEnviado(e.target); return; } if (e.target.dataset.orcesc) { const c = clienteSel(); const ct = ctrlDe(c); if (ct.orcamento){ ct.orcamento.escolhida = e.target.dataset.orcesc; gravarOrcEnviado(c, "Opção fechada salva no Notion"); } return; } if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
 app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.fb) fbInput(e.target); else if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.nota) notaInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); else if (e.target.dataset.fe) feInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 

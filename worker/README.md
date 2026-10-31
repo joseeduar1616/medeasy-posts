@@ -40,3 +40,12 @@ Nas colunas de opção (Mentor, Tipo de serviço, Provas), a ponte usa a opção
 Todo pedido leva `Authorization: Bearer <senha da equipe>`. O site manda isso sozinho com a senha que o mentor usou para entrar.
 
 Administrador: José e Eduardo (variável `ADMINS`, padrão "jose,eduardo"). O site manda o nome de quem entrou no cabeçalho `X-Quem` e a ponte libera as colunas de dinheiro e a publicação de depoimentos para eles. O antigo `PORTAL_SENHA_ADMIN` com o cabeçalho `X-Admin` ainda funciona, mas o site não usa mais.
+
+
+## Gemini
+
+A ponte lê arquivos com o Gemini (orçamento, certificados, currículo, edital e a nota). Para ligar:
+1. Crie a chave em https://aistudio.google.com/apikey (de preferência num projeto com cobrança ativa, porque no plano grátis o Google pode usar o conteúdo enviado).
+2. No GitHub, em Settings, Secrets and variables, Actions, crie o secret `GEMINI_API_KEY` com a chave.
+3. Rode o workflow "Portal MedEasy - ponte (Cloudflare Worker)". Ele publica a ponte e guarda a chave no Worker.
+4. Confira em https://medeasy-ponte.medeasy.workers.dev/saude: tem que aparecer `"gemini":true`.

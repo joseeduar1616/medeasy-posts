@@ -11,6 +11,9 @@
 //   CLIENTES_DB         id da base "Controle cliente" (recebe o cliente que fechou)
 //   FEEDBACK_DB         id da base "Feedback MedEasy" (opcional: sem ele, a ponte acha pelo nome ou cria a base ao lado da Triagem)
 //   SITE                endereço do site, para conferir o código do cliente (opcional: usa a primeira ORIGEM)
+//   GEMINI_API_KEY      chave da API do Gemini (secret). Lê orçamento, certificados, currículo, edital e faz a nota.
+//   GEMINI_MODEL        modelo para as leituras longas (opcional: sem ele, usa o Gemini Pro mais novo que a chave enxerga)
+//   GEMINI_MODEL_RAPIDO modelo para as leituras curtas (opcional: sem ele, usa o Gemini Flash mais novo)
 
 // Colunas que o site pode gravar, com o tipo no Notion. Qualquer outra é recusada.
 const COLUNAS = {
@@ -67,7 +70,7 @@ function cors(env, req) {
   const origem = req.headers.get("Origin") || "";
   const lista = String(env.ORIGEM || "").split(",").map(s => s.trim()).filter(Boolean);
   const ok = !lista.length || lista.includes(origem) || /^http:\/\/localhost(:\d+)?$/.test(origem);
-  return { "Access-Control-Allow-Origin": ok ? origem || "*" : "null", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Admin,X-Quem", "Access-Control-Max-Age": "86400", "Vary": "Origin" };
+  return { "Access-Control-Allow-Origin": ok ? origem || "*" : "null", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Admin,X-Quem,X-Nome", "Access-Control-Max-Age": "86400", "Vary": "Origin" };
 }
 const resposta = (obj, status, extra) => new Response(JSON.stringify(obj), { status: status || 200, headers: { "Content-Type": "application/json; charset=utf-8", ...(extra || {}) } });
 
@@ -91,6 +94,54 @@ async function clienteRecente(env, dbc, props) {
       return n === nome && String(pp.Telefone?.phone_number || "").replace(/\D/g, "").slice(-8) === tel && (pp["Tipo de serviço"]?.multi_select || []).map(o => semAcento(o.name)).sort().join(",") === tipos; }) || null;
   } catch { return null; }
 }
+// Gemini: o site sobe cada arquivo (File API) e depois pede a leitura com as referências. A chave nunca sai da ponte.
+const GEMINI = "https://generativelanguage.googleapis.com";
+const modelosGemini = {};
+async function escolherModelo(env, rapido) {
+  const fixo = rapido ? env.GEMINI_MODEL_RAPIDO : env.GEMINI_MODEL; if (fixo) return fixo;
+  const tipo = rapido ? "flash" : "pro"; if (modelosGemini[tipo]) return modelosGemini[tipo];
+  let escolhido = rapido ? "gemini-2.5-flash" : "gemini-2.5-pro";
+  try {
+    const r = await fetch(`${GEMINI}/v1beta/models?pageSize=200`, { headers: { "x-goog-api-key": env.GEMINI_API_KEY } }); const j = await r.json();
+    const ver = n => parseFloat((n.match(/gemini-(\d+(?:\.\d+)?)/) || [])[1] || "0");
+    const nomes = (j.models || []).filter(m => (m.supportedGenerationMethods || ["generateContent"]).includes("generateContent")).map(m => m.name.replace(/^models\//, "")).filter(n => new RegExp(`^gemini-\\d+(\\.\\d+)?-${tipo}$`).test(n));
+    nomes.sort((a, b) => ver(b) - ver(a)); if (nomes[0]) escolhido = nomes[0];
+  } catch {}
+  return modelosGemini[tipo] = escolhido;
+}
+async function geminiArquivo(env, req) {
+  const tipo = req.headers.get("Content-Type") || "application/octet-stream";
+  let nome = "arquivo"; try { nome = decodeURIComponent(req.headers.get("X-Nome") || "arquivo"); } catch {}
+  const dados = await req.arrayBuffer();
+  if (!dados.byteLength) return [400, { erro: "arquivo vazio" }];
+  const ini = await fetch(`${GEMINI}/upload/v1beta/files`, { method: "POST", headers: { "x-goog-api-key": env.GEMINI_API_KEY, "X-Goog-Upload-Protocol": "resumable", "X-Goog-Upload-Command": "start", "X-Goog-Upload-Header-Content-Length": String(dados.byteLength), "X-Goog-Upload-Header-Content-Type": tipo, "Content-Type": "application/json" }, body: JSON.stringify({ file: { display_name: nome.slice(0, 120) } }) });
+  const destino = ini.headers.get("x-goog-upload-url");
+  if (!ini.ok || !destino) return [502, { erro: "O Gemini não aceitou o arquivo: " + (await ini.text()).slice(0, 300) }];
+  const up = await fetch(destino, { method: "POST", headers: { "X-Goog-Upload-Offset": "0", "X-Goog-Upload-Command": "upload, finalize", "Content-Length": String(dados.byteLength) }, body: dados });
+  const j = await up.json().catch(() => ({}));
+  if (!up.ok || !j.file) return [502, { erro: "O Gemini não guardou o arquivo: " + JSON.stringify(j).slice(0, 300) }];
+  return [200, { nome: j.file.name, uri: j.file.uri, tipo: j.file.mimeType, estado: j.file.state }];
+}
+async function geminiEstado(env, nome) {
+  if (!/^files\/[\w-]+$/.test(String(nome || ""))) return [400, { erro: "arquivo inválido" }];
+  const r = await fetch(`${GEMINI}/v1beta/${nome}`, { headers: { "x-goog-api-key": env.GEMINI_API_KEY } }); const j = await r.json().catch(() => ({}));
+  return r.ok ? [200, { estado: j.state, erro: j.error && j.error.message }] : [502, { erro: (j.error && j.error.message) || "O Gemini não respondeu" }];
+}
+// Leitura: o pedido, os arquivos já enviados e, se o site mandar, o formato da resposta (esquema JSON)
+async function geminiGerar(env, corpo) {
+  const texto = String(corpo.texto || "").slice(0, 400000); const arquivos = Array.isArray(corpo.arquivos) ? corpo.arquivos.slice(0, 80) : [];
+  if (!texto) return [400, { erro: "falta o pedido" }];
+  const partes = [{ text: texto }, ...arquivos.filter(a => a && /^https:\/\/generativelanguage\.googleapis\.com\//.test(a.uri)).map(a => ({ file_data: { mime_type: a.tipo || "application/pdf", file_uri: a.uri } }))];
+  const modelo = await escolherModelo(env, !!corpo.rapido);
+  const config = { temperature: 0.1 }; if (corpo.esquema && typeof corpo.esquema === "object") { config.responseMimeType = "application/json"; config.responseSchema = corpo.esquema; }
+  const r = await fetch(`${GEMINI}/v1beta/models/${modelo}:generateContent`, { method: "POST", headers: { "x-goog-api-key": env.GEMINI_API_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ role: "user", parts: partes }], generationConfig: config }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) return [502, { erro: "Gemini: " + ((j.error && j.error.message) || r.status), modelo }];
+  const cand = (j.candidates || [])[0] || {}; const resposta = ((cand.content && cand.content.parts) || []).map(p => p.text || "").join("");
+  if (!resposta) return [502, { erro: "O Gemini não devolveu texto" + (cand.finishReason ? " (" + cand.finishReason + ")" : ""), modelo }];
+  return [200, { texto: resposta, modelo }];
+}
+
 async function sincronizar(env) {
   if (!env.GITHUB_TOKEN || !env.GITHUB_REPO) return { ok: false, motivo: "sem GITHUB_TOKEN" };
   const r = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/actions/workflows/portal-notion.yml/dispatches`, { method: "POST", headers: { Authorization: `Bearer ${env.GITHUB_TOKEN}`, Accept: "application/vnd.github+json", "User-Agent": "medeasy-ponte", "Content-Type": "application/json" }, body: JSON.stringify({ ref: "main" }) });
@@ -195,7 +246,7 @@ export default {
     const h = cors(env, req);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: h });
     const url = new URL(req.url);
-    if (url.pathname === "/saude") return resposta({ ok: true, notion: !!env.NOTION_TOKEN, github: !!(env.GITHUB_TOKEN && env.GITHUB_REPO), admin: true, feedback: true }, 200, h);
+    if (url.pathname === "/saude") return resposta({ ok: true, notion: !!env.NOTION_TOKEN, github: !!(env.GITHUB_TOKEN && env.GITHUB_REPO), admin: true, feedback: true, gemini: !!env.GEMINI_API_KEY }, 200, h);
 
     // Feedback do cliente: a única rota sem a senha da equipe. Precisa do código de um cliente que existe.
     if (url.pathname === "/feedback/enviar") {
@@ -215,7 +266,18 @@ export default {
     const admins = String(env.ADMINS || "jose,eduardo").split(",").map(semAcento).filter(Boolean);
     const admin = admins.includes(semAcento(quem).split(" ")[0]) || (!!env.PORTAL_SENHA_ADMIN && iguais((req.headers.get("X-Admin") || "").trim(), env.PORTAL_SENHA_ADMIN));
     if (req.method !== "POST") return resposta({ erro: "use POST" }, 405, h);
+
+    // Gemini: o arquivo vem cru no corpo (PDF ou foto), por isso antes de ler JSON
+    if (url.pathname.startsWith("/gemini/") && !env.GEMINI_API_KEY) return resposta({ erro: "A chave do Gemini ainda não está na ponte" }, 503, h);
+    if (url.pathname === "/gemini/arquivo") {
+      if (Number(req.headers.get("Content-Length") || 0) > 60 * 1024 * 1024) return resposta({ erro: "arquivo maior que 60 MB" }, 413, h);
+      try { const [st, j] = await geminiArquivo(env, req); return resposta(j, st, h); } catch (e) { return resposta({ erro: e.message }, 502, h); }
+    }
+
     let corpo; try { corpo = await req.json(); } catch { return resposta({ erro: "JSON inválido" }, 400, h); }
+
+    if (url.pathname === "/gemini/estado") { try { const [st, j] = await geminiEstado(env, corpo.nome); return resposta(j, st, h); } catch (e) { return resposta({ erro: e.message }, 502, h); } }
+    if (url.pathname === "/gemini/gerar") { try { const [st, j] = await geminiGerar(env, corpo); return resposta(j, st, h); } catch (e) { return resposta({ erro: e.message }, 502, h); } }
 
     if (url.pathname === "/sincronizar") return resposta(await sincronizar(env), 200, h);
 

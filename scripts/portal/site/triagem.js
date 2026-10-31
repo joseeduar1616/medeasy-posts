@@ -314,8 +314,16 @@ async function textoDaImagem(f){
   finally { await w.terminate(); }
 }
 /* Lê o orçamento pronto (PDF ou foto) e devolve as opções. Serve para a triagem e para o orçamento enviado ao cliente. */
+const ESQ_ORC = { type:"OBJECT", required:["opcoes"], properties:{ opcoes:{ type:"ARRAY", items:{ type:"OBJECT", required:["letra", "total", "linhas"], properties:{ letra:ESQ_TXT, titulo:ESQ_TXT, total:ESQ_NUM, mensal:{ type:"BOOLEAN" },
+  linhas:{ type:"ARRAY", items:{ type:"OBJECT", required:["desc", "valor"], properties:{ desc:ESQ_TXT, conta:ESQ_TXT, valor:ESQ_NUM } } } } } } } };
+async function orcamentoGemini(f){
+  const j = await geminiLer([f], `Este arquivo é um orçamento da MedEasy (PDF ou foto). Leia todas as opções (Opção A, Opção B e assim por diante). Para cada opção devolva: a letra, o título (o texto que vem depois de "OPÇÃO X"), cada linha da tabela com a descrição, a conta da coluna de quantidade (por exemplo "100,00 + 35 X 8,50") e o valor em reais, e o total da opção (o VALOR TOTAL, já com desconto). Desconto entra como uma linha com valor negativo. Marque mensal como verdadeiro quando o valor for por mês. Nos números, use ponto como separador decimal e não use separador de milhar. Não invente valores: copie o que está escrito.`, ESQ_ORC, { rapido:true, aviso:"Lendo o orçamento com o Gemini" });
+  return (j.opcoes || []).filter(o => o && o.letra && num(o.total) > 0).map(o => ({ letra:String(o.letra).trim().toUpperCase().slice(0, 2), titulo:String(o.titulo || "").trim(), total:r2(num(o.total)), mensal:!!o.mensal,
+    linhas:(o.linhas || []).map(l => ({ desc:String(l.desc || "").trim(), conta:String(l.conta || "").trim(), valor:l.valor == null ? null : r2(num(l.valor)) })) }));
+}
 async function lerOrcArquivo(f){
   const foto = /^image\//i.test(f.type) || /\.(jpe?g|png|webp|heic)$/i.test(f.name);
+  if (await temGemini()){ try { const ops = await orcamentoGemini(f); if (ops.length) return { ops, foto:false, gemini:true }; toast("O Gemini não achou opções nesse arquivo. Tentando a leitura do site"); } catch (e) { toast("O Gemini não leu o orçamento (" + e.message + "). Tentando a leitura do site"); } }
   toast(foto ? "Lendo a foto do orçamento. Pode levar uns 20 segundos" : "Lendo o orçamento");
   const ops = lerOrcamentoTexto(foto ? await textoDaImagem(f) : await textoDoPdf(f));
   if (!ops.length) throw new Error(foto ? "Não consegui ler as opções e os valores nessa foto. Tente uma foto mais reta e nítida, ou o PDF" : "Não achei as opções e os valores nesse PDF. Ele precisa ter as linhas com R$ e o VALOR TOTAL");

@@ -56,3 +56,32 @@ async function salvarServico(id){
 }
 function etapaDeJS(status, pagamento){ const s = semAcento(status); if (s.startsWith("concluido")) return 6; if (s.startsWith("em andamento")) return 3; if (s.startsWith("aguardando")) return 0; return !pagamento || semAcento(pagamento).startsWith("nao pago") ? 2 : 1; }
 function pagoDeJS(total, pagamento){ const p = semAcento(pagamento); if (p.startsWith("pagamento finalizado")) return total; if (p.startsWith("1")) return Math.round(total * 50) / 100; return 0; }
+/* ---------- Gemini pela ponte: lê orçamento, certificados, currículo e edital, e faz a nota ----------
+   O site sobe os arquivos para a ponte, e ela fala com o Gemini. A chave fica só na ponte. Sem a chave, cada leitura volta para o leitor do site. */
+let geminiOk = null;
+async function temGemini(){
+  if (!temPonte()) return false; if (geminiOk !== null) return geminiOk;
+  try { const r = await fetch(PONTE.replace(/\/$/, "") + "/saude"); geminiOk = !!(await r.json()).gemini; } catch { geminiOk = false; }
+  return geminiOk;
+}
+const tipoArquivo = f => f.type || (/\.pdf$/i.test(f.name) ? "application/pdf" : /\.png$/i.test(f.name) ? "image/png" : /\.webp$/i.test(f.name) ? "image/webp" : /\.hei[cf]$/i.test(f.name) ? "image/heic" : "image/jpeg");
+async function geminiSobe(f){
+  const h = { "Content-Type":tipoArquivo(f), Authorization:"Bearer " + S.senha, "X-Quem":encodeURIComponent(S.mentor?.nome || ""), "X-Nome":encodeURIComponent(f.name) };
+  const r = await fetch(PONTE.replace(/\/$/, "") + "/gemini/arquivo", { method:"POST", headers:h, body:f });
+  const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.erro || ("erro " + r.status)); return j;
+}
+/* Manda os arquivos e o pedido. Word vira texto dentro do pedido (o Gemini não abre .docx). Com esquema, devolve o JSON. */
+async function geminiLer(arquivos, pedido, esquema, { rapido = false, aviso = "Lendo com o Gemini" } = {}){
+  const docs = arquivos.filter(f => /\.docx$/i.test(f.name)); const outros = arquivos.filter(f => !docs.includes(f));
+  let texto = pedido;
+  if (outros.length) texto += `\n\nArquivos anexados, nesta ordem: ${outros.map((f, i) => `${i + 1}. ${f.name}`).join("; ")}.`;
+  for (const d of docs) texto += `\n\nConteúdo do arquivo ${d.name}:\n` + (await textoDoDocx(d)).slice(0, 150000);
+  if (outros.length) toast(`${aviso}: enviando ${outros.length} ${outros.length === 1 ? "arquivo" : "arquivos"}`);
+  const sub = []; for (let i = 0; i < outros.length; i += 4) sub.push(...await Promise.all(outros.slice(i, i + 4).map(geminiSobe)));
+  for (const a of sub){ let n = 0; while (a.estado === "PROCESSING" && n++ < 45){ await new Promise(r => setTimeout(r, 2000)); a.estado = (await pontePedido("/gemini/estado", { nome:a.nome })).estado; }
+    if (a.estado === "FAILED") throw new Error("o Gemini não conseguiu abrir um dos arquivos"); }
+  toast(`${aviso}. Pode levar até 1 minuto`);
+  const j = await pontePedido("/gemini/gerar", { texto, arquivos:sub.map(a => ({ uri:a.uri, tipo:a.tipo })), esquema, rapido });
+  if (!esquema) return j.texto;
+  try { return JSON.parse(String(j.texto).replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, "")); } catch { throw new Error("o Gemini respondeu fora do formato"); }
+}

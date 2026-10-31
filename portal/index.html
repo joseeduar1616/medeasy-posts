@@ -300,6 +300,8 @@ const brl = n => "R$ " + (Number(n) || 0).toLocaleString("pt-BR", { minimumFract
 const d1 = n => (Number(n) || 0).toLocaleString("pt-BR", { minimumFractionDigits:1, maximumFractionDigits:2 });
 function isoLocal(d = new Date()){ const z = d.getTimezoneOffset(); return new Date(d - z * 60000).toISOString().slice(0, 10); }
 const hoje = () => isoLocal();
+// Formato das respostas do Gemini (esquema JSON), usado nas leituras de arquivo
+const ESQ_TXT = { type:"STRING" }, ESQ_NUM = { type:"NUMBER" };
 const dBR = iso => iso ? String(iso).slice(0, 10).split("-").reverse().join("/") : "";
 function dias(iso){ if (!iso) return null; const a = new Date(hoje() + "T00:00"), b = new Date(String(iso).slice(0,10) + "T00:00"); const r = Math.round((b - a) / 86400000); return isFinite(r) ? r : null; }
 const mesNome = i => ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][i];
@@ -357,6 +359,8 @@ async function entrarMentor(nome, senha){
     if (S.importarMarc){ const m = S.importarMarc; S.importarMarc = null; importarMarc(m); }
     if (S.importarCerts){ const k = S.importarCerts; S.importarCerts = null; importarCertsDoLink(k); }
     if (typeof pedirSincronizacao === "function") pedirSincronizacao();
+    // Sem a chave do Gemini na ponte, o botão "Fazer com o Gemini" some e as leituras usam o leitor do site
+    if (typeof temGemini === "function") temGemini().then(ok => { if (!ok) render(); });
     if (typeof juntarTriagemNotion === "function") juntarTriagemNotion();
   } catch { S.erro = "Senha incorreta. Ela é toda em letras minúsculas"; }
   S.carregando = false; render();
@@ -1029,30 +1033,51 @@ function fichaAcoesView(c, p, itens){
   if (p.fonte === "analise") return `<div class="row" style="margin-bottom:10px">${doc}</div>`;
   return `<div class="row" style="margin-bottom:10px;gap:6px"><span class="xs muted">${p.edital && p.edital.fichaPropria ? "Ficha montada pelo mentor" : "Ficha do edital no site"}</span><button class="btn sm ghost" data-a="feEditar">Editar ficha</button><label class="btn sm ghost" style="cursor:pointer">Trocar pelo PDF do edital<input type="file" accept=".pdf,.docx,application/pdf" hidden data-edital="1"></label>${doc}</div>`;
 }
+const ESQ_FICHA = { type:"OBJECT", required:["itens"], properties:{ maximo:ESQ_NUM, itens:{ type:"ARRAY", items:{ type:"OBJECT", required:["item", "maxN"], properties:{ item:ESQ_TXT, pontos:ESQ_TXT, maxN:ESQ_NUM, unit:ESQ_NUM } } } } };
+async function fichaGemini(f){
+  const j = await geminiLer([f], `Este é o edital de uma prova de residência médica. Ache a tabela de pontuação da análise curricular (currículo) e devolva cada item: em "item", o número ou a letra do edital e um nome curto (por exemplo "3 Monitoria" ou "E1 Artigo indexado com JCR"), em "pontos" a regra em texto curto, em "maxN" a pontuação máxima do item e em "unit" quanto vale cada certificado ou atividade (0 quando o item não é por contagem). Em "maximo", a nota máxima do currículo. Use ponto como separador decimal. Copie os números do edital, não invente.`, ESQ_FICHA, { aviso:"Lendo o edital com o Gemini" });
+  const ficha = (j.itens || []).filter(x => x && x.item && num(x.maxN) > 0).map(x => ({ item:String(x.item).trim(), pontos:String(x.pontos || "").trim(), maxN:num(x.maxN), unit:num(x.unit) > 0 ? num(x.unit) : null }));
+  return { ficha, maximo:num(j.maximo) || null, gemini:true };
+}
 async function lerEditalArquivo(input){
   const c = clienteSel(); const f = input.files && input.files[0]; input.value = ""; if (!c || !f) return; const p = provaSelCI(c); if (!p) return;
   toast("Lendo o edital");
   try {
-    const r = lerFichaDoEdital(await textoDoArquivo(f));
+    let r = null;
+    if (await temGemini()){ try { r = await fichaGemini(f); if (!r.ficha.length) r = null; } catch (e) { toast("O Gemini não leu o edital (" + e.message + "). Tentando a leitura do site"); } }
+    if (!r) r = lerFichaDoEdital(await textoDoArquivo(f));
     S.fichaEd = { cid:c.id, pk:kP(p.nome), nome:p.nome, rows:r.ficha.length ? r.ficha : [{ item:"", pontos:"", unit:null, maxN:null }], maximo:r.maximo, arquivo:f.name,
-      fonte:r.ficha.length ? `Lida do arquivo ${f.name}: ${r.ficha.length} itens${r.maximo ? `, teto ${d1(r.maximo)}` : ""}.` : `Não achei a tabela de pontos em ${f.name}. Monte à mão olhando o edital.` };
+      fonte:r.ficha.length ? `Lida${r.gemini ? " pelo Gemini" : ""} do arquivo ${f.name}: ${r.ficha.length} itens${r.maximo ? `, teto ${d1(r.maximo)}` : ""}.` : `Não achei a tabela de pontos em ${f.name}. Monte à mão olhando o edital.` };
     render(); toast(r.ficha.length ? `${r.ficha.length} itens lidos. Confira e salve a ficha` : "Não achei a tabela de pontos nesse arquivo. Monte à mão");
   } catch (e) { toast(e.message || "Não consegui ler o arquivo"); }
+}
+/* Currículo pronto pelo Gemini: a nota de cada item da ficha e os certificados anexados nele */
+const esqCv = () => ({ type:"OBJECT", required:["itens"], properties:{ notaTotal:ESQ_NUM, itens:{ type:"ARRAY", items:{ type:"OBJECT", required:["indice"], properties:{ indice:{ type:"INTEGER" }, nota:ESQ_NUM,
+  certificados:{ type:"ARRAY", items:{ type:"OBJECT", required:["desc"], properties:{ desc:ESQ_TXT, tipo:{ type:"STRING", enum:TIPOS_CERT }, ano:ESQ_TXT, ch:ESQ_TXT, pagina:{ type:"INTEGER" } } } } } } } } });
+async function curriculoGemini(f, p, itens){
+  const j = await geminiLer([f], `Este é um currículo pronto (Vitae) de um candidato a residência médica, com a ficha de pontuação preenchida e os certificados anexados depois do título de cada item. A ficha da prova ${p.nome} tem estes itens:\n${itens.map((i, k) => `${k + 1}) ${i.item} (máximo ${String(i.maxN).replace(".", ",")})`).join("\n")}\n\nPara cada item da lista, devolva o índice (o número da lista acima), a nota que o currículo dá ao item na ficha preenchida (deixe vazio se não tiver) e os certificados anexados nesse item, cada um com uma descrição curta, o tipo, o ano, a carga horária em horas e a página. Ignore a capa, o Lattes, os documentos pessoais e a página da ficha. Em notaTotal, a nota total da ficha. Use ponto como separador decimal. Não invente.`, esqCv(), { aviso:"Lendo o currículo com o Gemini" });
+  const notas = [], porItem = {}; let total = 0;
+  for (const x of j.itens || []){ const idx = (x.indice | 0) - 1; if (!itens[idx]) continue;
+    if (x.nota != null && x.nota !== "") notas.push({ idx, pts:Math.min(itens[idx].maxN, num(x.nota)) });
+    const cs = (x.certificados || []).filter(c => c && c.desc); if (cs.length){ porItem[idx] = cs.map((c, k) => ({ cert:c, ref:c.pagina ? "p." + c.pagina : "certificado " + (k + 1) })); total += cs.length; } }
+  return { notas, cv:{ porItem, total, fora:0 }, total:j.notaTotal != null ? num(j.notaTotal) : null };
 }
 /* Currículo pronto: lê a ficha preenchida (última coluna é a nota do candidato) e vira a contagem por item, como rascunho */
 async function lerCurriculoArquivo(input){
   let c = clienteSel(); const f = input.files && input.files[0]; input.value = ""; if (!c || !f) return; let p = provaSelCI(c); if (!p) return; const pk = kP(p.nome);
   toast("Lendo o currículo");
   try {
-    const txt = await textoDoArquivo(f); let itens = itensDaProva(p); let notas, total = null;
+    let itens = itensDaProva(p); let notas, total = null; let cvGemini = null;
+    if (itens.length && await temGemini()){ try { const g = await curriculoGemini(f, p, itens); if (g.notas.length || g.cv.total){ notas = g.notas; total = g.total; cvGemini = g.cv; } } catch (e) { toast("O Gemini não leu o currículo (" + e.message + "). Tentando a leitura do site"); } }
+    const txt = cvGemini ? "" : await textoDoArquivo(f);
     if (!itens.length){
       const r = fichaDoCurriculo(txt); if (!r.ficha.length) throw new Error("Não achei a ficha de pontuação preenchida nesse currículo");
       await guardarFicha(c, pk, p.nome, r.ficha, `Tirada da ficha do currículo ${f.name}`, null);
       c = clienteSel(); p = (c.provas || []).find(x => kP(x.nome) === pk); itens = itensDaProva(p); notas = r.notas;
-    } else { const r = lerNotasDoCurriculo(txt, itens.map(i => ({ item:i.item, maxN:i.maxN }))); notas = r.notas; total = r.total; }
+    } else if (!cvGemini){ const r = lerNotasDoCurriculo(txt, itens.map(i => ({ item:i.item, maxN:i.maxN }))); notas = r.notas; total = r.total; }
     // Certificados do currículo: quantos vêm depois do título de cada item
-    let cv = { porItem:{}, total:0, fora:0 };
-    try { const blocos = /\.docx$/i.test(f.name) ? await blocosDoDocx(f) : await blocosDoPdf(f); cv = certificadosDoCurriculo(blocos, itens.map(i => ({ item:i.item }))); } catch (e) { console.warn(e); }
+    let cv = cvGemini || { porItem:{}, total:0, fora:0 };
+    if (!cvGemini) try { const blocos = /\.docx$/i.test(f.name) ? await blocosDoDocx(f) : await blocosDoPdf(f); cv = certificadosDoCurriculo(blocos, itens.map(i => ({ item:i.item }))); } catch (e) { console.warn(e); }
     if (!notas.length && !cv.total) throw new Error("Não achei as notas nem os certificados dos itens nesse currículo");
     const reg = carregarCont(c); const pr = (reg.provas[pk] ||= {});
     for (const n of notas){ const it = itens[n.idx]; if (!it) continue; const r = (pr[it.key] ||= { ...(it.base || {}) });
@@ -1063,7 +1088,7 @@ async function lerCurriculoArquivo(input){
       const ct = ctrlDe(c); const origem = "curriculo:" + pk; const velhos = new Set(ct.certs.filter(x => x.origem === origem).map(x => x.id));
       ct.certs = ct.certs.filter(x => !velhos.has(x.id)); for (const key of Object.keys(ct.aloc[pk] || {})) ct.aloc[pk][key] = ct.aloc[pk][key].filter(a => !velhos.has(a.id));
       for (const [idx, lista] of Object.entries(cv.porItem)){ const it = itens[idx]; if (!it) continue; const titulo = it.item.replace(/^\s*\d{1,2}[a-z]?[.)]?\s*/i, "");
-        lista.forEach((x, k) => { const base = x.texto ? certDoTexto(x.texto, `${f.name} (${x.ref})`) : { id:novoIdC(), desc:`${titulo}: certificado ${k + 1}`, tipo:(TIPO_POR_TEXTO.find(([re]) => re.test(titulo)) || [0, "Outro"])[1], ano:"", ch:"", obs:"Lido do currículo pronto, conferir", arquivo:`${f.name} (${x.ref})` };
+        lista.forEach((x, k) => { const base = x.cert ? { id:novoIdC(), desc:String(x.cert.desc).trim().slice(0, 140), tipo:TIPOS_CERT.includes(x.cert.tipo) ? x.cert.tipo : "Outro", ano:String(x.cert.ano || "").replace(/\D/g, "").slice(0, 4), ch:String(x.cert.ch || "").replace(/\D/g, "").slice(0, 4), obs:"", arquivo:`${f.name} (${x.ref})` } : x.texto ? certDoTexto(x.texto, `${f.name} (${x.ref})`) : { id:novoIdC(), desc:`${titulo}: certificado ${k + 1}`, tipo:(TIPO_POR_TEXTO.find(([re]) => re.test(titulo)) || [0, "Outro"])[1], ano:"", ch:"", obs:"Lido do currículo pronto, conferir", arquivo:`${f.name} (${x.ref})` };
           base.origem = origem; ct.certs.push(base); alocDe(ct, pk, it.key).push({ id:base.id, estado:"pontua" }); });
         // Contagem: o número de certificados do item. Se a nota da ficha for outra (algum não vale), ela fica como pontos.
         const r = (pr[it.key] ||= { ...(it.base || {}) }); const nota = notas.find(n => n.idx === +idx);
@@ -1536,8 +1561,16 @@ async function textoDaImagem(f){
   finally { await w.terminate(); }
 }
 /* Lê o orçamento pronto (PDF ou foto) e devolve as opções. Serve para a triagem e para o orçamento enviado ao cliente. */
+const ESQ_ORC = { type:"OBJECT", required:["opcoes"], properties:{ opcoes:{ type:"ARRAY", items:{ type:"OBJECT", required:["letra", "total", "linhas"], properties:{ letra:ESQ_TXT, titulo:ESQ_TXT, total:ESQ_NUM, mensal:{ type:"BOOLEAN" },
+  linhas:{ type:"ARRAY", items:{ type:"OBJECT", required:["desc", "valor"], properties:{ desc:ESQ_TXT, conta:ESQ_TXT, valor:ESQ_NUM } } } } } } } };
+async function orcamentoGemini(f){
+  const j = await geminiLer([f], `Este arquivo é um orçamento da MedEasy (PDF ou foto). Leia todas as opções (Opção A, Opção B e assim por diante). Para cada opção devolva: a letra, o título (o texto que vem depois de "OPÇÃO X"), cada linha da tabela com a descrição, a conta da coluna de quantidade (por exemplo "100,00 + 35 X 8,50") e o valor em reais, e o total da opção (o VALOR TOTAL, já com desconto). Desconto entra como uma linha com valor negativo. Marque mensal como verdadeiro quando o valor for por mês. Nos números, use ponto como separador decimal e não use separador de milhar. Não invente valores: copie o que está escrito.`, ESQ_ORC, { rapido:true, aviso:"Lendo o orçamento com o Gemini" });
+  return (j.opcoes || []).filter(o => o && o.letra && num(o.total) > 0).map(o => ({ letra:String(o.letra).trim().toUpperCase().slice(0, 2), titulo:String(o.titulo || "").trim(), total:r2(num(o.total)), mensal:!!o.mensal,
+    linhas:(o.linhas || []).map(l => ({ desc:String(l.desc || "").trim(), conta:String(l.conta || "").trim(), valor:l.valor == null ? null : r2(num(l.valor)) })) }));
+}
 async function lerOrcArquivo(f){
   const foto = /^image\//i.test(f.type) || /\.(jpe?g|png|webp|heic)$/i.test(f.name);
+  if (await temGemini()){ try { const ops = await orcamentoGemini(f); if (ops.length) return { ops, foto:false, gemini:true }; toast("O Gemini não achou opções nesse arquivo. Tentando a leitura do site"); } catch (e) { toast("O Gemini não leu o orçamento (" + e.message + "). Tentando a leitura do site"); } }
   toast(foto ? "Lendo a foto do orçamento. Pode levar uns 20 segundos" : "Lendo o orçamento");
   const ops = lerOrcamentoTexto(foto ? await textoDaImagem(f) : await textoDoPdf(f));
   if (!ops.length) throw new Error(foto ? "Não consegui ler as opções e os valores nessa foto. Tente uma foto mais reta e nítida, ou o PDF" : "Não achei as opções e os valores nesse PDF. Ele precisa ter as linhas com R$ e o VALOR TOTAL");
@@ -2221,7 +2254,7 @@ function notaRasc(c, p){
 function notaInput(el){ const c = clienteSel(); if (!c) return; const p = (c.provas || []).find(x => kP(x.nome) === el.dataset.nota); if (p) notaRasc(c, p)[el.dataset.k] = el.value; }
 function notaCard(c){
   const provas = (c.provas || []).filter(p => p.nome); const salvo = notasDe(c);
-  const cab = `<div class="card-h"><div><h2>Nota e pendências</h2><div class="sub">Você preenche a nota. O Claude só ajuda a escrever o recado e as pendências.</div></div>${provas.length ? `<div class="row" style="gap:6px"><button class="btn sm" data-a="notaPedido" title="Copia um pedido curto para colar no Claude junto com os certificados">Copiar pedido para o Claude</button><button class="btn sm ${S.colarNota ? "pri" : ""}" data-a="notaColarAbrir">Colar resposta</button></div>` : ""}</div>`;
+  const cab = `<div class="card-h"><div><h2>Nota e pendências</h2><div class="sub">Você preenche a nota. O Claude só ajuda a escrever o recado e as pendências.</div></div>${provas.length ? `<div class="row" style="gap:6px"><button class="btn sm" data-a="notaPedido" title="Copia um pedido curto para colar no Claude junto com os certificados">Copiar pedido para o Claude</button><button class="btn sm ${S.colarNota ? "pri" : ""}" data-a="notaColarAbrir">Colar resposta</button>${typeof temPonte === "function" && temPonte() && geminiOk !== false ? `<label class="btn sm pri" style="cursor:pointer" title="Escolha os certificados (e o edital, se a prova não estiver no site). O Gemini preenche os campos e você confere">Fazer com o Gemini<input type="file" accept=".pdf,.docx,application/pdf,image/*" multiple hidden data-notagem="1"></label>` : ""}</div>` : ""}</div>`;
   if (!provas.length) return `<section class="card" id="notaCard">${cab}<div class="empty">Marque as provas do cliente primeiro</div></section>`;
   return `<section class="card" id="notaCard">${cab}
    ${S.colarNota ? `<div class="svc" style="margin-bottom:12px"><p class="small" style="margin:0 0 8px">Cole a resposta inteira do Claude. O site preenche os campos abaixo e você confere antes de salvar. O que ele não entender fica vazio para você digitar.</p><textarea class="in" id="notaColar" rows="6" placeholder="NOTA MEDEASY&#10;Prova: ...&#10;Nota: 8 de 10&#10;..."></textarea><div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="notaColarLer">Preencher os campos</button><button class="btn sm ghost" data-a="notaColarAbrir">Fechar</button></div></div>` : ""}
@@ -2318,6 +2351,21 @@ function lerNotaColada(){
   for (const { p, r } of res) Object.assign(notaRasc(c, p), r);
   S.colarNota = false; render();
   toast(`Preenchi ${res.map(x => x.p.nome).join(", ")}. Confira os campos e clique em Salvar`);
+}
+
+/* Nota pelo Gemini: lê os certificados (e o edital, se mandar) com o mesmo pedido do Claude e preenche os campos. O mentor confere e salva. */
+const ESQ_NOTA = { type:"OBJECT", required:["provas"], properties:{ provas:{ type:"ARRAY", items:{ type:"OBJECT", required:["prova", "nota"], properties:{ prova:ESQ_TXT, nota:ESQ_NUM, max:ESQ_NUM, possivel:ESQ_NUM, recado:ESQ_TXT, pendencias:{ type:"ARRAY", items:ESQ_TXT } } } } } };
+async function notaGemini(input){
+  const c = clienteSel(); const fs = [...(input.files || [])]; input.value = ""; if (!c || !fs.length) return;
+  const provas = (c.provas || []).filter(p => p.nome); if (!provas.length){ toast("Marque a prova do cliente antes"); return; }
+  try {
+    const j = await geminiLer(fs, pedidoNota(c) + `\n\nOs certificados${provas.some(p => !itensDaProva(p).length) ? " e o edital" : ""} estão nos arquivos anexados. Responda no formato JSON pedido: um objeto por prova, com o nome da prova escrito como na lista acima, a nota, o máximo, a nota possível, o recado e as pendências (uma por item da lista).`, ESQ_NOTA, { aviso:"Fazendo a nota com o Gemini" });
+    let n = 0;
+    for (const x of j.provas || []){ const k = kP(String(x.prova || "").replace(/\s*20\d\d.*$/, "")); const p = provas.find(p => k && (k.startsWith(kP(p.nome)) || kP(p.nome).startsWith(k))) || (provas.length === 1 ? provas[0] : null); if (!p) continue;
+      const r = notaRasc(c, p); if (x.nota != null) r.nota = numTxt(x.nota); if (x.max) r.max = numTxt(x.max); if (x.possivel != null) r.possivel = numTxt(x.possivel); if (x.recado) r.recado = String(x.recado).trim();
+      if (Array.isArray(x.pendencias)) r.pend = x.pendencias.map(l => String(l).trim()).filter(l => l && !/^nenhuma\.?$/i.test(l)).join("\n"); n++; }
+    render(); toast(n ? `O Gemini preencheu ${n === 1 ? "a nota" : n + " provas"}. Confira os campos e clique em Salvar` : "O Gemini não devolveu a nota. Preencha à mão ou use o pedido para o Claude");
+  } catch (e) { toast("Não consegui fazer com o Gemini: " + e.message); }
 }
 
 /* ---------- controle de certificados: inventário, alocação por item, pendências e resumo ---------- */
@@ -2486,6 +2534,19 @@ async function certsDoArquivo(f){
   if (paginas.length > 1 && paginas.length <= 60 && comCert.length >= Math.max(2, paginas.length * 0.6)) return paginas.map((p, i) => certDoTexto(p, `${f.name} p.${i + 1}`)).filter(x => x.desc);
   return [certDoTexto(texto, f.name)];
 }
+/* Certificados pelo Gemini: um por arquivo, ou um por página quando o arquivo junta vários. Só descreve, não decide o item do edital. */
+const esqCert = () => ({ type:"OBJECT", required:["certificados"], properties:{ certificados:{ type:"ARRAY", items:{ type:"OBJECT", required:["arquivo", "desc", "tipo"], properties:{ arquivo:{ type:"INTEGER" }, pagina:{ type:"INTEGER" }, desc:ESQ_TXT, tipo:{ type:"STRING", enum:TIPOS_CERT }, ano:ESQ_TXT, ch:ESQ_TXT, obs:ESQ_TXT } } } } });
+async function certsComGemini(docs){
+  const out = [];
+  for (let i = 0; i < docs.length; i += 8){ const lote = docs.slice(i, i + 8);
+    const j = await geminiLer(lote, `Cada arquivo anexado traz um ou mais certificados ou declarações de um estudante de medicina, às vezes um por página. Para cada certificado devolva: o número do arquivo na lista, a página (quando o arquivo tiver mais de um certificado), uma descrição curta da atividade e do papel (por exemplo "Monitoria de Anatomia" ou "Ouvinte no Congresso Brasileiro de Cardiologia"), o tipo (um da lista), o ano (o mais recente que aparece) e a carga horária em horas (só o número, vazio se não tiver). Use obs só quando algo estiver ilegível ou faltando. Não invente: o que não der para ler fica vazio. Página que não é certificado (capa, verso, QR code) não entra.`, esqCert(), { rapido:true, aviso:"Lendo os certificados com o Gemini" });
+    const lista = (j.certificados || []).filter(x => x && lote[x.arquivo - 1]);
+    lote.forEach((f, k) => { const deste = lista.filter(x => x.arquivo === k + 1); const varios = deste.length > 1;
+      if (!deste.length) out.push({ ...certDoTexto("", f.name), obs:"O Gemini não achou certificado neste arquivo, conferir" });
+      deste.forEach((x, n) => out.push({ id:novoIdC(), desc:String(x.desc || "").trim().slice(0, 140) || f.name, tipo:TIPOS_CERT.includes(x.tipo) ? x.tipo : "Outro", ano:String(x.ano || "").replace(/\D/g, "").slice(0, 4), ch:String(x.ch || "").replace(/[^\d]/g, "").slice(0, 4), obs:String(x.obs || "").trim(), arquivo:varios ? `${f.name} p.${x.pagina || n + 1}` : f.name })); });
+  }
+  return out;
+}
 async function importarCtrl(input){
   const c = clienteSel(); const fs = [...(input.files || [])]; input.value = ""; if (!c || !fs.length) return;
   const jsons = fs.filter(f => /json$/i.test(f.type) || /\.json$/i.test(f.name)); const docs = fs.filter(f => !jsons.includes(f));
@@ -2496,7 +2557,10 @@ async function importarCtrl(input){
   if (docs.length){
     const ct = ctrlDe(c); const ja = new Set(ct.certs.map(x => x.arquivo).filter(Boolean)); let n = 0, rep = 0;
     toast(`Lendo ${docs.length} ${docs.length === 1 ? "arquivo" : "arquivos"}`);
-    for (const f of docs){ for (const x of await certsDoArquivo(f)){ if (ja.has(x.arquivo)){ rep++; continue; } ja.add(x.arquivo); ct.certs.push(x); n++; } }
+    let lidos = null;
+    if (await temGemini()){ try { lidos = await certsComGemini(docs); } catch (e) { toast("O Gemini não leu os certificados (" + e.message + "). Usando a leitura do site"); } }
+    if (!lidos){ lidos = []; for (const f of docs) lidos.push(...await certsDoArquivo(f)); }
+    for (const x of lidos){ if (ja.has(x.arquivo)){ rep++; continue; } ja.add(x.arquivo); ct.certs.push(x); n++; }
     salvarCtrl(c); delete S.cont[c.id]; (S.ctAba ||= {})[c.id] = "certs";
     toast(n ? `${n} ${n === 1 ? "certificado adicionado" : "certificados adicionados"}${rep ? `, ${rep} já ${rep === 1 ? "estava" : "estavam"}` : ""}. Confira o tipo e a carga horária` : `Nenhum certificado novo. ${rep === 1 ? "Esse arquivo já estava" : "Esses arquivos já estavam"} na lista`);
   }
@@ -2683,6 +2747,35 @@ async function salvarServico(id){
 }
 function etapaDeJS(status, pagamento){ const s = semAcento(status); if (s.startsWith("concluido")) return 6; if (s.startsWith("em andamento")) return 3; if (s.startsWith("aguardando")) return 0; return !pagamento || semAcento(pagamento).startsWith("nao pago") ? 2 : 1; }
 function pagoDeJS(total, pagamento){ const p = semAcento(pagamento); if (p.startsWith("pagamento finalizado")) return total; if (p.startsWith("1")) return Math.round(total * 50) / 100; return 0; }
+/* ---------- Gemini pela ponte: lê orçamento, certificados, currículo e edital, e faz a nota ----------
+   O site sobe os arquivos para a ponte, e ela fala com o Gemini. A chave fica só na ponte. Sem a chave, cada leitura volta para o leitor do site. */
+let geminiOk = null;
+async function temGemini(){
+  if (!temPonte()) return false; if (geminiOk !== null) return geminiOk;
+  try { const r = await fetch(PONTE.replace(/\/$/, "") + "/saude"); geminiOk = !!(await r.json()).gemini; } catch { geminiOk = false; }
+  return geminiOk;
+}
+const tipoArquivo = f => f.type || (/\.pdf$/i.test(f.name) ? "application/pdf" : /\.png$/i.test(f.name) ? "image/png" : /\.webp$/i.test(f.name) ? "image/webp" : /\.hei[cf]$/i.test(f.name) ? "image/heic" : "image/jpeg");
+async function geminiSobe(f){
+  const h = { "Content-Type":tipoArquivo(f), Authorization:"Bearer " + S.senha, "X-Quem":encodeURIComponent(S.mentor?.nome || ""), "X-Nome":encodeURIComponent(f.name) };
+  const r = await fetch(PONTE.replace(/\/$/, "") + "/gemini/arquivo", { method:"POST", headers:h, body:f });
+  const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.erro || ("erro " + r.status)); return j;
+}
+/* Manda os arquivos e o pedido. Word vira texto dentro do pedido (o Gemini não abre .docx). Com esquema, devolve o JSON. */
+async function geminiLer(arquivos, pedido, esquema, { rapido = false, aviso = "Lendo com o Gemini" } = {}){
+  const docs = arquivos.filter(f => /\.docx$/i.test(f.name)); const outros = arquivos.filter(f => !docs.includes(f));
+  let texto = pedido;
+  if (outros.length) texto += `\n\nArquivos anexados, nesta ordem: ${outros.map((f, i) => `${i + 1}. ${f.name}`).join("; ")}.`;
+  for (const d of docs) texto += `\n\nConteúdo do arquivo ${d.name}:\n` + (await textoDoDocx(d)).slice(0, 150000);
+  if (outros.length) toast(`${aviso}: enviando ${outros.length} ${outros.length === 1 ? "arquivo" : "arquivos"}`);
+  const sub = []; for (let i = 0; i < outros.length; i += 4) sub.push(...await Promise.all(outros.slice(i, i + 4).map(geminiSobe)));
+  for (const a of sub){ let n = 0; while (a.estado === "PROCESSING" && n++ < 45){ await new Promise(r => setTimeout(r, 2000)); a.estado = (await pontePedido("/gemini/estado", { nome:a.nome })).estado; }
+    if (a.estado === "FAILED") throw new Error("o Gemini não conseguiu abrir um dos arquivos"); }
+  toast(`${aviso}. Pode levar até 1 minuto`);
+  const j = await pontePedido("/gemini/gerar", { texto, arquivos:sub.map(a => ({ uri:a.uri, tipo:a.tipo })), esquema, rapido });
+  if (!esquema) return j.texto;
+  try { return JSON.parse(String(j.texto).replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, "")); } catch { throw new Error("o Gemini respondeu fora do formato"); }
+}
 
 /* ---------- feedback dos clientes ---------- */
 /* Página ?feedback (ou o botão no portal do cliente). Duas partes, as duas opcionais:
@@ -2890,13 +2983,13 @@ Object.assign(A, A_CTRL, A_ORC, A_CERTCLI, A_FICHA, A_FB, {
   usarValorNotion: async () => { const c = clienteSel(); const e = estimarJS(c); const id = paginaDoCliente(c); if (!e || !id || !confirm(`Gravar ${brl(e.total)} como Valor total no Notion?`)) return;
     try { await salvarNotion(id, { "Valor total":e.total }, "Valor gravado no Notion"); const s = (c.servicos || []).find(x => x.id === id); if (s){ s.total = e.total; c.financeiro.total = (c.servicos || []).reduce((a, x) => a + (x.total || 0), 0); } render(); } catch (er) { toast("Não gravou: " + er.message); } },
 });
-app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.ci === "cheio") { ciInput(e.target); return; } if (e.target.dataset.orcpdf) { importarOrcPdf(e.target); return; } if (e.target.dataset.orcenv) { importarOrcEnviado(e.target); return; } if (e.target.dataset.orcesc) { const c = clienteSel(); const ct = ctrlDe(c); if (ct.orcamento){ ct.orcamento.escolhida = e.target.dataset.orcesc; gravarOrcEnviado(c, "Opção fechada salva no Notion"); } return; } if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
+app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.ci === "cheio") { ciInput(e.target); return; } if (e.target.dataset.orcpdf) { importarOrcPdf(e.target); return; } if (e.target.dataset.notagem) { notaGemini(e.target); return; } if (e.target.dataset.orcenv) { importarOrcEnviado(e.target); return; } if (e.target.dataset.orcesc) { const c = clienteSel(); const ct = ctrlDe(c); if (ct.orcamento){ ct.orcamento.escolhida = e.target.dataset.orcesc; gravarOrcEnviado(c, "Opção fechada salva no Notion"); } return; } if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
 app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.fb) fbInput(e.target); else if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.nota) notaInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); else if (e.target.dataset.fe) feInput(e.target); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 /* Versão nova do site: quem deixa a aba aberta continuava com o código antigo depois de uma correção.
    O montar-site grava a versão em site.txt. Ao voltar para a aba (e a cada 5 minutos) o site confere e oferece atualizar. */
-const VERSAO_SITE = "c261f8a1f64e";
+const VERSAO_SITE = "ee95fdc23563";
 /* Erro no site aparece na tela (com a versão), em vez de falhar calado. Ajuda a mandar print para o suporte. */
 window.addEventListener("error", e => { try { toast(`Erro no site: ${e.message} (versão ${VERSAO_SITE})`); } catch {} });
 window.addEventListener("unhandledrejection", e => { try { toast(`Erro no site: ${(e.reason && e.reason.message) || e.reason} (versão ${VERSAO_SITE})`); } catch {} });
