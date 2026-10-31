@@ -1,0 +1,178 @@
+{
+  "id": "2026-10-31-mapa-enamed",
+  "legenda": "100 questões, 5 áreas e 5 horas de prova: esse é o ENAMED. 🩺\n\nSão 20 questões de cada área: Clínica Médica, Cirurgia, Pediatria, GO e Preventiva. No internato você estuda o que tá vendo no rodízio, e a área que ficou parada desde o 3º ano vale as mesmas 20 questões que a do estágio de agora.\n\nO que ajuda é passar pelas 5 áreas com um cronograma só. No Cadência Med você escolhe o ciclo clínico, o de residência ou os dois juntos, vê o que falta em cada área e cada aula volta pra revisão no dia certo. A próxima prova é a de 2027, então dá tempo se começar agora.\n\nSalva esse mapa e manda pra quem vai fazer o ENAMED com você 📌\n\nQual área você mais teme no ENAMED? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #enamed",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "MAPA DO ENAMED",
+      "titulo": "100 QUESTÕES, 5 ÁREAS: {g}SALVA ESSE MAPA DO ENAMED{/g}",
+      "texto": "Arrasta pra ver <b>como a prova se divide e como encaixar as 5 áreas</b> no seu ano.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "materias",
+        "altura": 360,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A PROVA",
+      "tag": "COMO SE DIVIDE",
+      "titulo": "20 QUESTÕES {g}DE CADA ÁREA{/g}",
+      "texto": "São 100 questões em 5 horas de prova, divididas <b>por igual entre as 5 áreas</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "As 100 questões do ENAMED",
+        "itens": [
+          {
+            "titulo": "Clínica Médica",
+            "sub": "20 de 100 questões",
+            "selo": "20",
+            "cor": "#A86BFF",
+            "cor_selo": "rgba(168,107,255,.16)",
+            "cor_texto": "#8A4FE0"
+          },
+          {
+            "titulo": "Cirurgia",
+            "sub": "20 de 100 questões",
+            "selo": "20",
+            "cor": "#46D9F5",
+            "cor_selo": "rgba(168,107,255,.16)",
+            "cor_texto": "#8A4FE0"
+          },
+          {
+            "titulo": "Pediatria",
+            "sub": "20 de 100 questões",
+            "selo": "20",
+            "cor": "#F5A524",
+            "cor_selo": "rgba(168,107,255,.16)",
+            "cor_texto": "#8A4FE0"
+          },
+          {
+            "titulo": "Ginecologia e Obstetrícia",
+            "sub": "20 de 100 questões",
+            "selo": "20",
+            "cor": "#F2557A",
+            "cor_selo": "rgba(168,107,255,.16)",
+            "cor_texto": "#8A4FE0"
+          },
+          {
+            "titulo": "Preventiva",
+            "sub": "20 de 100 questões",
+            "selo": "20",
+            "cor": "#2DD4A0",
+            "cor_selo": "rgba(168,107,255,.16)",
+            "cor_texto": "#8A4FE0"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "O PERIGO",
+      "titulo": "A ÁREA PARADA {g}VALE AS MESMAS 20{/g}",
+      "texto": "No internato você estuda o que tá vendo no rodízio. A área que ficou pra trás <b>pesa igual na prova</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {
+            "texto": "Prova de 5 horas com 100 questões",
+            "feito": true
+          },
+          {
+            "texto": "Obrigatória pros concluintes",
+            "feito": true
+          },
+          {
+            "texto": "A nota pode ser usada no ENARE (acesso direto)",
+            "feito": true
+          },
+          {
+            "texto": "As 5 áreas estudadas antes da prova",
+            "feito": false
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "UM CRONOGRAMA SÓ {g}PRAS 5 ÁREAS{/g}",
+      "texto": "No Cadência Med você escolhe o <b>ciclo clínico, o de residência ou os dois juntos</b>. O conteúdo do estágio entra no lugar das aulas da área.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Qual cronograma você segue"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "POR ÁREA",
+      "tag": "MATÉRIAS",
+      "titulo": "VEJA O QUE FALTA {g}EM CADA ÁREA{/g}",
+      "texto": "Aulas e tópicos separados por área. Você filtra e sabe <b>qual das 5 tá mais atrasada</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "materias",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Matérias e temas"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "REVISÃO",
+      "tag": "REVISÃO",
+      "titulo": "O QUE VOCÊ ESTUDOU {g}VOLTA ANTES DA PROVA{/g}",
+      "texto": "Cada aula marcada entra na escada de revisão: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Escada de revisão"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "5 ÁREAS, {g}UM PLANO SÓ{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {
+            "titulo": "Ciclo clínico e residência",
+            "texto": "os dois cronogramas juntos"
+          },
+          {
+            "titulo": "Matérias por área",
+            "texto": "o que falta em cada uma"
+          },
+          {
+            "titulo": "Escada de revisão",
+            "texto": "1 semana, 1 mês, 2, 4 e 6 meses"
+          },
+          {
+            "titulo": "Provas comentadas",
+            "texto": "pra treinar questão por área"
+          }
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
