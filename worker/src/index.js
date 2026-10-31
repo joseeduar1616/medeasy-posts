@@ -97,22 +97,23 @@ async function clienteRecente(env, dbc, props) {
 // Gemini: o site sobe cada arquivo (File API) e depois pede a leitura com as referências. A chave nunca sai da ponte.
 const GEMINI = "https://generativelanguage.googleapis.com";
 let listaGemini = null;
-// Modelos na ordem de tentativa: o mais novo do tipo pedido, o anterior dele e o mais novo do outro tipo.
-// Quando o Google diz que o modelo está sobrecarregado, a ponte passa para o próximo.
+// Modelos na ordem de tentativa, só os que a chave enxerga: os do tipo pedido (do mais novo para o mais velho),
+// depois os do outro tipo e por último os "lite". Quando um está sobrecarregado ou não está disponível, a ponte passa para o próximo.
 async function modelosGeminiPara(env, rapido) {
-  const tipo = rapido ? "flash" : "pro", outro = rapido ? "pro" : "flash";
-  if (!listaGemini) {
+  if (!listaGemini || !listaGemini.length) {
     try {
       const r = await fetch(`${GEMINI}/v1beta/models?pageSize=200`, { headers: { "x-goog-api-key": env.GEMINI_API_KEY } }); const j = await r.json();
       listaGemini = (j.models || []).filter(m => (m.supportedGenerationMethods || ["generateContent"]).includes("generateContent")).map(m => m.name.replace(/^models\//, ""));
     } catch { listaGemini = []; }
   }
   const ver = n => parseFloat((n.match(/gemini-(\d+(?:\.\d+)?)/) || [])[1] || "0");
-  const doTipo = t => listaGemini.filter(n => new RegExp(`^gemini-\\d+(\\.\\d+)?-${t}$`).test(n)).sort((a, b) => ver(b) - ver(a));
-  const a = doTipo(tipo), b = doTipo(outro);
-  return [...new Set([rapido ? env.GEMINI_MODEL_RAPIDO : env.GEMINI_MODEL, a[0], a[1], b[0], rapido ? "gemini-2.5-flash" : "gemini-2.5-pro"].filter(Boolean))];
+  const doTipo = re => listaGemini.filter(n => re.test(n)).sort((a, b) => ver(b) - ver(a));
+  const flash = doTipo(/^gemini-\d+(\.\d+)?-flash$/), pro = doTipo(/^gemini-\d+(\.\d+)?-pro$/), lite = doTipo(/^gemini-\d+(\.\d+)?-flash-lite$/);
+  const ordem = rapido ? [...flash.slice(0, 3), ...pro.slice(0, 2), ...lite.slice(0, 1)] : [...pro.slice(0, 3), ...flash.slice(0, 2)];
+  return [...new Set([rapido ? env.GEMINI_MODEL_RAPIDO : env.GEMINI_MODEL, ...ordem].filter(Boolean))];
 }
 const sobrecarga = (st, msg) => st === 429 || st === 503 || st === 500 || /high demand|overloaded|unavailable|resource.?exhausted|try again later/i.test(msg || "");
+const modeloFora = (st, msg) => st === 404 || /no longer available|not found|is not supported|deprecated|not available/i.test(msg || "");
 async function geminiArquivo(env, req) {
   const tipo = req.headers.get("Content-Type") || "application/octet-stream";
   let nome = "arquivo"; try { nome = decodeURIComponent(req.headers.get("X-Nome") || "arquivo"); } catch {}
@@ -138,9 +139,11 @@ async function geminiGerar(env, corpo) {
   const partes = [{ text: texto }, ...arquivos.filter(a => a && /^https:\/\/generativelanguage\.googleapis\.com\//.test(a.uri)).map(a => ({ file_data: { mime_type: a.tipo || "application/pdf", file_uri: a.uri } }))];
   const config = { temperature: 0.1 }; if (corpo.esquema && typeof corpo.esquema === "object") { config.responseMimeType = "application/json"; config.responseSchema = corpo.esquema; }
   const pedido = JSON.stringify({ contents: [{ role: "user", parts: partes }], generationConfig: config });
-  let ultimo = "";
-  for (const modelo of await modelosGeminiPara(env, !!corpo.rapido)) {
-    for (let tentativa = 0; tentativa < 2; tentativa++) {
+  let ultimo = ""; const tentados = []; const modelos = await modelosGeminiPara(env, !!corpo.rapido);
+  if (!modelos.length) return [502, { erro: "A chave do Gemini não enxerga nenhum modelo. Confira a chave no Google AI Studio" }];
+  for (const [k, modelo] of modelos.entries()) {
+    tentados.push(modelo);
+    for (let tentativa = 0; tentativa < (k === 0 ? 3 : 2); tentativa++) {
       const r = await fetch(`${GEMINI}/v1beta/models/${modelo}:generateContent`, { method: "POST", headers: { "x-goog-api-key": env.GEMINI_API_KEY, "Content-Type": "application/json" }, body: pedido });
       const j = await r.json().catch(() => ({})); const msg = (j.error && j.error.message) || "";
       if (r.ok) {
@@ -149,12 +152,12 @@ async function geminiGerar(env, corpo) {
         ultimo = "O Gemini não devolveu texto" + (cand.finishReason ? " (" + cand.finishReason + ")" : ""); break;
       }
       ultimo = "Gemini: " + (msg || r.status);
-      if (r.status === 404) break; // modelo que a chave não tem: vai para o próximo
-      if (!sobrecarga(r.status, msg)) return [502, { erro: ultimo, modelo }];
-      await new Promise(ok => setTimeout(ok, 1500));
+      if (modeloFora(r.status, msg)) break; // modelo que a chave não tem: vai para o próximo
+      if (!sobrecarga(r.status, msg)) return [502, { erro: ultimo, modelo, tentados }];
+      await new Promise(ok => setTimeout(ok, 1500 * (tentativa + 1)));
     }
   }
-  return [502, { erro: ultimo || "O Gemini não respondeu" }];
+  return [502, { erro: ultimo || "O Gemini não respondeu", tentados }];
 }
 
 async function sincronizar(env) {
