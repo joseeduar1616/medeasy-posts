@@ -1,0 +1,24 @@
+{
+ "slug": "2026-10-31-1200-novembro-residencia-2027",
+ "pillar": "calendário e prazos",
+ "header": ["NOVEMBRO", "RESIDÊNCIA 2027"],
+ "verified_on": "2026-10-31",
+ "sources": [
+  "SES-GO: Edital nº 24/2026 COREME SES-GO (sistemas.institutoverbena.ufg.br/2027/coreme-ses), inscrições até 03/11 17h, R$ 500 para 1 programa, prova 06/12, currículo na 2ª fase; posts/2026-10-09-1800-sesgo-2027-edital.json",
+  "SUS-SP: vunesp.com.br/SESA2601, inscrições até 05/11, R$ 120, prova 13/12 etapa única; posts/2026-10-26-1200-sussp-2026-concorrencia.json",
+  "UNESP: edital Vunesp UNESP FMB 2027, inscrições até 06/11, R$ 648, prova 12/12; posts/2026-10-22-1200-unesp-2027-guia.json",
+  "SES-DF: Edital Normativo nº 1 RM-1/SES/DF/2027 (IADES), inscrições até 18/11 23h59, R$ 120, prova 12/12, sem análise curricular; posts/2026-10-23-1800-sesdf-2027-um-programa.json",
+  "Datas das provas de novembro (Unicamp 15/11, USP-RP 20/11, AMRIGS e PSU-MG 22/11, PSU-GO e Unifesp 29/11): posts/2026-10-24-1800-agenda-provas-datas-que-batem.json e fontes listadas nele",
+  "Currículo depois da prova (USP-RP 27/11 a 01/12, Unicamp lista 02/12 e envio 04 a 08/12, Unifesp Lattes atualizado até 04/12): posts/2026-10-29-1800-curriculo-depois-da-prova.json e fontes listadas nele",
+  "log/news_seen.md, varredura de 31/10 11h: nenhuma retificação, prorrogação ou mudança de data nessas provas"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "AGENDA DE NOVEMBRO", "title": ["NOVEMBRO", "<span class='y glow'>DECIDE</span>"], "body": "Em um mês: <b>4 inscrições</b> fecham, <b>6 provas</b> acontecem e começa o envio do currículo.", "bullets": ["Último dia de inscrição", "Provas do mês", "Currículo depois da prova"]},
+  {"type": "rows", "label": "Inscrições", "title": ["QUEM AINDA <span class='g'>FECHA</span>"], "sub": "Último dia de inscrição e taxa", "rows": [{"name": "SES-GO", "sub": "Até 17h, Verbena, R$ 500", "value": "03/11"}, {"name": "SUS-SP", "sub": "Vunesp, R$ 120", "value": "05/11"}, {"name": "UNESP", "sub": "Vunesp, R$ 648", "value": "06/11"}, {"name": "SES-DF", "sub": "Até 23h59, IADES, R$ 120", "value": "18/11"}], "note": "A SES-GO fecha <b>nesta terça</b>, 03/11, às 17h."},
+  {"type": "table", "label": "Provas", "title": ["PROVAS EM <span class='y'>NOVEMBRO</span>"], "sub": "Data da prova objetiva", "headers": ["PROVA", "DATA", "CURRÍCULO?"], "rows": [["Unicamp", "15/11", "SIM"], ["USP-RP", "20/11", "DEPENDE"], ["AMRIGS", "22/11", "DEPENDE"], ["PSU-MG", "22/11", "SIM"], ["PSU-GO", "29/11", "SIM"], ["Unifesp", "29/11", "SIM"]], "note": "AMRIGS e PSU-MG no <b>mesmo dia</b>, e PSU-GO e Unifesp também."},
+  {"type": "rows", "label": "Currículo", "title": ["PASSOU? MANDA O <span class='y'>CURRÍCULO</span>"], "sub": "Só para quem passar na prova", "rows": [{"name": "USP-RP", "sub": "Prova em 20/11", "value": "27/11 a 01/12"}, {"name": "Unicamp", "sub": "Lista de classificados em 02/12", "value": "04 a 08/12"}, {"name": "Unifesp", "sub": "Lattes atualizado até", "value": "04/12"}, {"name": "PSU-GO e PSU-MG", "sub": "Foi junto com a inscrição", "value": "JÁ FOI"}], "note": "A janela da USP-RP e da Unicamp é de <b>poucos dias</b>. Junte os comprovantes antes da prova."},
+  {"type": "cta", "title": ["SALVA SUA", "<span class='g glow'>AGENDA</span>"], "pill": "SALVA", "body": "e manda para quem vai<br>prestar com você.", "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.", "small": "Fontes: editais 2027 de SES-GO (Instituto Verbena/UFG), SUS-SP, UNESP e Unifesp (Vunesp), SES-DF (IADES), Unicamp (FCM), HCFMRP-USP, AMRIGS (Fundatec), AREMG (PSU-MG e PSU-GO). Datas podem mudar: confira o edital."}
+ ],
+ "story": {"kicker": "AGENDA DE NOVEMBRO", "cta": "4 inscrições e <span>6 provas</span> no mês.<br>Veja no feed da @med_easyy."},
+ "caption": "📅 NOVEMBRO DECIDE A RESIDÊNCIA 2027\n\nNovembro concentra boa parte do ano da residência. Quatro provas ainda fecham inscrição: SES-GO nesta terça, 03/11, às 17h (R$ 500), SUS-SP em 05/11 (R$ 120), UNESP em 06/11 (R$ 648) e SES-DF em 18/11, às 23h59 (R$ 120).\n\nNo mesmo mês caem seis provas: Unicamp (15/11), USP-RP (20/11), AMRIGS e PSU-MG (22/11), PSU-GO e Unifesp (29/11).\n\nPrecisa de currículo? Em várias, sim, e ele vem logo depois da prova: USP-RP de 27/11 a 01/12, Unicamp de 04 a 08/12 e Unifesp com o Lattes atualizado até 04/12. No PSU-GO e no PSU-MG ele já foi com a inscrição. SES-DF e SUS-SP não têm análise curricular.\n\nSalva e manda para quem vai prestar com você 📌\n\nQual prova de novembro é a sua? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #residencia2027 #sesgo #psugo #psumg #provasderesidencia"
+}
