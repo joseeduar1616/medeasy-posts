@@ -1,0 +1,19 @@
+name: Portal MedEasy - testar o Gemini
+
+# Roda à mão. Sobe um orçamento de exemplo pela ponte e pede a leitura ao Gemini, igual ao site.
+on:
+  workflow_dispatch: {}
+
+jobs:
+  gemini:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Testar
+        env:
+          PORTAL_SENHA: ${{ secrets.PORTAL_SENHA }}
+        run: node scripts/portal/teste/gemini-ponte.mjs
