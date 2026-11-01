@@ -1,0 +1,96 @@
+{
+ "slug": "2026-11-01-1200-famerp-2026-concorrencia",
+ "pillar": "notas de corte e concorrência",
+ "header": ["CONCORRÊNCIA", "FAMERP 2026"],
+ "verified_on": "2026-11-01",
+ "sources": [
+  "https://med.estrategia.com/portal/noticias/famerp-bate-recorde-historico-de-inscritos-em-seu-seletivo-para-residencia-medica-2026-confira-as-especialidades-mais-concorridas/ (relação candidato/vaga 2026 por programa, a partir do documento enviado pela FAMERP)",
+  "https://www.medway.com.br/conteudos/concorrencia-residencia-medica-famerp/ (mesmos inscritos, vagas e relação por especialidade do acesso direto)",
+  "https://med.estrategia.com/portal/noticias/famerp-edital-residencia-medica-2027/ (edital GDG 032/2026: 313 vagas, 168 AD, prova 24/11, peso 9 prova e 1 currículo, envio 11/12 16h a 14/12 14h, vagas por especialidade)",
+  "https://www.medway.com.br/conteudos/vagas-residencia-medica-famerp/ (vagas 2027 por especialidade, iguais às do Estratégia)",
+  "https://www.grupomedcof.com.br/blog/edital-residencia-medica-famerp/ (313 vagas, 168 AD, prova 24/11 com 80 questões, envio do currículo 11/12 a 14/12)",
+  "https://www.vestibulandoweb.com.br/pos-graduacao/inscricao-residencia-medica-famerp-2027/ (prova 90% e currículo 10%, 80 questões em 4 horas)"
+ ],
+ "slides": [
+  {
+   "type": "cover",
+   "label": "Residência médica em São Paulo",
+   "pill": "FAMERP",
+   "title": ["QUANTOS DISPUTAM", "<span class='y glow'>CADA VAGA</span>"],
+   "body": "Veja a concorrência por especialidade na FAMERP 2026, em São José do Rio Preto, e onde abrem as vagas de 2027. A prova é em <b>24/11</b>.",
+   "bullets": ["As especialidades mais disputadas", "As vagas de 2027", "Precisa de currículo?"]
+  },
+  {
+   "type": "rows",
+   "label": "Mais disputadas",
+   "title": ["ONDE A DISPUTA <span class='y'>FOI MAIOR</span>"],
+   "sub": "Candidatos por vaga na FAMERP 2026, acesso direto",
+   "rows": [
+    {"name": "Dermatologia", "sub": "244 inscritos para 4 vagas", "value": "61,0"},
+    {"name": "Otorrinolaringologia", "sub": "223 inscritos para 4 vagas", "value": "55,8"},
+    {"name": "Oftalmologia", "sub": "289 inscritos para 6 vagas", "value": "48,2"},
+    {"name": "Psiquiatria", "sub": "274 inscritos para 6 vagas", "value": "45,7"},
+    {"name": "Neurocirurgia", "sub": "120 inscritos para 3 vagas", "value": "40,0"},
+    {"name": "Cirurgia Geral", "sub": "547 inscritos para 15 vagas", "value": "36,5"}
+   ],
+   "note": "Em 2026 a FAMERP passou de 4 mil inscritos, recorde da seleção."
+  },
+  {
+   "type": "rows",
+   "label": "Grandes áreas",
+   "title": ["E NAS <span class='y'>OUTRAS ÁREAS</span>"],
+   "sub": "Candidatos por vaga na FAMERP 2026, acesso direto",
+   "rows": [
+    {"name": "Neurologia", "sub": "171 inscritos para 6 vagas", "value": "28,5"},
+    {"name": "Ortopedia e Traumatologia", "sub": "204 inscritos para 8 vagas", "value": "25,5"},
+    {"name": "Ginecologia e Obstetrícia", "sub": "339 inscritos para 14 vagas", "value": "24,2"},
+    {"name": "Anestesiologia", "sub": "338 inscritos para 15 vagas", "value": "22,5"},
+    {"name": "Pediatria", "sub": "292 inscritos para 14 vagas", "value": "20,9"},
+    {"name": "Clínica Médica", "sub": "598 inscritos para 36 vagas", "value": "16,6"},
+    {"name": "Medicina de Família", "sub": "28 inscritos para 4 vagas", "value": "7,0"}
+   ],
+   "note": "A concorrência de 2026 é referência, não previsão para 2027."
+  },
+  {
+   "type": "rows",
+   "label": "Vagas 2027",
+   "title": ["ONDE ABRE <span class='g'>MAIS VAGA</span>"],
+   "sub": "FAMERP 2027: 313 vagas, 168 de acesso direto",
+   "rows": [
+    {"name": "Clínica Médica", "value": "35"},
+    {"name": "Cirurgia Geral", "value": "14"},
+    {"name": "Ginecologia e Obstetrícia", "value": "14"},
+    {"name": "Pediatria", "value": "14"},
+    {"name": "Anestesiologia", "value": "14"},
+    {"name": "Radiologia", "value": "9"},
+    {"name": "Dermatologia", "sub": "Eram 4 em 2026", "value": "6"}
+   ],
+   "note": "Ortopedia, Neurologia, Oftalmologia, Psiquiatria e Medicina de Família têm 6 vagas cada."
+  },
+  {
+   "type": "cards",
+   "label": "Formato da seleção",
+   "title": ["PRECISA DE <span class='g'>CURRÍCULO</span>?"],
+   "sub": "Resposta do edital da FAMERP 2027",
+   "cards": [
+    {"num": "1", "h": "Sim, vale 10%", "tag": "peso 1", "p": "A prova objetiva tem peso 9 e a avaliação curricular, peso 1. Nota final de 0 a 10."},
+    {"num": "2", "h": "Prova em 24/11", "tag": "80 questões", "p": "Prova objetiva de 80 questões. Quem for habilitado é convocado para o currículo em <b>11/12</b>."},
+    {"num": "3", "h": "Envio em 3 dias", "tag": "11 a 14/12", "p": "Currículo e documentos de <b>11/12, às 16h</b>, a <b>14/12, às 14h</b>, no acesso direto."}
+   ],
+   "note": "As notas do currículo saem em <b>20/01</b> e o resultado final em <b>29/01/2027</b>."
+  },
+  {
+   "type": "cta",
+   "title": ["SALVA PARA", "<span class='g glow'>COMPARAR</span>"],
+   "pill": "SALVA",
+   "body": "e manda para quem vai<br>prestar FAMERP com você.",
+   "note": "Vai prestar FAMERP? Chama a <b>MedEasy</b> no direct para deixar o currículo pronto antes da convocação.",
+   "small": "Fontes: relação candidato/vaga FAMERP 2026, conforme levantamentos de Estratégia MED e Medway (números iguais). Edital FAMERP 2027 (GDG nº 032/2026), conforme Estratégia MED, Medway e MedCof."
+  }
+ ],
+ "story": {
+  "kicker": "POST NOVO",
+  "cta": "FAMERP: <span>61 por vaga</span> em Dermatologia.<br>Veja onde a disputa foi maior no feed da @med_easyy."
+ },
+ "caption": "📊 QUANTOS DISPUTAM CADA VAGA NA FAMERP\n\nNa residência médica da FAMERP 2026, em São José do Rio Preto, Dermatologia foi a mais disputada no acesso direto, com 61 candidatos por vaga (244 inscritos para 4 vagas). Depois vêm Otorrino (55,8), Oftalmologia (48,2) e Psiquiatria (45,7).\n\nCirurgia Geral teve 36,5 por vaga, GO 24,2 e Anestesiologia 22,5. Clínica Médica ficou com 16,6 e Medicina de Família com 7. Para 2027 são 313 vagas, 168 de acesso direto, e Dermatologia passou de 4 para 6 vagas.\n\nPrecisa de currículo? Sim. A prova objetiva tem peso 9 e o currículo, peso 1. A prova é em 24/11 e quem for habilitado envia o currículo de 11/12, às 16h, a 14/12, às 14h. São só 3 dias, então vale deixar os comprovantes prontos antes. Arrasta para ver tudo e salva para comparar 📌\n\nQual especialidade você vai prestar na FAMERP? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#famerp #residenciamedica #saopaulo #riopreto #concorrencia #residencia2027"
+}
