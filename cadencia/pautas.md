@@ -21,7 +21,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 11. Estudou 3 horas e parece que não rendeu e o Foco que registra cada sessão. Prints: foco, hoje
 12. "Será que dá tempo de fechar tudo antes da prova?" e o ritmo com projeção. Prints: hoje, cronograma
 13. ~~Domingo à noite, sem saber como vai ser a semana, e o mentor de IA montando ela~~ *(saiu em 01/11)*. Prints: assistente, rotina
-14. Revisão no Anki, cronograma na planilha, cronômetro em outro app: tudo num lugar. Prints: hoje, revisoes, foco
+14. Revisão em outro app, cronograma na planilha, cronômetro em outro app: tudo num lugar. Prints: hoje, revisoes, foco
 15. Quanto custa organizar a preparação inteira: 3 dias grátis, R$ 39 ou R$ 300 no anual. Prints: planos, hoje
 16. ~~(pra salvar) Checklist da semana de plantão: o que fazer antes, no dia e depois do plantão pra não perder a revisão~~ *(saiu em 27/10)*. Prints: rotina, hoje
 17. ~~(pra salvar) Plano de 7 dias pra tirar o atraso sem largar as revisões~~ *(saiu em 30/10)*. Prints: revisoes, assistente
@@ -29,6 +29,9 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 19. ~~(nicho, pra salvar) Mapa do ENAMED: 100 questões, 20 de cada área (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), prova de 5 horas, e como encaixar as 5 áreas no ciclo clínico. Capa com pergunta ou "salva esse".~~ *(saiu em 31/10)* Prints: cronograma, materias
 20. (nicho) "Você sobreviveria ao internato estudando pra residência?" e a semana montada a partir da escala. Prints: rotina, assistente, hoje
 21. (pra salvar) Checklist do dia de revisão: o que fazer em 30 minutos quando o dia foi de plantão. Prints: revisoes, foco
+22. (nicho, pra salvar) ENAMED obrigatório pra exercer a medicina: o que muda pra quem está no 3º e 4º ano. Fonte: MP 1.370/2026, aprovada no Senado em 15/10/2026 (O Povo, 16/10, e Agência Senado). Antes de escrever, confira na fonte se já foi sancionada, a data de corte e quem fica de fora, e use só o que estiver lá. Fonte citada no último slide. Prints: cronograma, materias
+23. (nicho, pra salvar) 5 áreas, 5 semanas: uma área do ENAMED por semana (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), com a revisão das anteriores voltando junto. Slide do meio com a tabela das 5 semanas (bloco `semana`). Prints: materias, revisoes
+24. (nicho) No estágio de Cirurgia e a Pediatria parada: estudar a área do rodízio sem largar as outras 4, com o ciclo clínico. Prints: cronograma, materias
 
 ## Reels (14:55)
 
@@ -101,13 +104,13 @@ O app tem cronograma do ciclo clínico, que é o que serve pra esse público.
 
 ## Memes que divulgam (14:52, desde 25/10)
 
-A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(saiu em DD/MM)*`.
+A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(saiu em DD/MM)*`. Desde 02/11: A2 com 8 a 12 s e a tela do app até os 5 s, A1 com no máximo 12 palavras no tweet.
 
 1. ~~A1 · Eu fingindo que não vi as **revisões vencidas** pra conseguir dormir. Tela: revisoes~~ *(saiu em 26/10)*
 2. ~~A2 · POV: saiu do internato às 23h e abriu o caderno. "E agora, estudo o quê?" O Cadência Med já separou a revisão de hoje.~~ *(saiu em 27/10)*
 3. ~~A1 · Eu às 23h jogando o PDF da aula no **Cadência Med** e os **flashcards** saindo prontos. Tela: cartoes_ia~~ *(saiu em 28/10)*
 4. ~~A1 · Meu amigo jurando que estudou **o dia todo**. O ranking da nossa sala no Cadência Med: (ranking)~~ *(saiu em 30/10)*
-5. A2 · Eu antes do Cadência Med: planilha, Anki, cronômetro e caderno. Eu depois: uma tela. (etiquetas riscadas e tela Hoje)
+5. A2 · Eu antes do Cadência Med: planilha, app de flashcard, cronômetro e caderno. Eu depois: uma tela. (etiquetas riscadas e tela Hoje)
 6. A1 · O mentor de IA do **Cadência Med** olhando meu painel antes de **montar minha semana**. Tela: assistente
 7. ~~A2 · Níveis de cansaço no internato, do 1 ao 5, e o 5 é abrir o Cadência Med e a semana já estar montada. (escada com os níveis)~~ *(saiu em 31/10)*
 8. ~~A1 · Quando você conta seus **plantões** pro Cadência Med e ele devolve a **semana pronta**. Tela: rotina~~ *(saiu em 01/11)*
@@ -119,3 +122,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 14. A2 · "Você sobreviveria a uma semana com a revisão atrasada?" Segunda 3 vencidas, quarta 9, sexta 15. Fim: a tela Hoje do Cadência Med com a revisão do dia.
 15. A1 · Eu explicando pra turma que **não monto cronograma** desde que comecei a usar o **Cadência Med**. Tela: cronograma
 16. A2 · POV: primeiro dia de internato com o Cadência Med já sabendo a sua escala. (horários aparecendo e a semana pronta)
+17. A1 · (nicho) Eu no estágio de **Cirurgia** fingindo que lembro a **Pediatria** do 3º ano. Tela: materias
+18. A2 · (nicho) "Você sobreviveria a um rodízio de Cirurgia estudando as 5 áreas do ENAMED?" 6h centro cirúrgico, 14h ambulatório, 22h Pediatria. Aos 4 s o cronograma do ciclo clínico com as 5 áreas.
+19. A1 · Eu vendo o **ritmo** no Cadência Med dizer que dá pra **fechar o cronograma** antes da prova. Tela: hoje
+20. A2 · Níveis de revisão atrasada, do 1 ao 5. O 5 é abrir a tela Hoje do Cadência Med e só ter a de hoje.
