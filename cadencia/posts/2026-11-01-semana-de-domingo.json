@@ -1,0 +1,121 @@
+{
+  "id": "2026-11-01-semana-de-domingo",
+  "legenda": "Domingo à noite e você ainda não sabe o que vai estudar amanhã? 😮‍💨\n\nA semana começa sem plano, a segunda vira \"vou ver na hora\" e metade da manhã vai embora escolhendo por onde começar. Quando o plantão aparece no meio, a revisão é a primeira que fica pra depois.\n\nO que ajuda é montar a semana no domingo, começando pelo que é fixo: plantão, aula da faculdade e descanso. O estudo entra no espaço que sobra de verdade. No Cadência Med o mentor de IA olha o seu painel e diz o que priorizar, a agenda monta a semana com você (e conversa com o Google Agenda) e a tela Hoje mostra a revisão de cada dia.\n\nSalva esse post pra usar no próximo domingo e manda pra quem também começa a semana no improviso 📌\n\nQuantas horas você vai estudar amanhã? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #cronogramadeestudos",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "DOMINGO À NOITE",
+      "tag": "SUA SEMANA",
+      "titulo": "JÁ SABE O QUE VAI {g}ESTUDAR AMANHÃ?{/g}",
+      "texto": "Se a resposta foi \"vou ver na hora\", arrasta pra ver <b>como deixar a semana pronta hoje</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 410,
+        "foco": "center"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "A SEMANA COMEÇA {g}EM BRANCO{/g}",
+      "texto": "Você sabe que tem plantão e aula, mas o estudo ficou pra <b>decidir na hora</b>.",
+      "ui": {
+        "tipo": "semana",
+        "titulo": "Sua semana no domingo à noite",
+        "dias": [
+          {"d": "SEG", "blocos": [{"t": "?", "cor": "#6B6880"}]},
+          {"d": "TER", "blocos": [{"t": "Aula", "cor": "#A86BFF"}, {"t": "?", "cor": "#6B6880"}]},
+          {"d": "QUA", "blocos": [{"t": "Plantão 12h", "cor": "#F2557A"}]},
+          {"d": "QUI", "blocos": [{"t": "?", "cor": "#6B6880"}]},
+          {"d": "SEX", "blocos": [{"t": "Aula", "cor": "#A86BFF"}, {"t": "?", "cor": "#6B6880"}]},
+          {"d": "SÁB", "blocos": [{"t": "?", "cor": "#6B6880"}]},
+          {"d": "DOM", "blocos": [{"t": "?", "cor": "#6B6880"}]}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "A SEGUNDA VAI {g}EMBORA ESCOLHENDO{/g}",
+      "texto": "Metade da manhã passa decidindo por onde começar. E quando o plantão chega, <b>a revisão é a primeira que fica</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "O que ficou pra trás até quinta",
+        "itens": [
+          {"titulo": "Revisão de Cardiologia", "sub": "venceu na segunda", "selo": "atrasada", "cor": "#A86BFF", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Aula de Pediatria", "sub": "ia ver depois do plantão", "selo": "atrasada", "cor": "#46D9F5", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Questões de Preventiva", "sub": "ficou pro fim de semana", "selo": "atrasada", "cor": "#F5A524", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "MONTE NO DOMINGO, {g}PELO QUE É FIXO{/g}",
+      "texto": "Plantão, aula da faculdade e descanso entram primeiro. O estudo vai <b>no espaço que sobra de verdade</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "rotina",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Agenda da semana"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "MENTOR DE IA",
+      "tag": "MENTOR DE IA",
+      "titulo": "PERGUNTE {g}O QUE PRIORIZAR{/g}",
+      "texto": "O mentor de IA olha o seu painel, as revisões que venceram e os seus plantões, e <b>diz por onde começar a semana</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Mentor de IA"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "SEGUNDA",
+      "tag": "TELA HOJE",
+      "titulo": "SEGUNDA DE MANHÃ, {g}É SÓ ABRIR{/g}",
+      "texto": "A tela Hoje mostra a agenda do dia e a revisão que venceu. <b>Você senta e já começa</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Tela Hoje"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "A SEMANA PRONTA {g}ANTES DA SEGUNDA{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Mentor de IA", "texto": "diz o que priorizar olhando o seu painel"},
+          {"titulo": "Agenda", "texto": "monta a semana e conversa com o Google Agenda"},
+          {"titulo": "Tela Hoje", "texto": "a revisão do dia aparece sozinha"},
+          {"titulo": "Foco", "texto": "pomodoro que registra cada hora estudada"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
