@@ -58,7 +58,7 @@ function valorNotion(tipo, v) {
     case "checkbox": return { checkbox: v === true || v === "true" || v === 1 || v === "__YES__" };
     case "rich_text": { const t = String(v); const partes = []; for (let i = 0; i < t.length; i += 1900) partes.push({ type: "text", text: { content: t.slice(i, i + 1900) } }); return { rich_text: partes }; }
     case "date": return { date: { start: String(v).slice(0, 10) } };
-    case "number": return { number: Number(String(v).replace(",", ".")) };
+    case "number": { const n = typeof v === "number" ? v : Number(String(v).trim().replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", ".")); return Number.isFinite(n) ? { number: n } : null; }
     case "phone_number": return { phone_number: String(v) };
     case "title": return { title: [{ type: "text", text: { content: String(v).slice(0, 1900) } }] };
     case "url": return { url: String(v) };
@@ -96,6 +96,8 @@ async function clienteRecente(env, dbc, props) {
 }
 // Gemini: o site sobe cada arquivo (File API) e depois pede a leitura com as referências. A chave nunca sai da ponte.
 const GEMINI = "https://generativelanguage.googleapis.com";
+// O Worker tem 128 MB de memória e o arquivo fica inteiro nela antes de subir
+const LIMITE_ARQUIVO = 50 * 1024 * 1024;
 let listaGemini = null;
 // Modelos na ordem de tentativa, só os que a chave enxerga: os do tipo pedido (do mais novo para o mais velho),
 // depois os do outro tipo e por último os "lite". Quando um está sobrecarregado ou não está disponível, a ponte passa para o próximo.
@@ -119,6 +121,7 @@ async function geminiArquivo(env, req) {
   let nome = "arquivo"; try { nome = decodeURIComponent(req.headers.get("X-Nome") || "arquivo"); } catch {}
   const dados = await req.arrayBuffer();
   if (!dados.byteLength) return [400, { erro: "arquivo vazio" }];
+  if (dados.byteLength > LIMITE_ARQUIVO) return [413, { erro: "arquivo maior que 50 MB" }];
   const ini = await fetch(`${GEMINI}/upload/v1beta/files`, { method: "POST", headers: { "x-goog-api-key": env.GEMINI_API_KEY, "X-Goog-Upload-Protocol": "resumable", "X-Goog-Upload-Command": "start", "X-Goog-Upload-Header-Content-Length": String(dados.byteLength), "X-Goog-Upload-Header-Content-Type": tipo, "Content-Type": "application/json" }, body: JSON.stringify({ file: { display_name: nome.slice(0, 120) } }) });
   const destino = ini.headers.get("x-goog-upload-url");
   if (!ini.ok || !destino) return [502, { erro: "O Gemini não aceitou o arquivo: " + (await ini.text()).slice(0, 300) }];
@@ -197,6 +200,14 @@ async function ajustarOpcoes(env, dbId, props) {
   return props;
 }
 
+// A página é do Controle cliente: o pai é a base CLIENTES_DB ou, se o id mudou, uma base com esse nome
+const semTraco = s => String(s || "").replace(/-/g, "");
+async function doControle(env, pg) {
+  const pai = semTraco(pg.parent?.database_id);
+  if (!pai) return false;
+  if (pai === semTraco(env.CLIENTES_DB)) return true;
+  try { const db = await notion(env, `databases/${pai}`); return /controle cliente/i.test(tituloDe(db)); } catch { return false; }
+}
 // Converte {coluna: valor} do site no formato do Notion, só com as colunas permitidas
 function montar(permitidas, entrada) {
   const props = {}; const recusadas = [];
@@ -204,7 +215,7 @@ function montar(permitidas, entrada) {
     const tipo = permitidas[nome]; if (!tipo) { recusadas.push(nome); continue; }
     if (tipo === "rich_text" && String(v ?? "").length > 190000) return { erro: `${nome} grande demais` };
     if (tipo === "url" && v && !/^https?:\/\//i.test(String(v))) { recusadas.push(nome); continue; }
-    const nv = valorNotion(tipo, v); if (nv) props[nome] = nv;
+    const nv = valorNotion(tipo, v); if (nv) props[nome] = nv; else recusadas.push(nome);
   }
   return { props, recusadas };
 }
@@ -284,7 +295,9 @@ export default {
     if (url.pathname === "/feedback/enviar") {
       if (req.method !== "POST") return resposta({ erro: "use POST" }, 405, h);
       if (Number(req.headers.get("Content-Length") || 0) > 20000) return resposta({ erro: "grande demais" }, 413, h);
-      let corpo; try { corpo = await req.json(); } catch { return resposta({ erro: "JSON inválido" }, 400, h); }
+      // Lê como texto e confere o tamanho: o Content-Length pode não vir
+      let corpo; try { const t = await req.text(); if (t.length > 20000) return resposta({ erro: "grande demais" }, 413, h); corpo = JSON.parse(t); } catch { return resposta({ erro: "JSON inválido" }, 400, h); }
+      if (!corpo || typeof corpo !== "object") return resposta({ erro: "JSON inválido" }, 400, h);
       try { const [st, j] = await receberFeedback(env, corpo); return resposta(j, st, h); }
       catch (e) { return resposta({ erro: e.message }, 502, h); }
     }
@@ -302,11 +315,12 @@ export default {
     // Gemini: o arquivo vem cru no corpo (PDF ou foto), por isso antes de ler JSON
     if (url.pathname.startsWith("/gemini/") && !env.GEMINI_API_KEY) return resposta({ erro: "A chave do Gemini ainda não está na ponte" }, 503, h);
     if (url.pathname === "/gemini/arquivo") {
-      if (Number(req.headers.get("Content-Length") || 0) > 60 * 1024 * 1024) return resposta({ erro: "arquivo maior que 60 MB" }, 413, h);
+      if (Number(req.headers.get("Content-Length") || 0) > LIMITE_ARQUIVO) return resposta({ erro: "arquivo maior que 50 MB" }, 413, h);
       try { const [st, j] = await geminiArquivo(env, req); return resposta(j, st, h); } catch (e) { return resposta({ erro: e.message }, 502, h); }
     }
 
     let corpo; try { corpo = await req.json(); } catch { return resposta({ erro: "JSON inválido" }, 400, h); }
+    if (!corpo || typeof corpo !== "object" || Array.isArray(corpo)) return resposta({ erro: "JSON inválido" }, 400, h);
 
     if (url.pathname === "/gemini/estado") { try { const [st, j] = await geminiEstado(env, corpo.nome); return resposta(j, st, h); } catch (e) { return resposta({ erro: e.message }, 502, h); } }
     if (url.pathname === "/gemini/gerar") { try { const [st, j] = await geminiGerar(env, corpo); return resposta(j, st, h); } catch (e) { return resposta({ erro: e.message }, 502, h); } }
@@ -363,17 +377,24 @@ export default {
 
     if (url.pathname === "/pagina") {
       const id = String(corpo.id || "").replace(/-/g, ""); if (!/^[0-9a-f]{32}$/.test(id)) return resposta({ erro: "id da página inválido" }, 400, h);
+      if (!corpo.props || typeof corpo.props !== "object" || Array.isArray(corpo.props)) return resposta({ erro: "faltam as colunas" }, 400, h);
       const props = {}; const recusadas = [];
+      // Só grava em linhas do "Controle cliente": o id vem do site, e a conexão do Notion enxerga outras páginas
+      let pg = null;
+      if (env.CLIENTES_DB) {
+        try { pg = await notion(env, `pages/${id}`); } catch (e) { return resposta({ erro: e.message }, 502, h); }
+        if (!(await doControle(env, pg))) return resposta({ erro: "essa página não é do Controle cliente" }, 403, h);
+      }
       // O mentor ajusta o "Valor total" do próprio orçamento enquanto o cliente não pagou nada. Depois disso, só o administrador.
       let naoPago = false;
-      if (!admin && corpo.props && "Valor total" in corpo.props) {
-        try { const pg = await notion(env, `pages/${id}`); const p = pg.properties?.["Pagamento"]?.select?.name || ""; naoPago = !p || semAcento(p).startsWith("nao pago"); } catch {}
+      if (!admin && "Valor total" in corpo.props) {
+        try { pg ||= await notion(env, `pages/${id}`); const p = pg.properties?.["Pagamento"]?.select?.name || ""; naoPago = !p || semAcento(p).startsWith("nao pago"); } catch {}
       }
       for (const [nome, v] of Object.entries(corpo.props || {})) {
         const liberadoMentor = nome === "Valor total" && naoPago;
         const tipo = COLUNAS[nome] || (admin || liberadoMentor ? TIPOS_ADMIN[nome] : null);
         if (!tipo || (SO_ADMIN.has(nome) && !admin && !liberadoMentor)) { recusadas.push(nome); continue; }
-        const nv = valorNotion(tipo, v); if (nv) props[nome] = nv;
+        const nv = valorNotion(tipo, v); if (nv) props[nome] = nv; else recusadas.push(nome);
       }
       if (!Object.keys(props).length) return resposta({ erro: "nenhuma coluna permitida", recusadas }, 403, h);
       try { await notion(env, `pages/${id}`, "PATCH", { properties: props }); }

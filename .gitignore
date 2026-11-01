@@ -6,3 +6,4 @@ cadencia/saida/
 cadencia/node_modules/
 cadencia/package.json
 cadencia/package-lock.json
+.env

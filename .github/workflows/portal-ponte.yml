@@ -60,6 +60,13 @@ jobs:
             exit 0
           done
 
+      - name: Conferir a trava do /pagina
+        env:
+          PORTAL_SENHA: ${{ secrets.PORTAL_SENHA }}
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB: ${{ secrets.NOTION_DB }}
+        run: node scripts/portal/teste/trava-pagina.mjs
+
       - name: Verificar a versão no ar
         env:
           SENHA: ${{ secrets.PORTAL_SENHA }}

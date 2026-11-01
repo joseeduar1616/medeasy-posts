@@ -35,12 +35,16 @@ function servicoEditor(c, s){
   if (!temPonte() || !s.id) return "";
   const pago = (c.repasses || []).find(r => r.servico === s.id && r.papel === "Mentor");
   return `<div class="row" style="margin-top:8px;gap:6px" data-svc="${s.id}">
-    <select class="in" data-se="Status" style="width:auto;padding:5px 8px;font-size:13px">${STATUS_NOTION.map(o => `<option ${semAcento(s.status) === semAcento(o) ? "selected" : ""}>${o}</option>`).join("")}</select>
-    <select class="in" data-se="Pagamento" style="width:auto;padding:5px 8px;font-size:13px">${PAGAMENTO_NOTION.map(o => `<option ${semAcento(s.pagamento || "") === semAcento(o) ? "selected" : ""}>${o}</option>`).join("")}${s.pagamento == null || !PAGAMENTO_NOTION.some(o => semAcento(o) === semAcento(s.pagamento || "")) ? `<option value="" selected>Pagamento: em branco</option>` : ""}</select>
+    <select class="in" data-se="Status" aria-label="Status do serviço" style="width:auto;padding:5px 8px;font-size:13px">${STATUS_NOTION.map(o => `<option ${semAcento(s.status) === semAcento(o) ? "selected" : ""}>${o}</option>`).join("")}</select>
+    <select class="in" data-se="Pagamento" aria-label="Pagamento do serviço" style="width:auto;padding:5px 8px;font-size:13px">${PAGAMENTO_NOTION.map(o => `<option ${semAcento(s.pagamento || "") === semAcento(o) ? "selected" : ""}>${o}</option>`).join("")}${s.pagamento == null || !PAGAMENTO_NOTION.some(o => semAcento(o) === semAcento(s.pagamento || "")) ? `<option value="" selected>Pagamento: em branco</option>` : ""}</select>
     ${S.admin ? `<label class="chk"><input type="checkbox" data-se="Mentor pago" ${pago && pago.pago ? "checked" : ""}><span>Mentor pago</span></label>` : ""}
     <button class="btn sm pri" data-a="salvarServico" data-id="${s.id}">Salvar no Notion</button></div>`;
 }
 async function salvarServico(id){
+  if (S.salvandoSvc) return; S.salvandoSvc = true;
+  try { await salvarServicoJa(id); } finally { S.salvandoSvc = false; }
+}
+async function salvarServicoJa(id){
   const c = clienteSel(); const s = (c.servicos || []).find(x => x.id === id); if (!s) return;
   const box = document.querySelector(`[data-svc="${id}"]`); const props = {};
   box.querySelectorAll("[data-se]").forEach(el => { props[el.dataset.se] = el.type === "checkbox" ? el.checked : el.value; });
@@ -79,16 +83,19 @@ function pagamentoCard(c){
   const nomeSvc = id => (svs.find(s => s.id === id) || {}).nome || "";
   return `<section class="card"><div class="card-h"><h2>Pagamento do cliente</h2></div><div class="row between small"><span>Total</span><b class="num">${brl(f.total)}</b></div><div class="row between small"><span>Pago${lst.length ? "" : ` <span class="xs muted">(conta pelo status do Notion)</span>`}</span><b class="num neon">${brl(f.pago)}</b></div><div class="row between small"><span>Saldo</span><b class="num gold">${brl(f.saldo)}</b></div>
    ${lst.length ? `<div class="list" style="margin-top:10px">${lst.map(p => `<div class="li"><div class="grow"><div class="t">${brl(p.valor)}${p.forma ? " · " + esc(p.forma) : ""}</div><div class="xs muted">${p.data ? dBR(p.data) : "sem data"}${svs.length > 1 && nomeSvc(p.servico) ? " · " + esc(nomeSvc(p.servico)) : ""}</div></div><button class="btn sm ghost" data-a="pagTirar" data-id="${esc(p.id)}">Tirar</button></div>`).join("")}</div>` : ""}
-   ${svs.length ? `<div class="stack" style="margin-top:10px;gap:6px"><div class="row" style="gap:6px"><input class="in" id="pagValor" inputmode="decimal" placeholder="Valor pago" style="flex:1;min-width:120px"><input class="in" id="pagData" type="date" value="${isoLocal()}" style="width:auto"></div>
-    <div class="row" style="gap:6px">${svs.length > 1 ? `<select class="in" id="pagSvc" style="flex:1;min-width:120px"><option value="">Cliente todo</option>${svs.map(s => `<option value="${esc(s.id)}">Só ${esc(s.nome)}${s.total ? " · " + brl(s.total) : ""}</option>`).join("")}</select>` : ""}<select class="in" id="pagForma" style="width:auto">${["", ...FORMAS_PAG].map(x => `<option value="${x}">${x || "Forma"}</option>`).join("")}</select><button class="btn sm pri" data-a="pagLancar">Lançar pagamento</button></div>
+   ${svs.length ? `<div class="stack" style="margin-top:10px;gap:6px"><div class="row" style="gap:6px"><input class="in" id="pagValor" inputmode="decimal" aria-label="Valor pago" placeholder="Valor pago" style="flex:1;min-width:120px"><input class="in" id="pagData" type="date" aria-label="Data do pagamento" value="${isoLocal()}" style="width:auto"></div>
+    <div class="row" style="gap:6px">${svs.length > 1 ? `<select class="in" id="pagSvc" aria-label="Serviço pago" style="flex:1;min-width:120px"><option value="">Cliente todo</option>${svs.map(s => `<option value="${esc(s.id)}">Só ${esc(s.nome)}${s.total ? " · " + brl(s.total) : ""}</option>`).join("")}</select>` : ""}<select class="in" id="pagForma" aria-label="Forma de pagamento" style="width:auto">${["", ...FORMAS_PAG].map(x => `<option value="${x}">${x || "Forma"}</option>`).join("")}</select><button class="btn sm pri" data-a="pagLancar">Lançar pagamento</button></div>
     <p class="xs muted" style="margin:0">${lst.length ? "O Pago é a soma dos valores lançados." : "Depois do primeiro lançamento, o Pago passa a ser só a soma do que for lançado. Lance também o que o cliente já tinha pago antes."} O Pagamento no Notion muda sozinho: 1° parcela quando entra o primeiro valor e Pagamento finalizado quando chega no total.</p></div>` : ""}</section>`;
 }
 async function lancarPagamento(){
+  // Dois toques seguidos lançavam o mesmo pagamento duas vezes
+  if (S.lancandoPag) return;
   const c = clienteSel(); if (!c) return; const svs = svcsPagaveis(c); if (!svs.length) return;
   const v = r2(num(document.getElementById("pagValor")?.value)); if (!(v > 0)){ toast("Digite o valor que o cliente pagou"); return; }
   const sid = svs.length > 1 ? document.getElementById("pagSvc")?.value || "" : svs[0].id;
   const ct = ctrlDe(c); (ct.pagamentos ||= []).push({ id:"pg" + Date.now().toString(36), valor:v, data:document.getElementById("pagData")?.value || isoLocal(), servico:sid, forma:document.getElementById("pagForma")?.value || "" });
-  await gravarPagamentos(c, `Pagamento de ${brl(v)} lançado`);
+  S.lancandoPag = true; const bt = document.querySelector("[data-a=pagLancar]"); if (bt){ bt.disabled = true; bt.textContent = "Lançando..."; }
+  try { await gravarPagamentos(c, `Pagamento de ${brl(v)} lançado`); } finally { S.lancandoPag = false; render(); }
 }
 async function tirarPagamento(id){
   const c = clienteSel(); if (!c) return; const ct = ctrlDe(c); const p = (ct.pagamentos || []).find(x => x.id === id); if (!p) return;

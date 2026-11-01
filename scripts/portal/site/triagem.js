@@ -165,7 +165,8 @@ function triagemFormView(){
   </main>`;
 }
 function enviarTriagem(){
-  const d = S.triForm; if (!d.nome || !d.whats){ toast("Preencha o nome e o WhatsApp"); return; }
+  const d = S.triForm; if (!String(d.nome || "").trim() || !d.whats){ toast("Preencha o nome e o WhatsApp"); return; }
+  if (String(d.whats).replace(/\D/g, "").length < 10){ toast("Confira o WhatsApp: coloque o DDD e o número, como (62) 99999-9999"); return; }
   if (!provasTri(d).length && !confirm("Você não marcou nenhuma prova. Enviar assim mesmo?")) return;
   const dest = S.triDestino || CONTATO.whats; d.em = Date.now(); delete d.servico;
   window.open(waLink(dest, mensagemTri(d)), "_blank");
@@ -388,7 +389,7 @@ function triagemItemView(){
   const c = clienteDaTriagem(t); const ops = opcoesTri(t); const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo;
   const chk = (kk, nome) => `<label class="chk"><input type="checkbox" data-tri="prova" value="${kk}" ${(t.provas || []).includes(kk) ? "checked" : ""}><span>${esc(nome)}</span></label>`;
   return `<div class="pagehead"><div><button class="btn ghost sm" data-a="nav" data-v="triagem" style="margin-left:-10px">‹ Triagem</button><h1>${esc(t.nome || "Cliente novo")}</h1><div class="row" style="margin-top:6px"><span class="pill ${k}">${et}</span>${t.area ? `<span class="pill ok">${esc(t.area)}</span>` : ""}<span id="triSync">${syncTriTexto(t.id)}</span></div></div>
-    <div class="row">${t.whats ? `<a class="btn" href="${waLink(t.whats, "Oi, " + primeiro(t.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}${t.notion ? `<a class="btn" href="${esc(t.notion)}" target="_blank" rel="noopener">Arquivos no Notion${t.arquivos ? ` (${t.arquivos})` : ""}</a>` : ""}<select class="in" id="triEtapa" style="width:auto">${Object.entries(ETAPAS_TRI).map(([kk, [tt]]) => `<option value="${kk}" ${t.etapa === kk ? "selected" : ""}>${tt}</option>`).join("")}</select><button class="btn sm danger" data-a="apagarTri">Apagar</button></div></div>
+    <div class="row">${t.whats ? `<a class="btn" href="${waLink(t.whats, "Oi, " + primeiro(t.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}${t.notion ? `<a class="btn" href="${esc(t.notion)}" target="_blank" rel="noopener">Arquivos no Notion${t.arquivos ? ` (${t.arquivos})` : ""}</a>` : ""}<select class="in" id="triEtapa" aria-label="Etapa da triagem" style="width:auto">${Object.entries(ETAPAS_TRI).map(([kk, [tt]]) => `<option value="${kk}" ${t.etapa === kk ? "selected" : ""}>${tt}</option>`).join("")}</select><button class="btn sm danger" data-a="apagarTri">Apagar</button></div></div>
    <div class="grid2"><div class="stack">
     ${t.pedido || t.obs ? `<section class="card"><div class="card-h"><h2>Pedido do cliente</h2></div>${t.pedido ? `<p class="small" style="margin:0 0 8px;white-space:pre-wrap">${esc(t.pedido)}</p>` : ""}${t.obs ? `<p class="small muted" style="margin:0 0 8px;white-space:pre-wrap">Obs: ${esc(t.obs)}</p>` : ""}<div class="xs muted">Entendido como <b>${esc(SERVICOS_TRI[t.servico] || "")}</b>${(t.motivos || []).length ? " (" + esc(t.motivos.join(", ")) + ")" : ""}. Se não for isso, troque o serviço e as provas abaixo.</div></section>` : ""}
     <section class="card"><div class="card-h"><h2>Dados</h2></div><div class="stack" style="gap:10px">
