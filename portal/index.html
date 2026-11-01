@@ -257,6 +257,8 @@ details.faq p{margin:8px 0 0;color:var(--muted)}
 .stars{display:inline-flex;gap:2px}.stars button{background:none;border:0;padding:2px 3px;font-size:30px;line-height:1;color:var(--line);cursor:pointer;font-family:inherit}.stars button.on{color:var(--gold)}.stars button:focus-visible{outline:2px solid var(--neon);border-radius:6px}
 .nova-versao{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--neon);border-radius:var(--r);padding:10px 14px;box-shadow:0 8px 30px rgba(0,0,0,.4);font-size:14px;max-width:calc(100% - 32px)}
 .ci-passo{display:inline-flex;align-items:center;gap:2px}.ci-passo .btn{padding:4px 9px;font-size:16px;line-height:1}
+/* Celular e tablet: botões pequenos com área de toque maior (mínimo de uns 36 pixels) */
+@media (pointer:coarse){.btn.sm{min-height:36px;padding:7px 12px}.ci-passo .btn{min-width:36px;min-height:36px}.tab{padding:10px 14px}}
 
 .login{max-width:400px;width:100%;text-align:left}
 .login h1{font-size:30px;text-align:center}
@@ -276,7 +278,7 @@ details.faq p{margin:8px 0 0;color:var(--muted)}
 </head>
 <body>
 <div id="app"><div class="wrap"><div class="gate"><div class="box"><div class="spin"></div></div></div></div></div>
-<div id="toast" class="toast" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script>
 "use strict";
 if (/\/portal$/.test(location.pathname)) location.replace(location.pathname + "/" + location.search);
@@ -313,7 +315,8 @@ function soDigitos(s){ let d = String(s || "").replace(/\D/g, ""); if (d && d.le
 function waLink(fone, texto){ const d = soDigitos(fone); return `https://wa.me/${d}?text=${encodeURIComponent(texto || "")}`; }
 const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 const codFmt = c => c ? c.slice(0, 5) + "-" + c.slice(5) : "";
-function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); }
+// Mensagem longa (erro com o motivo) fica mais tempo na tela: com 2,6 segundos fixos ninguém conseguia ler
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, Math.min(9000, 2600 + String(msg || "").length * 35)); }
 async function copiar(texto){ try { await navigator.clipboard.writeText(texto); toast("Copiado"); } catch { prompt("Copie:", texto); } }
 
 /* ---------- cripto (mesmo formato de scripts/portal/build.mjs) ---------- */
@@ -339,7 +342,11 @@ function sair(){ try { sessionStorage.removeItem("medeasy"); } catch {} Object.a
 async function entrarCliente(codigo){
   codigo = normCodigo(codigo); if (codigo.length < 8){ S.erro = "Confira o código. Ele tem 10 letras e números"; render(); return; }
   S.carregando = true; S.erro = ""; render();
-  try { const env = await baixar(`data/c/${await arquivoCliente(codigo)}.json`); S.portal = await abrir(env, codigo); juntarContagemCliente(S.portal); S.portal.orcamento = (S.portal.tipos || []).length ? estimarJS(clienteDoPortal(S.portal)) : null; S.modo = S.querFeedback ? "feedback" : "cliente"; S.codigo = codigo; guardar("cliente", "", codigo); }
+  // Sai do cliente anterior antes de abrir outro: se o código novo falhar, a tela não fica com os dados de outra pessoa
+  if (S.codigo && S.codigo !== codigo){ S.portal = null; S.codigo = ""; try { sessionStorage.removeItem("medeasy"); } catch {} }
+  let env; try { env = await baixar(`data/c/${await arquivoCliente(codigo)}.json`); }
+  catch (e) { S.erro = String(e.message) === "404" ? "Código não encontrado. Confira com o seu mentor" : "Não consegui carregar. Confira a internet e tente de novo"; S.carregando = false; render(); return; }
+  try { S.portal = await abrir(env, codigo); juntarContagemCliente(S.portal); S.portal.orcamento = (S.portal.tipos || []).length ? estimarJS(clienteDoPortal(S.portal)) : null; S.modo = S.querFeedback ? "feedback" : "cliente"; S.codigo = codigo; S.loginCodigo = ""; guardar("cliente", "", codigo); }
   catch { S.erro = "Código não encontrado. Confira com o seu mentor"; }
   S.carregando = false; render();
 }
@@ -390,8 +397,8 @@ function loginView(){
   return gate(`<img src="${LOGO}" alt="MedEasy" style="width:110px"><div class="login stack"><h1>Portal MedEasy</h1>
     <div class="seg"><button data-a="aba" data-v="cliente" aria-pressed="${cli}">Sou cliente</button><button data-a="aba" data-v="mentor" aria-pressed="${!cli}">Sou mentor</button></div>
     <form id="fLogin" class="stack" autocomplete="on">
-      ${cli ? `<label class="f"><span>Seu código de acesso</span><input class="in mono" id="lCodigo" placeholder="XXXXX-XXXXX" autocomplete="one-time-code" autocapitalize="characters" required></label>`
-            : `<label class="f"><span>Seu nome</span><input class="in" id="lNome" autocomplete="username" autocorrect="off" spellcheck="false" required></label><label class="f"><span>Senha</span><input class="in" id="lSenha" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>`}
+      ${cli ? `<label class="f"><span>Seu código de acesso</span><input class="in mono" id="lCodigo" value="${esc(S.loginCodigo || "")}" placeholder="XXXXX-XXXXX" autocomplete="one-time-code" autocapitalize="characters" required></label>`
+            : `<label class="f"><span>Seu nome</span><input class="in" id="lNome" value="${esc(S.loginNome || "")}" autocomplete="username" autocorrect="off" spellcheck="false" required></label><label class="f"><span>Senha</span><input class="in" id="lSenha" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>`}
       <div class="err">${esc(S.erro)}</div>
       <button class="btn pri" type="submit" ${S.carregando ? "disabled" : ""}>${S.carregando ? "Abrindo" : "Entrar"}</button>
     </form>
@@ -405,7 +412,7 @@ function mentorView(){
   const mentores = (S.eq.mentores || []).map(m => m.nome);
   return `<header class="top"><div class="wrap top-in"><img class="logo" src="${LOGO}" alt=""><div class="brand"><b>MED<i>EASY</i></b><span>${esc(S.mentor.nome)}${S.admin ? " · admin" : ""}</span></div>
     <nav class="tabs">${(S.admin && S.adminDados ? [...ABAS, ["feedbacks","Feedbacks"]] : ABAS).map(([k, t]) => `<button class="tab" data-a="nav" data-v="${k}" ${v === k ? 'aria-current="page"' : ""}>${t}</button>`).join("")}</nav>
-    ${S.admin ? `<select class="in" id="verMentor" style="width:auto"><option value="">Toda a equipe</option>${mentores.map(n => `<option ${S.verMentor === n ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>` : ""}
+    ${S.admin ? `<select class="in" id="verMentor" aria-label="Ver clientes de" style="width:auto"><option value="">Toda a equipe</option>${mentores.map(n => `<option ${S.verMentor === n ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>` : ""}
     <button class="btn sm ghost" data-a="sair">Sair</button></div></header>
     <main class="wrap">${body}<p class="xs faint" style="margin-top:24px">Dados de ${esc(dataHora(S.eq.geradoEm))}. ${typeof temPonte === "function" && temPonte() ? "O que você salvar aqui vai para o Notion na hora, e o site atualiza em 1 ou 2 minutos." : "Para mudar algo, edite no Notion. O portal atualiza sozinho."} Versão do site ${VERSAO_SITE}.</p></main>`;
 }
@@ -1412,7 +1419,8 @@ function triagemFormView(){
   </main>`;
 }
 function enviarTriagem(){
-  const d = S.triForm; if (!d.nome || !d.whats){ toast("Preencha o nome e o WhatsApp"); return; }
+  const d = S.triForm; if (!String(d.nome || "").trim() || !d.whats){ toast("Preencha o nome e o WhatsApp"); return; }
+  if (String(d.whats).replace(/\D/g, "").length < 10){ toast("Confira o WhatsApp: coloque o DDD e o número, como (62) 99999-9999"); return; }
   if (!provasTri(d).length && !confirm("Você não marcou nenhuma prova. Enviar assim mesmo?")) return;
   const dest = S.triDestino || CONTATO.whats; d.em = Date.now(); delete d.servico;
   window.open(waLink(dest, mensagemTri(d)), "_blank");
@@ -1635,7 +1643,7 @@ function triagemItemView(){
   const c = clienteDaTriagem(t); const ops = opcoesTri(t); const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo;
   const chk = (kk, nome) => `<label class="chk"><input type="checkbox" data-tri="prova" value="${kk}" ${(t.provas || []).includes(kk) ? "checked" : ""}><span>${esc(nome)}</span></label>`;
   return `<div class="pagehead"><div><button class="btn ghost sm" data-a="nav" data-v="triagem" style="margin-left:-10px">‹ Triagem</button><h1>${esc(t.nome || "Cliente novo")}</h1><div class="row" style="margin-top:6px"><span class="pill ${k}">${et}</span>${t.area ? `<span class="pill ok">${esc(t.area)}</span>` : ""}<span id="triSync">${syncTriTexto(t.id)}</span></div></div>
-    <div class="row">${t.whats ? `<a class="btn" href="${waLink(t.whats, "Oi, " + primeiro(t.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}${t.notion ? `<a class="btn" href="${esc(t.notion)}" target="_blank" rel="noopener">Arquivos no Notion${t.arquivos ? ` (${t.arquivos})` : ""}</a>` : ""}<select class="in" id="triEtapa" style="width:auto">${Object.entries(ETAPAS_TRI).map(([kk, [tt]]) => `<option value="${kk}" ${t.etapa === kk ? "selected" : ""}>${tt}</option>`).join("")}</select><button class="btn sm danger" data-a="apagarTri">Apagar</button></div></div>
+    <div class="row">${t.whats ? `<a class="btn" href="${waLink(t.whats, "Oi, " + primeiro(t.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}${t.notion ? `<a class="btn" href="${esc(t.notion)}" target="_blank" rel="noopener">Arquivos no Notion${t.arquivos ? ` (${t.arquivos})` : ""}</a>` : ""}<select class="in" id="triEtapa" aria-label="Etapa da triagem" style="width:auto">${Object.entries(ETAPAS_TRI).map(([kk, [tt]]) => `<option value="${kk}" ${t.etapa === kk ? "selected" : ""}>${tt}</option>`).join("")}</select><button class="btn sm danger" data-a="apagarTri">Apagar</button></div></div>
    <div class="grid2"><div class="stack">
     ${t.pedido || t.obs ? `<section class="card"><div class="card-h"><h2>Pedido do cliente</h2></div>${t.pedido ? `<p class="small" style="margin:0 0 8px;white-space:pre-wrap">${esc(t.pedido)}</p>` : ""}${t.obs ? `<p class="small muted" style="margin:0 0 8px;white-space:pre-wrap">Obs: ${esc(t.obs)}</p>` : ""}<div class="xs muted">Entendido como <b>${esc(SERVICOS_TRI[t.servico] || "")}</b>${(t.motivos || []).length ? " (" + esc(t.motivos.join(", ")) + ")" : ""}. Se não for isso, troque o serviço e as provas abaixo.</div></section>` : ""}
     <section class="card"><div class="card-h"><h2>Dados</h2></div><div class="stack" style="gap:10px">
@@ -2658,8 +2666,8 @@ function marcacaoView(pv){
    <div class="bar" style="margin-top:10px;height:8px;position:relative"><i style="width:${r.atual.max ? r.atual.total / r.atual.max * 100 : 0}%"></i><i style="position:absolute;left:${r.atual.max ? r.atual.total / r.atual.max * 100 : 0}%;width:${r.atual.max ? (r.meta.total - r.atual.total) / r.atual.max * 100 : 0}%;background:var(--gold);opacity:.6"></i></div>
    <div class="stack" style="gap:8px;margin-top:12px">${r.itens.map((it, i) => { const x = m[it.key] || {}; const st = x.st || "nao"; const row = r.atual.rows[i];
      return `<div class="svc" style="padding:10px 12px"><div class="row between" style="gap:8px"><div style="min-width:0"><div class="small" style="font-weight:600">${esc(it.item)}</div><div class="xs muted">${esc(it.pontos || "")}</div></div><b class="num ${row.pts >= it.maxN ? "neon" : "muted"}" style="white-space:nowrap">${d1(row.pts)} / ${d1(it.maxN)}</b></div>
-       <div class="row" style="margin-top:8px;gap:6px"><select class="in" data-marc="st" data-pk="${pk}" data-key="${esc(it.key)}" style="width:auto;flex:1;min-width:140px">${Object.entries(MARC_ST).map(([k, t]) => `<option value="${k}" ${st === k ? "selected" : ""}>${t}</option>`).join("")}</select>
-       ${it.unit != null && (st === "tenho" || st === "andamento") ? `<input class="in num" type="number" min="0" step="1" inputmode="numeric" data-marc="n" data-pk="${pk}" data-key="${esc(it.key)}" value="${x.n || ""}" placeholder="quantos" style="width:92px">` : ""}
+       <div class="row" style="margin-top:8px;gap:6px"><select class="in" data-marc="st" data-pk="${pk}" data-key="${esc(it.key)}" aria-label="Situação: ${esc(it.key)}" style="width:auto;flex:1;min-width:140px">${Object.entries(MARC_ST).map(([k, t]) => `<option value="${k}" ${st === k ? "selected" : ""}>${t}</option>`).join("")}</select>
+       ${it.unit != null && (st === "tenho" || st === "andamento") ? `<input class="in num" type="number" min="0" step="1" inputmode="numeric" data-marc="n" data-pk="${pk}" data-key="${esc(it.key)}" aria-label="Quantos certificados: ${esc(it.key)}" value="${x.n || ""}" placeholder="quantos" style="width:92px">` : ""}
        ${it.unit == null && st === "tenho" ? `<input class="in num" type="number" min="0" step="0.01" inputmode="decimal" data-marc="pts" data-pk="${pk}" data-key="${esc(it.key)}" value="${x.pts ?? ""}" placeholder="pontos" title="Se não souber, deixe em branco que conta o máximo" style="width:92px">` : ""}</div></div>`; }).join("")}</div>
    ${r.faltam.length && marcou ? `<div class="label" style="margin:14px 0 6px">O que falta, do que vale mais</div><div class="stack" style="gap:6px">${r.faltam.slice(0, 6).map(f => `<div class="pend" style="padding:8px 12px"><div class="grow small"><b>${esc(f.x.item)}</b>${f.st === "andamento" ? ` <span class="pill gold">em andamento</span>` : ""}<div class="xs muted">${esc(f.x.pontos || "")}</div></div><b class="num gold">+${d1(f.falta)}</b></div>`).join("")}</div>` : ""}
    <div class="row" style="margin-top:12px"><button class="btn sm pri" data-a="enviarMarc" data-pk="${pk}" ${marcou ? "" : "disabled"}>Enviar para o mentor</button><button class="btn sm ghost" data-a="limparMarc" data-pk="${pk}" ${marcou ? "" : "disabled"}>Limpar</button></div>`;
@@ -2772,12 +2780,16 @@ function servicoEditor(c, s){
   if (!temPonte() || !s.id) return "";
   const pago = (c.repasses || []).find(r => r.servico === s.id && r.papel === "Mentor");
   return `<div class="row" style="margin-top:8px;gap:6px" data-svc="${s.id}">
-    <select class="in" data-se="Status" style="width:auto;padding:5px 8px;font-size:13px">${STATUS_NOTION.map(o => `<option ${semAcento(s.status) === semAcento(o) ? "selected" : ""}>${o}</option>`).join("")}</select>
-    <select class="in" data-se="Pagamento" style="width:auto;padding:5px 8px;font-size:13px">${PAGAMENTO_NOTION.map(o => `<option ${semAcento(s.pagamento || "") === semAcento(o) ? "selected" : ""}>${o}</option>`).join("")}${s.pagamento == null || !PAGAMENTO_NOTION.some(o => semAcento(o) === semAcento(s.pagamento || "")) ? `<option value="" selected>Pagamento: em branco</option>` : ""}</select>
+    <select class="in" data-se="Status" aria-label="Status do serviço" style="width:auto;padding:5px 8px;font-size:13px">${STATUS_NOTION.map(o => `<option ${semAcento(s.status) === semAcento(o) ? "selected" : ""}>${o}</option>`).join("")}</select>
+    <select class="in" data-se="Pagamento" aria-label="Pagamento do serviço" style="width:auto;padding:5px 8px;font-size:13px">${PAGAMENTO_NOTION.map(o => `<option ${semAcento(s.pagamento || "") === semAcento(o) ? "selected" : ""}>${o}</option>`).join("")}${s.pagamento == null || !PAGAMENTO_NOTION.some(o => semAcento(o) === semAcento(s.pagamento || "")) ? `<option value="" selected>Pagamento: em branco</option>` : ""}</select>
     ${S.admin ? `<label class="chk"><input type="checkbox" data-se="Mentor pago" ${pago && pago.pago ? "checked" : ""}><span>Mentor pago</span></label>` : ""}
     <button class="btn sm pri" data-a="salvarServico" data-id="${s.id}">Salvar no Notion</button></div>`;
 }
 async function salvarServico(id){
+  if (S.salvandoSvc) return; S.salvandoSvc = true;
+  try { await salvarServicoJa(id); } finally { S.salvandoSvc = false; }
+}
+async function salvarServicoJa(id){
   const c = clienteSel(); const s = (c.servicos || []).find(x => x.id === id); if (!s) return;
   const box = document.querySelector(`[data-svc="${id}"]`); const props = {};
   box.querySelectorAll("[data-se]").forEach(el => { props[el.dataset.se] = el.type === "checkbox" ? el.checked : el.value; });
@@ -2816,16 +2828,19 @@ function pagamentoCard(c){
   const nomeSvc = id => (svs.find(s => s.id === id) || {}).nome || "";
   return `<section class="card"><div class="card-h"><h2>Pagamento do cliente</h2></div><div class="row between small"><span>Total</span><b class="num">${brl(f.total)}</b></div><div class="row between small"><span>Pago${lst.length ? "" : ` <span class="xs muted">(conta pelo status do Notion)</span>`}</span><b class="num neon">${brl(f.pago)}</b></div><div class="row between small"><span>Saldo</span><b class="num gold">${brl(f.saldo)}</b></div>
    ${lst.length ? `<div class="list" style="margin-top:10px">${lst.map(p => `<div class="li"><div class="grow"><div class="t">${brl(p.valor)}${p.forma ? " · " + esc(p.forma) : ""}</div><div class="xs muted">${p.data ? dBR(p.data) : "sem data"}${svs.length > 1 && nomeSvc(p.servico) ? " · " + esc(nomeSvc(p.servico)) : ""}</div></div><button class="btn sm ghost" data-a="pagTirar" data-id="${esc(p.id)}">Tirar</button></div>`).join("")}</div>` : ""}
-   ${svs.length ? `<div class="stack" style="margin-top:10px;gap:6px"><div class="row" style="gap:6px"><input class="in" id="pagValor" inputmode="decimal" placeholder="Valor pago" style="flex:1;min-width:120px"><input class="in" id="pagData" type="date" value="${isoLocal()}" style="width:auto"></div>
-    <div class="row" style="gap:6px">${svs.length > 1 ? `<select class="in" id="pagSvc" style="flex:1;min-width:120px"><option value="">Cliente todo</option>${svs.map(s => `<option value="${esc(s.id)}">Só ${esc(s.nome)}${s.total ? " · " + brl(s.total) : ""}</option>`).join("")}</select>` : ""}<select class="in" id="pagForma" style="width:auto">${["", ...FORMAS_PAG].map(x => `<option value="${x}">${x || "Forma"}</option>`).join("")}</select><button class="btn sm pri" data-a="pagLancar">Lançar pagamento</button></div>
+   ${svs.length ? `<div class="stack" style="margin-top:10px;gap:6px"><div class="row" style="gap:6px"><input class="in" id="pagValor" inputmode="decimal" aria-label="Valor pago" placeholder="Valor pago" style="flex:1;min-width:120px"><input class="in" id="pagData" type="date" aria-label="Data do pagamento" value="${isoLocal()}" style="width:auto"></div>
+    <div class="row" style="gap:6px">${svs.length > 1 ? `<select class="in" id="pagSvc" aria-label="Serviço pago" style="flex:1;min-width:120px"><option value="">Cliente todo</option>${svs.map(s => `<option value="${esc(s.id)}">Só ${esc(s.nome)}${s.total ? " · " + brl(s.total) : ""}</option>`).join("")}</select>` : ""}<select class="in" id="pagForma" aria-label="Forma de pagamento" style="width:auto">${["", ...FORMAS_PAG].map(x => `<option value="${x}">${x || "Forma"}</option>`).join("")}</select><button class="btn sm pri" data-a="pagLancar">Lançar pagamento</button></div>
     <p class="xs muted" style="margin:0">${lst.length ? "O Pago é a soma dos valores lançados." : "Depois do primeiro lançamento, o Pago passa a ser só a soma do que for lançado. Lance também o que o cliente já tinha pago antes."} O Pagamento no Notion muda sozinho: 1° parcela quando entra o primeiro valor e Pagamento finalizado quando chega no total.</p></div>` : ""}</section>`;
 }
 async function lancarPagamento(){
+  // Dois toques seguidos lançavam o mesmo pagamento duas vezes
+  if (S.lancandoPag) return;
   const c = clienteSel(); if (!c) return; const svs = svcsPagaveis(c); if (!svs.length) return;
   const v = r2(num(document.getElementById("pagValor")?.value)); if (!(v > 0)){ toast("Digite o valor que o cliente pagou"); return; }
   const sid = svs.length > 1 ? document.getElementById("pagSvc")?.value || "" : svs[0].id;
   const ct = ctrlDe(c); (ct.pagamentos ||= []).push({ id:"pg" + Date.now().toString(36), valor:v, data:document.getElementById("pagData")?.value || isoLocal(), servico:sid, forma:document.getElementById("pagForma")?.value || "" });
-  await gravarPagamentos(c, `Pagamento de ${brl(v)} lançado`);
+  S.lancandoPag = true; const bt = document.querySelector("[data-a=pagLancar]"); if (bt){ bt.disabled = true; bt.textContent = "Lançando..."; }
+  try { await gravarPagamentos(c, `Pagamento de ${brl(v)} lançado`); } finally { S.lancandoPag = false; render(); }
 }
 async function tirarPagamento(id){
   const c = clienteSel(); if (!c) return; const ct = ctrlDe(c); const p = (ct.pagamentos || []).find(x => x.id === id); if (!p) return;
@@ -3080,7 +3095,11 @@ function render(){
   else if (S.preview) app.innerHTML = portalView(espelho(S.eq.clientes.find(c => c.id === S.preview)), true);
   else app.innerHTML = mentorView();
   if (S.modo !== "login") window.scrollTo(0, sy);
-  const f = $("#fLogin"); if (f){ f.onsubmit = e => { e.preventDefault(); if (S.aba === "cliente") entrarCliente($("#lCodigo").value); else entrarMentor($("#lNome").value, $("#lSenha").value); }; const first = f.querySelector("input"); if (first && !S.carregando) first.focus(); }
+  // Linhas clicáveis (cliente, triagem, painel) também abrem pelo teclado
+  app.querySelectorAll("div[data-a],tr[data-a],li[data-a]").forEach(el => { if (!el.hasAttribute("tabindex")) el.tabIndex = 0; if (!el.hasAttribute("role")) el.setAttribute("role", "button"); });
+  const f = $("#fLogin"); if (f){ f.onsubmit = e => { e.preventDefault(); if (S.aba === "cliente") entrarCliente(S.loginCodigo = $("#lCodigo").value); else entrarMentor(S.loginNome = $("#lNome").value, $("#lSenha").value); };
+    // Depois de um erro, o foco vai para o campo que precisa mudar (a senha), e o nome digitado continua lá
+    const first = S.erro && $("#lSenha") && $("#lNome").value ? $("#lSenha") : f.querySelector("input"); if (first && !S.carregando) first.focus(); }
   const b = $("#busca"); if (b){ b.oninput = () => { S.busca = b.value; const pos = b.selectionStart; render(); const nb = $("#busca"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
   const vm = $("#verMentor"); if (vm) vm.onchange = () => { S.verMentor = vm.value; render(); };
   const ft = $("#fTri"); if (ft) ft.onsubmit = e => { e.preventDefault(); enviarTriagem(); };
@@ -3144,11 +3163,12 @@ Object.assign(A, A_CTRL, A_ORC, A_CERTCLI, A_FICHA, A_FB, {
 });
 app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.ci === "cheio") { ciInput(e.target); return; } if (e.target.dataset.orcpdf) { importarOrcPdf(e.target); return; } if (e.target.dataset.notagem) { notaGemini(e.target); return; } if (e.target.dataset.orcenv) { importarOrcEnviado(e.target); return; } if (e.target.dataset.ns || e.target.dataset.nsp) { novoSvcMudou(e.target); return; } if (e.target.dataset.orcesc) { const c = clienteSel(); const ct = ctrlDe(c); if (ct.orcamento){ ct.orcamento.escolhida = e.target.dataset.orcesc; gravarOrcEnviado(c, "Opção fechada salva no Notion"); } return; } if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
 app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.fb) fbInput(e.target); else if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.nota) notaInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); else if (e.target.dataset.fe) feInput(e.target); });
+app.addEventListener("keydown", e => { if (e.key !== "Enter" && e.key !== " ") return; const el = e.target; if (!el.matches || !el.matches("div[data-a],tr[data-a],li[data-a]")) return; e.preventDefault(); el.click(); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 /* Versão nova do site: quem deixa a aba aberta continuava com o código antigo depois de uma correção.
    O montar-site grava a versão em site.txt. Ao voltar para a aba (e a cada 5 minutos) o site confere e oferece atualizar. */
-const VERSAO_SITE = "27516b938446";
+const VERSAO_SITE = "a62e862b5b8d";
 /* Erro no site aparece na tela (com a versão), em vez de falhar calado. Ajuda a mandar print para o suporte. */
 window.addEventListener("error", e => { try { toast(`Erro no site: ${e.message} (versão ${VERSAO_SITE})`); } catch {} });
 window.addEventListener("unhandledrejection", e => { try { toast(`Erro no site: ${(e.reason && e.reason.message) || e.reason} (versão ${VERSAO_SITE})`); } catch {} });
@@ -3183,11 +3203,14 @@ setInterval(conferirVersao, 5 * 60 * 1000);
   // Link da lista de certificados que o cliente montou no portal
   const certs = new URLSearchParams(location.search).get("k");
   if (certs){ S.importarCerts = certs; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
+  // O link com outro código vale mais que o cliente guardado nesta aba: sem isso, o aparelho de um cliente abria o portal de outro
+  const codSessao = s && s.tipo === "cliente" ? normCodigo(s.segredo) : "";
   if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo);
+  else if (cod && normCodigo(cod) !== codSessao){ S.aba = "cliente"; S.loginCodigo = cod; await entrarCliente(cod); }
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
-  else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }
   else render();
-  if (S.modo === "login") S.erro = "", render();
+  // Erro de uma sessão guardada (senha que mudou) não aparece ao abrir. O de um link com código errado aparece.
+  if (S.modo === "login" && !(cod && S.aba === "cliente")) S.erro = "", render();
 })();
 </script>
 </body>

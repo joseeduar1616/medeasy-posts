@@ -14,7 +14,8 @@ import path from "node:path";
 import { lerAnaliseDaUrl, lerArquivoAnalise } from "./analise.mjs";
 
 const RAIZ = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
-const SAIDA = path.join(RAIZ, "portal", "data");
+// PORTAL_SAIDA: outra pasta para os dados (os testes usam uma pasta temporária e não mexem em portal/data)
+const SAIDA = process.env.PORTAL_SAIDA ? path.resolve(process.env.PORTAL_SAIDA) : path.join(RAIZ, "portal", "data");
 const ITER = 310000;
 const ALFA = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 const enc = new TextEncoder();
@@ -224,7 +225,7 @@ async function montar(linhas) {
       pv.forEach(p => provas.has(p) || provas.set(p, { id: "p" + provas.size, nome: p, prazoEnvio: "", itens: [] }));
       for (const a of l.analises || []) {
         try { const pr = a.url ? await lerAnaliseDaUrl(a.url, a.nome || "") : lerArquivoAnalise(a.arquivo); juntarProva(provas, pr); }
-        catch (e) { console.warn(`Não consegui ler a análise "${a.nome || a.arquivo}" de ${l.cliente}: ${e.message}`); }
+        catch (e) { console.warn(`Não consegui ler uma análise da linha ...${String(l.id || "").slice(-6)}: ${e.message}`); } // sem nome: o log do GitHub é público
       }
       const etapa = etapaDe(l.status, l.pagamento);
       const m = pessoa(l.mentor), c = pessoa(l.corretor), t = pessoa(l.trainee);

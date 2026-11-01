@@ -32,7 +32,7 @@ __CSS__
 </head>
 <body>
 <div id="app"><div class="wrap"><div class="gate"><div class="box"><div class="spin"></div></div></div></div></div>
-<div id="toast" class="toast" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script>
 "use strict";
 if (/\/portal$/.test(location.pathname)) location.replace(location.pathname + "/" + location.search);
@@ -69,7 +69,8 @@ function soDigitos(s){ let d = String(s || "").replace(/\D/g, ""); if (d && d.le
 function waLink(fone, texto){ const d = soDigitos(fone); return `https://wa.me/${d}?text=${encodeURIComponent(texto || "")}`; }
 const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 const codFmt = c => c ? c.slice(0, 5) + "-" + c.slice(5) : "";
-function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); }
+// Mensagem longa (erro com o motivo) fica mais tempo na tela: com 2,6 segundos fixos ninguém conseguia ler
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, Math.min(9000, 2600 + String(msg || "").length * 35)); }
 async function copiar(texto){ try { await navigator.clipboard.writeText(texto); toast("Copiado"); } catch { prompt("Copie:", texto); } }
 
 /* ---------- cripto (mesmo formato de scripts/portal/build.mjs) ---------- */
@@ -95,7 +96,11 @@ function sair(){ try { sessionStorage.removeItem("medeasy"); } catch {} Object.a
 async function entrarCliente(codigo){
   codigo = normCodigo(codigo); if (codigo.length < 8){ S.erro = "Confira o código. Ele tem 10 letras e números"; render(); return; }
   S.carregando = true; S.erro = ""; render();
-  try { const env = await baixar(`data/c/${await arquivoCliente(codigo)}.json`); S.portal = await abrir(env, codigo); juntarContagemCliente(S.portal); S.portal.orcamento = (S.portal.tipos || []).length ? estimarJS(clienteDoPortal(S.portal)) : null; S.modo = S.querFeedback ? "feedback" : "cliente"; S.codigo = codigo; guardar("cliente", "", codigo); }
+  // Sai do cliente anterior antes de abrir outro: se o código novo falhar, a tela não fica com os dados de outra pessoa
+  if (S.codigo && S.codigo !== codigo){ S.portal = null; S.codigo = ""; try { sessionStorage.removeItem("medeasy"); } catch {} }
+  let env; try { env = await baixar(`data/c/${await arquivoCliente(codigo)}.json`); }
+  catch (e) { S.erro = String(e.message) === "404" ? "Código não encontrado. Confira com o seu mentor" : "Não consegui carregar. Confira a internet e tente de novo"; S.carregando = false; render(); return; }
+  try { S.portal = await abrir(env, codigo); juntarContagemCliente(S.portal); S.portal.orcamento = (S.portal.tipos || []).length ? estimarJS(clienteDoPortal(S.portal)) : null; S.modo = S.querFeedback ? "feedback" : "cliente"; S.codigo = codigo; S.loginCodigo = ""; guardar("cliente", "", codigo); }
   catch { S.erro = "Código não encontrado. Confira com o seu mentor"; }
   S.carregando = false; render();
 }
@@ -146,8 +151,8 @@ function loginView(){
   return gate(`<img src="${LOGO}" alt="MedEasy" style="width:110px"><div class="login stack"><h1>Portal MedEasy</h1>
     <div class="seg"><button data-a="aba" data-v="cliente" aria-pressed="${cli}">Sou cliente</button><button data-a="aba" data-v="mentor" aria-pressed="${!cli}">Sou mentor</button></div>
     <form id="fLogin" class="stack" autocomplete="on">
-      ${cli ? `<label class="f"><span>Seu código de acesso</span><input class="in mono" id="lCodigo" placeholder="XXXXX-XXXXX" autocomplete="one-time-code" autocapitalize="characters" required></label>`
-            : `<label class="f"><span>Seu nome</span><input class="in" id="lNome" autocomplete="username" autocorrect="off" spellcheck="false" required></label><label class="f"><span>Senha</span><input class="in" id="lSenha" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>`}
+      ${cli ? `<label class="f"><span>Seu código de acesso</span><input class="in mono" id="lCodigo" value="${esc(S.loginCodigo || "")}" placeholder="XXXXX-XXXXX" autocomplete="one-time-code" autocapitalize="characters" required></label>`
+            : `<label class="f"><span>Seu nome</span><input class="in" id="lNome" value="${esc(S.loginNome || "")}" autocomplete="username" autocorrect="off" spellcheck="false" required></label><label class="f"><span>Senha</span><input class="in" id="lSenha" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>`}
       <div class="err">${esc(S.erro)}</div>
       <button class="btn pri" type="submit" ${S.carregando ? "disabled" : ""}>${S.carregando ? "Abrindo" : "Entrar"}</button>
     </form>
@@ -161,7 +166,7 @@ function mentorView(){
   const mentores = (S.eq.mentores || []).map(m => m.nome);
   return `<header class="top"><div class="wrap top-in"><img class="logo" src="${LOGO}" alt=""><div class="brand"><b>MED<i>EASY</i></b><span>${esc(S.mentor.nome)}${S.admin ? " · admin" : ""}</span></div>
     <nav class="tabs">${(S.admin && S.adminDados ? [...ABAS, ["feedbacks","Feedbacks"]] : ABAS).map(([k, t]) => `<button class="tab" data-a="nav" data-v="${k}" ${v === k ? 'aria-current="page"' : ""}>${t}</button>`).join("")}</nav>
-    ${S.admin ? `<select class="in" id="verMentor" style="width:auto"><option value="">Toda a equipe</option>${mentores.map(n => `<option ${S.verMentor === n ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>` : ""}
+    ${S.admin ? `<select class="in" id="verMentor" aria-label="Ver clientes de" style="width:auto"><option value="">Toda a equipe</option>${mentores.map(n => `<option ${S.verMentor === n ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>` : ""}
     <button class="btn sm ghost" data-a="sair">Sair</button></div></header>
     <main class="wrap">${body}<p class="xs faint" style="margin-top:24px">Dados de ${esc(dataHora(S.eq.geradoEm))}. ${typeof temPonte === "function" && temPonte() ? "O que você salvar aqui vai para o Notion na hora, e o site atualiza em 1 ou 2 minutos." : "Para mudar algo, edite no Notion. O portal atualiza sozinho."} Versão do site ${VERSAO_SITE}.</p></main>`;
 }
@@ -291,7 +296,11 @@ function render(){
   else if (S.preview) app.innerHTML = portalView(espelho(S.eq.clientes.find(c => c.id === S.preview)), true);
   else app.innerHTML = mentorView();
   if (S.modo !== "login") window.scrollTo(0, sy);
-  const f = $("#fLogin"); if (f){ f.onsubmit = e => { e.preventDefault(); if (S.aba === "cliente") entrarCliente($("#lCodigo").value); else entrarMentor($("#lNome").value, $("#lSenha").value); }; const first = f.querySelector("input"); if (first && !S.carregando) first.focus(); }
+  // Linhas clicáveis (cliente, triagem, painel) também abrem pelo teclado
+  app.querySelectorAll("div[data-a],tr[data-a],li[data-a]").forEach(el => { if (!el.hasAttribute("tabindex")) el.tabIndex = 0; if (!el.hasAttribute("role")) el.setAttribute("role", "button"); });
+  const f = $("#fLogin"); if (f){ f.onsubmit = e => { e.preventDefault(); if (S.aba === "cliente") entrarCliente(S.loginCodigo = $("#lCodigo").value); else entrarMentor(S.loginNome = $("#lNome").value, $("#lSenha").value); };
+    // Depois de um erro, o foco vai para o campo que precisa mudar (a senha), e o nome digitado continua lá
+    const first = S.erro && $("#lSenha") && $("#lNome").value ? $("#lSenha") : f.querySelector("input"); if (first && !S.carregando) first.focus(); }
   const b = $("#busca"); if (b){ b.oninput = () => { S.busca = b.value; const pos = b.selectionStart; render(); const nb = $("#busca"); nb.focus(); nb.setSelectionRange(pos, pos); }; }
   const vm = $("#verMentor"); if (vm) vm.onchange = () => { S.verMentor = vm.value; render(); };
   const ft = $("#fTri"); if (ft) ft.onsubmit = e => { e.preventDefault(); enviarTriagem(); };
@@ -355,6 +364,7 @@ Object.assign(A, A_CTRL, A_ORC, A_CERTCLI, A_FICHA, A_FB, {
 });
 app.addEventListener("change", e => { if (!e.target.dataset) return; if (e.target.dataset.ci === "cheio") { ciInput(e.target); return; } if (e.target.dataset.orcpdf) { importarOrcPdf(e.target); return; } if (e.target.dataset.notagem) { notaGemini(e.target); return; } if (e.target.dataset.orcenv) { importarOrcEnviado(e.target); return; } if (e.target.dataset.ns || e.target.dataset.nsp) { novoSvcMudou(e.target); return; } if (e.target.dataset.orcesc) { const c = clienteSel(); const ct = ctrlDe(c); if (ct.orcamento){ ct.orcamento.escolhida = e.target.dataset.orcesc; gravarOrcEnviado(c, "Opção fechada salva no Notion"); } return; } if (e.target.dataset.an) importarAnalise(e.target); else if (e.target.dataset.ctimp) importarCtrl(e.target); else if (e.target.dataset.tri === "outras" && S.modo !== "triagem") render(); else if (e.target.dataset.orc) orcInput(e.target); else if (e.target.dataset.cliarq) importarCertsCli(e.target); else if (e.target.dataset.anprova) escolherProvaAnalise(e.target); else if (e.target.dataset.edital) lerEditalArquivo(e.target); else if (e.target.dataset.curr) lerCurriculoArquivo(e.target); });
 app.addEventListener("input", e => { if (!e.target.dataset) return; if (e.target.dataset.fb) fbInput(e.target); else if (e.target.dataset.ci) ciInput(e.target); else if (e.target.dataset.tri) triInput(e.target); else if (e.target.dataset.ct) ctInput(e.target); else if (e.target.dataset.nota) notaInput(e.target); else if (e.target.dataset.marc) marcInput(e.target); else if (e.target.dataset.fe) feInput(e.target); });
+app.addEventListener("keydown", e => { if (e.key !== "Enter" && e.key !== " ") return; const el = e.target; if (!el.matches || !el.matches("div[data-a],tr[data-a],li[data-a]")) return; e.preventDefault(); el.click(); });
 app.addEventListener("click", e => { const el = e.target.closest("[data-a]"); if (!el || el.tagName === "A") return; const fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el); } });
 
 /* Versão nova do site: quem deixa a aba aberta continuava com o código antigo depois de uma correção.
@@ -394,11 +404,14 @@ setInterval(conferirVersao, 5 * 60 * 1000);
   // Link da lista de certificados que o cliente montou no portal
   const certs = new URLSearchParams(location.search).get("k");
   if (certs){ S.importarCerts = certs; S.aba = "mentor"; history.replaceState(null, "", location.pathname); }
+  // O link com outro código vale mais que o cliente guardado nesta aba: sem isso, o aparelho de um cliente abria o portal de outro
+  const codSessao = s && s.tipo === "cliente" ? normCodigo(s.segredo) : "";
   if (s && s.tipo === "mentor") await entrarMentor(s.nome, s.segredo);
+  else if (cod && normCodigo(cod) !== codSessao){ S.aba = "cliente"; S.loginCodigo = cod; await entrarCliente(cod); }
   else if (s && s.tipo === "cliente") await entrarCliente(s.segredo);
-  else if (cod){ S.aba = "cliente"; await entrarCliente(cod); }
   else render();
-  if (S.modo === "login") S.erro = "", render();
+  // Erro de uma sessão guardada (senha que mudou) não aparece ao abrir. O de um link com código errado aparece.
+  if (S.modo === "login" && !(cod && S.aba === "cliente")) S.erro = "", render();
 })();
 </script>
 </body>
