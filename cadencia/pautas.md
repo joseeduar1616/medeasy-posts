@@ -110,7 +110,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 5. A2 · Eu antes do Cadência Med: planilha, Anki, cronômetro e caderno. Eu depois: uma tela. (etiquetas riscadas e tela Hoje)
 6. A1 · O mentor de IA do **Cadência Med** olhando meu painel antes de **montar minha semana**. Tela: assistente
 7. ~~A2 · Níveis de cansaço no internato, do 1 ao 5, e o 5 é abrir o Cadência Med e a semana já estar montada. (escada com os níveis)~~ *(saiu em 31/10)*
-8. A1 · Quando você conta seus **plantões** pro Cadência Med e ele devolve a **semana pronta**. Tela: rotina
+8. ~~A1 · Quando você conta seus **plantões** pro Cadência Med e ele devolve a **semana pronta**. Tela: rotina~~ *(saiu em 01/11)*
 9. A1 · Eu mandando o conteúdo do **ciclo clínico** pro Cadência Med e ele entrando no lugar das aulas. Tela: cronograma (ciclo clínico)
 10. A2 · "Vou revisar depois" × o Cadência Med com a revisão marcada pra daqui 1 semana, 1 mês, 2, 4 e 6 meses.
 11. A1 · Pagar **R$ 25 por mês** no anual e parar de montar cronograma na mão. Tela: planos
