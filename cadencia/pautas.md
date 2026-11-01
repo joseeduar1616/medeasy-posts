@@ -20,7 +20,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 10. Fez o simulado, viu a nota e não sabe o que fazer depois. Prints: revisoes, assistente
 11. Estudou 3 horas e parece que não rendeu e o Foco que registra cada sessão. Prints: foco, hoje
 12. "Será que dá tempo de fechar tudo antes da prova?" e o ritmo com projeção. Prints: hoje, cronograma
-13. Domingo à noite, sem saber como vai ser a semana, e o mentor de IA montando ela. Prints: assistente, rotina
+13. ~~Domingo à noite, sem saber como vai ser a semana, e o mentor de IA montando ela~~ *(saiu em 01/11)*. Prints: assistente, rotina
 14. Revisão no Anki, cronograma na planilha, cronômetro em outro app: tudo num lugar. Prints: hoje, revisoes, foco
 15. Quanto custa organizar a preparação inteira: 3 dias grátis, R$ 39 ou R$ 300 no anual. Prints: planos, hoje
 16. ~~(pra salvar) Checklist da semana de plantão: o que fazer antes, no dia e depois do plantão pra não perder a revisão~~ *(saiu em 27/10)*. Prints: rotina, hoje
