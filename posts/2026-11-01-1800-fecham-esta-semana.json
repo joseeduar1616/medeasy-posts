@@ -1,0 +1,22 @@
+{
+ "slug": "2026-11-01-1800-fecham-esta-semana",
+ "pillar": "calendário e prazos",
+ "header": ["ÚLTIMA CHAMADA", "RESIDÊNCIA 2027"],
+ "verified_on": "2026-11-01",
+ "sources": [
+  "SES-GO: Edital nº 24/2026 COREME SES-GO 2027 (sistemas.institutoverbena.ufg.br/2027/coreme-ses/sistema/arquivos/editais/EDITAL_DE_ABERTURA_COREME_SES_2027.pdf), inscrições até 03/11 17h, R$ 500 para 1 programa, prova 06/12, currículo de 100 pontos na 2ª fase; 219 vagas (portal.estrategia.com); posts de 09, 21 e 28/10",
+  "SUS-SP: vunesp.com.br/SESA2601, inscrições até 05/11, R$ 120, prova objetiva em 13/12 como etapa única; posts de 18, 19 e 26/10",
+  "UNESP (FMB Botucatu): vunesp.com.br/FMHO2602, inscrições até 06/11 23h59, R$ 648, 201 vagas (142 acesso direto), prova 12/12 às 14h em Botucatu, São Paulo ou Brasília, currículo 10% (sem currículo em Clínica Médica, Ortopedia, Cirurgia Plástica e Cirurgia da Mão), envio 22 e 23/12; MedCof, Estratégia MED e Medgrupo concordando; post de 22/10",
+  "USP-SP 1ª fase 06/12 (FUVEST) e SES-DF 12/12 (IADES): editais conferidos nos posts de 12/10, 10/10 e 27/10",
+  "log/news_seen.md, varredura de 01/11 17h: nenhuma retificação, prorrogação ou mudança de data nessas provas"
+ ],
+ "slides": [
+  {"type": "cover", "label": "Residência médica 2027", "pill": "ÚLTIMA CHAMADA", "title": ["FECHA", "<span class='y glow'>ESTA SEMANA</span>"], "body": "Três inscrições terminam até sexta: <b>SES-GO</b>, <b>SUS-SP</b> e <b>UNESP</b>.", "bullets": ["Último dia e taxa", "Precisa de currículo?", "Datas de prova que batem"]},
+  {"type": "rows", "label": "Inscrições", "title": ["ÚLTIMO <span class='g'>DIA</span>"], "sub": "Fim das inscrições e taxa", "rows": [{"name": "SES-GO", "sub": "Terça, até 17h, Verbena, R$ 500", "value": "03/11"}, {"name": "SUS-SP", "sub": "Quinta, Vunesp, R$ 120", "value": "05/11"}, {"name": "UNESP", "sub": "Sexta, até 23h59, Vunesp, R$ 648", "value": "06/11"}], "note": "A SES-GO fecha às <b>17h</b>, não à meia-noite."},
+  {"type": "rows", "label": "Currículo", "title": ["PRECISA DE <span class='y'>CURRÍCULO?</span>"], "sub": "O que diz cada edital", "rows": [{"name": "SES-GO", "sub": "Vale 100 pontos na 2ª fase", "value": "SIM"}, {"name": "UNESP", "sub": "10% da nota, menos em CM, Ortopedia, Plástica e Mão", "value": "SIM"}, {"name": "SUS-SP", "sub": "A prova objetiva é a etapa única", "value": "NÃO"}], "note": "Na UNESP o currículo vai em <b>22 e 23/12</b>, só para quem passar para a 2ª etapa."},
+  {"type": "rows", "label": "Provas", "title": ["DATAS QUE <span class='y'>BATEM</span>"], "sub": "Dia da prova objetiva", "rows": [{"name": "SES-GO", "sub": "Mesmo dia da 1ª fase da USP-SP", "value": "06/12"}, {"name": "UNESP", "sub": "Mesmo dia da SES-DF", "value": "12/12"}, {"name": "SUS-SP", "sub": "Dia seguinte à UNESP e à SES-DF", "value": "13/12"}], "note": "A UNESP tem prova em <b>Botucatu, São Paulo ou Brasília</b>. São 201 vagas, e a SES-GO tem 219."},
+  {"type": "cta", "title": ["SALVA E", "<span class='g glow'>NÃO PERDE</span>"], "pill": "SALVA", "body": "e manda para quem ainda<br>não se inscreveu.", "note": "Vai prestar prova com currículo? Chama a <b>MedEasy</b> no direct para organizar o seu.", "small": "Fontes: editais 2027 de SES-GO (Instituto Verbena/UFG), SUS-SP e UNESP (Vunesp), USP-SP (FUVEST) e SES-DF (IADES). Datas podem mudar: confira o edital."}
+ ],
+ "story": {"kicker": "ÚLTIMA CHAMADA", "cta": "SES-GO, SUS-SP e UNESP<br><span>fecham esta semana</span>.<br>Veja no feed da @med_easyy."},
+ "caption": "⏰ FECHA ESTA SEMANA\n\nTrês inscrições da residência 2027 terminam até sexta. SES-GO na terça, 03/11, até as 17h no Instituto Verbena/UFG (R$ 500). SUS-SP na quinta, 05/11, na Vunesp (R$ 120). UNESP na sexta, 06/11, até 23h59, também na Vunesp (R$ 648).\n\nPrecisa de currículo? Na SES-GO, sim: vale 100 pontos na 2ª fase. Na UNESP, sim, com 10% da nota, menos em Clínica Médica, Ortopedia, Cirurgia Plástica e Cirurgia da Mão. No SUS-SP, não: a prova objetiva é a etapa única.\n\nOlho nas datas: a SES-GO é em 06/12, mesmo dia da USP-SP. A UNESP é em 12/12, mesmo dia da SES-DF, e o SUS-SP vem no dia seguinte, 13/12.\n\nSalva e manda para quem ainda não se inscreveu 📌\n\nVai fazer qual dessas três? Comenta aqui 👇\n\nPrecisa organizar o currículo? Chama a MedEasy no direct 💚\n\n#residenciamedica #residencia2027 #sesgo #sussp #unesp #goiania"
+}
