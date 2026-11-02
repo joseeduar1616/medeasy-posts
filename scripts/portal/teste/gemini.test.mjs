@@ -31,6 +31,7 @@ test("leitura normal: Flash mais novo, pouco pensamento e sem o texto de pensame
   novo(""); const [st, j] = await pede({ texto: "oi", rapido: true });
   assert.equal(st, 200); assert.equal(j.texto, "funcionando"); assert.equal(j.modelo, "gemini-3.8-flash");
   assert.equal(configs[0].thinkingConfig.thinkingLevel, "low");
+  assert.equal(configs[0].maxOutputTokens, 8192, "resposta com limite: um modelo em laço não escreve sem fim");
 });
 test("sem senha não chega no Google", async () => {
   novo(""); const [st] = await pede({ texto: "oi" }, "errada");

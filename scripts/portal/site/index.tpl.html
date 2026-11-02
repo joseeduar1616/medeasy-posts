@@ -54,6 +54,18 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&l
 function num(s){ if (typeof s === "number") return isFinite(s) ? s : 0; s = String(s ?? "").trim().replace(/\s|R\$/g, ""); if (!s) return 0; if (s.includes(",")) s = s.replace(/\./g, "").replace(",", "."); const n = parseFloat(s); return isFinite(n) ? n : 0; }
 const brl = n => "R$ " + (Number(n) || 0).toLocaleString("pt-BR", { minimumFractionDigits:2, maximumFractionDigits:2 });
 const d1 = n => (Number(n) || 0).toLocaleString("pt-BR", { minimumFractionDigits:1, maximumFractionDigits:2 });
+/* Texto que o cliente lê (recado e pendências): sem emoji, sem marcação de markdown e com tamanho limitado.
+   A resposta do Claude ou do Gemini às vezes vinha com centenas de emoji e "**" no meio, e o portal mostrava tudo. */
+function textoLimpo(s, max = 700){
+  let t = String(s ?? "").replace(/\r/g, "")
+    .replace(/[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{1F3FB}-\u{1F3FF}️‍⃣]/gu, "")
+    .replace(/\*\*|__|`+/g, "").replace(/^\s*#{1,6}\s*/gm, "").replace(/^\s*>\s?/gm, "")
+    .replace(/(\S)\1{5,}/g, "$1$1$1").replace(/[ \t]+/g, " ").replace(/ *\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  if (t.length > max){ t = t.slice(0, max); const i = t.lastIndexOf(" "); t = (i > max * 0.7 ? t.slice(0, i) : t).replace(/[\s,.;:]+$/, "") + "..."; }
+  return t;
+}
+/* Lista de pendências: uma por linha, sem marcador, sem "Nenhuma", no máximo 20 de até 220 letras */
+const pendLimpas = linhas => (Array.isArray(linhas) ? linhas : String(linhas || "").split("\n")).map(l => textoLimpo(String(l).replace(/^\s*(?:[-•*▪◦]|\d{1,2}[.)])\s*/, ""), 220)).filter(l => l && !/^nenhuma\.?$/i.test(l) && /[a-zA-ZÀ-ú0-9]/.test(l)).slice(0, 20);
 function isoLocal(d = new Date()){ const z = d.getTimezoneOffset(); return new Date(d - z * 60000).toISOString().slice(0, 10); }
 const hoje = () => isoLocal();
 // Formato das respostas do Gemini (esquema JSON), usado nas leituras de arquivo

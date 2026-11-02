@@ -249,7 +249,7 @@ const numTxt = v => v === "" || v == null ? "" : String(v).replace(".", ",");
 function notaRasc(c, p){
   const pk = kP(p.nome); const r = ((S.notaRasc ||= {})[c.id] ||= {});
   if (!r[pk]){ const n = notasDe(c)[pk];
-    r[pk] = n ? { nota:numTxt(n.nota), max:numTxt(n.max), possivel:numTxt(n.possivel), recado:n.recado || "", pend:(n.pend || []).join("\n") }
+    r[pk] = n ? { nota:numTxt(n.nota), max:numTxt(n.max), possivel:numTxt(n.possivel), recado:textoLimpo(n.recado || ""), pend:pendLimpas(n.pend || []).join("\n") }
       : { nota:"", max:numTxt(maxPadrao(c, p)), possivel:"", recado:"", pend:"" }; }
   return r[pk];
 }
@@ -279,8 +279,7 @@ async function salvarNotas(){
   for (const p of (c.provas || []).filter(p => p.nome)){
     const pk = kP(p.nome); const r = ((S.notaRasc || {})[c.id] || {})[pk]; if (!r) continue;
     const vz = k => r[k] == null || String(r[k]).trim() === ""; const n = k => vz(k) ? "" : num(r[k]);
-    const nm = { nota:n("nota"), max:n("max"), possivel:n("possivel"), recado:String(r.recado || "").trim(),
-      pend:String(r.pend || "").split("\n").map(l => l.replace(/^\s*(?:[-•*▪◦]|\d{1,2}[.)])\s*/, "").trim()).filter(l => l && !/^nenhuma\.?$/i.test(l)) };
+    const nm = { nota:n("nota"), max:n("max"), possivel:n("possivel"), recado:textoLimpo(r.recado), pend:pendLimpas(r.pend) };
     if (nm.nota !== "" && nm.max === "") erros.push(`${p.nome}: falta o máximo da nota`);
     if (nm.max !== "" && nm.nota !== "" && nm.nota > nm.max) erros.push(`${p.nome}: a nota passa do máximo`);
     if (nm.max !== "" && nm.possivel !== "" && nm.possivel > nm.max) erros.push(`${p.nome}: a nota possível passa do máximo`);
@@ -304,7 +303,7 @@ function pedidoNota(c){
 
 Quem decide o que vale é o mentor da MedEasy. Conte como válido todo comprovante que eu mandar, no item em que ele se encaixa. Não tire ponto por detalhe de formato, como falta de assinatura, carimbo, QR code, papel timbrado, carga horária ou data. O que estiver em dúvida entra na nota possível, não some. Se eu escrever o que considero válido, isso manda mais que a sua leitura do edital.
 
-O recado e as pendências aparecem para o cliente. Escreva simples e em tom positivo.
+O recado e as pendências aparecem para o cliente. Escreva simples e em tom positivo, sem emoji e sem negrito ou outra marcação. Recado com no máximo 3 frases. Cada pendência numa linha curta.
 
 Responda só com ${provas.length > 1 ? "um bloco por prova" : "o bloco abaixo"}, preenchido, sem nada antes nem depois. Use vírgula decimal.
 
@@ -323,11 +322,13 @@ function lerNotaTexto(txt, c){
   const limpo = String(txt || "").replace(/\r/g, "").replace(/\*\*|__|`/g, "").replace(/^\s*#+\s*/gm, "");
   let blocos = limpo.split(/^\s*NOTA MEDEASY\s*:?\s*$/im).slice(1); if (!blocos.length) blocos = [limpo];
   const provas = (c.provas || []).filter(p => p.nome); const out = [];
-  const ROT = /^(prova|nota|nota atual|possivel|nota possivel|maximo|nota maxima|certificados|certificados validos|artigos?|recado|pendencias)\s*:/;
+  // "Pendências (ações e documentos)" e rótulo sozinho na linha, sem os dois pontos, também valem
+  const ROT = /^(prova|nota|nota atual|possivel|nota possivel|maximo|nota maxima|certificados|certificados validos|artigos?|recado|pendencias)\s*(?:\([^)]*\))?\s*(?::|$)/;
   const numDe = s => (String(s || "").match(/\d+(?:[.,]\d+)?/) || [])[0];
   for (const b of blocos){
     const ls = b.split("\n"); const rot = l => (semAcento(l).trim().match(ROT) || [])[1] || "";
-    const campo = (...nomes) => { const l = ls.find(l => nomes.includes(rot(l))); return l == null ? null : l.slice(l.indexOf(":") + 1).trim(); };
+    const depois = l => l.includes(":") ? l.slice(l.indexOf(":") + 1) : "";
+    const campo = (...nomes) => { const l = ls.find(l => nomes.includes(rot(l))); return l == null ? null : depois(l).trim(); };
     const provaTxt = campo("prova"); const kp = provaTxt ? kP(provaTxt.replace(/\s*20\d\d.*$/, "")) : "";
     const p = kp ? provas.find(x => kp.startsWith(kP(x.nome)) || kP(x.nome).startsWith(kp)) : provas.length === 1 ? provas[0] : null;
     if (!p) continue;
@@ -337,11 +338,11 @@ function lerNotaTexto(txt, c){
     const pos = campo("possivel", "nota possivel"); if (numDe(pos)) r.possivel = numDe(pos);
     // Recado: da linha "Recado:" até o próximo rótulo. Pendências: as linhas depois de "Pendências:".
     const iR = ls.findIndex(l => rot(l) === "recado");
-    if (iR >= 0){ const partes = [ls[iR].slice(ls[iR].indexOf(":") + 1)]; for (const l of ls.slice(iR + 1)){ if (rot(l)) break; partes.push(l); } const t = partes.join(" ").replace(/\s+/g, " ").trim(); if (t) r.recado = t; }
+    if (iR >= 0){ const partes = [depois(ls[iR])]; for (const l of ls.slice(iR + 1)){ if (rot(l)) break; partes.push(l); } const t = textoLimpo(partes.join(" ").replace(/\s+/g, " ")); if (t) r.recado = t; }
     const iP = ls.findIndex(l => rot(l) === "pendencias");
-    if (iP >= 0){ const linhas = [ls[iP].slice(ls[iP].indexOf(":") + 1), ...ls.slice(iP + 1)]; const pend = [];
-      for (const l of linhas){ if (rot(l) && rot(l) !== "pendencias") break; const t = l.replace(/^\s*(?:[-•*▪◦]|\d{1,2}[.)])\s*/, "").trim(); if (t && !/^nenhuma\.?$/i.test(t)) pend.push(t); }
-      r.pend = pend.join("\n"); }
+    if (iP >= 0){ const linhas = [depois(ls[iP]), ...ls.slice(iP + 1)]; const pend = [];
+      for (const l of linhas){ if (rot(l) && rot(l) !== "pendencias") break; pend.push(l); }
+      r.pend = pendLimpas(pend).join("\n"); }
     if (Object.keys(r).length) out.push({ p, r });
   }
   return out;
@@ -366,12 +367,12 @@ async function notaGemini(input){
   input.value = "";
   try {
     const j = await geminiLer(fs, daAnalise
-      ? `Este arquivo é a análise curricular que o mentor da MedEasy já fez para o cliente ${c.nome || ""}. Não refaça a análise: copie o que está escrito. Provas do cliente: ${provas.map(p => p.nome).join(", ")}. Para cada prova que aparece no arquivo, devolva o nome da prova escrito como nesta lista, a nota atual, o máximo, a nota possível (se o arquivo trouxer), as pendências (o que falta o cliente mandar ou fazer, uma por item) e um recado curto e positivo para o cliente, com base no que a análise diz. Use ponto como separador decimal.`
+      ? `Este arquivo é a análise curricular que o mentor da MedEasy já fez para o cliente ${c.nome || ""}. Não refaça a análise: copie o que está escrito. Provas do cliente: ${provas.map(p => p.nome).join(", ")}. Para cada prova que aparece no arquivo, devolva o nome da prova escrito como nesta lista, a nota atual, o máximo, a nota possível (se o arquivo trouxer), as pendências (o que falta o cliente mandar ou fazer, uma por item) e um recado curto e positivo para o cliente (no máximo 3 frases), com base no que a análise diz. Sem emoji e sem negrito ou outra marcação. Use ponto como separador decimal.`
       : pedidoNota(c) + `\n\nOs certificados${provas.some(p => !itensDaProva(p).length) ? " e o edital" : ""} estão nos arquivos anexados. Responda no formato JSON pedido: um objeto por prova, com o nome da prova escrito como na lista acima, a nota, o máximo, a nota possível, o recado e as pendências (uma por item da lista).`, ESQ_NOTA, { aviso:daAnalise ? "Lendo a análise com o Gemini" : "Fazendo a nota com o Gemini" });
     let n = 0;
     for (const x of j.provas || []){ const k = kP(String(x.prova || "").replace(/\s*20\d\d.*$/, "")); const p = provas.find(p => k && (k.startsWith(kP(p.nome)) || kP(p.nome).startsWith(k))) || (provas.length === 1 ? provas[0] : null); if (!p) continue;
-      const r = notaRasc(c, p); if (x.nota != null) r.nota = numTxt(x.nota); if (x.max) r.max = numTxt(x.max); if (x.possivel != null) r.possivel = numTxt(x.possivel); if (x.recado) r.recado = String(x.recado).trim();
-      if (Array.isArray(x.pendencias)) r.pend = x.pendencias.map(l => String(l).trim()).filter(l => l && !/^nenhuma\.?$/i.test(l)).join("\n"); n++; }
+      const r = notaRasc(c, p); if (x.nota != null) r.nota = numTxt(x.nota); if (x.max) r.max = numTxt(x.max); if (x.possivel != null) r.possivel = numTxt(x.possivel); if (x.recado) r.recado = textoLimpo(x.recado);
+      if (Array.isArray(x.pendencias)) r.pend = pendLimpas(x.pendencias).join("\n"); n++; }
     render(); toast(n ? `O Gemini preencheu ${n === 1 ? "a nota" : n + " provas"}. Confira os campos e clique em Salvar` : daAnalise ? "Não achei a nota das provas do cliente nesse arquivo. Confira se as provas marcadas são as da análise, ou preencha à mão" : "O Gemini não devolveu a nota. Preencha à mão ou use o pedido para o Claude");
   } catch (e) { toast("Não consegui fazer com o Gemini: " + e.message); }
 }
