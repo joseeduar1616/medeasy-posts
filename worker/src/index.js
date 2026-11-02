@@ -143,7 +143,8 @@ async function geminiGerar(env, corpo) {
   if (!texto) return [400, { erro: "falta o pedido" }];
   const rapido = !!corpo.rapido;
   const partes = [{ text: texto }, ...arquivos.filter(a => a && /^https:\/\/generativelanguage\.googleapis\.com\//.test(a.uri)).map(a => ({ file_data: { mime_type: a.tipo || "application/pdf", file_uri: a.uri } }))];
-  const config = { temperature: 0.1 }; if (corpo.esquema && typeof corpo.esquema === "object") { config.responseMimeType = "application/json"; config.responseSchema = corpo.esquema; }
+  // Limite de resposta: um modelo em laço chegou a escrever centenas de emoji num recado
+  const config = { temperature: 0.1, maxOutputTokens: rapido ? 8192 : 32768 }; if (corpo.esquema && typeof corpo.esquema === "object") { config.responseMimeType = "application/json"; config.responseSchema = corpo.esquema; }
   // Pensar pouco: os modelos novos pensam muito antes de responder e a leitura passava de 2 minutos
   const ver = m => parseFloat((m.match(/gemini-(\d+(?:\.\d+)?)/) || [])[1] || "0");
   const pensar = m => ver(m) >= 3 ? { thinkingConfig: { thinkingLevel: "low" } } : /2\.5-flash/.test(m) ? { thinkingConfig: { thinkingBudget: rapido ? 0 : 2048 } } : {};

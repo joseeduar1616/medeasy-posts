@@ -17,7 +17,7 @@ const linha = (n, cliente, tel, extra = {}) => ({ url: `https://www.notion.so/${
 test("site: login, portal do cliente e tela de celular", { skip: !chromium && "Playwright não está instalado", timeout: 240000 }, async t => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "medeasy-site-"));
   fs.mkdirSync(path.join(tmp, "data"));
-  fs.writeFileSync(path.join(tmp, "linhas.json"), JSON.stringify([linha(1, "Ana Teste Inventada", "(62) 90000-0001"), linha(2, "Bruno Teste Inventado", "(62) 90000-0002", { Status: "Concluído", Pagamento: "Pagamento finalizado" })]));
+  fs.writeFileSync(path.join(tmp, "linhas.json"), JSON.stringify([linha(1, "Ana Teste Inventada", "(62) 90000-0001", { "Controle de certificados": JSON.stringify({ certs: [], aloc: {}, pend: [{ id: "x1", quem: "Cliente", situacao: "Aberta", item: "PSU-GO", texto: "**Pedir** o certificado 🚀🚀", origem: "nota:psugo" }], notas: { psugo: { nota: 3.45, max: 10, recado: "Você já tem uma base sólida 😀" + "🎉📚✨".repeat(300) + " **Pendências (Ações)**", pend: ["**Pedir** o certificado 🚀🚀"] } } }) }), linha(2, "Bruno Teste Inventado", "(62) 90000-0002", { Status: "Concluído", Pagamento: "Pagamento finalizado" })]));
   execFileSync(process.execPath, [path.join(RAIZ, "scripts/portal/build.mjs"), "--linhas", path.join(tmp, "linhas.json")], { env: { ...process.env, PORTAL_SENHA: SENHA, PORTAL_SAIDA: path.join(tmp, "data"), NOTION_TOKEN: "", NOTION_DB: "" }, stdio: "pipe" });
   for (const f of ["index.html", "site.txt"]) fs.copyFileSync(path.join(RAIZ, "portal", f), path.join(tmp, f));
   for (const f of fs.readdirSync(path.join(RAIZ, "portal"))) if (/\.(png|webp|svg|ico)$/.test(f)) fs.copyFileSync(path.join(RAIZ, "portal", f), path.join(tmp, f));
@@ -39,12 +39,24 @@ test("site: login, portal do cliente e tela de celular", { skip: !chromium && "P
   await pg.fill("#lSenha", SENHA); await pg.click("button[type=submit]"); await pg.waitForSelector("header.top", { timeout: 60000 });
   const cods = await pg.evaluate(() => Object.fromEntries(S.eq.clientes.map(c => [c.nome, c.codigo])));
   assert.equal(Object.keys(cods).length, 2);
+  // Resposta colada com "Pendências (...)" em negrito e emoji: separa recado e pendências e limpa
+  const lida = await pg.evaluate(() => { const c = { provas: [{ nome: "PSU-GO" }] };
+    const r = lerNotaTexto("NOTA MEDEASY\nProva: PSU-GO\nNota: 3,45 de 10\nRecado: Você está indo bem 😀😀😀😀\n**Pendências (Ações e documentos faltantes)**\n1. **Certificado** com código 📄\n- Histórico", c);
+    return r[0] && r[0].r; });
+  assert.equal(lida.nota, "3,45"); assert.equal(lida.recado, "Você está indo bem");
+  assert.equal(lida.pend, "Certificado com código\nHistórico");
   assert.deepEqual(erros, []);
 
   // Cliente: link de outro código na mesma aba abre o cliente do link, não o anterior
   const c = await nova({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   await c.pg.goto(URL0 + "?c=" + cods["Ana Teste Inventada"]); await c.pg.waitForFunction(() => S.modo === "cliente", null, { timeout: 60000 });
   assert.match(await c.pg.evaluate(() => S.portal.nome), /Ana/);
+  // Recado e pendência com centenas de emoji e markdown: o portal mostra o texto limpo
+  const tela = await c.pg.evaluate(() => document.body.innerText);
+  assert.match(tela, /Você já tem uma base sólida/);
+  assert.ok(!/\p{Extended_Pictographic}/u.test(tela.replace(/[©®™]/g, "")), "sem emoji no portal");
+  assert.ok(!tela.includes("**"), "sem asteriscos de markdown");
+  assert.match(tela, /Pedir o certificado/);
   assert.ok(await c.pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), "portal sem rolagem lateral no celular");
   await c.pg.goto(URL0 + "?c=" + cods["Bruno Teste Inventado"]); await c.pg.waitForFunction(() => S.modo === "cliente" && S.portal && /Bruno/.test(S.portal.nome), null, { timeout: 60000 });
   // Código errado: mostra o erro e não mostra o cliente anterior

@@ -355,11 +355,21 @@ function estimar(c) {
 }
 
 /* ---------- espelho do cliente ---------- */
+/* Recado e pendências que o cliente lê: sem emoji, sem markdown e com tamanho limitado (o mesmo textoLimpo do site) */
+function textoLimpo(s, max = 700) {
+  let t = String(s ?? "").replace(/\r/g, "")
+    .replace(/[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{1F3FB}-\u{1F3FF}️‍⃣]/gu, "")
+    .replace(/\*\*|__|`+/g, "").replace(/^\s*#{1,6}\s*/gm, "").replace(/^\s*>\s?/gm, "")
+    .replace(/(\S)\1{5,}/g, "$1$1$1").replace(/[ \t]+/g, " ").replace(/ *\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  if (t.length > max) { t = t.slice(0, max); const i = t.lastIndexOf(" "); t = (i > max * 0.7 ? t.slice(0, i) : t).replace(/[\s,.;:]+$/, "") + "..."; }
+  return t;
+}
+const notasLimpas = ns => Object.fromEntries(Object.entries(ns || {}).map(([k, n]) => [k, { ...n, recado: textoLimpo(n && n.recado), pend: ((n && n.pend) || []).map(l => textoLimpo(l, 220)).filter(Boolean).slice(0, 20) }]));
 // Nota digitada pelo mentor no site (controle.notas): vale mais que a análise por item, e o recado vai junto
 function notaMentorBuild(c, p, pv) {
   const n = ((c.controle && c.controle.notas) || {})[kProva(p.nome)];
   if (!n || ((n.nota === "" || n.nota == null) && !n.recado)) return pv;
-  return { ...pv, notaEstimada: n.nota ?? "", notaMax: n.max || pv.notaMax || 10, notaPossivel: n.possivel ?? "", recado: n.recado || "", itens: [] };
+  return { ...pv, notaEstimada: n.nota ?? "", notaMax: n.max || pv.notaMax || 10, notaPossivel: n.possivel ?? "", recado: textoLimpo(n.recado), itens: [] };
 }
 function espelho(c, contato) {
   const pago = c.financeiro.pago, total = c.financeiro.total;
@@ -367,8 +377,8 @@ function espelho(c, contato) {
     id: c.id, nome: c.nome, mentores: c.mentores || [],
     servicos: c.servicos.map(s => ({ nome: s.nome, etapa: s.etapa, prazo: s.prazo, mensal: !!s.mensal })), mentoria: c.mentoria || null,
     provas: c.provas.map(p => notaMentorBuild(c, p, { nome: p.nome, ano: p.ano || "", area: p.area || "", prazoEnvio: p.prazoEnvio || "", dataProva: p.dataProva || "", notaEstimada: p.notaEstimada ?? "", notaPossivel: p.notaPossivel ?? "", notaMax: p.notaMax ?? "", link: p.link || "", regras: p.regras || "", itens: p.itens || [], edital: p.edital || null })),
-    pendencias: [...c.pendencias.filter(p => !p.interna).map(p => ({ texto: p.texto, feita: !!p.feita, prazo: p.prazo || "" })),
-      ...((c.controle && c.controle.pend) || []).filter(x => x.quem === "Cliente" && x.situacao !== "Resolvida").map(x => ({ texto: [x.item, x.texto].filter(Boolean).join(": "), feita: false, prazo: "" }))],
+    pendencias: [...c.pendencias.filter(p => !p.interna).map(p => ({ texto: textoLimpo(p.texto, 300), feita: !!p.feita, prazo: p.prazo || "" })),
+      ...((c.controle && c.controle.pend) || []).filter(x => x.quem === "Cliente" && x.situacao !== "Resolvida").map(x => ({ texto: textoLimpo([x.item, x.texto].filter(Boolean).join(": "), 300), feita: false, prazo: "" }))].filter(p => p.texto),
     atualizacoes: c.atualizacoes.filter(a => !a.interna).slice(-40),
     documentos: c.documentos.filter(d => d.link),
     financeiro: { total, pago, saldo: Math.max(0, total - pago), entradaOk: total > 0 && pago >= total / 2 - 0.009 },
@@ -376,7 +386,7 @@ function espelho(c, contato) {
     contagem: c.contagem || {},
     // Para o orçamento do cliente se atualizar no portal: plano (tipos), contagem e certificados do controle (sem as observações internas)
     tipos: c.tipos || [], nCert: c.nCert ?? null, nArtigos: c.nArtigos ?? null,
-    controle: c.controle ? { certs: (c.controle.certs || []).map(({ obs, ...x }) => x), aloc: c.controle.aloc || {}, pend: [], notas: c.controle.notas || {} } : null,
+    controle: c.controle ? { certs: (c.controle.certs || []).map(({ obs, ...x }) => x), aloc: c.controle.aloc || {}, pend: [], notas: notasLimpas(c.controle.notas) } : null,
     // Orçamento que o cliente recebeu (PDF ou foto lido no site): o portal mostra este em vez da conta automática
     orcamentoEnviado: (c.controle && c.controle.orcamento) || null,
     progresso: c.servicos.length ? Math.round(c.servicos.reduce((a, s) => a + s.etapa / 6, 0) / c.servicos.length * 100) : 0,
