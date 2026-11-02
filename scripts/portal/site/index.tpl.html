@@ -335,6 +335,7 @@ const A = {
   notaColarLer: () => lerNotaColada(),
   notaSalvar: () => salvarNotas(),
   avancado: () => { S.avancado = !S.avancado; try { localStorage.setItem("medeasy-avancado", S.avancado ? "1" : ""); } catch {} render(); },
+  irPara: el => { const x = document.getElementById(el.dataset.v); if (x) x.scrollIntoView({ behavior:"smooth", block:"start" }); },
   pagLancar: () => lancarPagamento(),
   pagTirar: el => tirarPagamento(el.dataset.id),
   novoSvcAbrir: () => { const c = clienteSel(); if (!c) return; S.novoSvc = S.novoSvc && S.novoSvc.id === c.id ? null : { id:c.id, tipo:"mentoria", valor:valorNovoSvc("mentoria"), status:"Em andamento", fora:[] }; render(); },

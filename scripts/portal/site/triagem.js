@@ -47,10 +47,10 @@ async function enviarTriNotion(id){
 function syncTriTexto(id){
   const t = triDe(id); const s = (S.triSync || {})[id];
   if (!triNoNotion()) return `<span class="pill">Só neste navegador</span>`;
-  if (s === "pendente" || s === "gravando") return `<span class="pill gold">Gravando no Notion</span>`;
-  if (s && s.startsWith("erro:")) return `<span class="pill" title="${esc(s.slice(5))}" style="color:var(--bad,#ff6b6b)">Não gravou no Notion</span>`;
-  if (t && (t.notionId || t.notion)) return `<a class="pill ok" href="${esc(t.notion || "#")}" target="_blank" rel="noopener">Salvo no Notion</a>`;
-  return `<span class="pill">Ainda não está no Notion</span>`;
+  if (s === "pendente" || s === "gravando") return `<span class="pill gold">Salvando a triagem</span>`;
+  if (s && s.startsWith("erro:")) return `<span class="pill" title="${esc(s.slice(5))}" style="color:var(--bad,#ff6b6b)">Triagem não salvou</span>`;
+  if (t && (t.notionId || t.notion)) return `<a class="pill ok" href="${esc(t.notion || "#")}" target="_blank" rel="noopener" title="Salvo na base Triagem MedEasy. Ainda não é cliente no Controle cliente">Triagem salva</a>`;
+  return `<span class="pill">Triagem ainda não salva</span>`;
 }
 function mostrarSyncTri(id){ const el = document.getElementById("triSync"); if (el && S.sel === id) el.innerHTML = syncTriTexto(id); }
 /* Depois do login: traz as triagens gravadas no Notion por outros aparelhos. Fica a versão mais nova. */
@@ -71,7 +71,7 @@ function juntarTriagemNotion(){
 const SERVICO_NOTION = { vitae:"Vitae", analise:"ANALISE", lattes:"Lattes", certificados:"Certificados", mentoria:"Mentoria", mentoriaInd:"Mentoria individual" };
 async function criarClienteNotion(){
   const t = triDe(S.sel); if (!t) return; const ops = opcoesTri(t);
-  const letra = document.getElementById("triOpFechar")?.value || "A"; const o = ops.find(x => x.letra === letra) || ops[0];
+  const letra = document.getElementById("triOpFechar")?.value || t.opFechar || "A"; const o = ops.find(x => x.letra === letra) || ops[0];
   if (!String(t.nome || "").trim() || !t.whats){ toast("Preencha o nome e o WhatsApp antes"); return; }
   if (S.criandoCliente) return;
   if (t.clienteNotion && !confirm("Esse cliente já foi criado no Notion. Criar outra linha?")) return;
@@ -82,14 +82,22 @@ async function criarClienteNotion(){
   const c = clienteDaTriagem(t); const ct = ctrlDe(c);
   // O portal do cliente mostra o orçamento que ele recebeu, com a opção que fechou
   if (ops.length) ct.orcamento = { arquivo:t.orcImportado ? t.orcImportado.arquivo : "Orçamento da triagem", em:Date.now(), opcoes:opcoesCurtas(ops), escolhida:o ? o.letra : "" };
+  // Já pagou: o valor entra em Pagamento do cliente e o Notion já nasce com 1° parcela (ou Pagamento finalizado)
+  let pagamento = "Não pago";
+  if (t.pagou && o){
+    const valor = String(t.pagouValor || "").trim() ? r2(num(t.pagouValor)) : r2(o.mensal ? o.total : o.total / 2);
+    if (!(valor > 0)){ toast("Confira o valor que o cliente pagou"); return; }
+    pagamento = o.mensal || valor >= o.total - 0.009 ? "Pagamento finalizado" : "1° parcela";
+    if (!o.mensal) ct.pagamentos = [...(ct.pagamentos || []).filter(x => x.origem !== "triagem"), { id:"pg" + Date.now().toString(36), valor, data:isoLocal(), servico:"", forma:t.pagouForma || "", origem:"triagem" }];
+  }
   const tipos = (o?.tipos || tiposDe(t.servico)).map(x => SERVICO_NOTION[x]).filter(Boolean);
-  const props = { "Cliente":t.nome.trim(), "Telefone":t.whats, "Tipo de serviço":[...tipos, ...c.provas.map(p => p.nome)], "Mentor":S.mentor?.nome || "", "Status":"Não iniciada", "Pagamento":"Não pago",
+  const props = { "Cliente":t.nome.trim(), "Telefone":t.whats, "Tipo de serviço":[...tipos, ...c.provas.map(p => p.nome)], "Mentor":S.mentor?.nome || "", "Status":"Não iniciada", "Pagamento":pagamento,
     "Valor total":o ? o.total : null, "Data de início ":isoLocal(), "Certificados por item":textoCont(c, carregarCont(c).provas) || "", "Controle de certificados":temCtrl(ct) ? textoCtrl(ct) : "" };
   // Trava o botão até a ponte responder: dois toques criavam duas linhas
   S.criandoCliente = true; const bt = document.querySelector("[data-a=criarClienteNotion]"); if (bt){ bt.disabled = true; bt.textContent = "Criando..."; }
   toast("Criando o cliente no Notion");
   try { const j = await pontePedido("/cliente", { props, outraLinha }); t.clienteNotion = j.url; t.clienteNotionId = String(j.id || "").replace(/-/g, ""); t.valorNotion = o ? o.total : null; t.opcaoNotion = o ? o.letra : ""; t.etapa = "fechado"; salvarTri(t);
-    toast(j.jaExistia ? "Esse cliente já tinha sido criado no Notion agora há pouco. A triagem ficou ligada a essa linha, sem criar outra" : "Cliente criado no Notion. Entra no painel com o código de acesso em 1 ou 2 minutos"); }
+    toast(j.jaExistia ? "Esse cliente já tinha sido criado no Notion agora há pouco. A triagem ficou ligada a essa linha, sem criar outra" : `Cliente criado no Notion${pagamento !== "Não pago" ? ", com " + pagamento : ""}. Aparece em Clientes, com o código de acesso, em 1 ou 2 minutos`); }
   catch (e) { toast("Não criou: " + e.message); }
   finally { S.criandoCliente = false; render(); }
 }
@@ -197,7 +205,7 @@ function importarTriNotion(url){
 function triagemView(){
   const lista = lerTri().sort((a, b) => (b.em || 0) - (a.em || 0));
   const doNotion = (S.eq.triagem || []).filter(n => !n.dados && !lista.some(t => t.notion === n.url || (t.notionId && t.notionId === n.id)) && (!alvo() || !n.mentor || semAcento(n.mentor).split(" ")[0] === semAcento(alvo()).split(" ")[0]));
-  return `<div class="pagehead"><div><h1>Triagem</h1><p>${triNoNotion() ? "Clientes novos. Cada triagem fica salva no Notion, na base Triagem MedEasy, e aparece em qualquer aparelho" : "Clientes novos antes de entrar no Notion. Fica guardado só neste navegador"}</p></div><div class="row"><button class="btn sm" data-a="copiarLinkTri">Copiar link de triagem</button><button class="btn sm pri" data-a="novaTri">Novo cliente</button></div></div>
+  return `<div class="pagehead"><div><h1>Triagem</h1><p>${triNoNotion() ? "Clientes novos em espera. Cada triagem fica salva na base Triagem MedEasy e aparece em qualquer aparelho. Ela só entra em Clientes quando você clica em Fechou: criar cliente no Notion" : "Clientes novos antes de entrar no Notion. Fica guardado só neste navegador"}</p></div><div class="row"><button class="btn sm" data-a="copiarLinkTri">Copiar link de triagem</button><button class="btn sm pri" data-a="novaTri">Novo cliente</button></div></div>
    ${doNotion.length ? `<section class="card" style="margin-bottom:16px"><div class="card-h"><h2>Chegaram pelo formulário</h2><span class="pill info">${doNotion.length}</span></div><div class="list">${doNotion.map(n => `<div class="li"><div class="grow"><div class="t">${esc(n.nome)}</div><div class="small muted">${esc((n.provas || []).join(", ") || "sem prova")}${n.mentor ? " · mentor " + esc(n.mentor) : ""}${n.arquivos ? ` · ${n.arquivos} ${n.arquivos === 1 ? "arquivo" : "arquivos"}` : ""} · ${dBR(n.em ? new Date(n.em).toISOString() : "")}</div></div><a class="btn sm ghost" href="${esc(n.url)}" target="_blank" rel="noopener">Notion</a><button class="btn sm pri" data-a="importarTriNotion" data-v="${esc(n.url)}">Importar</button></div>`).join("")}</div></section>` : ""}
    <section class="card" style="margin-bottom:16px"><div class="card-h"><h2>Importar da mensagem</h2></div><p class="xs muted" style="margin:0 0 8px">A mensagem do cliente traz o link "Abrir no painel". Tocar nele já importa. Se preferir, cole a mensagem ou o link aqui.</p><div class="row"><textarea class="in" id="triImport" rows="2" placeholder="Cole a mensagem inteira" style="flex:1"></textarea><button class="btn" data-a="importarTri">Importar</button></div></section>
    <section class="card" style="padding:4px">${lista.length ? lista.map(t => { const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo; const c = clienteDaTriagem(t); const e = estimarJS(c); return `<div class="crow" data-a="abrirTri" data-id="${t.id}"><div style="min-width:0"><div class="t">${esc(t.nome || "Sem nome")}</div><div class="small muted">${esc(provasTri(t).map(nomeProva).join(", ") || "Sem prova")} · ${esc(SERVICOS_TRI[t.servico] || "")}</div></div><div class="hide-m"><span class="pill ${k}">${et}</span></div><div class="hide-m small num">${e && e.completo ? brl(e.total) : `<span class="faint">sem valor</span>`}</div><div class="xs muted">${dBR(new Date(t.em || 0).toISOString())}</div></div>`; }).join("") : `<div class="empty" style="margin:12px">Nenhum cliente em triagem. Mande o link de triagem ou importe uma mensagem.</div>`}</section>`;
@@ -384,15 +392,44 @@ function mensagemOrcamento(t, ops){
   return `Oi, ${primeiro(t.nome)}! Tudo bem? Segue o seu orçamento para ${provas.join(", ") || "a sua prova"} ${ANO}\n\nEm cada prova fazemos a análise curricular com projeção de nota e a seleção dos certificados que pontuam no edital, e deixamos o documento pronto para envio\n\n${blocos}${prox ? `\n\nAtenção ao ${prox.nome}: o envio do currículo termina em ${dBR(prox.prazoEnvio)}` : ""}\n\n${curr.length ? "O pagamento é 50% na contratação e o restante depois da versão para conferência" : ""}${ops.some(o => o.mensal) ? `${curr.length ? "\n" : ""}A mentoria mensal é paga todo mês` : ""}`.replace(/\n+$/, "");
 }
 function textoNotionTri(t){ const c = clienteDaTriagem(t); const cont = textoCont(c, (carregarCont(c).provas) || {}); return `${t.nome}\nTelefone: ${t.whats}\nTipo de serviço: ${tiposDe(t.servico).join(", ")}, ${c.provas.map(p => p.nome).join(", ")}\n${t.area ? "Especialidade: " + t.area + "\n" : ""}${t.links ? "Drive: " + t.links + "\n" : ""}${cont ? "\nCertificados por item:\n" + cont : ""}`; }
+/* Passo a passo da triagem: deixa claro que o cliente fica em espera até fechar, e o que falta */
+function passosTri(t, c, ops){
+  const ct = ctrlDe(c); const temNota = Object.keys(ct.notas || {}).length || Object.keys(ct.analises || {}).length;
+  const passos = [
+    ["triDados", "Dados do cliente", t.nome && t.whats && provasTri(t).length, t.nome && t.whats ? (provasTri(t).length ? "Nome, WhatsApp e provas" : "Falta marcar as provas") : "Falta o nome e o WhatsApp"],
+    ["triOrc", "Orçamento", ops.length, t.orcImportado ? "Lido do orçamento que você mandou" : ops.length ? "Calculado pelo site. Se já mandou um, suba o PDF ou a foto" : "Suba o orçamento que você mandou ou conte os certificados"],
+    ["notaCard", "Análise", temNota, temNota ? "Nota salva" : "Suba a análise pronta ou preencha a nota (opcional)"],
+    ["triFechar", "Fechou?", !!t.clienteNotion, t.clienteNotion ? "Já está no Controle cliente" : "Quando o cliente fechar, marque a opção e se já pagou"],
+  ];
+  return `<section class="card" id="triPassos" style="margin-bottom:16px">
+    ${t.clienteNotion ? `<div class="row between" style="gap:8px"><div><b>Fechado</b><div class="small muted">Este cliente já está no Controle cliente do Notion e aparece em Clientes.</div></div><a class="btn sm" href="${esc(t.clienteNotion)}" target="_blank" rel="noopener">Abrir no Notion</a></div>`
+      : `<div><b>Em espera</b><div class="small muted">Ainda não está no Controle cliente. ${triNoNotion() ? "Fica salvo na base Triagem MedEasy e aparece em qualquer aparelho." : "Fica salvo só neste navegador."} Só vira cliente no Notion quando você clicar em "Fechou: criar cliente no Notion".</div></div>`}
+    <div class="passos-tri">${passos.map(([id, tt, ok, sub], i) => `<button class="passo-tri ${ok ? "ok" : ""}" data-a="irPara" data-v="${id}" type="button"><span class="n">${ok ? "✓" : i + 1}</span><span><b>${tt}</b><span class="xs muted">${esc(sub)}</span></span></button>`).join("")}</div></section>`;
+}
+/* Cartão "Fechou?": opção fechada, se já pagou a primeira parcela, e o botão que cria o cliente no Notion */
+function fecharTriForm(t, ops){
+  const o = ops.find(x => x.letra === t.opFechar) || ops[0];
+  const sugerido = o ? r2(o.mensal ? o.total : o.total / 2) : 0;
+  const falta = !String(t.nome || "").trim() || !t.whats ? "Preencha o nome e o WhatsApp no passo 1" : !ops.length ? "Falta o orçamento no passo 2" : "";
+  return `${t.clienteNotion ? "" : `<p class="xs muted" style="margin:0 0 10px">Cria a linha do cliente no Controle cliente, com serviço, provas, valor, orçamento, nota e controle de certificados. Ele aparece em Clientes, com o código de acesso, em 1 ou 2 minutos.</p>`}
+    <div class="stack" style="gap:8px">
+      ${ops.length > 1 ? `<label class="f"><span>Opção que ele fechou</span><select class="in" id="triOpFechar" data-tri="opFechar">${ops.map(x => `<option value="${x.letra}" ${o && o.letra === x.letra ? "selected" : ""}>Opção ${x.letra}: ${brl(x.total)}${x.mensal ? " por mês" : ""}</option>`).join("")}</select></label>` : o ? `<div class="small">Opção ${o.letra}: <b class="num">${brl(o.total)}${o.mensal ? " por mês" : ""}</b></div>` : ""}
+      <label class="chk"><input type="checkbox" data-tri="pagou" ${t.pagou ? "checked" : ""}><span>${o && o.mensal ? "Já pagou o primeiro mês" : "Já pagou a 1ª parcela"}</span></label>
+      ${t.pagou ? `<div class="row" style="gap:6px"><input class="in" data-tri="pagouValor" inputmode="decimal" aria-label="Valor pago" placeholder="${brl(sugerido)}" value="${esc(t.pagouValor || "")}" style="flex:1;min-width:110px"><select class="in" data-tri="pagouForma" aria-label="Forma de pagamento" style="width:auto">${["", "Pix", "Cartão", "Boleto", "Dinheiro", "Transferência"].map(x => `<option value="${x}" ${t.pagouForma === x ? "selected" : ""}>${x || "Forma"}</option>`).join("")}</select></div><p class="xs muted" style="margin:0">Vazio, entra ${brl(sugerido)}. O valor vai para Pagamento do cliente e o Notion fica com 1° parcela (ou Pagamento finalizado, se já pagou tudo).</p>` : ""}
+      ${falta && !t.clienteNotion ? `<p class="xs gold" style="margin:0">${falta}</p>` : ""}
+      <div class="row"><button class="btn pri" data-a="criarClienteNotion" ${falta ? "disabled" : ""}>${t.clienteNotion ? "Criar outra linha no Notion" : "Fechou: criar cliente no Notion"}</button><button class="btn sm ghost" data-a="copiarNotionTri">Copiar texto</button></div>
+    </div>`;
+}
 function triagemItemView(){
   const t = triDe(S.sel); if (!t) return triagemView();
   const c = clienteDaTriagem(t); const ops = opcoesTri(t); const [et, k] = ETAPAS_TRI[t.etapa] || ETAPAS_TRI.novo;
   const chk = (kk, nome) => `<label class="chk"><input type="checkbox" data-tri="prova" value="${kk}" ${(t.provas || []).includes(kk) ? "checked" : ""}><span>${esc(nome)}</span></label>`;
   return `<div class="pagehead"><div><button class="btn ghost sm" data-a="nav" data-v="triagem" style="margin-left:-10px">‹ Triagem</button><h1>${esc(t.nome || "Cliente novo")}</h1><div class="row" style="margin-top:6px"><span class="pill ${k}">${et}</span>${t.area ? `<span class="pill ok">${esc(t.area)}</span>` : ""}<span id="triSync">${syncTriTexto(t.id)}</span></div></div>
     <div class="row">${t.whats ? `<a class="btn" href="${waLink(t.whats, "Oi, " + primeiro(t.nome) + "!")}" target="_blank" rel="noopener">WhatsApp</a>` : ""}${t.notion ? `<a class="btn" href="${esc(t.notion)}" target="_blank" rel="noopener">Arquivos no Notion${t.arquivos ? ` (${t.arquivos})` : ""}</a>` : ""}<select class="in" id="triEtapa" aria-label="Etapa da triagem" style="width:auto">${Object.entries(ETAPAS_TRI).map(([kk, [tt]]) => `<option value="${kk}" ${t.etapa === kk ? "selected" : ""}>${tt}</option>`).join("")}</select><button class="btn sm danger" data-a="apagarTri">Apagar</button></div></div>
+   ${passosTri(t, c, ops)}
    <div class="grid2"><div class="stack">
     ${t.pedido || t.obs ? `<section class="card"><div class="card-h"><h2>Pedido do cliente</h2></div>${t.pedido ? `<p class="small" style="margin:0 0 8px;white-space:pre-wrap">${esc(t.pedido)}</p>` : ""}${t.obs ? `<p class="small muted" style="margin:0 0 8px;white-space:pre-wrap">Obs: ${esc(t.obs)}</p>` : ""}<div class="xs muted">Entendido como <b>${esc(SERVICOS_TRI[t.servico] || "")}</b>${(t.motivos || []).length ? " (" + esc(t.motivos.join(", ")) + ")" : ""}. Se não for isso, troque o serviço e as provas abaixo.</div></section>` : ""}
-    <section class="card"><div class="card-h"><h2>Dados</h2></div><div class="stack" style="gap:10px">
+    <section class="card" id="triDados"><div class="card-h"><h2>1. Dados do cliente</h2></div><div class="stack" style="gap:10px">
       <div class="grid2" style="gap:10px"><label class="f"><span>Nome</span><input class="in" data-tri="nome" value="${esc(t.nome || "")}"></label><label class="f"><span>WhatsApp</span><input class="in" data-tri="whats" value="${esc(t.whats || "")}" inputmode="tel"></label></div>
       <div class="grid2" style="gap:10px"><label class="f"><span>Especialidade</span><input class="in" data-tri="area" value="${esc(t.area || "")}"></label><label class="f"><span>Serviço</span><select class="in" data-tri="servico">${Object.entries(SERVICOS_TRI).filter(([kk]) => kk !== "naosei").map(([kk, tt]) => `<option value="${kk}" ${t.servico === kk ? "selected" : ""}>${tt}</option>`).join("")}</select></label></div>
       <div class="f"><span>Provas</span><div class="chks">${PROVAS.map(p => chk(p.k, p.nome)).join("")}</div></div>
@@ -405,16 +442,15 @@ function triagemItemView(){
       <label class="f"><span>Observações</span><textarea class="in" data-tri="obs" rows="2">${esc(t.obs || "")}</textarea></label></div></section>
     <section class="card" id="triProvas"><div class="card-h"><h2>Provas</h2></div>${c.provas.length ? `<div class="list">${c.provas.map(p => { const cp = calcDe(c, p); return `<div class="li"><div class="grow"><div class="t">${esc(p.nome)} ${ANO}</div><div class="small muted">${p.prazoEnvio ? "Envio até " + dBR(p.prazoEnvio) + " (" + quando(p.prazoEnvio) + ")" : "Sem prazo cadastrado"}${p.dataProva ? " · prova " + dBR(p.dataProva) : ""}</div></div>${cp.tem ? `<b class="num">${d1(cp.total)} / ${d1(cp.max)}</b>` : ""}</div>`; }).join("")}</div>` : `<div class="empty">Marque as provas acima</div>`}</section>
    </div><div class="stack">
-    <section class="card" id="triOrc"><div class="card-h"><h2>Orçamento</h2><div class="row" style="gap:6px">${t.orcImportado ? `<span class="pill gold" title="${esc(t.orcImportado.arquivo || "")}">${t.orcImportado.foto ? "Da foto" : "Do PDF"}</span><label class="btn sm" style="cursor:pointer" title="Lê um orçamento atualizado no lugar do que foi lido">Trocar<input type="file" accept=".pdf,application/pdf,image/*" hidden data-orcpdf="1"></label><button class="btn sm ghost" data-a="orcAuto">Voltar ao automático</button>` : `<label class="btn sm" style="cursor:pointer" title="Usa as opções e os valores de um orçamento que já foi feito, em PDF ou foto">Usar orçamento pronto<input type="file" accept=".pdf,application/pdf,image/*" hidden data-orcpdf="1"></label>`}${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
+    <section class="card" id="triOrc"><div class="card-h"><h2>2. Orçamento</h2><div class="row" style="gap:6px">${t.orcImportado ? `<span class="pill gold" title="${esc(t.orcImportado.arquivo || "")}">${t.orcImportado.foto ? "Da foto" : "Do PDF"}</span><label class="btn sm" style="cursor:pointer" title="Lê um orçamento atualizado no lugar do que foi lido">Trocar<input type="file" accept=".pdf,application/pdf,image/*" hidden data-orcpdf="1"></label><button class="btn sm ghost" data-a="orcAuto">Voltar ao automático</button>` : `<label class="btn sm pri" style="cursor:pointer" title="Usa as opções e os valores do orçamento que você já mandou, em PDF ou foto">Subir orçamento pronto<input type="file" accept=".pdf,application/pdf,image/*" hidden data-orcpdf="1"></label>`}${ops.some(o => o.manual) || t.msgOrc || t.notaOrc ? `<span class="pill gold">Editado à mão</span>` : ""}${ops.length && ops.every(o => o.completo) ? `<span class="pill ok">Pronto</span>` : `<span class="pill">Falta contagem</span>`}${ops.length ? `<button class="btn sm ${S.orcEdit ? "pri" : ""}" data-a="orcEditar">${S.orcEdit ? "Fechar edição" : "Editar à mão"}</button>` : ""}</div></div>
       ${ops.length && S.orcEdit ? orcEditor(t, ops) : ops.length ? ops.map(o => `<div class="svc" style="margin-bottom:10px"><div class="row between"><b>Opção ${o.letra}</b><b class="num gold">${brl(o.total)}${o.mensal ? " por mês" : ""}</b></div><div class="xs muted">${esc(o.titulo)}${o.desconto ? ` · ${o.desconto}% de desconto` : ""}</div><div class="tbl-wrap"><table class="tbl"><tbody>${o.linhas.map(l => `<tr><td class="small">${esc(l.desc)}<div class="xs muted">${esc(l.conta)}${esc(foraTxt(l))}</div></td><td class="r num" style="white-space:nowrap">${l.valor == null ? "–" : brl(l.valor)}</td></tr>`).join("")}</tbody></table></div></div>`).join("") : `<div class="empty">Marque as provas e conte os certificados</div>`}
       <div class="row" style="margin-top:8px"><button class="btn sm pri" data-a="pdfOrc" ${ops.length ? "" : "disabled"}>PDF do orçamento</button><button class="btn sm" data-a="copiarMsgOrc" ${ops.length ? "" : "disabled"}>Copiar mensagem</button>${t.whats && ops.length ? `<a class="btn sm" target="_blank" rel="noopener" href="${waLink(t.whats, msgOrc(t, ops))}">Mandar no WhatsApp</a>` : ""}</div></section>
     ${notaCard(c)}
     ${S.avancado ? analiseCard(c) : ""}
     ${S.avancado ? `<section class="card"><div class="card-h"><h2>PDF da análise</h2></div><p class="xs muted" style="margin:0 0 10px">Sai da análise importada ou da contagem por item lá embaixo, com os comentários de cada item. Uma prova por vez.</p><div class="row">${c.provas.map(p => `<button class="btn sm ${calcDe(c, p).tem ? "pri" : ""}" data-a="pdfAnalise" data-v="${kP(p.nome)}">PDF ${esc(p.nome)}</button>`).join("") || `<span class="xs muted">Sem prova</span>`}</div></section>` : ""}
-    <section class="card" id="triFechar"><div class="card-h"><h2>Quando fechar</h2>${t.clienteNotion ? `<a class="pill ok" href="${esc(t.clienteNotion)}" target="_blank" rel="noopener">Cliente no Notion</a>` : ""}</div>
+    <section class="card" id="triFechar"><div class="card-h"><h2>4. Fechou?</h2>${t.clienteNotion ? `<a class="pill ok" href="${esc(t.clienteNotion)}" target="_blank" rel="noopener">Cliente no Notion</a>` : ""}</div>
       ${valorNotionTri(t, ops)}
-      ${triNoNotion() ? `<p class="xs muted" style="margin:0 0 10px">Cria a linha do cliente no Controle cliente, com serviço, provas, valor, contagem por item e controle de certificados. Ele entra no painel com o código de acesso em 1 ou 2 minutos.</p>
-      <div class="row">${ops.length > 1 ? `<select class="in" id="triOpFechar" style="width:auto">${ops.map(o => `<option value="${o.letra}">Opção ${o.letra}: ${brl(o.total)}${o.mensal ? " por mês" : ""}</option>`).join("")}</select>` : ""}<button class="btn sm pri" data-a="criarClienteNotion" ${t.nome && t.whats ? "" : "disabled"}>Criar cliente no Notion</button><button class="btn sm ghost" data-a="copiarNotionTri">Copiar texto</button></div>`
+      ${triNoNotion() ? fecharTriForm(t, ops)
       : `<p class="xs muted" style="margin:0 0 10px">Crie o cliente no Notion e cole o texto abaixo. Na próxima sincronização ele entra no painel com a contagem e o código de acesso.</p><button class="btn sm" data-a="copiarNotionTri">Copiar dados para o Notion</button>`}</section>
    </div></div>
    <div style="margin-top:16px">${controleView(c)}</div>
@@ -423,7 +459,7 @@ function triagemItemView(){
 function atualizarTriParcial(){
   try {
     const tmp = document.createElement("div"); tmp.innerHTML = triagemItemView(); let trocou = 0;
-    for (const id of ["triProvas", "triOrc", "triFechar"]){ const novo = tmp.querySelector("#" + id), velho = document.getElementById(id); if (novo && velho){ velho.replaceWith(novo); trocou++; } }
+    for (const id of ["triProvas", "triOrc", "triFechar", "triPassos"]){ const novo = tmp.querySelector("#" + id), velho = document.getElementById(id); if (novo && velho){ velho.replaceWith(novo); trocou++; } }
     if (!trocou) render();
   } catch (e) { toast("Não consegui atualizar o orçamento: " + e.message); }
 }
@@ -480,7 +516,7 @@ function triInput(el){
   if (campo === "prova" || campo === "servico" || campo === "drive" || campo === "mentoria" || campo === "mentoriaInd") render();
   // Campos digitados (desconto, certificados, valor da mentoria): redesenhar a tela inteira tirava o foco do campo a cada número,
   // e "10" virava "1". Agora só os cartões de provas, orçamento e fechamento são refeitos.
-  else if (campo === "nCert" || campo === "desconto" || campo === "reunioes") atualizarTriParcial();
+  else if (campo === "nCert" || campo === "desconto" || campo === "reunioes" || campo === "pagou" || campo === "opFechar" || campo === "nome" || campo === "whats") atualizarTriParcial();
 }
 
 /* ---------- PDFs no navegador ---------- */
