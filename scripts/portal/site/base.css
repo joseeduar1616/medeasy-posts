@@ -244,3 +244,12 @@ details.faq p{margin:8px 0 0;color:var(--muted)}
 .ci-passo{display:inline-flex;align-items:center;gap:2px}.ci-passo .btn{padding:4px 9px;font-size:16px;line-height:1}
 /* Celular e tablet: botões pequenos com área de toque maior (mínimo de uns 36 pixels) */
 @media (pointer:coarse){.btn.sm{min-height:36px;padding:7px 12px}.ci-passo .btn{min-width:36px;min-height:36px}.tab{padding:10px 14px}}
+/* Passo a passo da triagem */
+.passos-tri{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.passo-tri{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface2);border:1px solid var(--line2);border-radius:var(--r);padding:10px;color:inherit;font:inherit;cursor:pointer}
+.passo-tri b{display:block;font-size:14px}.passo-tri .xs{display:block;margin-top:2px}
+.passo-tri .n{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;border:1px solid var(--line2)}
+.passo-tri.ok{border-color:var(--neon)}.passo-tri.ok .n{background:var(--neon);color:var(--neon-ink);border-color:var(--neon)}
+@media (max-width:820px){.passos-tri{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media (max-width:420px){.passos-tri{grid-template-columns:minmax(0,1fr)}}
+
