@@ -1,0 +1,172 @@
+{
+  "id": "2026-11-02-enamed-registro",
+  "legenda": "O ENAMED vai valer pro seu registro de médico? 🩺\n\nEm 15/10 o Congresso aprovou a MP 1.370/2026, que liga a inscrição no CRM à aprovação no ENAMED, e o texto foi pra sanção do presidente. Pra quem a regra vale, são 3 provas no curso (fim do 4º, do 8º e do 12º semestre) e a nota final é a média, com peso maior na última.\n\nA exigência pro CRM vale pra quem entrou na faculdade a partir de 19/06/2026. Quem já estava matriculado antes segue as regras anteriores, e quem já se formou não faz o ENAMED. Pra quem vai fazer a prova, o caminho segue o mesmo: 100 questões, 20 de cada área. No Cadência Med você escolhe o ciclo clínico, o de residência ou os dois juntos, vê o que falta em cada área e cada aula volta pra revisão no dia certo.\n\nFonte: Agência Senado, 15/10/2026.\n\nSalva esse post e manda pra quem ainda tem dúvida se a regra vale pra ele 📌\n\nQue ano você tá? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #enamed",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "ENAMED E CRM",
+      "titulo": "O ENAMED VAI VALER PRO {g}SEU REGISTRO DE MÉDICO?{/g}",
+      "texto": "O Congresso aprovou a regra em 15/10. Arrasta pra ver <b>se ela vale pra você</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 400,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O QUE MUDA",
+      "tag": "MP 1.370/2026",
+      "titulo": "O CRM PASSA A DEPENDER {g}DA APROVAÇÃO{/g}",
+      "texto": "O texto aprovado pelo Congresso foi pra sanção do presidente. Pra quem a regra vale, <b>é assim</b>:",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Como fica o ENAMED",
+        "itens": [
+          {
+            "titulo": "3 provas no curso",
+            "sub": "fim do 4º, do 8º e do 12º semestre",
+            "selo": "3",
+            "cor": "#A86BFF",
+            "cor_selo": "rgba(168,107,255,.16)",
+            "cor_texto": "#8A4FE0"
+          },
+          {
+            "titulo": "Nota final",
+            "sub": "média das 3, com peso maior na última",
+            "selo": "média",
+            "cor": "#46D9F5",
+            "cor_selo": "rgba(168,107,255,.16)",
+            "cor_texto": "#8A4FE0"
+          },
+          {
+            "titulo": "Não chegou no mínimo",
+            "sub": "pode refazer a 3ª etapa nas edições seguintes",
+            "selo": "refaz",
+            "cor": "#F5A524",
+            "cor_selo": "rgba(168,107,255,.16)",
+            "cor_texto": "#8A4FE0"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "PRA QUEM",
+      "tag": "A DATA DE CORTE",
+      "titulo": "TUDO DEPENDE DE QUANDO {g}VOCÊ ENTROU{/g}",
+      "texto": "A exigência pro CRM vale pra quem ingressou <b>a partir de 19/06/2026</b>, a data em que a MP saiu.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Vale pra você?",
+        "itens": [
+          {
+            "titulo": "Entrou a partir de 19/06/2026",
+            "sub": "precisa da aprovação pro CRM",
+            "selo": "vale",
+            "cor": "#F2557A",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Já estava matriculado antes",
+            "sub": "segue as regras anteriores",
+            "selo": "fica de fora",
+            "cor": "#2DD4A0",
+            "cor_selo": "rgba(45,212,160,.16)",
+            "cor_texto": "#139C72"
+          },
+          {
+            "titulo": "Já se formou",
+            "sub": "não faz o ENAMED",
+            "selo": "fica de fora",
+            "cor": "#2DD4A0",
+            "cor_selo": "rgba(45,212,160,.16)",
+            "cor_texto": "#139C72"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "QUEM VAI FAZER A PROVA",
+      "titulo": "SÃO 100 QUESTÕES, {g}20 DE CADA ÁREA{/g}",
+      "texto": "Clínica, Cirurgia, Pediatria, GO e Preventiva. No Cadência Med você vê <b>o que falta em cada área</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "materias",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Matérias por área"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "REVISÃO",
+      "tag": "AS 5 ÁREAS EM DIA",
+      "titulo": "CADA AULA {g}VOLTA NO DIA CERTO{/g}",
+      "texto": "A área do rodízio não apaga as outras. Cada aula entra na escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Escada de revisão"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "MENTOR DE IA",
+      "tag": "COM O INTERNATO",
+      "titulo": "A SEMANA MONTADA {g}EM VOLTA DA ESCALA{/g}",
+      "texto": "O mentor de IA olha o seu painel e diz <b>o que priorizar</b> com os horários que sobram do internato.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Mentor de IA"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "AS 5 ÁREAS {g}NUM CRONOGRAMA SÓ{/g}",
+      "texto": "Fonte: Agência Senado, 15/10/2026.",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {
+            "titulo": "Ciclo clínico",
+            "texto": "ou o de residência, ou os dois juntos"
+          },
+          {
+            "titulo": "Matérias por área",
+            "texto": "o que falta em cada uma das 5"
+          },
+          {
+            "titulo": "Escada de revisão",
+            "texto": "1 semana, 1 mês, 2, 4 e 6 meses"
+          },
+          {
+            "titulo": "Mentor de IA",
+            "texto": "a semana em volta da escala"
+          }
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
