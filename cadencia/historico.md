@@ -35,7 +35,7 @@
 | 02/11/2026 | 09:58 | Carrossel 7 slides | (nicho, pra salvar) O ENAMED vai valer pro seu registro de médico? MP 1.370/2026, data de corte 19/06/2026 (pauta 22, plano de seg 02, `posts/2026-11-02-enamed-registro.json`, media_id 18453203536135222) | https://www.instagram.com/p/DfPXge3jpwe/ | 25 contas, 105 views, 0 visitas, 0 salvamentos (2 dias) |
 | 02/11/2026 | 15:05 | Meme animado (A2, Reel) + story (nicho) | POV: primeiro dia de internato e a semana já tá montada. Escala no Cadência Med e ele monta a semana (memes 16, plano de seg 02, 11 s com a tela da agenda aos 4,8 s, `posts/2026-11-02-primeiro-dia-internato.json`, `videos/v9.js`, Reel 18637292104046418, story 18129825832888835) | https://www.instagram.com/reel/DfP6PclH7Nf/ | 20 contas, 48 views, 74% de pulo, 4,6 s de média (2 dias) |
 | 03/11/2026 | 15:00 | Meme com tela (A1, foto) + story | Eu terceirizando minha semana pro mentor de IA do Cadência Med (memes 6, plano de ter 03, `posts/2026-11-03-mentor-semana-meme.json`, post 18102332711553097, story 18140980462626666) | https://www.instagram.com/p/DfSedafERnY/ | 22 contas, 52 views, 0 visitas (1 dia) |
-| 04/11/2026 | 09:58 | Carrossel 7 slides | (nicho, pra salvar) 5 áreas, 5 semanas: o plano pro ENAMED 2027 (pauta 23, plano de qua 04, `posts/2026-11-04-cinco-semanas-enamed.json`, media_id 17976880907965033) | perfil (link ainda não aparece no Windsor) | (preencher) |
+| 04/11/2026 | 09:55 | Carrossel 7 slides | (nicho, pra salvar) 5 áreas, 5 semanas: o plano pro ENAMED 2027 (pauta 23, plano de qua 04, `posts/2026-11-04-cinco-semanas-enamed.json`, media_id 17976880907965033) | perfil (link ainda não aparece no Windsor) | (preencher) |
 
 ## Anotações de desempenho
 
