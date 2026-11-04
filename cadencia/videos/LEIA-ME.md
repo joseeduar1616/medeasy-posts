@@ -17,6 +17,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v7.js` | Meme animado de nicho: você sobreviveria a um dia de 4º ano com o ENAMED chegando? | 18 s |
 | `v8.js` | Meme animado de nicho: níveis de cansaço no internato, o 5 é a semana já montada | 18 s |
 | `v9.js` | Meme animado de nicho: POV primeiro dia de internato, a semana já montada com a escala | 11 s |
+| `v10.js` | Meme animado: você sobreviveria a uma semana com a revisão atrasada? 3, 9 e 15 vencidas e a escada de revisão | 11,5 s |
 
 ## Como gerar
 
