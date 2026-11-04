@@ -1,0 +1,106 @@
+{
+  "id": "2026-11-04-cinco-semanas-enamed",
+  "legenda": "5 áreas, 5 semanas: um jeito de dar a primeira volta pelo ENAMED 2027. 🩺\n\nNo internato a vontade é abrir tudo ao mesmo tempo: um pouco de Clínica na segunda, Pediatria na terça, GO na quarta. No fim do mês nenhuma área fechou, e sem área fechada não tem o que revisar no dia certo.\n\nO plano vai por partes: uma área por semana (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), e a área da semana anterior volta pra revisão junto com a nova. No Cadência Med você filtra as matérias pela área da semana, vê o que falta pra fechar e cada aula marcada entra na escada de revisão (1 semana, 1 mês, 2, 4 e 6 meses).\n\nSalva esse plano e manda pra quem vai fazer o ENAMED com você 📌\n\nQual área vem primeiro pra você? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #enamed",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "ENAMED 2027",
+      "tag": "UMA ÁREA POR SEMANA",
+      "titulo": "5 ÁREAS, 5 SEMANAS: {g}O PLANO PRO ENAMED 2027{/g}",
+      "texto": "Uma área nova por semana, com <b>a anterior voltando pra revisão</b>. Arrasta pra ver a tabela.",
+      "ui": {"tipo": "print", "imagem": "materias", "altura": 360, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "AS 5 ÁREAS ABERTAS {g}AO MESMO TEMPO{/g}",
+      "texto": "Clínica na segunda, Pediatria na terça, GO na quarta. No fim do mês, <b>nenhuma área fechou</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Seu mês tentando ver tudo",
+        "itens": [
+          {"titulo": "Clínica Médica", "sub": "começou e parou", "selo": "pela metade", "cor": "#A86BFF", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Cirurgia", "sub": "só o que caiu no rodízio", "selo": "pela metade", "cor": "#46D9F5", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Pediatria", "sub": "parada desde o 3º ano", "selo": "parada", "cor": "#F5A524", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Ginecologia e Obstetrícia", "sub": "duas aulas soltas", "selo": "pela metade", "cor": "#F2557A", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Preventiva", "sub": "ficou pro fim", "selo": "parada", "cor": "#2DD4A0", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "SEM ÁREA FECHADA, {g}A REVISÃO NÃO CHEGA{/g}",
+      "texto": "Cada área vale 20 das 100 questões. Quando a prova chega, <b>a primeira que você viu já foi embora</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Abriu as 5 áreas", "feito": true},
+          {"texto": "Fechou uma área inteira", "feito": false},
+          {"texto": "Revisou o que viu mês passado", "feito": false},
+          {"texto": "Sabe qual área tá mais atrasada", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PLANO",
+      "tag": "A VIRADA",
+      "titulo": "UMA ÁREA POR SEMANA, {g}A ANTERIOR VOLTANDO{/g}",
+      "texto": "Cada semana tem uma área nova e <b>a revisão de 1 semana da área que passou</b>.",
+      "ui": {
+        "tipo": "semana",
+        "titulo": "A 1ª volta pelas 5 áreas",
+        "dias": [
+          {"d": "SEM 1", "blocos": [{"t": "Clínica", "cor": "#A86BFF"}]},
+          {"d": "SEM 2", "blocos": [{"t": "Cirurgia", "cor": "#46D9F5"}, {"t": "rev Clínica", "cor": "#6B6880"}]},
+          {"d": "SEM 3", "blocos": [{"t": "Pediatria", "cor": "#F5A524"}, {"t": "rev Cirurgia", "cor": "#6B6880"}]},
+          {"d": "SEM 4", "blocos": [{"t": "GO", "cor": "#F2557A"}, {"t": "rev Pediatria", "cor": "#6B6880"}]},
+          {"d": "SEM 5", "blocos": [{"t": "Preventiva", "cor": "#2DD4A0"}, {"t": "rev GO", "cor": "#6B6880"}]}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "POR ÁREA",
+      "tag": "MATÉRIAS",
+      "titulo": "ABRA SÓ {g}A ÁREA DA SEMANA{/g}",
+      "texto": "Aulas e tópicos separados por área. Você filtra e <b>vê o que falta pra fechar</b>.",
+      "ui": {"tipo": "print", "imagem": "materias", "altura": 520, "foco": "top", "nota": "Matérias e temas"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "REVISÃO",
+      "tag": "REVISÃO",
+      "titulo": "A ÁREA QUE PASSOU {g}VOLTA SOZINHA{/g}",
+      "texto": "Cada aula marcada entra na escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "SALVA ESSE",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "5 SEMANAS PRA {g}PASSAR PELAS 5 ÁREAS{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Ciclo clínico e residência", "texto": "os dois cronogramas juntos"},
+          {"titulo": "Matérias por área", "texto": "o que falta em cada uma"},
+          {"titulo": "Escada de revisão", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Mentor de IA", "texto": "monta a semana em volta do internato"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
