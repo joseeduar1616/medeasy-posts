@@ -1,0 +1,94 @@
+{
+  "id": "2026-11-05-nota-do-simulado",
+  "legenda": "Viu a nota do simulado e não sabe o que fazer com ela? 😶\n\nVocê confere o número, fecha a aba e segue pra aula nova. As questões que você errou ficam lá, sem ninguém olhar pra elas de novo. Na prova, o mesmo tema aparece e o erro também.\n\nA nota serve pra mostrar onde voltar. No Cadência Med o que você erra vai pro caderno de erros e entra na revisão, o desempenho mostra a área que tá abaixo da sua média e o mentor de IA olha o seu painel e diz o que priorizar na semana. A tela Hoje mostra a revisão que venceu.\n\nSalva esse post pra usar no próximo simulado e manda pra quem fez a prova com você 📌\n\nQuanto você tirou no último simulado? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #simulado",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "DEPOIS DO SIMULADO",
+      "titulo": "VIU A NOTA DO SIMULADO. {g}E AGORA?{/g}",
+      "texto": "Se você só olha o número e segue em frente, arrasta pra ver <b>o que fazer com a nota</b>.",
+      "ui": {"tipo": "print", "imagem": "assistente", "altura": 380, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "VOCÊ VÊ A NOTA E {g}FECHA A ABA{/g}",
+      "texto": "Confere o número, comemora ou fica mal, e volta pra aula nova. <b>As questões erradas ficam pra trás</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Viu a nota", "feito": true},
+          {"texto": "Leu o comentário das que errou", "feito": false},
+          {"texto": "Separou os temas que mais errou", "feito": false},
+          {"texto": "Marcou quando revisar esses temas", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "O ERRO DO SIMULADO {g}VOLTA NA PROVA{/g}",
+      "texto": "O mesmo tema aparece de novo e você marca a mesma alternativa. <b>O simulado avisou, mas ninguém voltou nele</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Temas que você errou e não revisou",
+        "itens": [
+          {"titulo": "Taquiarritmias", "sub": "Cardiologia · errou no simulado", "selo": "sem revisão", "cor": "#A86BFF", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Vigilância epidemiológica", "sub": "Preventiva · errou no simulado", "selo": "sem revisão", "cor": "#2DD4A0", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Icterícia neonatal", "sub": "Pediatria · errou no simulado", "selo": "sem revisão", "cor": "#F5A524", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "A NOTA MOSTRA {g}ONDE VOLTAR{/g}",
+      "texto": "O mentor de IA olha o seu painel, vê <b>a área abaixo da sua média</b> e diz o que priorizar na semana.",
+      "ui": {"tipo": "print", "imagem": "assistente", "altura": 540, "foco": "top", "nota": "Mentor de IA"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "REVISÃO",
+      "tag": "CADERNO DE ERROS",
+      "titulo": "O QUE VOCÊ ERROU {g}ENTRA NA REVISÃO{/g}",
+      "texto": "O erro vai pro caderno de erros e volta na escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "A REVISÃO DO DIA {g}JÁ VEM SEPARADA{/g}",
+      "texto": "Abriu o app, a tela Hoje mostra o que venceu. <b>Você só senta e revisa</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "FEZ O SIMULADO? {g}AGORA ELE TRABALHA PRA VOCÊ{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Caderno de erros", "texto": "o que você erra volta pra revisão"},
+          {"titulo": "Desempenho por área", "texto": "onde você tá abaixo da média"},
+          {"titulo": "Mentor de IA", "texto": "diz o que priorizar na semana"},
+          {"titulo": "Escada de revisão", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
