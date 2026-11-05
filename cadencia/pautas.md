@@ -122,7 +122,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 14. ~~A2 · "Você sobreviveria a uma semana com a revisão atrasada?" Segunda 3 vencidas, quarta 9, sexta 15. Fim: a tela Hoje do Cadência Med com a revisão do dia.~~ *(saiu em 04/11)*
 15. A1 · Eu explicando pra turma que **não monto cronograma** desde que comecei a usar o **Cadência Med**. Tela: cronograma
 16. ~~A2 · POV: primeiro dia de internato com o Cadência Med já sabendo a sua escala. (horários aparecendo e a semana pronta)~~ *(saiu em 02/11)*
-17. A1 · (nicho) Eu no estágio de **Cirurgia** fingindo que lembro a **Pediatria** do 3º ano. Tela: materias
+17. ~~A1 · (nicho) Eu no estágio de **Cirurgia** fingindo que lembro a **Pediatria** do 3º ano. Tela: materias~~ *(saiu em 05/11)*
 18. A2 · (nicho) "Você sobreviveria a um rodízio de Cirurgia estudando as 5 áreas do ENAMED?" 6h centro cirúrgico, 14h ambulatório, 22h Pediatria. Aos 4 s o cronograma do ciclo clínico com as 5 áreas.
 19. A1 · Eu vendo o **ritmo** no Cadência Med dizer que dá pra **fechar o cronograma** antes da prova. Tela: hoje
 20. A2 · Níveis de revisão atrasada, do 1 ao 5. O 5 é abrir a tela Hoje do Cadência Med e só ter a de hoje.
