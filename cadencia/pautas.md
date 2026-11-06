@@ -31,7 +31,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 21. (pra salvar) Checklist do dia de revisão: o que fazer em 30 minutos quando o dia foi de plantão. Prints: revisoes, foco
 22. ~~(nicho, pra salvar) ENAMED obrigatório pra exercer a medicina: o que muda pra quem está no 3º e 4º ano.~~ *(saiu em 02/11)* Fonte: MP 1.370/2026, aprovada no Senado em 15/10/2026 (O Povo, 16/10, e Agência Senado). Antes de escrever, confira na fonte se já foi sancionada, a data de corte e quem fica de fora, e use só o que estiver lá. Fonte citada no último slide. Prints: cronograma, materias
 23. ~~(nicho, pra salvar) 5 áreas, 5 semanas: uma área do ENAMED por semana (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), com a revisão das anteriores voltando junto. Slide do meio com a tabela das 5 semanas (bloco `semana`).~~ *(saiu em 04/11)* Prints: materias, revisoes
-24. (nicho) No estágio de Cirurgia e a Pediatria parada: estudar a área do rodízio sem largar as outras 4, com o ciclo clínico. Prints: cronograma, materias
+24. ~~(nicho) No estágio de Cirurgia e a Pediatria parada: estudar a área do rodízio sem largar as outras 4, com o ciclo clínico.~~ *(saiu em 06/11)* Prints: cronograma, materias
 
 ## Reels (14:55)
 
