@@ -18,6 +18,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v8.js` | Meme animado de nicho: níveis de cansaço no internato, o 5 é a semana já montada | 18 s |
 | `v9.js` | Meme animado de nicho: POV primeiro dia de internato, a semana já montada com a escala | 11 s |
 | `v10.js` | Meme animado: você sobreviveria a uma semana com a revisão atrasada? 3, 9 e 15 vencidas e a escada de revisão | 11,5 s |
+| `v11.js` | Meme animado: eu antes do Cadência Med (planilha, flashcard, cronômetro e caderno riscados) e depois uma tela, a Hoje | 11 s |
 
 ## Como gerar
 
