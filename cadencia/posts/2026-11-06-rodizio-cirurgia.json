@@ -1,0 +1,123 @@
+{
+  "id": "2026-11-06-rodizio-cirurgia",
+  "legenda": "No rodízio de Cirurgia e as outras 4 áreas paradas? 🩺\n\nNo internato o estágio puxa todo o estudo. Você lê o que vai cair na visita de amanhã, e Clínica, Pediatria, GO e Preventiva vão ficando pra depois. Só que no ENAMED cada uma vale as mesmas 20 questões.\n\nO que ajuda é dividir o estudo: a área do rodízio fica com a maior parte, e as outras 4 seguem com revisão curta no dia certo. No Cadência Med você segue o cronograma do ciclo clínico, vê o que falta em cada área e cada aula marcada entra na escada de revisão (1 semana, 1 mês, 2, 4 e 6 meses).\n\nSalva esse post e manda pra quem tá no mesmo rodízio que você 📌\n\nEm que estágio você tá? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #enamed",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "INTERNATO",
+      "tag": "INTERNATO E ENAMED",
+      "titulo": "NO RODÍZIO DE CIRURGIA E {g}AS OUTRAS 4 ÁREAS PARADAS?{/g}",
+      "texto": "Arrasta pra ver <b>como estudar o estágio sem largar o resto</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 410,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "O ESTÁGIO {g}PUXA TODO O ESTUDO{/g}",
+      "texto": "Você lê o que vai cair na visita de amanhã. O resto fica <b>pra quando o rodízio acabar</b>.",
+      "ui": {
+        "tipo": "semana",
+        "titulo": "Uma semana no rodízio de Cirurgia",
+        "dias": [
+          {"d": "SEG", "blocos": [{"t": "Centro cir.", "cor": "#46D9F5"}, {"t": "Cirurgia", "cor": "#A86BFF"}]},
+          {"d": "TER", "blocos": [{"t": "Ambul.", "cor": "#46D9F5"}, {"t": "Cirurgia", "cor": "#A86BFF"}]},
+          {"d": "QUA", "blocos": [{"t": "Plantão 12h", "cor": "#F2557A"}]},
+          {"d": "QUI", "blocos": [{"t": "Centro cir.", "cor": "#46D9F5"}, {"t": "Cirurgia", "cor": "#A86BFF"}]},
+          {"d": "SEX", "blocos": [{"t": "Enferm.", "cor": "#46D9F5"}, {"t": "Cirurgia", "cor": "#A86BFF"}]},
+          {"d": "SÁB", "blocos": [{"t": "Plantão 12h", "cor": "#F2557A"}]},
+          {"d": "DOM", "blocos": [{"t": "Pediatria?", "cor": "#F5A524"}]}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "NO ENAMED {g}TODAS VALEM IGUAL{/g}",
+      "texto": "São <b>20 questões de cada área</b>. A que ficou parada vale o mesmo que a do estágio de agora.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Suas 5 áreas hoje",
+        "itens": [
+          {"titulo": "Cirurgia", "sub": "rodízio de agora · 20 questões", "selo": "em dia", "cor": "#46D9F5", "cor_selo": "rgba(45,212,160,.16)", "cor_texto": "#14A37A"},
+          {"titulo": "Clínica Médica", "sub": "último rodízio · 20 questões", "selo": "esfriando", "cor": "#A86BFF", "cor_selo": "rgba(245,165,36,.16)", "cor_texto": "#C27C0E"},
+          {"titulo": "Pediatria", "sub": "sem estudo · 20 questões", "selo": "parada", "cor": "#F5A524", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "GO", "sub": "sem estudo · 20 questões", "selo": "parada", "cor": "#F2557A", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Preventiva", "sub": "sem estudo · 20 questões", "selo": "parada", "cor": "#2DD4A0", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "O ESTÁGIO NA FRENTE, {g}O RESTO EM REVISÃO{/g}",
+      "texto": "A área do rodízio fica com a maior parte. As outras 4 seguem com <b>revisão curta no dia certo</b>, no cronograma do ciclo clínico.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 540,
+        "foco": "top",
+        "nota": "Ciclo clínico, residência ou os dois"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "POR ÁREA",
+      "tag": "MATÉRIAS",
+      "titulo": "VEJA O QUE FALTA {g}EM CADA ÁREA{/g}",
+      "texto": "Aulas e tópicos separados por área. Você filtra e sabe <b>qual ficou mais pra trás</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "materias",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Matérias e temas"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "REVISÃO",
+      "tag": "ESCADA DE REVISÃO",
+      "titulo": "O QUE VOCÊ JÁ ESTUDOU {g}VOLTA SOZINHO{/g}",
+      "texto": "Cada aula marcada volta em <b>1 semana, 1 mês, 2, 4 e 6 meses</b>. A área do rodízio passado não esfria.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Escada de revisão"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "UM RODÍZIO POR VEZ, {g}AS 5 ÁREAS NO PLANO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Ciclo clínico", "texto": "sozinho ou junto com o de residência"},
+          {"titulo": "Matérias por área", "texto": "o que falta em cada uma"},
+          {"titulo": "Escada de revisão", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Mentor de IA", "texto": "monta a semana com a sua escala"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
