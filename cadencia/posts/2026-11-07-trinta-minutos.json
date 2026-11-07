@@ -1,0 +1,140 @@
+{
+  "id": "2026-11-07-trinta-minutos",
+  "legenda": "Dia de plantão e a revisão venceu bem hoje? 😮‍💨\n\nVocê chega em casa sem energia pra aula nova, e a revisão que venceu vai pra amanhã. Só que amanhã ela soma com a de amanhã, e em poucos dias a pilha fica grande demais.\n\nNesses dias, 30 minutos resolvem: um pomodoro de 25 minutos só pra revisão que venceu, os flashcards do dia e o erro anotado no caderno de erros, mais 5 de pausa. No Cadência Med a tela Hoje já separa o que venceu, a escada de revisão diz o que volta e o Foco conta a sessão.\n\nSalva esse checklist pro próximo plantão e manda pra quem divide escala com você 📌\n\nQuantos plantões você tem essa semana? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #plantao",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "DIA DE PLANTÃO",
+      "titulo": "DIA DE PLANTÃO? {g}30 MINUTOS DÃO PRA ISSO AQUI{/g}",
+      "texto": "O checklist da revisão curta pra <b>não perder o dia quando o plantão come tudo</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 410,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "CHEGOU DO PLANTÃO E {g}A REVISÃO VENCEU{/g}",
+      "texto": "Sem energia pra aula nova, tudo vira \"amanhã eu vejo\". E a revisão de hoje <b>fica sem dono</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "O que ficou pra hoje",
+        "itens": [
+          {
+            "titulo": "Revisão de Insuficiência cardíaca",
+            "sub": "Cardiologia · 1 mês",
+            "selo": "venceu hoje",
+            "cor": "#A86BFF",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Flashcards do dia",
+            "sub": "Pediatria e GO",
+            "selo": "pendente",
+            "cor": "#46D9F5",
+            "cor_selo": "rgba(242,85,122,.14)",
+            "cor_texto": "#E0365F"
+          },
+          {
+            "titulo": "Aula nova de Nefrologia",
+            "sub": "Clínica Médica",
+            "selo": "pode esperar",
+            "cor": "#F5A524",
+            "cor_selo": "rgba(245,165,36,.16)",
+            "cor_texto": "#B87400"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "DEIXAR PRA AMANHÃ {g}SÓ JUNTA MAIS{/g}",
+      "texto": "A revisão de hoje soma com a de amanhã. Em poucos dias de plantão, <b>a pilha passa do que cabe num dia</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Revisão que venceu hoje", "feito": false},
+          {"texto": "Revisão que vence amanhã", "feito": false},
+          {"texto": "Flashcards de dois dias", "feito": false},
+          {"texto": "E o detalhe da prova sumindo", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "O CHECKLIST",
+      "titulo": "30 MINUTOS, {g}NESTA ORDEM{/g}",
+      "texto": "Nada de aula nova. Só o que <b>segura o que você já estudou</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Revisão que venceu hoje primeiro", "feito": true},
+          {"texto": "Flashcards do dia", "feito": true},
+          {"texto": "O erro da questão no caderno de erros", "feito": true},
+          {"texto": "5 minutos de pausa e cama", "feito": true}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "FOCO",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "UM POMODORO E {g}O TEMPO CONTA SOZINHO{/g}",
+      "texto": "Ligue o Foco: 25 minutos de revisão e 5 de pausa. A sessão fica registrada <b>até no dia mais curto</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "foco",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Foco com pomodoro"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "REVISÕES",
+      "tag": "ESCADA DE REVISÃO",
+      "titulo": "VOCÊ SABE {g}O QUE VENCEU HOJE{/g}",
+      "texto": "A escada mostra o que volta em 1 semana, 1 mês, 2, 4 e 6 meses. <b>Cansado, você só abre e faz</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "revisoes",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Escada de revisão"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "DIA DE PLANTÃO, {g}REVISÃO EM 30 MINUTOS{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Escada de revisão", "texto": "o que venceu hoje, separado"},
+          {"titulo": "Foco com pomodoro", "texto": "cada sessão registrada"},
+          {"titulo": "Flashcards", "texto": "voltam no dia certo"},
+          {"titulo": "Caderno de erros", "texto": "o que você erra volta pra revisão"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
