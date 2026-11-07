@@ -36,3 +36,5 @@ pra nunca responder duas vezes. "pendente" = resposta sugerida que não pôde se
 04/11/2026: nenhum comentário novo nos últimos 3 dias (a janela de 7 dias só traz o 👏👏 do plano de 7 dias, já respondido, e a resposta do próprio perfil). Nada escondido, nada pendente.
 
 06/11/2026: não deu pra ler os comentários. O Windsor pausou a leitura porque a conta tem 13 contas ligadas (facebook 2, instagram 2, instagram_public 9) e o plano grátis aceita 1. Nada respondido, nada escondido. Os comentários desses dias entram na próxima execução que conseguir ler.
+
+07/11/2026: de novo não deu pra ler os comentários. O Windsor continua com a leitura pausada (13 contas ligadas: facebook 2, instagram 2, instagram_public 9, e o plano grátis aceita 1). Nada respondido, nada escondido, nada pendente. Pra voltar, desligue 12 contas em onboard.windsor.ai/app ou mude de plano. Os comentários desde 04/11 entram na próxima execução que conseguir ler (vale ampliar a janela pra pegar todos).
