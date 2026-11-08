@@ -32,6 +32,8 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 22. ~~(nicho, pra salvar) ENAMED obrigatório pra exercer a medicina: o que muda pra quem está no 3º e 4º ano.~~ *(saiu em 02/11)* Fonte: MP 1.370/2026, aprovada no Senado em 15/10/2026 (O Povo, 16/10, e Agência Senado). Antes de escrever, confira na fonte se já foi sancionada, a data de corte e quem fica de fora, e use só o que estiver lá. Fonte citada no último slide. Prints: cronograma, materias
 23. ~~(nicho, pra salvar) 5 áreas, 5 semanas: uma área do ENAMED por semana (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), com a revisão das anteriores voltando junto. Slide do meio com a tabela das 5 semanas (bloco `semana`).~~ *(saiu em 04/11)* Prints: materias, revisoes
 24. ~~(nicho) No estágio de Cirurgia e a Pediatria parada: estudar a área do rodízio sem largar as outras 4, com o ciclo clínico.~~ *(saiu em 06/11)* Prints: cronograma, materias
+25. (nicho, pra salvar) Cada rodízio do internato puxa uma área do ENAMED: tabela com uma linha por rodízio (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), o que estudar no rodízio e a revisão das outras 4 voltando junto. A tabela inteira no slide do meio (bloco `lista`), "salva" só no último slide. Prints: materias, cronograma (ciclo clínico)
+26. (pra salvar) Domingo à noite: 5 perguntas antes de montar a semana (quantos plantões, quantas horas livres, qual revisão vence, qual área tá parada, qual simulado vem). Lista inteira no slide 2, o mentor de IA respondendo no slide 5. Prints: assistente, rotina
 
 ## Reels (14:55)
 
@@ -126,3 +128,6 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 18. A2 · (nicho) "Você sobreviveria a um rodízio de Cirurgia estudando as 5 áreas do ENAMED?" 6h centro cirúrgico, 14h ambulatório, 22h Pediatria. Aos 4 s o cronograma do ciclo clínico com as 5 áreas.
 19. A1 · Eu vendo o **ritmo** no Cadência Med dizer que dá pra **fechar o cronograma** antes da prova. Tela: hoje
 20. A2 · Níveis de revisão atrasada, do 1 ao 5. O 5 é abrir a tela Hoje do Cadência Med e só ter a de hoje.
+21. A1 · (nicho) Eu descobrindo que **Preventiva** cai tanto quanto **Cirurgia** no ENAMED. Tela: materias (Cadência Med no rodapé do tweet)
+22. A2 · (nicho) POV: rodízio de Cirurgia, 6h no centro cirúrgico, e o ENAMED cobra as 5 áreas. Abre na cena (não em pergunta), carimbo "5 ÁREAS" aos 2 s, aos 4 s a tela de matérias do Cadência Med com as 5 áreas. Fecha repetindo a primeira frase
+23. A2 · POV: você disse "vou revisar depois" há 1 mês. Abre na cena, carimbo "1 MÊS DEPOIS" aos 2 s, aos 4 s a escada de revisão do Cadência Med (1 semana, 1 mês, 2, 4 e 6 meses). Fecha repetindo a primeira frase
