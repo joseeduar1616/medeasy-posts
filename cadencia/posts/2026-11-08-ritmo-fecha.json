@@ -1,0 +1,158 @@
+{
+  "id": "2026-11-08-ritmo-fecha",
+  "legenda": "Seu ritmo de agora fecha o cronograma antes da prova? 🤔\n\nVocê estuda quase todo dia, mas ninguém te diz se dá tempo. Faltam quantas aulas? Quantas você faz por semana? Sem essa conta, o atraso só aparece quando faltam poucas semanas, e aí vira correria.\n\nA conta é simples: as aulas que faltam divididas pelas semanas até a prova. No Cadência Med a tela Hoje faz isso sozinha, com o seu ritmo das últimas 4 semanas e o ritmo necessário lado a lado. Você coloca a data da prova uma vez, e se o ritmo cair o mentor de IA te ajuda a remontar a semana.\n\nSalva esse post e manda pra quem vive perguntando se ainda dá tempo 📌\n\nQuantos meses faltam pra sua prova? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #cronogramadeestudos",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "ARRASTA",
+      "tag": "RITMO E PROJEÇÃO",
+      "titulo": "SEU RITMO {g}FECHA O CRONOGRAMA{/g} A TEMPO?",
+      "texto": "Arrasta pra ver <b>como fazer essa conta</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 380,
+        "foco": "center"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "VOCÊ ESTUDA TODO DIA E {g}NÃO SABE SE DÁ TEMPO{/g}",
+      "texto": "Tem semana boa, tem semana de plantão. No fim, fica só a sensação, <b>sem número nenhum</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {
+            "texto": "Quantas aulas faltam?",
+            "feito": false
+          },
+          {
+            "texto": "Quantas eu faço por semana?",
+            "feito": false
+          },
+          {
+            "texto": "Quantas eu precisaria fazer?",
+            "feito": false
+          },
+          {
+            "texto": "Dá tempo até a prova?",
+            "feito": false
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "SEM ESSA CONTA, {g}O SUSTO VEM NO FIM{/g}",
+      "texto": "Umas semanas fracas aqui e ali e o atraso cresce calado. Você só percebe quando faltam poucas semanas e <b>tem que correr</b>.",
+      "ui": {
+        "tipo": "barras",
+        "titulo": "Aulas feitas por semana",
+        "itens": [
+          {
+            "nome": "Semana 1",
+            "valor": 0.9,
+            "rotulo": "5 aulas"
+          },
+          {
+            "nome": "Semana 2",
+            "valor": 0.55,
+            "rotulo": "3 aulas"
+          },
+          {
+            "nome": "Semana 3",
+            "valor": 0.2,
+            "rotulo": "1 aula"
+          },
+          {
+            "nome": "Semana 4",
+            "valor": 0.2,
+            "rotulo": "1 aula"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "O RITMO NECESSÁRIO {g}É UMA CONTA SÓ{/g}",
+      "texto": "As aulas que faltam divididas pelas semanas até a prova. Se o seu ritmo está acima, <b>dá tempo</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "hoje",
+        "altura": 540,
+        "foco": "center",
+        "nota": "Ritmo e projeção"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A DATA",
+      "tag": "CRONOGRAMA",
+      "titulo": "A DATA DA PROVA {g}ENTRA NA CONTA{/g}",
+      "texto": "Você coloca as datas do curso e da prova uma vez. O painel sabe <b>quantas semanas faltam</b> e quantas aulas sobram.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 520,
+        "foco": "bottom",
+        "nota": "Datas do curso e da prova"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "MENTOR DE IA",
+      "tag": "MENTOR DE IA",
+      "titulo": "O RITMO CAIU? {g}A SEMANA SE AJUSTA{/g}",
+      "texto": "Pergunte ao mentor de IA o que priorizar. Ele olha o seu painel e <b>monta a semana com você</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 520,
+        "foco": "top",
+        "nota": "Mentor de IA"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "TESTE GRÁTIS",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "PARE DE ADIVINHAR {g}SE VAI DAR TEMPO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {
+            "titulo": "Ritmo e projeção",
+            "texto": "o seu ritmo e o necessário lado a lado"
+          },
+          {
+            "titulo": "Cronograma pronto",
+            "texto": "ou o do seu cursinho, lido pela IA"
+          },
+          {
+            "titulo": "Mentor de IA",
+            "texto": "monta a semana a partir do painel"
+          },
+          {
+            "titulo": "Escada de revisão",
+            "texto": "1 semana, 1 mês, 2, 4 e 6 meses"
+          }
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "SEM CARTÃO · LINK NA BIO"
+    }
+  ]
+}
