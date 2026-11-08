@@ -19,7 +19,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 9. ~~Internato e residência ao mesmo tempo: o ciclo clínico junto com o cronograma~~ *(saiu em 28/10)*. Prints: cronograma, materias
 ~~10. Fez o simulado, viu a nota e não sabe o que fazer depois. Prints: revisoes, assistente~~ *(saiu em 05/11)*
 11. Estudou 3 horas e parece que não rendeu e o Foco que registra cada sessão. Prints: foco, hoje
-12. "Será que dá tempo de fechar tudo antes da prova?" e o ritmo com projeção. Prints: hoje, cronograma
+12. ~~"Será que dá tempo de fechar tudo antes da prova?" e o ritmo com projeção~~ *(saiu em 08/11)*. Prints: hoje, cronograma
 13. ~~Domingo à noite, sem saber como vai ser a semana, e o mentor de IA montando ela~~ *(saiu em 01/11)*. Prints: assistente, rotina
 14. Revisão em outro app, cronograma na planilha, cronômetro em outro app: tudo num lugar. Prints: hoje, revisoes, foco
 15. Quanto custa organizar a preparação inteira: 3 dias grátis, R$ 39 ou R$ 300 no anual. Prints: planos, hoje
