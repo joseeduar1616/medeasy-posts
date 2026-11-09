@@ -10,6 +10,8 @@
 //          ou { "arquivo": "/tmp/meme.jpg" }                            meme famoso baixado do Drive (fica fora do git)
 //          ou { "ranking": [["Marina","12h40"],["Você","11h05",1],["Rafael","8h30"]] }
 //   "selo": "Tela real do app"     (opcional, etiqueta pequena em cima da imagem)
+//   "seloTopo": true               (opcional, põe o selo acima da imagem, fora dela, quando dentro cobre a tela)
+//   "rodape": "Black Friday · **manda BLACK no direct**"   (opcional, troca a linha de baixo do cartão)
 //   "legenda": "..."
 // Saída: cadencia/publicado/<id>/feed.jpg e story.jpg.
 import fs from 'fs';
@@ -45,7 +47,11 @@ function imagemHTML(largura) {
   const altura = Math.min(Math.round(largura * rc[3] / rc[2]), im.alturaMax || 760);
   const k = Math.max(largura / rc[2], altura / rc[3]);
   const x = -rc[0] * k + (largura - rc[2] * k) / 2, y = -rc[1] * k + (altura - rc[3] * k) / 2;
-  return `<div class="img" style="height:${altura}px;background-image:url('${src}');background-size:${iw * k}px ${ih * k}px;background-position:${x}px ${y}px">${post.selo ? `<span class="selo">${esc(post.selo)}</span>` : ''}</div>`;
+  const fora = post.seloTopo && post.selo, selo = post.selo;
+  if (fora) post.selo = '';
+  const html = `<div class="img" style="height:${altura}px;background-image:url('${src}');background-size:${iw * k}px ${ih * k}px;background-position:${x}px ${y}px">${post.selo ? `<span class="selo">${esc(post.selo)}</span>` : ''}</div>`;
+  post.selo = selo;
+  return fora ? `<div class="selo fora">${esc(selo)}</div>${html}` : html;
 }
 
 function tamanho(arq) {           // largura e altura de JPG ou PNG, sem dependência
@@ -86,6 +92,7 @@ body{font-family:J,sans-serif;background:#0a0618;color:#16121f;display:flex;flex
 .txt b{font-weight:800}
 .img{position:relative;width:${dentro}px;border-radius:24px;border:1px solid #e5e2ec;background-repeat:no-repeat;background-color:#0b0a18;overflow:hidden}
 .selo{position:absolute;right:18px;bottom:18px;font:600 20px M,monospace;letter-spacing:.12em;text-transform:uppercase;color:#e9e4ff;background:rgba(20,10,40,.78);border:1px solid rgba(196,181,253,.5);padding:9px 14px;border-radius:999px}
+.selo.fora{position:static;display:inline-block;margin-bottom:16px;color:#5b21b6;background:#f1ebff;border-color:#d8ccfb}
 .rank{width:${dentro}px;display:flex;flex-direction:column;gap:14px}
 .rank .r{display:flex;align-items:center;gap:20px;padding:24px 28px;border-radius:20px;background:#f4f1fb;border:2px solid #e6e0f5;font-weight:800;font-size:38px}
 .rank .p{font:600 30px M;color:#8b84a3;width:34px}.rank .n{flex:1}.rank .h{font:600 34px M;color:#7c3aed}
@@ -96,7 +103,7 @@ body{font-family:J,sans-serif;background:#0a0618;color:#16121f;display:flex;flex
 <div class="topo"><i></i>Cadência Med · app de estudos pra residência</div>
 <div class="card"><div class="quem"><div class="av"><img src="file://${AQUI}/marca.png"></div><div><div class="nome">Cadência Med</div><div class="arroba">@cadenciamed</div></div></div>
 <div class="txt">${texto}</div>${imagemHTML(dentro)}</div>
-<div class="pe">cadenciamed.com.br · <b>3 dias grátis</b></div>
+<div class="pe">${post.rodape ? esc(post.rodape).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') : 'cadenciamed.com.br · <b>3 dias grátis</b>'}</div>
 </body></html>`;
 }
 
