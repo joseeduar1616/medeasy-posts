@@ -39,5 +39,20 @@
     "fim": "2026-10-31T14:30:00-03:00",
     "publico": "cópia do conjunto geral (Brasil, 20 a 32 anos, só Instagram)",
     "observacao": "Pedido do José em 27/10: R$ 25 por dia por 4 dias, fora do teto de R$ 15. O agente não mexe no dinheiro, não adia o fim, não põe meme novo aqui e não pausa. Só anota os números em turbinadas.md. Termina sozinho em 31/10."
+  },
+  "black_friday": {
+    "ate": "2026-11-30T23:59:00-03:00",
+    "campanha": "120251893956980345",
+    "adset": "120251893960170345",
+    "ads": [
+      "120251893968990345"
+    ],
+    "orcamento_diario_brl": 15,
+    "objetivo": "conversas no direct do Instagram",
+    "pausados_desde_09_11": [
+      "120251603405840345",
+      "120251603906260345"
+    ],
+    "regra": "Até 30/11 não religar os pausados nem criar anúncio de tráfego. Veja AGENTES.md, seção BLACK FRIDAY."
   }
 }

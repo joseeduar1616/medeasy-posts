@@ -8,13 +8,48 @@ Os agentes rodam sozinhos, sozinhos, por pedido do José (22/10 e 25/10/2026):
 | Meme do dia | 14:52 | Meme que divulga o Cadência Med, feito aqui em alta, no feed e no story |
 | Comentários | 20:23 | Responde os comentários novos dos posts com o tom da marca e esconde spam (skill `insta-comunidade`) |
 | Viralização e plano da semana | domingo 17:44 | Lê os números, tira os padrões e escreve o plano da semana em `viralizacao.md` (skill `insta-viralizacao`) |
-| Turbinar | 19:47 | Coloca o meme novo como anúncio no conjunto certo (nicho ou geral), tira os que não rendem e põe mais dinheiro no conjunto que dá visita mais barata, com teto de R$ 15 por dia |
+| Turbinar | 19:47 | Até 30/11: só a campanha da Black no direct (veja a seção BLACK FRIDAY). Fora disso: coloca o meme novo como anúncio no conjunto certo, com teto de R$ 15 por dia |
 
 Antes de criar post, leia o `viralizacao.md` (padrões e plano da semana). Os skills `insta-criador`,
 `insta-viralizacao` e `insta-comunidade` (do José) explicam cada função com mais detalhe.
 
 Todos começam igual a qualquer rotina daqui: leia antes o `LEIA-ME.md`
 (começo da execução, regras de texto e como subir arquivos).
+
+## BLACK FRIDAY (09/11 a 30/11/2026): vale antes de tudo
+
+Pedido do José em 09/11: "ninguém criou conta por anúncio, faça algo mais incisivo e poste promoção de Black
+Friday". Até 30/11, isto manda mais que o resto deste arquivo.
+
+- **A oferta é o preço que já está no site, chamado de Black Friday.** Anual R$ 300 (R$ 25 por mês, 4 meses
+  de graça perto do mensal de R$ 39), 3 dias grátis sem cartão, 7 dias de garantia. Nunca escreva "de R$ X por
+  R$ Y", preço riscado, porcentagem de desconto ou "só até tal dia" sem o José dizer que o preço muda depois:
+  isso seria desconto inventado.
+- **Chamada de todo post e story:** "Manda BLACK no direct". Nos posts, a última linha da legenda é essa chamada.
+  O carrossel e o meme do dia continuam, com o tema de sempre, e fecham com a Black (último slide do carrossel
+  e selo do meme: "Black Friday · manda BLACK no direct").
+- **Arte da Black:** `cadencia/black/black.html` (feed `?feed`, story `?story`, rode `python3 tirar.py`).
+  Primeiro post: `publicado/2026-11-09-black-friday/` (mídia 18110080256101815).
+- **Anúncios:** os conjuntos antigos de tráfego (geral `120251603405840345` e nicho `120251603906260345`) estão
+  PAUSADOS desde 09/11, porque mais de 3 mil visitas não deram nenhuma conta. Não religue nem ponha anúncio neles.
+  Todo o dinheiro (R$ 15 por dia) vai para a campanha "Cadência · Black Friday · conversas no direct"
+  (`120251893956980345`), conjunto `120251893960170345` (Brasil, 20 a 30 anos, só Instagram, otimizado para
+  conversas, termina sozinho em 30/11 às 23h59). Anúncio `120251893968990345` com a arte da Black. A mensagem
+  automática do direct manda o link cadenciamed.com.br/comecar e pergunta se a pessoa está no internato ou
+  na residência. Quem responde as conversas é o José.
+- **Turbinar, até 30/11:** não cria anúncio de tráfego. A cada 3 dias, se um post da Black (ou meme com a
+  chamada da Black) tiver bom alcance orgânico, crie mais um anúncio no conjunto da Black com `create_ad` e
+  `creative.object_story_spec.link_data` (link `https://www.instagram.com/cadenciamed/`, `picture` com o link
+  raw da imagem, `message`, `name` e `call_to_action` `{"type":"INSTAGRAM_MESSAGE","value":{"app_destination":
+  "INSTAGRAM_DIRECT"}}`; os botões MESSAGE_PAGE e o padrão do Windsor são recusados no Instagram), depois
+  `set_page_welcome_message` com o mesmo texto de boas-vindas do primeiro anúncio. No máximo 3 anúncios ativos.
+  Anote em `turbinadas.md` o gasto, as conversas iniciadas e o custo por conversa. Não mude o orçamento.
+- **Comentários:** quem comentar "BLACK" ou perguntar preço recebe: "Te chamei no direct! Se preferir, o link
+  pra testar 3 dias grátis tá na bio 💜". Se o comentário pedir o link, responda com cadenciamed.com.br/comecar.
+- **Depois de 30/11:** o conjunto da Black para sozinho. Não religue nada: o agente de Turbinar escreve o
+  resumo (gasto, conversas, contas que o José contar) e espera o José decidir.
+
+---
 
 ## O que funciona (até 25/10/2026)
 
