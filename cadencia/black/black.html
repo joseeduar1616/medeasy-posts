@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:J;font-weight:500;src:url(../vid/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-500-normal.woff2)}
+@font-face{font-family:J;font-weight:700;src:url(../vid/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2)}
+@font-face{font-family:J;font-weight:800;src:url(../vid/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-800-normal.woff2)}
+@font-face{font-family:J;font-weight:800;font-style:italic;src:url(../vid/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-800-italic.woff2)}
+@font-face{font-family:M;src:url(../vid/node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-600-normal.woff2)}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--roxo:#A855F7;--roxo2:#7C3AED;--ciano:#67E8F9;--tinta:#F4F1FF;--cinza:#A39DBF}
+body{width:1080px;height:var(--h);overflow:hidden;position:relative;font-family:J,sans-serif;color:var(--tinta);-webkit-font-smoothing:antialiased;
+  background:linear-gradient(180deg,#000 0%,#05030a 45%,#0d0a17 100%)}
+.feed{--h:1350px}.story{--h:1920px}
+.grade{position:absolute;inset:0;background-image:linear-gradient(rgba(196,181,253,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(196,181,253,.05) 1px,transparent 1px);background-size:60px 60px;
+  -webkit-mask:linear-gradient(180deg,transparent 0%,#000 30%,#000 70%,transparent 100%)}
+.halo{position:absolute;right:-260px;top:var(--haloT);width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.38),rgba(124,58,237,0) 65%)}
+.halo2{position:absolute;left:-300px;bottom:-200px;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.16),rgba(34,211,238,0) 65%)}
+.wrap{position:absolute;left:72px;right:72px;top:var(--top);bottom:var(--bot);display:flex;flex-direction:column}
+.topo{display:flex;justify-content:space-between;align-items:center}
+.topo img{height:56px}
+.topo span{font:600 19px M;letter-spacing:.2em;color:var(--cinza);text-transform:uppercase}
+.topo span b{color:var(--ciano);font-weight:600}
+.titulo{margin-top:var(--tt);line-height:.82}
+.black{white-space:nowrap;font-weight:800;font-size:var(--fb);letter-spacing:-.055em;color:#fff}
+.friday{font-weight:800;font-style:italic;font-size:var(--fb);letter-spacing:-.05em;color:transparent;-webkit-text-stroke:3px var(--roxo);margin-top:-6px;display:flex;align-items:center;gap:28px}
+.titulo{position:relative}.tag{position:absolute;right:0;top:calc(var(--fb) * .30);white-space:nowrap;display:inline-block;font-style:normal;-webkit-text-stroke:0;color:#0b0618;background:var(--ciano);font-size:26px;letter-spacing:.14em;padding:10px 16px;border-radius:10px;font-family:M}
+.oferta{margin-top:var(--mo);display:flex;gap:28px;align-items:stretch}
+.preco{flex:1.15;border-radius:30px;padding:30px 34px;background:linear-gradient(160deg,rgba(124,58,237,.30),rgba(124,58,237,.08));border:2px solid rgba(168,85,247,.6)}
+.preco .r{font:600 19px M;letter-spacing:.18em;color:#D8C8FF}
+.preco .v{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.preco .v b{font-size:124px;font-weight:800;letter-spacing:-.05em;line-height:.9;color:#fff}
+.preco .v span{font-size:34px;font-weight:700;color:#D8C8FF}
+.preco p{font-size:24px;line-height:1.38;color:#C9C2E6;margin-top:14px;font-weight:500}
+.preco p b{color:#fff;font-weight:700}
+.lista{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px}
+.lista div{display:flex;gap:16px;align-items:flex-start;font-size:25px;font-weight:700;line-height:1.28}
+.lista svg{flex:none;margin-top:2px}
+.selos{margin-top:26px;display:flex;gap:16px;flex-wrap:wrap}
+.selos span{font-size:24px;font-weight:700;padding:14px 24px;border-radius:999px;border:1.5px solid rgba(103,232,249,.5);color:#A5F3FC;background:rgba(103,232,249,.07)}
+.cta{margin-top:auto;display:flex;align-items:center;justify-content:space-between;border-radius:26px;padding:26px 34px;background:linear-gradient(90deg,var(--roxo2),#3B82F6)}
+.cta b{font-size:40px;font-weight:800;letter-spacing:-.02em}
+.cta b em{font-style:normal;background:#fff;color:#2a0f63;padding:2px 14px 4px;border-radius:10px;margin:0 4px}
+.cta span{font:600 20px M;letter-spacing:.14em;color:#E9E3FF}
+.tela{margin-top:var(--mt);border-radius:22px;overflow:hidden;border:2px solid rgba(196,181,253,.3);box-shadow:0 30px 60px rgba(0,0,0,.6),0 0 60px rgba(124,58,237,.25);height:var(--th);background:url(rotina.jpg) -231px -422px/1199px auto no-repeat}
+.feed{--mt:24px;--th:224px}
+.feed{--top:58px;--bot:60px;--tt:54px;--fb:212px;--mo:46px;--haloT:180px}
+.story{--top:230px;--bot:250px;--tt:60px;--fb:236px;--mo:44px;--haloT:420px;--mt:34px;--th:328px}
+</style></head><body>
+<div class="grade"></div><div class="halo"></div><div class="halo2"></div>
+<div class="wrap">
+  <div class="topo"><img src="marca.png"><span>Black Friday · <b>novembro</b></span></div>
+  <div class="titulo">
+    <div class="black">BLACK</div><i class="tag">CADÊNCIA MED</i>
+    <div class="friday">FRIDAY</div>
+  </div>
+  <div class="oferta">
+    <div class="preco">
+      <div class="r">PLANO ANUAL</div>
+      <div class="v"><b>R$ 25</b><span>/mês</span></div>
+      <p>R$ 300 no ano todo. Perto do mensal de R$ 39, são <b>4 meses de graça</b>.</p>
+    </div>
+    <div class="lista">
+      <div><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#67E8F9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Cronograma das 5 áreas e revisão que volta sozinha</div>
+      <div><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#67E8F9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Flashcards prontos a partir do seu PDF</div>
+      <div><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#67E8F9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Semana montada em volta dos plantões</div>
+    </div>
+  </div>
+  <div class="tela"></div>
+  <div class="selos"><span>3 dias grátis, sem cartão</span><span>7 dias de garantia</span></div>
+  <div class="cta"><b>Manda <em>BLACK</em> no direct</b><span>@CADENCIAMED</span></div>
+</div>
+<script>document.body.className = location.search.includes('story') ? 'story' : 'feed';</script>
+</body></html>
