@@ -128,6 +128,6 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 18. A2 · (nicho) "Você sobreviveria a um rodízio de Cirurgia estudando as 5 áreas do ENAMED?" 6h centro cirúrgico, 14h ambulatório, 22h Pediatria. Aos 4 s o cronograma do ciclo clínico com as 5 áreas.
 19. A1 · Eu vendo o **ritmo** no Cadência Med dizer que dá pra **fechar o cronograma** antes da prova. Tela: hoje
 20. A2 · Níveis de revisão atrasada, do 1 ao 5. O 5 é abrir a tela Hoje do Cadência Med e só ter a de hoje.
-21. A1 · (nicho) Eu descobrindo que **Preventiva** cai tanto quanto **Cirurgia** no ENAMED. Tela: materias (Cadência Med no rodapé do tweet)
+21. ~~A1 · (nicho) Eu descobrindo que **Preventiva** cai tanto quanto **Cirurgia** no ENAMED. Tela: materias (Cadência Med no rodapé do tweet)~~ *(saiu em 09/11)*
 22. A2 · (nicho) POV: rodízio de Cirurgia, 6h no centro cirúrgico, e o ENAMED cobra as 5 áreas. Abre na cena (não em pergunta), carimbo "5 ÁREAS" aos 2 s, aos 4 s a tela de matérias do Cadência Med com as 5 áreas. Fecha repetindo a primeira frase
 23. A2 · POV: você disse "vou revisar depois" há 1 mês. Abre na cena, carimbo "1 MÊS DEPOIS" aos 2 s, aos 4 s a escada de revisão do Cadência Med (1 semana, 1 mês, 2, 4 e 6 meses). Fecha repetindo a primeira frase
