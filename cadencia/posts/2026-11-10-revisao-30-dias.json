@@ -1,0 +1,98 @@
+{
+  "id": "2026-11-10-revisao-30-dias",
+  "legenda": "O que você estudou hoje volta em 7 dias. E depois? 🤔\n\nA aula de hoje parece fresca, mas daqui a um mês ela já ficou lá atrás. Sem data marcada, a revisão vai pra depois e a matéria volta quase do zero.\n\nSalva essa escada: dia 1 você estuda, no dia 7 revisa, no dia 30 revisa de novo, e depois em 2, 4 e 6 meses. No Cadência Med cada aula marcada entra sozinha nessa escada, a tela Hoje mostra o que venceu no dia e o Foco conta o tempo da revisão.\n\nSalva esse post e manda pra quem vive dizendo que vai revisar depois 📌\n\nQuantas revisões venceram essa semana? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #revisaoespacada\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "REVISÃO ESPAÇADA",
+      "titulo": "O QUE VOCÊ ESTUDOU HOJE VOLTA EM 7 DIAS. {g}E DEPOIS?{/g}",
+      "texto": "Arrasta pra ver <b>a escada de revisão inteira</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 360, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "SALVA ESSA",
+      "tag": "A ESCADA",
+      "titulo": "UMA AULA, {g}6 DATAS PRA VOLTAR{/g}",
+      "texto": "Revise <b>antes de esquecer</b>, sempre na mesma ordem.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Escada de revisão",
+        "itens": [
+          {"titulo": "Estudou a aula", "sub": "marque como vista", "selo": "DIA 1", "cor": "#A86BFF"},
+          {"titulo": "1ª revisão", "sub": "1 semana depois", "selo": "DIA 7", "cor": "#46D9F5"},
+          {"titulo": "2ª revisão", "sub": "1 mês depois", "selo": "DIA 30", "cor": "#46D9F5"},
+          {"titulo": "3ª revisão", "sub": "2 meses depois", "selo": "2 MESES", "cor": "#F5A524"},
+          {"titulo": "4ª revisão", "sub": "4 meses depois", "selo": "4 MESES", "cor": "#F5A524"},
+          {"titulo": "5ª revisão", "sub": "6 meses depois", "selo": "6 MESES", "cor": "#F2557A"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "PULOU O DIA 7 E {g}O DIA 30 CHEGOU{/g}",
+      "texto": "Sem data marcada, a revisão fica pra depois. Quando você volta, a aula parece nova e <b>o tempo de estudo se perde</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "titulo": "O que aconteceu com a aula",
+        "itens": [
+          {"texto": "Aula assistida no dia 1", "feito": true},
+          {"texto": "Revisão do dia 7", "feito": false},
+          {"texto": "Revisão do dia 30", "feito": false},
+          {"texto": "Lembrar o detalhe na questão", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "A ESCADA {g}SE MONTA SOZINHA{/g}",
+      "texto": "Marcou a aula como vista, ela já entra na escada de <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 540, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "O QUE VENCEU {g}APARECE NO DIA CERTO{/g}",
+      "texto": "Abriu o app, a tela Hoje mostra a revisão do dia. <b>Sem planilha e sem lembrete no celular</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "FOCO",
+      "tag": "FOCO",
+      "titulo": "UM POMODORO {g}PRA REVISÃO DO DIA{/g}",
+      "texto": "Ligue o Foco, revise o que venceu e <b>a sessão fica registrada</b> no seu tempo da semana.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 520, "foco": "top", "nota": "Foco com pomodoro"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "ESTUDOU HOJE, {g}A ESCADA LEMBRA O RESTO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Escada de revisão", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Tela Hoje", "texto": "o que venceu aparece no dia"},
+          {"titulo": "Foco com pomodoro", "texto": "cada sessão registrada"},
+          {"titulo": "Caderno de erros", "texto": "o que você erra volta pra revisão"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
