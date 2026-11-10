@@ -20,6 +20,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v10.js` | Meme animado: você sobreviveria a uma semana com a revisão atrasada? 3, 9 e 15 vencidas e a escada de revisão | 11,5 s |
 | `v11.js` | Meme animado: eu antes do Cadência Med (planilha, flashcard, cronômetro e caderno riscados) e depois uma tela, a Hoje | 11 s |
 | `v12.js` | Meme animado: POV seu amigo te chamou pra sala e você tá em último no ranking, depois o Foco com pomodoro | 11,5 s |
+| `v13.js` | Meme animado de nicho: POV rodízio de Cirurgia às 6h e o ENAMED cobra as 5 áreas, depois a tela de matérias | 11,5 s |
 
 ## Como gerar
 
