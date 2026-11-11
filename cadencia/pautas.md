@@ -122,7 +122,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 12. ~~A2 · POV: seu amigo te chamou pra sala do Cadência Med e agora você tá em **último** no ranking.~~ *(saiu em 08/11)*
 13. ~~A2 · (nicho) "Você sobreviveria a um dia de 4º ano com o ENAMED chegando?" 7h ambulatório, 13h aula, 19h plantão, 23h Pediatria parada desde o 3º ano. Fim: a semana montada no Cadência Med com o ciclo clínico.~~ *(saiu em 29/10)*
 14. ~~A2 · "Você sobreviveria a uma semana com a revisão atrasada?" Segunda 3 vencidas, quarta 9, sexta 15. Fim: a tela Hoje do Cadência Med com a revisão do dia.~~ *(saiu em 04/11)*
-15. A1 · Eu explicando pra turma que **não monto cronograma** desde que comecei a usar o **Cadência Med**. Tela: cronograma
+15. ~~A1 · Eu explicando pra turma que **não monto cronograma** desde que comecei a usar o **Cadência Med**. Tela: cronograma~~ *(saiu em 11/11)*
 16. ~~A2 · POV: primeiro dia de internato com o Cadência Med já sabendo a sua escala. (horários aparecendo e a semana pronta)~~ *(saiu em 02/11)*
 17. ~~A1 · (nicho) Eu no estágio de **Cirurgia** fingindo que lembro a **Pediatria** do 3º ano. Tela: materias~~ *(saiu em 05/11)*
 18. A2 · (nicho) "Você sobreviveria a um rodízio de Cirurgia estudando as 5 áreas do ENAMED?" 6h centro cirúrgico, 14h ambulatório, 22h Pediatria. Aos 4 s o cronograma do ciclo clínico com as 5 áreas.
