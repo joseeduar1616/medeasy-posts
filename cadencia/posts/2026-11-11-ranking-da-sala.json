@@ -1,0 +1,105 @@
+{
+  "id": "2026-11-11-ranking-da-sala",
+  "legenda": "Seu amigo estudou 4 horas hoje e postou no ranking. E você aí, sozinho, sem saber se o dia rendeu 😅\n\nEstudar sozinho cansa. Ninguém sabe se você abriu a aula, o celular puxa a atenção e a meta do dia vira amanhã sem ninguém notar.\n\nNo Cadência Med você chama os amigos pra mesma sala e o ranking mostra as horas líquidas de cada um. O Foco com pomodoro registra cada sessão, a tela Hoje mostra o seu tempo do dia e da semana e a agenda guarda o horário de estudar.\n\nManda esse post pro amigo que vai entrar na sua sala 📌\n\nVocê estuda melhor sozinho ou com alguém do lado? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #estudarjuntos\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALAS",
+      "tag": "ESTUDAR JUNTO",
+      "titulo": "SEU AMIGO ESTUDOU 4 HORAS HOJE E {g}POSTOU NO RANKING{/g}",
+      "texto": "E você aí, <b>estudando sozinho</b> sem saber se rendeu.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 360, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIDA REAL",
+      "tag": "SOZINHO",
+      "titulo": "ESTUDAR SOZINHO {g}CANSA{/g}",
+      "texto": "Ninguém vê se você abriu a aula. <b>A desculpa fica fácil</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Uma noite de estudo sozinho",
+        "itens": [
+          {"titulo": "Abriu a aula", "sub": "depois do plantão", "selo": "20H", "cor": "#A86BFF"},
+          {"titulo": "Pegou o celular", "sub": "só pra ver uma coisa", "selo": "20H15", "cor": "#46D9F5"},
+          {"titulo": "Voltou pra aula", "sub": "sem lembrar onde parou", "selo": "21H", "cor": "#F5A524"},
+          {"titulo": "Deixou pra amanhã", "sub": "ninguém ficou sabendo", "selo": "21H30", "cor": "#F2557A"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "SEM NINGUÉM DO LADO, {g}O DIA ESCORREGA{/g}",
+      "texto": "Sem horário e sem companhia, a aula vira amanhã e a semana fecha com <b>menos horas do que parecia</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "titulo": "A meta da semana",
+        "itens": [
+          {"texto": "Segunda: aula vista", "feito": true},
+          {"texto": "Terça: ficou pra depois", "feito": false},
+          {"texto": "Quarta: ficou pra depois", "feito": false},
+          {"texto": "Saber quanto estudou de verdade", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "CHAMA OS AMIGOS {g}PRA MESMA SALA{/g}",
+      "texto": "Na sala do Cadência Med o ranking é por <b>horas líquidas</b>. Todo mundo vê quem estudou.",
+      "ui": {
+        "tipo": "barras",
+        "titulo": "Ranking da sala (exemplo)",
+        "itens": [
+          {"nome": "Amigo 1", "valor": 0.95, "rotulo": "4h"},
+          {"nome": "Você", "valor": 0.8, "rotulo": "3h20"},
+          {"nome": "Amigo 2", "valor": 0.6, "rotulo": "2h30"},
+          {"nome": "Amigo 3", "valor": 0.35, "rotulo": "1h30"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "FOCO",
+      "tag": "FOCO",
+      "titulo": "LIGA O POMODORO E {g}A SESSÃO FICA REGISTRADA{/g}",
+      "texto": "25 minutos de foco, pausa, e o tempo <b>conta sozinho</b>. Sem cronômetro à parte.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 520, "foco": "top", "nota": "Foco com pomodoro"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "SEU TEMPO DO DIA {g}E DA SEMANA{/g}",
+      "texto": "A tela Hoje mostra quanto você estudou, as questões e os <b>dias seguidos</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "ESTUDAR JUNTO, {g}CADA UM NO SEU RITMO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Salas com amigos", "texto": "ranking por horas líquidas"},
+          {"titulo": "Foco com pomodoro", "texto": "cada sessão registrada"},
+          {"titulo": "Tela Hoje", "texto": "tempo do dia e da semana"},
+          {"titulo": "Agenda da semana", "texto": "junto com o Google Agenda"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
