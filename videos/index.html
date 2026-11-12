@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<script type="importmap">{ "imports": { "three": "./three.js" } }</script></head>
+<body><script type="module">
+import { montar } from './motor.js';
+const v = new URLSearchParams(location.search).get('v');
+const { VIDEO } = await import(`./${v}.js`);
+await document.fonts.load('800 40px Jak'); await document.fonts.load('400 40px Jak'); await document.fonts.load('700 40px Jak');
+await document.fonts.ready;
+window.VIDEO = VIDEO;
+montar(VIDEO);
+await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
+render(0); window.PRONTO = true;
+</script></body></html>
