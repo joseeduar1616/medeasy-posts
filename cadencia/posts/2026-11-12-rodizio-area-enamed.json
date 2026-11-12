@@ -1,0 +1,97 @@
+{
+  "id": "2026-11-12-rodizio-area-enamed",
+  "legenda": "5 rodízios no internato e 5 áreas no ENAMED. O problema é que a área do rodízio de agora anda e as outras 4 ficam paradas 🩺\n\nNo internato você estuda o que tá vendo no estágio. Quando chega a prova, a área que você viu lá no começo do ano já sumiu da cabeça, e ela pesa igual às outras.\n\nO jeito é usar cada rodízio pra puxar a sua área e deixar a revisão das outras 4 voltando junto. No Cadência Med você escolhe o ciclo clínico, o de residência ou os dois juntos, e cada aula volta pra revisão no dia certo (1 semana, 1 mês, 2, 4 e 6 meses). A tela Hoje mostra a revisão do dia, seja de qual área for.\n\nSalva essa tabela e manda pra quem tá no internato com você 📌\n\nQual área tá mais parada pra você? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #enamed\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "INTERNATO",
+      "tag": "INTERNATO E ENAMED",
+      "titulo": "5 RODÍZIOS, {g}5 ÁREAS DO ENAMED{/g}",
+      "texto": "E a área do rodízio de agora anda enquanto <b>as outras 4 ficam paradas</b>.",
+      "ui": {"tipo": "print", "imagem": "materias", "altura": 360, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A TABELA",
+      "tag": "UM RODÍZIO, UMA ÁREA",
+      "titulo": "CADA RODÍZIO {g}PUXA UMA ÁREA{/g}",
+      "texto": "Estuda a área do estágio e deixa <b>a revisão das outras 4</b> voltando junto.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "No rodízio de...",
+        "itens": [
+          {"titulo": "Clínica Médica", "sub": "estuda Clínica, revisa as outras 4", "selo": "CM", "cor": "#A86BFF"},
+          {"titulo": "Cirurgia", "sub": "estuda Cirurgia, revisa as outras 4", "selo": "CIR", "cor": "#46D9F5"},
+          {"titulo": "Pediatria", "sub": "estuda Pediatria, revisa as outras 4", "selo": "PED", "cor": "#F5A524"},
+          {"titulo": "Ginecologia e Obstetrícia", "sub": "estuda GO, revisa as outras 4", "selo": "GO", "cor": "#F2557A"},
+          {"titulo": "Preventiva", "sub": "estuda Preventiva, revisa as outras 4", "selo": "PREV", "cor": "#2DD4A0"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "O PERIGO",
+      "titulo": "A ÁREA DO COMEÇO DO ANO {g}SOME ATÉ A PROVA{/g}",
+      "texto": "Sem revisão, o que você viu no primeiro rodízio já esfriou quando chega o ENAMED, e <b>ela pesa igual às outras</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "titulo": "Um ano de internato sem revisão",
+        "itens": [
+          {"texto": "Área do rodízio de agora em dia", "feito": true},
+          {"texto": "Área do rodízio passado revisada", "feito": false},
+          {"texto": "Área do primeiro rodízio revisada", "feito": false},
+          {"texto": "As 5 áreas frescas no dia da prova", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "UM CRONOGRAMA SÓ {g}PRO ANO INTEIRO{/g}",
+      "texto": "No Cadência Med você escolhe o <b>ciclo clínico, o de residência ou os dois juntos</b>.",
+      "ui": {"tipo": "print", "imagem": "cronograma", "altura": 520, "foco": "top", "nota": "Qual cronograma você segue"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "REVISÃO",
+      "tag": "AS OUTRAS 4",
+      "titulo": "A REVISÃO DAS OUTRAS ÁREAS {g}VOLTA SOZINHA{/g}",
+      "texto": "Cada aula sobe a escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>. Mesmo depois que o rodízio acabou.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "ABRIU O APP, {g}TÁ LÁ O DO DIA{/g}",
+      "texto": "A tela Hoje junta a aula do rodízio e <b>as revisões que venceram</b>, de qualquer área.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "SALVA ESSA TABELA",
+      "titulo": "CADA RODÍZIO NO SEU LUGAR, {g}AS 5 ÁREAS EM DIA{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Ciclo clínico e residência", "texto": "um cronograma ou os dois juntos"},
+          {"titulo": "Revisão espaçada", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Tela Hoje", "texto": "a revisão do dia de qualquer área"},
+          {"titulo": "Desempenho por área", "texto": "veja qual área tá parada"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
