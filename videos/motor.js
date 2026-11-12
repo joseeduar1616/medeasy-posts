@@ -168,7 +168,7 @@ const OBJ = {
     grupo.add(corpo);
     const W = 520, H = 1080;
     const tela = textura(W, H, (g, t) => {
-      const p = easeOut(cl((t - s.t - .7) / 1.6));
+      const p = easeOut(cl((t - s.t - (s.anel ? s.anel[0] : .7)) / (s.anel ? s.anel[1] : 1.6)));
       g.fillStyle = '#0B0F0A'; g.fillRect(0, 0, W, H);
       const gr = g.createRadialGradient(W * .8, 60, 0, W * .8, 60, 420); gr.addColorStop(0, 'rgba(62,242,58,.22)'); gr.addColorStop(1, 'rgba(62,242,58,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
       g.fillStyle = '#9EA39F'; g.font = '700 22px Jak'; g.textAlign = 'left'; g.fillText('PORTAL MEDEASY', 44, 120);
@@ -180,7 +180,7 @@ const OBJ = {
       g.fillStyle = '#9EA39F'; g.font = '400 24px Jak'; g.fillText('por prova', cx, cy + 46);
       g.textAlign = 'left'; g.fillStyle = '#fff'; g.font = '800 34px Jak'; g.fillText('O que falta', 44, 660);
       [0, 1, 2].forEach(i => {
-        const y = 700 + i * 112, ok = t > s.t + 2 + i * .45;
+        const y = 700 + i * 112, ok = t > s.t + (s.lista ? s.lista[0] + i * s.lista[1] : 2 + i * .45);
         g.fillStyle = 'rgba(255,255,255,.06)'; round(g, 44, y, W - 88, 88, 22); g.fill();
         g.fillStyle = ok ? '#3EF23A' : 'rgba(255,255,255,.18)'; g.beginPath(); g.arc(92, y + 44, 20, 0, 7); g.fill();
         if (ok) { g.strokeStyle = '#0B0F0A'; g.lineWidth = 5; g.beginPath(); g.moveTo(82, y + 45); g.lineTo(90, y + 53); g.lineTo(104, y + 36); g.stroke(); }
@@ -241,7 +241,7 @@ const B = {
   checks(c, s) {
     const box = el('div', 'checks', c.dom); box.style.top = s.y + 'px';
     s.itens.forEach((it, i) => {
-      const t = s.t + i * (s.passo || .7);
+      const t = s.tempos ? s.tempos[i] : s.t + i * (s.passo || .7);
       const linha = el('div', 'ck', box, `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#3EF23A" stroke-width="5"/><path class="v" d="M19 33 l9 9 l18 -19" fill="none" stroke="#3EF23A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40"/></svg><span>${it.replace(/\*(.+?)\*/g, '<span class="hl">$1</span>')}</span>`);
       anim(linha, [{ opacity: 0, transform: 'translateX(-70px)', filter: 'blur(12px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], t, .45); evento(t, 'pop');
       anim(linha.querySelector('.v'), [{ strokeDashoffset: 40 }, { strokeDashoffset: 0 }], t + .25, .35);
