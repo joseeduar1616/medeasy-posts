@@ -14,7 +14,7 @@ function anim(e, kf, ini, dur, opt = {}) {
   const a = e.animate(kf, { duration: dur * 1000, delay: ini * 1000, fill: opt.fill || 'both', easing: opt.easing || EASE });
   a.pause(); ANIMS.push(a); return a;
 }
-function evento(t, tipo) { EVENTOS.push({ t: +t.toFixed(3), tipo }); }
+function evento(t, tipo) { EVENTOS.push({ t: +Math.max(0, t).toFixed(3), tipo }); }
 const ENTRA = [{ opacity: 0, transform: 'translateY(40px)', filter: 'blur(14px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }];
 
 /* ── fundo: constelação, brilhos e grão ─────────────────────────── */
@@ -185,7 +185,7 @@ function montar() {
   el('div', 'topo', document.body, `<img src="marca.png"><span class="pt"></span><span>${VIDEO.topo || 'Cadência Med'}</span><span class="sep">·</span><span>${VIDEO.topo2 || '3 dias grátis'}</span>`);
   for (const c of VIDEO.cenas) {
     c.dom = el('div', 'cena');
-    anim(c.dom, [{ opacity: 0 }, { opacity: 1 }], c.t0, .2);
+    if (c.t0 > 0) anim(c.dom, [{ opacity: 0 }, { opacity: 1 }], c.t0, .2); // a 1ª cena já aparece no quadro 0
     if (c.t1 < VIDEO.dur) anim(c.dom, [{ opacity: 1, filter: 'blur(0)', transform: 'none' }, { opacity: 0, filter: 'blur(16px)', transform: 'scale(1.03)' }], c.t1 - .32, .32, { fill: 'forwards', easing: 'ease-in' });
     evento(c.t0, 'whoosh');
     for (const b of c.blocos) B[b.tipo](c, b);

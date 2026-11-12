@@ -21,6 +21,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v11.js` | Meme animado: eu antes do Cadência Med (planilha, flashcard, cronômetro e caderno riscados) e depois uma tela, a Hoje | 11 s |
 | `v12.js` | Meme animado: POV seu amigo te chamou pra sala e você tá em último no ranking, depois o Foco com pomodoro | 11,5 s |
 | `v13.js` | Meme animado de nicho: POV rodízio de Cirurgia às 6h e o ENAMED cobra as 5 áreas, depois a tela de matérias | 11,5 s |
+| `v14.js` | Meme animado: POV você disse "vou revisar depois", carimbo 1 MÊS DEPOIS e a escada de revisão | 11,5 s |
 
 ## Como gerar
 
@@ -46,6 +47,8 @@ Copie um `vN.js`. Cada cena tem `t0` e `t1` (segundos), `bg` (duas cores do bril
 em vermelho, pode pegar várias palavras), `relogio`, `chips`, `carimbo`, `tela` (print de
 `prints/` com `recorte: [x, y, largura, altura]` em pixels do print), `escada`, `checks`,
 `grande`, `adesivo`, `contador`, `pergunta`, `rank`, `timer`, `areas` e `fim`.
+A primeira cena já aparece inteira no quadro 0 (desde 12/11). Pra frase já estar escrita no quadro 0,
+dê um `t` negativo ao `head` (ex.: `t: -.75`).
 
 Regras de texto do `../LEIA-ME.md`: sem travessão, sem "não é X, é Y", só função que existe no
 app, nenhum número inventado (os de cada vídeo vêm do site, da tela de planos e do edital do ENAMED).
