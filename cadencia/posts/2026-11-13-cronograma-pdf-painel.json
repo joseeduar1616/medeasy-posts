@@ -1,0 +1,87 @@
+{
+  "id": "2026-11-13-cronograma-pdf-painel",
+  "legenda": "Seu cronograma do cursinho tá parado num PDF que você abre uma vez por semana e fecha com culpa 📄\n\nO PDF diz o que estudar, mas não lembra o que você já fez, não conta o que atrasou e não traz a revisão de volta. Aí a semana vira um chute.\n\nNo Cadência Med você manda o cronograma do seu cursinho e a IA lê e monta o painel: as aulas viram matérias e temas, cada aula marcada sobe na escada de revisão (1 semana, 1 mês, 2, 4 e 6 meses) e a tela Hoje mostra o que é pra fazer no dia.\n\nManda pra quem tem o cronograma esquecido no celular 📌\n\nSeu cronograma tá em PDF, planilha ou no papel? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #cronogramadeestudos\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "CRONOGRAMA",
+      "tag": "CURSINHO",
+      "titulo": "SEU CRONOGRAMA DO CURSINHO {g}TÁ PARADO NUM PDF{/g}",
+      "texto": "Você abre uma vez por semana, <b>vê o quanto atrasou</b> e fecha de novo.",
+      "ui": {"tipo": "print", "imagem": "cronograma", "altura": 360, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O QUE O PDF NÃO FAZ",
+      "titulo": "O PDF DIZ O QUE ESTUDAR, {g}E PARA AÍ{/g}",
+      "texto": "Ele não sabe o que você já fez, <b>nem o que tá pra revisar</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "titulo": "Cronograma em PDF",
+        "itens": [
+          {"texto": "Lista das aulas da semana", "feito": true},
+          {"texto": "Marca o que você já estudou", "feito": false},
+          {"texto": "Avisa o que atrasou", "feito": false},
+          {"texto": "Traz a revisão no dia certo", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "A VIRADA",
+      "tag": "MANDA O SEU",
+      "titulo": "MANDA O CRONOGRAMA {g}E A IA LÊ{/g}",
+      "texto": "No Cadência Med você usa o <b>cronograma do seu cursinho</b>, o pronto da residência, o ciclo clínico ou os dois juntos.",
+      "ui": {"tipo": "print", "imagem": "cronograma", "altura": 520, "foco": "center", "nota": "Qual cronograma você segue"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PAINEL",
+      "tag": "VIROU PAINEL",
+      "titulo": "AS AULAS VIRAM {g}MATÉRIAS E TEMAS{/g}",
+      "texto": "Tudo separado por área, com <b>filtro e tópico de cada aula</b>.",
+      "ui": {"tipo": "print", "imagem": "materias", "altura": 520, "foco": "top", "nota": "Matérias e temas"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "REVISÃO",
+      "tag": "DEPOIS DA AULA",
+      "titulo": "MARCOU A AULA, {g}A REVISÃO JÁ TÁ MARCADA{/g}",
+      "texto": "Cada aula sobe a escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "ABRIU O APP, {g}TÁ LÁ O DO DIA{/g}",
+      "texto": "A aula do cronograma e <b>as revisões que venceram</b>, sem abrir PDF nenhum.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "MANDA PRA TURMA",
+      "titulo": "O CRONOGRAMA SAI DO PDF {g}E VIRA ROTINA{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Cronograma do cursinho", "texto": "a IA lê e monta o painel"},
+          {"titulo": "Matérias e temas", "texto": "as aulas separadas por área"},
+          {"titulo": "Revisão espaçada", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Tela Hoje", "texto": "o que fazer no dia"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
