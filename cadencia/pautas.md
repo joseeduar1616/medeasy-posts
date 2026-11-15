@@ -33,7 +33,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 23. ~~(nicho, pra salvar) 5 áreas, 5 semanas: uma área do ENAMED por semana (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), com a revisão das anteriores voltando junto. Slide do meio com a tabela das 5 semanas (bloco `semana`).~~ *(saiu em 04/11)* Prints: materias, revisoes
 24. ~~(nicho) No estágio de Cirurgia e a Pediatria parada: estudar a área do rodízio sem largar as outras 4, com o ciclo clínico.~~ *(saiu em 06/11)* Prints: cronograma, materias
 ~~25. (nicho, pra salvar) Cada rodízio do internato puxa uma área do ENAMED: tabela com uma linha por rodízio (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), o que estudar no rodízio e a revisão das outras 4 voltando junto. A tabela inteira no slide do meio (bloco `lista`), "salva" só no último slide. Prints: materias, cronograma (ciclo clínico)~~ *(saiu em 12/11)*
-26. (pra salvar) Domingo à noite: 5 perguntas antes de montar a semana (quantos plantões, quantas horas livres, qual revisão vence, qual área tá parada, qual simulado vem). Lista inteira no slide 2, o mentor de IA respondendo no slide 5. Prints: assistente, rotina
+26. ~~(pra salvar) Domingo à noite: 5 perguntas antes de montar a semana (quantos plantões, quantas horas livres, qual revisão vence, qual área tá parada, qual simulado vem). Lista inteira no slide 2, o mentor de IA respondendo no slide 5.~~ *(saiu em 15/11)* Prints: assistente, rotina
 
 ## Reels (14:55)
 
