@@ -1,0 +1,100 @@
+{
+  "id": "2026-11-15-cinco-perguntas-semana",
+  "legenda": "Domingo à noite e a semana que vem ainda é uma incógnita? 🗓️\n\nAntes de abrir o cronograma, responde 5 perguntas: quantos plantões você tem, quantas horas livres sobram, qual revisão vence, qual área tá parada e se tem simulado vindo. Sem isso, o plano ideal cai no primeiro plantão e a revisão fica pra depois.\n\nNo Cadência Med você conta isso pro mentor de IA, ele olha o seu painel e diz o que priorizar. A agenda monta a semana com plantão, estudo e aula (dá pra ligar no Google Agenda), e as revisões da escada já entram na conta.\n\nSalva esse post e responde as 5 todo domingo 📌\n\nQuantos plantões você tem essa semana? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #planejamentodeestudos\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "SALVA ESSE",
+      "tag": "DOMINGO À NOITE",
+      "titulo": "5 PERGUNTAS PRA RESPONDER {g}ANTES DE MONTAR A SEMANA{/g}",
+      "texto": "Domingo à noite e a semana ainda é um mistério? <b>Responde essas 5 primeiro</b>.",
+      "ui": {"tipo": "print", "imagem": "assistente", "altura": 380, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "AS 5",
+      "tag": "ANTES DO CRONOGRAMA",
+      "titulo": "RESPONDE {g}NESSA ORDEM{/g}",
+      "texto": "Leva 5 minutos e <b>muda a semana inteira</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Domingo à noite",
+        "itens": [
+          {"titulo": "Quantos plantões eu tenho?", "sub": "e em que dias caem", "selo": "1", "cor": "#F2557A"},
+          {"titulo": "Quantas horas livres sobram?", "sub": "contando o descanso depois do plantão", "selo": "2", "cor": "#A86BFF"},
+          {"titulo": "Qual revisão vence?", "sub": "o que estudei há 1 semana e há 1 mês", "selo": "3", "cor": "#2DD4A0"},
+          {"titulo": "Qual área tá parada?", "sub": "a que não vejo há mais tempo", "selo": "4", "cor": "#F5A524"},
+          {"titulo": "Tem simulado vindo?", "sub": "e quanto tempo ele ocupa", "selo": "5", "cor": "#46D9F5"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "SEM ISSO",
+      "tag": "SEM AS RESPOSTAS",
+      "titulo": "A SEMANA {g}VIRA CHUTE{/g}",
+      "texto": "Você monta o plano ideal, o plantão de quarta derruba tudo e <b>a revisão fica pra depois</b>.",
+      "ui": {
+        "tipo": "semana",
+        "titulo": "A semana montada no chute",
+        "dias": [
+          {"d": "SEG", "blocos": [{"t": "Aula", "cor": "#A86BFF"}, {"t": "Aula", "cor": "#A86BFF"}]},
+          {"d": "TER", "blocos": [{"t": "Aula", "cor": "#A86BFF"}, {"t": "Questões", "cor": "#46D9F5"}]},
+          {"d": "QUA", "blocos": [{"t": "Plantão 12h", "cor": "#F2557A"}]},
+          {"d": "QUI", "blocos": [{"t": "Atraso", "cor": "#F5A524"}]},
+          {"d": "SEX", "blocos": [{"t": "Atraso", "cor": "#F5A524"}]},
+          {"d": "SÁB", "blocos": [{"t": "Simulado", "cor": "#46D9F5"}]},
+          {"d": "DOM", "blocos": [{"t": "Revisão?", "cor": "#2DD4A0"}]}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "MENTOR DE IA",
+      "titulo": "CONTA AS RESPOSTAS {g}PRO MENTOR DE IA{/g}",
+      "texto": "Ele olha o seu painel e diz <b>o que priorizar na semana</b>. Dá pra falar por voz.",
+      "ui": {"tipo": "print", "imagem": "assistente", "altura": 560, "foco": "top", "nota": "Mentor de IA"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "AGENDA",
+      "tag": "PERGUNTAS 1 E 2",
+      "titulo": "A SEMANA MONTADA {g}EM VOLTA DO PLANTÃO{/g}",
+      "texto": "Horas de plantão, estudo e aula no mesmo lugar, e <b>ligada no Google Agenda</b>.",
+      "ui": {"tipo": "print", "imagem": "rotina", "altura": 520, "foco": "top", "nota": "Agenda da semana"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "REVISÃO",
+      "tag": "PERGUNTA 3",
+      "titulo": "O QUE VENCE {g}JÁ TÁ NA ESCADA{/g}",
+      "texto": "Cada aula marcada volta em <b>1 semana, 1 mês, 2, 4 e 6 meses</b>. A pergunta 3 se responde sozinha.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "SALVA PRO DOMINGO",
+      "titulo": "DOMINGO VOCÊ RESPONDE, {g}SEGUNDA JÁ COMEÇA{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Mentor de IA", "texto": "diz o que priorizar na semana"},
+          {"titulo": "Agenda da semana", "texto": "plantão, estudo e aula juntos"},
+          {"titulo": "Revisão espaçada", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Google Agenda", "texto": "a semana no seu calendário"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
