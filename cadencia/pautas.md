@@ -34,6 +34,9 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 24. ~~(nicho) No estágio de Cirurgia e a Pediatria parada: estudar a área do rodízio sem largar as outras 4, com o ciclo clínico.~~ *(saiu em 06/11)* Prints: cronograma, materias
 ~~25. (nicho, pra salvar) Cada rodízio do internato puxa uma área do ENAMED: tabela com uma linha por rodízio (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), o que estudar no rodízio e a revisão das outras 4 voltando junto. A tabela inteira no slide do meio (bloco `lista`), "salva" só no último slide. Prints: materias, cronograma (ciclo clínico)~~ *(saiu em 12/11)*
 26. ~~(pra salvar) Domingo à noite: 5 perguntas antes de montar a semana (quantos plantões, quantas horas livres, qual revisão vence, qual área tá parada, qual simulado vem). Lista inteira no slide 2, o mentor de IA respondendo no slide 5.~~ *(saiu em 15/11)* Prints: assistente, rotina
+27. (nicho, pra salvar) ENAMED 2027 com um ano pela frente: 100 questões, 20 de cada área (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), prova de 5 horas, e onde cada área entra no ano junto com o rodízio. Capa com cena ("4º ano, 100 questões no ENAMED e o rodízio já começou"), lista inteira no slide 2 (bloco `lista`), tom "dá tempo se começar agora". Só os fatos do edital listados em "Nicho internato e ENAMED". Prints: materias, cronograma (ciclo clínico)
+28. (pra salvar) Caderno de erros em 4 passos: anotar a questão, escrever por que errou numa frase, ligar ao tema e deixar a revisão voltar no dia certo. Os 4 passos inteiros no slide 2, "salva" só no último slide. Prints: revisoes, hoje
+29. (nicho, pra salvar) Os horários que cabem num dia de internato: antes do ambulatório, intervalo do almoço, trajeto, depois do plantão, com o que dá pra fazer em cada um (flashcard, revisão curta, questão, aula). Capa com a cena "7h ambulatório, 13h aula, 19h plantão". Lista inteira no slide 2. Prints: rotina, foco, hoje
 
 ## Reels (14:55)
 
@@ -125,9 +128,15 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 15. ~~A1 · Eu explicando pra turma que **não monto cronograma** desde que comecei a usar o **Cadência Med**. Tela: cronograma~~ *(saiu em 11/11)*
 16. ~~A2 · POV: primeiro dia de internato com o Cadência Med já sabendo a sua escala. (horários aparecendo e a semana pronta)~~ *(saiu em 02/11)*
 17. ~~A1 · (nicho) Eu no estágio de **Cirurgia** fingindo que lembro a **Pediatria** do 3º ano. Tela: materias~~ *(saiu em 05/11)*
-18. A2 · (nicho) "Você sobreviveria a um rodízio de Cirurgia estudando as 5 áreas do ENAMED?" 6h centro cirúrgico, 14h ambulatório, 22h Pediatria. Aos 4 s o cronograma do ciclo clínico com as 5 áreas.
+18. A2 · (nicho) "Você sobreviveria a um rodízio de Cirurgia estudando as 5 áreas do ENAMED?" 6h centro cirúrgico, 14h ambulatório, 22h Pediatria. Aos 4 s o cronograma do ciclo clínico com as 5 áreas. *(15/11: reescrito como POV pro plano de 16/11: "POV: 22h, voltou do ambulatório e a Pediatria tá parada desde o 3º ano", carimbo "DESDE O 3º ANO" aos 2 s)*
 19. ~~A1 · Eu vendo o **ritmo** no Cadência Med dizer que dá pra **fechar o cronograma** antes da prova. Tela: hoje~~ *(saiu em 15/11)*
 20. ~~A2 · Níveis de revisão atrasada, do 1 ao 5. O 5 é abrir a tela Hoje do Cadência Med e só ter a de hoje.~~ *(saiu em 14/11, com a tela de revisões no nível 5, porque a tela Hoje não mostra a lista de revisões)*
 21. ~~A1 · (nicho) Eu descobrindo que **Preventiva** cai tanto quanto **Cirurgia** no ENAMED. Tela: materias (Cadência Med no rodapé do tweet)~~ *(saiu em 09/11)*
 22. ~~A2 · (nicho) POV: rodízio de Cirurgia, 6h no centro cirúrgico, e o ENAMED cobra as 5 áreas. Abre na cena (não em pergunta), carimbo "5 ÁREAS" aos 2 s, aos 4 s a tela de matérias do Cadência Med com as 5 áreas. Fecha repetindo a primeira frase~~ *(saiu em 10/11)*
 23. ~~A2 · POV: você disse "vou revisar depois" há 1 mês. Abre na cena, carimbo "1 MÊS DEPOIS" aos 2 s, aos 4 s a escada de revisão do Cadência Med (1 semana, 1 mês, 2, 4 e 6 meses). Fecha repetindo a primeira frase~~ *(saiu em 12/11)*
+24. A1 · Eu descobrindo no **Foco** do **Cadência Med** quanto das 3 horas foi **estudo de verdade**. Tela: foco. Legenda: "Marca quem conta o tempo do celular como estudo"
+25. A2 · POV: errou a mesma questão de Cardio pela terceira vez. Abre na cena, carimbo "3ª VEZ" aos 2 s, aos 4 s a escada de revisão do Cadência Med com a questão voltando. Fecha repetindo a primeira frase
+26. A1 · (nicho) Meu grupo da turma dividindo a **escala do internato** e eu jogando ela no **Cadência Med**. Tela: rotina. Legenda: "Marca quem faz a escala do grupo"
+27. A2 · POV: saiu do plantão às 7h e a revisão de hoje são só 3. Abre na cena, carimbo "SÓ 3" aos 2 s, aos 4 s a tela de revisões do Cadência Med. Fecha repetindo a primeira frase
+28. A1 · Eu mandando o **ranking da sala** do **Cadência Med** no grupo da turma às **23h**. Tela: foco, com o ranking desenhado. Legenda: "Marca quem tá atrás de você no ranking"
+29. A2 · POV: domingo 22h e a semana ainda não tá montada. Abre na cena, carimbo "22H" aos 2 s, aos 4 s o mentor de IA do Cadência Med montando a semana. Fecha repetindo a primeira frase
