@@ -23,6 +23,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v13.js` | Meme animado de nicho: POV rodízio de Cirurgia às 6h e o ENAMED cobra as 5 áreas, depois a tela de matérias | 11,5 s |
 | `v14.js` | Meme animado: POV você disse "vou revisar depois", carimbo 1 MÊS DEPOIS e a escada de revisão | 11,5 s |
 | `v15.js` | Meme animado: níveis de revisão atrasada, do 1 ao 5, o 5 é a tela de revisões com o dia certo de cada uma | 12 s |
+| `v16.js` | Meme animado de nicho: POV 22h, voltou do ambulatório, carimbo DESDE O 3º ANO e a tela real do ciclo clínico | 11,5 s |
 
 ## Como gerar
 
