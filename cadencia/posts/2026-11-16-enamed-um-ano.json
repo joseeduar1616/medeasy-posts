@@ -1,0 +1,98 @@
+{
+  "id": "2026-11-16-enamed-um-ano",
+  "legenda": "4º ano, 100 questões no ENAMED e o rodízio já começou? 🩺\n\nO ENAMED de 2027 tem 100 questões em 5 horas, 20 de cada área: Clínica Médica, Cirurgia, Pediatria, GO e Preventiva. No rodízio você estuda a área do estágio, e as outras 4 ficam paradas valendo 80 das 100 questões.\n\nNo Cadência Med você escolhe o cronograma do ciclo clínico (ou junta com o de residência), vê as 5 áreas na mesma tela e cada aula marcada volta na escada de revisão, mesmo depois que o rodízio acabou. Dá tempo se começar agora.\n\nSalva esse post e manda pra quem tá no 4º ano com você 📌\n\nEm que ano você tá? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #enamed\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "ENAMED 2027",
+      "tag": "4º ANO",
+      "titulo": "100 QUESTÕES NO ENAMED E {g}O RODÍZIO JÁ COMEÇOU{/g}",
+      "texto": "A prova de 2027 tem um ano pela frente. <b>Dá tempo se começar agora</b>.",
+      "ui": {"tipo": "print", "imagem": "materias", "altura": 380, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "AS 5 ÁREAS",
+      "tag": "COMO A PROVA SE DIVIDE",
+      "titulo": "20 QUESTÕES DE CADA, {g}O ANO TODO{/g}",
+      "texto": "100 questões em 5 horas, <b>por igual entre as 5 áreas</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Onde cada área entra no ano",
+        "itens": [
+          {"titulo": "Clínica Médica", "sub": "20 questões · no rodízio dela e na revisão do resto do ano", "selo": "20", "cor": "#F2557A"},
+          {"titulo": "Cirurgia", "sub": "20 questões · o centro cirúrgico vira o tema do dia", "selo": "20", "cor": "#A86BFF"},
+          {"titulo": "Pediatria", "sub": "20 questões · a do 3º ano volta pela revisão", "selo": "20", "cor": "#2DD4A0"},
+          {"titulo": "GO", "sub": "20 questões · plantão de GO e aula da área juntos", "selo": "20", "cor": "#F5A524"},
+          {"titulo": "Preventiva", "sub": "20 questões · pesa igual às outras 4", "selo": "20", "cor": "#46D9F5"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "O RISCO",
+      "tag": "SÓ O RODÍZIO",
+      "titulo": "A ÁREA DO ESTÁGIO {g}NÃO FECHA A PROVA{/g}",
+      "texto": "No rodízio de Cirurgia você estuda Cirurgia. As outras 4 ficam paradas e <b>valem 80 das 100 questões</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "titulo": "Mês de rodízio de Cirurgia",
+        "itens": [
+          {"texto": "Cirurgia", "feito": true},
+          {"texto": "Clínica Médica", "feito": false},
+          {"texto": "Pediatria", "feito": false},
+          {"texto": "GO", "feito": false},
+          {"texto": "Preventiva", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "CICLO CLÍNICO",
+      "titulo": "UM CRONOGRAMA {g}QUE ACOMPANHA O RODÍZIO{/g}",
+      "texto": "No Cadência Med você segue o ciclo clínico, o de residência ou <b>os dois juntos</b>. O conteúdo do estágio entra no lugar das aulas da área.",
+      "ui": {"tipo": "print", "imagem": "cronograma", "altura": 540, "foco": "top", "nota": "Qual cronograma você segue"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "MATÉRIAS",
+      "tag": "AS 5 NA MESMA TELA",
+      "titulo": "VOCÊ VÊ {g}QUAL ÁREA TÁ PARADA{/g}",
+      "texto": "Aulas e tópicos separados por área. Você filtra e sabe <b>qual das 5 tá mais atrasada</b>.",
+      "ui": {"tipo": "print", "imagem": "materias", "altura": 520, "foco": "top", "nota": "Matérias e temas"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "REVISÃO",
+      "tag": "DEPOIS DO RODÍZIO",
+      "titulo": "A ÁREA QUE PASSOU {g}VOLTA SOZINHA{/g}",
+      "texto": "Cada aula marcada volta em <b>1 semana, 1 mês, 2, 4 e 6 meses</b>, mesmo depois que o rodízio acabou.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "SALVA PRO 4º ANO",
+      "titulo": "UM ANO, 5 ÁREAS, {g}DÁ TEMPO SE COMEÇAR AGORA{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Ciclo clínico", "texto": "o cronograma que acompanha o estágio"},
+          {"titulo": "Matérias por área", "texto": "o que falta em cada uma das 5"},
+          {"titulo": "Revisão espaçada", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Mentor de IA", "texto": "diz o que priorizar na semana"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
