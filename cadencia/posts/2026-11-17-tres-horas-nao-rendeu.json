@@ -1,0 +1,97 @@
+{
+  "id": "2026-11-17-tres-horas-nao-rendeu",
+  "legenda": "3 horas sentado e a sensação de que não rendeu? ⏱️\n\nVocê abriu o livro às 14h e fechou às 17h. No meio teve celular, grupo da turma, café e aquele \"só 1 minuto\" no Instagram. A cadeira contou 3 horas, mas o estudo de verdade ficou em bem menos.\n\nNo Cadência Med o Foco registra cada sessão, no pomodoro ou no tempo corrido. Pausou, parou de contar. No fim do dia a tela Hoje mostra o tempo estudado no dia e na semana, e você sabe quanto rendeu de verdade.\n\nManda pra aquele amigo que conta o tempo do celular como estudo 📌\n\nQuanto das suas horas de hoje foi estudo de verdade? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #pomodoro\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "FOCO",
+      "tag": "QUEM NUNCA",
+      "titulo": "3 HORAS SENTADO E A SENSAÇÃO DE QUE {g}NÃO RENDEU{/g}",
+      "texto": "A cadeira contou 3 horas. <b>O estudo de verdade contou menos</b>.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 380, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A TARDE",
+      "tag": "O QUE ACONTECE",
+      "titulo": "DAS 14H ÀS 17H, {g}O QUE ENTROU NO MEIO{/g}",
+      "texto": "Você não parou de estudar. Você só <b>parou um monte de vezes</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Uma tarde de estudo comum",
+        "itens": [
+          {"titulo": "Abriu a aula", "sub": "começou bem, caderno aberto", "selo": "14h", "cor": "#2DD4A0"},
+          {"titulo": "\"Só 1 minuto\" no celular", "sub": "o grupo da turma tinha mensagem", "selo": "CEL", "cor": "#F2557A"},
+          {"titulo": "Café", "sub": "levantou e voltou pensando em outra coisa", "selo": "CAFÉ", "cor": "#F5A524"},
+          {"titulo": "Voltou pra aula", "sub": "rebobinou o que já tinha visto", "selo": "DE NOVO", "cor": "#A86BFF"},
+          {"titulo": "Fechou o livro", "sub": "3 horas na cadeira, sensação de nada", "selo": "17h", "cor": "#46D9F5"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "O PROBLEMA",
+      "tag": "SEM REGISTRO",
+      "titulo": "SEM SABER O TEMPO REAL, {g}O PLANO NÃO FECHA{/g}",
+      "texto": "Você planeja a semana achando que estudou 3 horas por dia. <b>Na hora da prova a conta não bate</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "titulo": "O que fica no escuro",
+        "itens": [
+          {"texto": "Quanto você estudou de verdade hoje", "feito": false},
+          {"texto": "Quanto estudou na semana", "feito": false},
+          {"texto": "Se o ritmo fecha o cronograma", "feito": false},
+          {"texto": "Em que hora do dia você rende mais", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "FOCO",
+      "titulo": "SÓ CONTA {g}O TEMPO DE ESTUDO{/g}",
+      "texto": "No Foco do Cadência Med você escolhe <b>pomodoro ou tempo corrido</b>. Pausou, parou de contar. Cada sessão fica registrada.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 540, "foco": "top", "nota": "Pomodoro ou tempo corrido"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "HOJE",
+      "tag": "NO FIM DO DIA",
+      "titulo": "VOCÊ VÊ {g}QUANTO RENDEU{/g}",
+      "texto": "A tela Hoje mostra o tempo estudado <b>no dia e na semana</b>, as questões e os dias seguidos.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tempo estudado no dia e na semana"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "A SEMANA",
+      "tag": "COM O TEMPO REAL",
+      "titulo": "A SEMANA MONTADA {g}COM O TEMPO QUE VOCÊ TEM{/g}",
+      "texto": "Na agenda você põe plantão, aula e estudo, e <b>liga com o Google Agenda</b>.",
+      "ui": {"tipo": "print", "imagem": "rotina", "altura": 520, "foco": "top", "nota": "Agenda da semana"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "ESTUDO DE VERDADE",
+      "titulo": "MENOS CADEIRA, {g}MAIS ESTUDO CONTADO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Foco", "texto": "pomodoro ou tempo corrido, cada sessão registrada"},
+          {"titulo": "Tela Hoje", "texto": "tempo do dia e da semana, ritmo e projeção"},
+          {"titulo": "Agenda", "texto": "plantão, aula e estudo com o Google Agenda"},
+          {"titulo": "Salas com amigos", "texto": "ranking por horas líquidas"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
