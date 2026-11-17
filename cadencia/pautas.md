@@ -134,7 +134,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 21. ~~A1 · (nicho) Eu descobrindo que **Preventiva** cai tanto quanto **Cirurgia** no ENAMED. Tela: materias (Cadência Med no rodapé do tweet)~~ *(saiu em 09/11)*
 22. ~~A2 · (nicho) POV: rodízio de Cirurgia, 6h no centro cirúrgico, e o ENAMED cobra as 5 áreas. Abre na cena (não em pergunta), carimbo "5 ÁREAS" aos 2 s, aos 4 s a tela de matérias do Cadência Med com as 5 áreas. Fecha repetindo a primeira frase~~ *(saiu em 10/11)*
 23. ~~A2 · POV: você disse "vou revisar depois" há 1 mês. Abre na cena, carimbo "1 MÊS DEPOIS" aos 2 s, aos 4 s a escada de revisão do Cadência Med (1 semana, 1 mês, 2, 4 e 6 meses). Fecha repetindo a primeira frase~~ *(saiu em 12/11)*
-24. A1 · Eu descobrindo no **Foco** do **Cadência Med** quanto das 3 horas foi **estudo de verdade**. Tela: foco. Legenda: "Marca quem conta o tempo do celular como estudo"
+24. ~~A1 · Eu descobrindo no **Foco** do **Cadência Med** quanto das 3 horas foi **estudo de verdade**. Tela: foco. Legenda: "Marca quem conta o tempo do celular como estudo"~~ *(saiu em 17/11)*
 25. A2 · POV: errou a mesma questão de Cardio pela terceira vez. Abre na cena, carimbo "3ª VEZ" aos 2 s, aos 4 s a escada de revisão do Cadência Med com a questão voltando. Fecha repetindo a primeira frase
 26. A1 · (nicho) Meu grupo da turma dividindo a **escala do internato** e eu jogando ela no **Cadência Med**. Tela: rotina. Legenda: "Marca quem faz a escala do grupo"
 27. A2 · POV: saiu do plantão às 7h e a revisão de hoje são só 3. Abre na cena, carimbo "SÓ 3" aos 2 s, aos 4 s a tela de revisões do Cadência Med. Fecha repetindo a primeira frase
