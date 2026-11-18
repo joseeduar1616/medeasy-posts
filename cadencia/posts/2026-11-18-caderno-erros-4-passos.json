@@ -1,0 +1,91 @@
+{
+  "id": "2026-11-18-caderno-erros-4-passos",
+  "legenda": "Errou a mesma questão de novo? Anota assim ✍️\n\nLer o comentário e seguir em frente dá a sensação de que entendeu. Um mês depois a mesma pegadinha aparece e a alternativa errada sai igual. O que muda isso é anotar o erro do jeito certo, em 4 passos: a questão numa linha, por que errou numa frase, o tema de onde ela vem e a revisão voltando no dia certo.\n\nNo Cadência Med o que você erra vai pro caderno de erros e entra na escada de revisão (1 semana, 1 mês, 2, 4 e 6 meses). A tela Hoje mostra o que venceu e o mentor de IA olha o seu painel pra dizer o que priorizar.\n\nSalva esse post pra usar no próximo simulado e manda pro amigo que sempre cai na mesma pegadinha 📌\n\nQual área você mais erra? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #cadernodeerros\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "4 PASSOS",
+      "tag": "CADERNO DE ERROS",
+      "titulo": "ERROU A MESMA QUESTÃO DE NOVO. {g}ANOTA ASSIM{/g}",
+      "texto": "4 passos pra <b>o erro parar de voltar</b> na prova.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 380, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "OS 4 PASSOS",
+      "tag": "COMO ANOTAR",
+      "titulo": "O ERRO ANOTADO {g}EM 4 PASSOS{/g}",
+      "texto": "Vale pra questão do simulado, da prova antiga ou do banco de questões.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Caderno de erros",
+        "itens": [
+          {"titulo": "Anote a questão", "sub": "o tema e o que ela pedia, numa linha", "selo": "1", "cor": "#A86BFF"},
+          {"titulo": "Escreva por que errou", "sub": "numa frase: não sabia, confundiu ou leu rápido", "selo": "2", "cor": "#46D9F5"},
+          {"titulo": "Ligue ao tema", "sub": "a aula ou o resumo de onde aquilo vem", "selo": "3", "cor": "#F5A524"},
+          {"titulo": "Deixe a revisão voltar", "sub": "no dia certo, antes de esquecer", "selo": "4", "cor": "#2DD4A0"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "EXEMPLO",
+      "tag": "O PASSO 2",
+      "titulo": "UMA FRASE {g}JÁ MUDA A REVISÃO{/g}",
+      "texto": "Quando a questão volta, você lê <b>o motivo do erro</b> antes de responder.",
+      "ui": {
+        "tipo": "cartao",
+        "frente": "Antídoto da intoxicação por benzodiazepínico?",
+        "verso": "Flumazenil. Errei porque confundi com a naloxona, que é do opioide."
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "O PASSO 4",
+      "titulo": "O ERRO VOLTA {g}NO DIA CERTO{/g}",
+      "texto": "No Cadência Med o que você erra vai pro caderno de erros e entra na escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 540, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "HOJE",
+      "tag": "TODO DIA",
+      "titulo": "O QUE VENCEU {g}APARECE SOZINHO{/g}",
+      "texto": "Abriu o app, a tela Hoje já mostra a revisão do dia. <b>Sem lembrete no celular</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "MENTOR DE IA",
+      "tag": "O QUE PRIORIZAR",
+      "titulo": "O MENTOR OLHA {g}ONDE VOCÊ MAIS ERRA{/g}",
+      "texto": "Pergunte o que priorizar na semana e o mentor de IA responde <b>com base no seu painel</b>.",
+      "ui": {"tipo": "print", "imagem": "assistente", "altura": 520, "foco": "top", "nota": "Mentor de IA"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "SALVA ESSE",
+      "titulo": "ERROU UMA VEZ, {g}A REVISÃO CUIDA DO RESTO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Caderno de erros", "texto": "o que você erra volta pra revisão"},
+          {"titulo": "Escada de revisão", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Tela Hoje", "texto": "o que venceu aparece sozinho"},
+          {"titulo": "Mentor de IA", "texto": "o que priorizar, com base no seu painel"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
