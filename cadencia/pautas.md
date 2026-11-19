@@ -136,7 +136,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 23. ~~A2 · POV: você disse "vou revisar depois" há 1 mês. Abre na cena, carimbo "1 MÊS DEPOIS" aos 2 s, aos 4 s a escada de revisão do Cadência Med (1 semana, 1 mês, 2, 4 e 6 meses). Fecha repetindo a primeira frase~~ *(saiu em 12/11)*
 24. ~~A1 · Eu descobrindo no **Foco** do **Cadência Med** quanto das 3 horas foi **estudo de verdade**. Tela: foco. Legenda: "Marca quem conta o tempo do celular como estudo"~~ *(saiu em 17/11)*
 25. ~~A2 · POV: errou a mesma questão de Cardio pela terceira vez. Abre na cena, carimbo "3ª VEZ" aos 2 s, aos 4 s a escada de revisão do Cadência Med com a questão voltando. Fecha repetindo a primeira frase~~ *(saiu em 18/11)*
-26. A1 · (nicho) Meu grupo da turma dividindo a **escala do internato** e eu jogando ela no **Cadência Med**. Tela: rotina. Legenda: "Marca quem faz a escala do grupo"
+26. ~~A1 · (nicho) Meu grupo da turma dividindo a **escala do internato** e eu jogando ela no **Cadência Med**. Tela: rotina. Legenda: "Marca quem faz a escala do grupo"~~ *(saiu em 19/11)*
 27. A2 · POV: saiu do plantão às 7h e a revisão de hoje são só 3. Abre na cena, carimbo "SÓ 3" aos 2 s, aos 4 s a tela de revisões do Cadência Med. Fecha repetindo a primeira frase
 28. A1 · Eu mandando o **ranking da sala** do **Cadência Med** no grupo da turma às **23h**. Tela: foco, com o ranking desenhado. Legenda: "Marca quem tá atrás de você no ranking"
 29. A2 · POV: domingo 22h e a semana ainda não tá montada. Abre na cena, carimbo "22H" aos 2 s, aos 4 s o mentor de IA do Cadência Med montando a semana. Fecha repetindo a primeira frase
