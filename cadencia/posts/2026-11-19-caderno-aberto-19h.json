@@ -1,0 +1,96 @@
+{
+  "id": "2026-11-19-caderno-aberto-19h",
+  "legenda": "19h, caderno aberto e nenhuma ideia de por onde começar? 😶\n\nVocê senta pra estudar e a primeira meia hora vai embora decidindo: a aula atrasada, a revisão que venceu ou as questões que ficaram pra depois. Quando escolhe, o cansaço já chegou e o dia rende menos do que podia.\n\nO que ajuda é já sentar sabendo o que fazer. No Cadência Med a tela Hoje mostra a agenda do dia, o tempo estudado e o seu ritmo. A semana é montada em volta dos plantões e, se bater a dúvida, o mentor de IA olha o seu painel e diz o que priorizar.\n\nSalva esse post e manda pro amigo que passa meia hora escolhendo a matéria 📌\n\nQuanto tempo você leva pra decidir o que estudar? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #rotinadeestudos\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "TELA HOJE",
+      "tag": "POR ONDE COMEÇAR",
+      "titulo": "19H, CADERNO ABERTO E {g}NENHUMA IDEIA DE POR ONDE COMEÇAR{/g}",
+      "texto": "Se isso acontece com você, arrasta pra ver <b>como sentar já sabendo o que fazer</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 330, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "A DÚVIDA DE TODO DIA",
+      "titulo": "TUDO PARECE {g}URGENTE AO MESMO TEMPO{/g}",
+      "texto": "Você abre o caderno e a cabeça puxa pra quatro lados.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "O que passa pela cabeça às 19h",
+        "itens": [
+          {"titulo": "A aula atrasada", "sub": "a da semana passada que ficou pra depois", "selo": "?", "cor": "#A86BFF"},
+          {"titulo": "A revisão que venceu", "sub": "aquela que você nem lembra quando era", "selo": "?", "cor": "#46D9F5"},
+          {"titulo": "As questões", "sub": "o bloco que você prometeu fazer", "selo": "?", "cor": "#F5A524"},
+          {"titulo": "O tema que cai muito", "sub": "o que todo mundo diz pra não deixar de lado", "selo": "?", "cor": "#2DD4A0"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "A CONSEQUÊNCIA",
+      "tag": "O CUSTO",
+      "titulo": "MEIA HORA ESCOLHENDO {g}E O DIA RENDE MENOS{/g}",
+      "texto": "Quando você decide, o cansaço já chegou. E no dia seguinte <b>a dúvida volta igual</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Abriu o caderno", "feito": true},
+          {"texto": "Olhou as aulas atrasadas", "feito": true},
+          {"texto": "Mudou de ideia duas vezes", "feito": true},
+          {"texto": "Começou a estudar de verdade", "feito": false},
+          {"texto": "Fez a revisão que venceu", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "SENTOU, COMEÇOU",
+      "titulo": "O DIA JÁ VEM {g}DECIDIDO NA TELA HOJE{/g}",
+      "texto": "Tempo estudado, questões, ritmo e a agenda de hoje <b>num lugar só</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 540, "foco": "center", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "AGENDA",
+      "tag": "A SEMANA MONTADA",
+      "titulo": "A SEMANA CABE {g}EM VOLTA DO PLANTÃO{/g}",
+      "texto": "Monte a semana com as horas de plantão, estudo e aula, e ligue no <b>Google Agenda</b>.",
+      "ui": {"tipo": "print", "imagem": "rotina", "altura": 520, "foco": "top", "nota": "Agenda da semana"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "MENTOR DE IA",
+      "tag": "BATEU A DÚVIDA",
+      "titulo": "PERGUNTE {g}O QUE PRIORIZAR{/g}",
+      "texto": "O mentor de IA olha o seu painel e responde <b>o que vem primeiro na semana</b>.",
+      "ui": {"tipo": "print", "imagem": "assistente", "altura": 520, "foco": "top", "nota": "Mentor de IA"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "SALVA ESSE",
+      "titulo": "ABRIU O APP, {g}JÁ SABE POR ONDE COMEÇAR{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Tela Hoje", "texto": "agenda, tempo e ritmo do dia"},
+          {"titulo": "Agenda da semana", "texto": "em volta dos plantões, com Google Agenda"},
+          {"titulo": "Escada de revisão", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Mentor de IA", "texto": "o que priorizar, com base no seu painel"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
