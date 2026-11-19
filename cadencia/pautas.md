@@ -14,7 +14,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 4. ~~Errou a mesma questão pela terceira vez e o caderno de erros que vira revisão~~ *(saiu em 26/10)*. Prints: revisoes, hoje
 5. ~~23h, cansado, montando flashcard na mão e a IA montando do PDF~~ *(saiu em 29/10)*. Prints: cartoes_ia, revisoes
 6. ~~Mandou o cronograma do cursinho num PDF e ele virou painel~~ *(saiu em 14/11)*. Prints: cronograma, materias
-7. Abriu o caderno e não sabe por onde começar e a tela Hoje. Prints: hoje, rotina
+7. ~~Abriu o caderno e não sabe por onde começar e a tela Hoje. Prints: hoje, rotina~~ *(saiu em 19/11)*
 ~~8. Estudar sozinho cansa e a sala com os amigos, com ranking por horas. Prints: foco, hoje (bloco desenhado pro ranking)~~ *(saiu em 11/11)*
 9. ~~Internato e residência ao mesmo tempo: o ciclo clínico junto com o cronograma~~ *(saiu em 28/10)*. Prints: cronograma, materias
 ~~10. Fez o simulado, viu a nota e não sabe o que fazer depois. Prints: revisoes, assistente~~ *(saiu em 05/11)*
