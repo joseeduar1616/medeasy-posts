@@ -22,7 +22,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 12. ~~"Será que dá tempo de fechar tudo antes da prova?" e o ritmo com projeção~~ *(saiu em 08/11)*. Prints: hoje, cronograma
 13. ~~Domingo à noite, sem saber como vai ser a semana, e o mentor de IA montando ela~~ *(saiu em 01/11)*. Prints: assistente, rotina
 14. Revisão em outro app, cronograma na planilha, cronômetro em outro app: tudo num lugar. Prints: hoje, revisoes, foco
-15. Quanto custa organizar a preparação inteira: 3 dias grátis, R$ 39 ou R$ 300 no anual. Prints: planos, hoje
+15. ~~Quanto custa organizar a preparação inteira: 3 dias grátis, R$ 39 ou R$ 300 no anual~~ *(saiu em 20/11)*. Prints: planos, hoje
 16. ~~(pra salvar) Checklist da semana de plantão: o que fazer antes, no dia e depois do plantão pra não perder a revisão~~ *(saiu em 27/10)*. Prints: rotina, hoje
 17. ~~(pra salvar) Plano de 7 dias pra tirar o atraso sem largar as revisões~~ *(saiu em 30/10)*. Prints: revisoes, assistente
 18. ~~(pra salvar) Cronograma de revisão de 30 dias: o que volta em 1 semana e em 1 mês.~~ *(saiu em 10/11)* Prints: revisoes, hoje
