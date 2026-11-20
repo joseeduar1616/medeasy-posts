@@ -1,0 +1,96 @@
+{
+  "id": "2026-11-20-quanto-custa",
+  "legenda": "Cronograma, revisão, flashcards e Foco por R$ 25 por mês? 👀\n\nNa maioria das rotinas a preparação fica espalhada: o cronograma numa planilha, a revisão anotada no caderno, os cartões num canto e o cronômetro no celular. Antes de estudar, vai tempo só organizando.\n\nNo Cadência Med fica tudo num lugar. A tela Hoje mostra o dia, a escada de revisão diz o que voltar, a IA monta os flashcards do seu PDF e o Foco registra cada sessão. O mensal é R$ 39 e o anual R$ 300, que dá R$ 25 por mês, com 7 dias de garantia.\n\nManda pro amigo que ainda monta tudo na mão 📌\n\nMensal ou anual? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #organizacaodeestudos\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "BLACK FRIDAY",
+      "tag": "QUANTO CUSTA",
+      "titulo": "CRONOGRAMA, REVISÃO, FLASHCARDS E FOCO {g}POR R$ 25 POR MÊS{/g}",
+      "texto": "Arrasta pra ver <b>o que entra</b> e quanto sai cada plano.",
+      "ui": {"tipo": "print", "imagem": "planos", "altura": 410, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "A PREPARAÇÃO FICA {g}ESPALHADA{/g}",
+      "texto": "Cada parte do estudo mora num canto diferente, e <b>nenhuma conversa com a outra</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Onde fica cada coisa",
+        "itens": [
+          {"titulo": "Cronograma", "sub": "numa planilha", "selo": "atualiza à mão", "cor": "#A86BFF", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Revisões", "sub": "anotadas no caderno", "selo": "fácil esquecer", "cor": "#46D9F5", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Flashcards", "sub": "feitos na mão", "selo": "toma a noite", "cor": "#F5A524", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"},
+          {"titulo": "Tempo de estudo", "sub": "no cronômetro do celular", "selo": "sem registro", "cor": "#3DDC97", "cor_selo": "rgba(242,85,122,.14)", "cor_texto": "#E0365F"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "E AÍ",
+      "titulo": "O TEMPO VAI {g}EM ORGANIZAR{/g}",
+      "texto": "Antes da primeira questão, você já abriu quatro coisas. <b>Esse tempo sai do estudo</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Abrir a planilha do cronograma", "feito": true},
+          {"texto": "Procurar a revisão que venceu", "feito": true},
+          {"texto": "Achar os cartões do tema", "feito": true},
+          {"texto": "Ligar o cronômetro", "feito": true},
+          {"texto": "Começar a estudar", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "TUDO NUM LUGAR, {g}UM PREÇO SÓ{/g}",
+      "texto": "Mensal de <b>R$ 39</b> ou anual de <b>R$ 300</b>, que dá R$ 25 por mês. Antes, 3 dias grátis sem cartão.",
+      "ui": {"tipo": "print", "imagem": "planos", "altura": 540, "foco": "bottom"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "TODO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "ABRIU O APP, {g}O DIA JÁ ESTÁ ALI{/g}",
+      "texto": "Tempo estudado, questões, ritmo e a agenda de hoje. <b>Sem montar nada antes</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "FLASHCARDS",
+      "tag": "FLASHCARDS",
+      "titulo": "OS CARTÕES {g}A IA MONTA{/g}",
+      "texto": "Mande o PDF da aula e a IA monta os flashcards. Eles voltam junto com a <b>revisão espaçada</b>.",
+      "ui": {"tipo": "print", "imagem": "cartoes_ia", "altura": 520, "foco": "top", "nota": "Flashcards com IA"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "NO CADÊNCIA MED",
+      "titulo": "A PREPARAÇÃO INTEIRA {g}NUM APP SÓ{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Cronograma e revisão", "texto": "pronto ou o do cursinho, com a escada de revisão"},
+          {"titulo": "Flashcards com IA", "texto": "montados a partir do seu PDF"},
+          {"titulo": "Foco e mentor de IA", "texto": "pomodoro e o que priorizar na semana"},
+          {"titulo": "Anual por R$ 300", "texto": "R$ 25 por mês, 7 dias de garantia"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
