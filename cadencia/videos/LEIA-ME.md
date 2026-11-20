@@ -25,6 +25,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v15.js` | Meme animado: níveis de revisão atrasada, do 1 ao 5, o 5 é a tela de revisões com o dia certo de cada uma | 12 s |
 | `v16.js` | Meme animado de nicho: POV 22h, voltou do ambulatório, carimbo DESDE O 3º ANO e a tela real do ciclo clínico | 11,5 s |
 | `v17.js` | Meme animado: POV errou a mesma questão de Cardio pela terceira vez, carimbo 3ª VEZ e o caderno de erros com a escada de revisão | 11,5 s |
+| `v18.js` | Meme animado: POV saiu do plantão às 7h e as revisões de hoje são só 3, carimbo SÓ 3 e a tela real de revisões | 11,5 s |
 
 ## Como gerar
 
