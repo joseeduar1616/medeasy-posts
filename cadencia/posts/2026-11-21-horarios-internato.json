@@ -1,0 +1,96 @@
+{
+  "id": "2026-11-21-horarios-internato",
+  "legenda": "7h ambulatório, 13h aula, 19h plantão. Onde entra o estudo? 🏥\n\nNo internato o dia já vem cheio, mas sempre sobram alguns buracos: antes do ambulatório, o intervalo do almoço, o trajeto e a volta do plantão. O problema é chegar nesses horários sem saber o que fazer e ver o tempo passar no grupo da turma.\n\nA saída é decidir antes o que cabe em cada um. Questão de manhã, a revisão que venceu no almoço, flashcard no trajeto e aula só se a cabeça deixar. No Cadência Med a agenda monta o dia em volta da escala, o Foco registra cada sessão e a tela Hoje mostra o que rendeu.\n\nSalva esse pra usar no próximo rodízio e manda pro amigo do seu grupo do internato 📌\n\nEm que rodízio você tá? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #rotinadeestudos\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "INTERNATO",
+      "tag": "PRA SALVAR",
+      "titulo": "7H AMBULATÓRIO, 19H PLANTÃO. {g}ONDE ENTRA O ESTUDO?{/g}",
+      "texto": "Arrasta pra ver <b>o que cabe em cada horário</b> do dia.",
+      "ui": {"tipo": "print", "imagem": "rotina", "altura": 410, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "OS HORÁRIOS",
+      "tag": "OS HORÁRIOS",
+      "titulo": "OS BURACOS QUE {g}SOBRAM NO DIA{/g}",
+      "texto": "Todo dia de internato tem esses horários. <b>Cada um aguenta uma coisa</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "O que fazer em cada horário",
+        "itens": [
+          {"titulo": "Antes do ambulatório", "sub": "um bloco curto de questões", "selo": "questão", "cor": "#A86BFF"},
+          {"titulo": "Intervalo do almoço", "sub": "a revisão que venceu hoje", "selo": "revisão", "cor": "#46D9F5"},
+          {"titulo": "Trajeto", "sub": "flashcards, se não for dirigindo", "selo": "flashcard", "cor": "#F5A524"},
+          {"titulo": "Depois do plantão", "sub": "a aula, só se a cabeça deixar", "selo": "aula", "cor": "#3DDC97"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "SEM PLANO",
+      "tag": "SEM PLANO",
+      "titulo": "O INTERVALO {g}PASSA NO CELULAR{/g}",
+      "texto": "Sem saber o que fazer, o tempo vai só em decidir. <b>Quando decide, o intervalo acabou</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Abrir o caderno no almoço", "feito": true},
+          {"texto": "Pensar no que estudar", "feito": true},
+          {"texto": "Olhar o grupo da turma", "feito": true},
+          {"texto": "Voltar pro ambulatório", "feito": true},
+          {"texto": "Estudar alguma coisa", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "MONTE O DIA {g}EM VOLTA DA ESCALA{/g}",
+      "texto": "Coloque o internato e o plantão na agenda, com o Google Agenda junto. <b>O estudo entra nos espaços que sobram</b>.",
+      "ui": {"tipo": "print", "imagem": "rotina", "altura": 540, "foco": "center", "nota": "Agenda da semana"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "NO INTERVALO",
+      "tag": "FOCO",
+      "titulo": "LIGOU O FOCO, {g}O TEMPO CONTA{/g}",
+      "texto": "Pomodoro ou tempo corrido no intervalo. <b>Cada sessão fica registrada</b>, mesmo as curtas.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 520, "foco": "top", "nota": "Foco"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "NO FIM DO DIA",
+      "tag": "TELA HOJE",
+      "titulo": "NO FIM DO DIA, {g}VOCÊ VÊ O QUE RENDEU{/g}",
+      "texto": "Tempo estudado no dia e na semana, questões, ritmo e a agenda de hoje. <b>Os buracos viram horas</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "SALVA PRO PRÓXIMO RODÍZIO",
+      "titulo": "O INTERNATO INTEIRO {g}NUM APP SÓ{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Agenda da semana", "texto": "plantão, aula e estudo, com o Google Agenda"},
+          {"titulo": "Ciclo clínico", "texto": "o cronograma do internato, junto com a residência"},
+          {"titulo": "Revisão espaçada", "texto": "a escada de 1 semana a 6 meses"},
+          {"titulo": "Foco e flashcards com IA", "texto": "pomodoro e cartões montados do seu PDF"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
