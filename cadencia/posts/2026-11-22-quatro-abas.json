@@ -1,0 +1,96 @@
+{
+  "id": "2026-11-22-quatro-abas",
+  "legenda": "Domingo à noite com 4 abas abertas pra montar a semana 😮‍💨\n\nPlanilha do cronograma numa aba, app de revisão na outra, o cronômetro do celular e a agenda com os plantões. Cada uma sabe uma parte, e você passa a noite copiando de uma pra outra.\n\nNo Cadência Med fica tudo no mesmo lugar: o cronograma (o pronto, o do seu cursinho que a IA lê ou o ciclo clínico), a revisão marcada pra 1 semana, 1 mês, 2, 4 e 6 meses, o Foco que registra cada sessão e a tela Hoje com o tempo, as questões e a agenda do dia.\n\nManda pro amigo que monta a semana em 4 abas 📌\n\nQuantos plantões você tem essa semana? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #organizacaodeestudos\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "DOMINGO",
+      "tag": "MONTAR A SEMANA",
+      "titulo": "DOMINGO À NOITE E {g}4 ABAS ABERTAS{/g}",
+      "texto": "Tudo isso só <b>pra montar a semana</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 430, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "AS 4 ABAS",
+      "tag": "AS 4 ABAS",
+      "titulo": "CADA ABA {g}SABE UMA PARTE{/g}",
+      "texto": "E nenhuma conversa com a outra. <b>Quem junta tudo é você</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "O domingo à noite",
+        "itens": [
+          {"titulo": "Planilha", "sub": "o que estudar na semana", "selo": "cronograma", "cor": "#A86BFF"},
+          {"titulo": "App de revisão", "sub": "o que venceu e o que vai vencer", "selo": "revisão", "cor": "#46D9F5"},
+          {"titulo": "Cronômetro do celular", "sub": "quanto você estudou de verdade", "selo": "tempo", "cor": "#F5A524"},
+          {"titulo": "Agenda", "sub": "os plantões e as aulas", "selo": "agenda", "cor": "#3DDC97"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "O DOMINGO {g}VAI NA CÓPIA{/g}",
+      "texto": "Copiar de uma aba pra outra toma a noite. <b>E na quarta já tá tudo desencontrado</b>.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Passar as aulas da planilha pra agenda", "feito": true},
+          {"texto": "Conferir as revisões no outro app", "feito": true},
+          {"texto": "Encaixar os plantões", "feito": true},
+          {"texto": "Somar as horas da semana passada", "feito": false},
+          {"texto": "Descansar antes da segunda", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "O CRONOGRAMA {g}MORA NO APP{/g}",
+      "texto": "O pronto, o do seu cursinho (a IA lê) ou o ciclo clínico. <b>Sem planilha do lado</b>.",
+      "ui": {"tipo": "print", "imagem": "cronograma", "altura": 520, "foco": "top", "nota": "Cronograma"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "REVISÃO",
+      "tag": "REVISÃO",
+      "titulo": "A REVISÃO {g}JÁ VEM MARCADA{/g}",
+      "texto": "Cada aula volta em 1 semana, 1 mês, 2, 4 e 6 meses. <b>Sem outro app pra conferir</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "FOCO",
+      "tag": "FOCO",
+      "titulo": "O CRONÔMETRO {g}VIRA REGISTRO{/g}",
+      "texto": "Pomodoro ou tempo corrido. <b>Cada sessão entra no seu tempo do dia e da semana</b>.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 520, "foco": "top", "nota": "Foco"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "FECHA AS 4 ABAS",
+      "titulo": "A SEMANA INTEIRA {g}NUM APP SÓ{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Cronograma", "texto": "pronto, do cursinho ou ciclo clínico"},
+          {"titulo": "Revisão espaçada", "texto": "a escada de 1 semana a 6 meses"},
+          {"titulo": "Foco", "texto": "pomodoro com cada sessão registrada"},
+          {"titulo": "Agenda da semana", "texto": "plantão, aula e estudo, com o Google Agenda"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
