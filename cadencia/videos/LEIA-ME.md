@@ -26,6 +26,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v16.js` | Meme animado de nicho: POV 22h, voltou do ambulatório, carimbo DESDE O 3º ANO e a tela real do ciclo clínico | 11,5 s |
 | `v17.js` | Meme animado: POV errou a mesma questão de Cardio pela terceira vez, carimbo 3ª VEZ e o caderno de erros com a escada de revisão | 11,5 s |
 | `v18.js` | Meme animado: POV saiu do plantão às 7h e as revisões de hoje são só 3, carimbo SÓ 3 e a tela real de revisões | 11,5 s |
+| `v19.js` | Meme animado: POV domingo 22h e a semana ainda não tá montada, carimbo 22H e a tela real do mentor de IA | 11,5 s |
 
 ## Como gerar
 
