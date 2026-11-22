@@ -37,6 +37,13 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 27. ~~(nicho, pra salvar) ENAMED 2027 com um ano pela frente: 100 questões, 20 de cada área (Clínica Médica, Cirurgia, Pediatria, GO e Preventiva), prova de 5 horas, e onde cada área entra no ano junto com o rodízio. Capa com cena ("4º ano, 100 questões no ENAMED e o rodízio já começou"), lista inteira no slide 2 (bloco `lista`), tom "dá tempo se começar agora". Só os fatos do edital listados em "Nicho internato e ENAMED". Prints: materias, cronograma (ciclo clínico)~~ *(saiu em 16/11)*
 28. ~~(pra salvar) Caderno de erros em 4 passos: anotar a questão, escrever por que errou numa frase, ligar ao tema e deixar a revisão voltar no dia certo. Os 4 passos inteiros no slide 2, "salva" só no último slide.~~ *(saiu em 18/11)* Prints: revisoes, hoje
 29. ~~(nicho, pra salvar) Os horários que cabem num dia de internato: antes do ambulatório, intervalo do almoço, trajeto, depois do plantão, com o que dá pra fazer em cada um (flashcard, revisão curta, questão, aula). Capa com a cena "7h ambulatório, 13h aula, 19h plantão". Lista inteira no slide 2.~~ *(saiu em 21/11)* Prints: rotina, foco, hoje
+30. (nicho) Rodízio novo começando: a área do rodízio entra no ciclo clínico e as outras 4 seguem na revisão. Capa: "Segunda, 7h, primeiro dia do rodízio de GO". Prints: cronograma (ciclo clínico), materias, rotina
+31. (nicho, pra salvar) O que dá pra fazer em 15 minutos de trajeto até o hospital: flashcards do dia, revisão curta, uma questão do caderno de erros, ouvir o mentor de IA. Lista inteira no slide 2. Prints: cartoes_ia, revisoes, foco
+32. Saindo do hospital sem mão livre pra digitar e o mentor de IA por voz dizendo o que estudar hoje. Capa: "20h, saindo do hospital, e ainda não sabe o que estudar hoje". Prints: assistente, hoje, rotina
+33. (nicho, pra salvar) Prova antiga do jeito certo em 4 passos: fazer no tempo, corrigir, ler o comentário das erradas e das chutadas, mandar pro caderno de erros. Capa: "Fez a prova antiga e só conferiu o gabarito". Bloco `questao` desenhado. Prints: revisoes, hoje
+34. (Black) 3 dias grátis sem cartão e o que testar em cada um: dia 1 manda o cronograma, dia 2 faz a revisão e os flashcards, dia 3 monta a semana com o mentor de IA. Preço do site. Prints: planos, cronograma, cartoes_ia, assistente
+35. (nicho) Simulado com a turma do internato no sábado de folga, e o ranking da sala depois. Capa: "Sábado, 8h, a turma do internato fazendo o mesmo simulado". Prints: hoje, foco (ranking desenhado), bloco `questao`
+36. (pra salvar) Dezembro com festa, viagem e plantão: o que marcar na agenda (com o Google Agenda) antes do mês começar. Lista inteira no slide 2. Prints: rotina, revisoes, assistente
 
 ## Reels (14:55)
 
@@ -140,3 +147,10 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 27. ~~A2 · POV: saiu do plantão às 7h e a revisão de hoje são só 3. Abre na cena, carimbo "SÓ 3" aos 2 s, aos 4 s a tela de revisões do Cadência Med. Fecha repetindo a primeira frase~~ *(saiu em 20/11)*
 28. ~~A1 · Eu mandando o **ranking da sala** do **Cadência Med** no grupo da turma às **23h**. Tela: foco, com o ranking desenhado. Legenda: "Marca quem tá atrás de você no ranking"~~ *(saiu em 21/11)*
 29. ~~A2 · POV: domingo 22h e a semana ainda não tá montada. Abre na cena, carimbo "22H" aos 2 s, aos 4 s o mentor de IA do Cadência Med montando a semana. Fecha repetindo a primeira frase~~ *(saiu em 22/11)*
+30. A1 · (nicho) Eu no **primeiro dia do rodízio de GO** abrindo o **Cadência Med** pra ver onde a área entra na semana. Tela: cronograma (ciclo clínico). Legenda: "Marca quem começou rodízio novo hoje"
+31. A2 · (nicho) POV: 6h40 no ônibus pro hospital e 15 minutos até chegar. Abre na cena, carimbo "15 MIN" aos 2 s, aos 4 s os flashcards do Cadência Med. Fecha repetindo a primeira frase
+32. A1 · Meu amigo me vendo **falar sozinho** no corredor do hospital. Eu: perguntando pro **mentor de IA** do **Cadência Med** o que estudar hoje. Tela: assistente. Legenda: "Marca quem estuda no caminho de casa"
+33. A2 · POV: terminou a prova antiga e só conferiu o gabarito. Abre na cena, carimbo "SÓ O GABARITO" aos 2 s, aos 4 s o caderno de erros com a escada de revisão do Cadência Med. Fecha repetindo a primeira frase
+34. A1 · (Black) Eu na **Black Friday** fechando o **anual** do **Cadência Med** por **R$ 25 por mês** enquanto a turma discute o que comprar. Tela: planos. Legenda: "Marca quem tá no carrinho desde cedo"
+35. A2 · (nicho) POV: sábado 8h e a turma do internato toda no mesmo simulado. Abre na cena, carimbo "A TURMA TODA" aos 2 s, aos 4 s o ranking da sala do Cadência Med. Fecha repetindo a primeira frase
+36. A1 · Minha mãe perguntando o que eu vou fazer em **dezembro** e eu mostrando a **agenda** do **Cadência Med**. Tela: rotina. Legenda: "Marca quem já tem plantão no Natal"
