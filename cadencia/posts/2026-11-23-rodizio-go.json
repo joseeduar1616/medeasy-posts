@@ -1,0 +1,97 @@
+{
+  "id": "2026-11-23-rodizio-go",
+  "legenda": "Segunda, 7h, primeiro dia do rodízio de GO. E as outras 4 áreas? 🩺\n\nRodízio novo começa e o estudo inteiro vira para a área nova. A Clínica do rodízio passado para na sexta, e Pediatria, Cirurgia e Preventiva ficam pra depois. Um mês depois, o que você estudou já esfriou.\n\nNo Cadência Med você manda o conteúdo do estágio e ele entra no ciclo clínico, no lugar das aulas daquela área. As outras áreas seguem com a revisão marcada pra 1 semana, 1 mês, 2, 4 e 6 meses, e na agenda você diz quanto tempo tem e o app reparte a semana entre as especialidades, puxando pra frente o que está com revisão atrasada.\n\nManda pra quem começou rodízio novo hoje 📌\n\nEm que rodízio você tá? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #enamed\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "INTERNATO",
+      "tag": "RODÍZIO NOVO",
+      "titulo": "SEGUNDA, 7H, {g}PRIMEIRO DIA DO RODÍZIO DE GO{/g}",
+      "texto": "E as outras 4 áreas? <b>Arrasta pra ver</b>.",
+      "ui": {"tipo": "print", "imagem": "cronograma", "altura": 410, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "O PROBLEMA",
+      "titulo": "O RODÍZIO NOVO {g}PUXA TODO O ESTUDO{/g}",
+      "texto": "A área nova ocupa a semana. <b>O resto vai pra depois</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "A troca de rodízio",
+        "itens": [
+          {"titulo": "GO", "sub": "começa hoje, tudo novo", "selo": "agora", "cor": "#F2557A"},
+          {"titulo": "Clínica Médica", "sub": "o rodízio passado parou na sexta", "selo": "parou", "cor": "#A86BFF"},
+          {"titulo": "Pediatria", "sub": "desde o 3º ano", "selo": "depois", "cor": "#F5A524"},
+          {"titulo": "Cirurgia", "sub": "fica pro próximo rodízio", "selo": "depois", "cor": "#46D9F5"},
+          {"titulo": "Preventiva", "sub": "ninguém lembra dela", "selo": "depois", "cor": "#2DD4A0"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "UM MÊS DEPOIS",
+      "titulo": "A CLÍNICA {g}JÁ ESFRIOU{/g}",
+      "texto": "No ENAMED são <b>20 questões de cada área</b>. A que parou vale o mesmo que a de agora.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "GO do rodízio em dia", "feito": true},
+          {"texto": "Revisar a Clínica do rodízio passado", "feito": false},
+          {"texto": "Voltar na Pediatria", "feito": false},
+          {"texto": "Uma revisão curta de Cirurgia", "feito": false},
+          {"texto": "Abrir a Preventiva", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "O ESTÁGIO ENTRA {g}NO CICLO CLÍNICO{/g}",
+      "texto": "Você manda o conteúdo do rodízio e ele entra <b>no lugar das aulas daquela área</b>. Dá pra seguir junto com a residência.",
+      "ui": {"tipo": "print", "imagem": "cronograma", "altura": 540, "foco": "top", "nota": "Ciclo clínico, residência ou os dois"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "POR ÁREA",
+      "tag": "MATÉRIAS",
+      "titulo": "VEJA O QUE FALTA {g}EM CADA ÁREA{/g}",
+      "texto": "Aulas e tópicos separados por área. <b>A que ficou pra trás aparece</b>.",
+      "ui": {"tipo": "print", "imagem": "materias", "altura": 520, "foco": "top", "nota": "Matérias e temas"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "AGENDA",
+      "tag": "AGENDA",
+      "titulo": "A SEMANA {g}REPARTIDA ENTRE AS ÁREAS{/g}",
+      "texto": "Diga quanto tempo tem. O app reparte e <b>puxa pra frente a revisão atrasada</b>.",
+      "ui": {"tipo": "print", "imagem": "rotina", "altura": 520, "foco": "top", "nota": "Agenda da semana"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "RODÍZIO NOVO",
+      "titulo": "A ÁREA NOVA {g}SEM LARGAR AS OUTRAS{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Ciclo clínico", "texto": "o conteúdo do estágio vira cronograma"},
+          {"titulo": "Revisão espaçada", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Matérias por área", "texto": "o que falta em cada uma"},
+          {"titulo": "Agenda da semana", "texto": "plantão, aula e estudo, com o Google Agenda"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
