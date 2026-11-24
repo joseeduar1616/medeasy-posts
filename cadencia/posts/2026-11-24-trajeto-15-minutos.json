@@ -1,0 +1,95 @@
+{
+  "id": "2026-11-24-trajeto-15-minutos",
+  "legenda": "15 minutos no ônibus até o hospital. Dá pra revisar? Dá 🚌\n\nIda e volta, 5 dias de internato, são umas 2h30 por semana de 15 em 15 minutos. Quase sempre esse tempo vai pro feed e pro grupo da turma, e a revisão fica pra noite, depois do ambulatório.\n\nO que cabe no trajeto: os flashcards que a IA montou do PDF da aula, a revisão que venceu hoje, uma questão do caderno de erros e uma pergunta pro mentor de IA por voz sobre o que estudar à noite. No Cadência Med a revisão já vem marcada pra 1 semana, 1 mês, 2, 4 e 6 meses, e o Foco conta esse tempo junto com o resto do dia.\n\nSalva pra usar no próximo trajeto e manda pra quem vai de ônibus pro hospital 📌\n\nQuanto tempo dura o seu trajeto? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #flashcards\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "INTERNATO",
+      "tag": "15 MINUTOS",
+      "titulo": "15 MINUTOS NO ÔNIBUS ATÉ O HOSPITAL. {g}DÁ PRA REVISAR?{/g}",
+      "texto": "Dá. <b>Arrasta pra ver o que cabe</b>.",
+      "ui": {"tipo": "print", "imagem": "cartoes_ia", "altura": 400, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A LISTA",
+      "tag": "O QUE CABE",
+      "titulo": "O QUE CABE EM {g}15 MINUTOS{/g}",
+      "texto": "Quatro coisas, <b>uma depois da outra</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "No trajeto até o hospital",
+        "itens": [
+          {"titulo": "Flashcards do dia", "sub": "os cartões que a IA montou do PDF", "selo": "1", "cor": "#F2557A"},
+          {"titulo": "Revisão curta", "sub": "a aula que venceu hoje na escada", "selo": "2", "cor": "#A86BFF"},
+          {"titulo": "Caderno de erros", "sub": "uma questão que você já errou", "selo": "3", "cor": "#F5A524"},
+          {"titulo": "Mentor de IA por voz", "sub": "pergunta o que estudar à noite", "selo": "4", "cor": "#2DD4A0"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "E AÍ",
+      "tag": "O TRAJETO",
+      "titulo": "O TEMPO {g}VAI PRO FEED{/g}",
+      "texto": "Ida e volta, 5 dias: <b>2h30 por semana</b> de 15 em 15 minutos.",
+      "ui": {
+        "tipo": "checklist",
+        "itens": [
+          {"texto": "Rolar o feed", "feito": true},
+          {"texto": "Ler o grupo da turma", "feito": true},
+          {"texto": "Revisar a aula de ontem", "feito": false},
+          {"texto": "Passar os flashcards", "feito": false}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "A VIRADA",
+      "titulo": "A REVISÃO DO DIA {g}JÁ ESTÁ SEPARADA{/g}",
+      "texto": "1 semana, 1 mês, 2, 4 e 6 meses. <b>Você abre e faz a que venceu</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "FLASHCARDS",
+      "tag": "FLASHCARDS",
+      "titulo": "OS CARTÕES {g}SAEM DO SEU PDF{/g}",
+      "texto": "Manda o PDF da aula e a IA monta. <b>No ônibus é só passar</b>.",
+      "ui": {"tipo": "print", "imagem": "cartoes_ia", "altura": 520, "foco": "top", "nota": "Flashcards com IA"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "FOCO",
+      "tag": "FOCO",
+      "titulo": "15 MINUTOS {g}TAMBÉM CONTAM{/g}",
+      "texto": "Liga o Foco no tempo corrido e o trajeto entra <b>nas sessões do dia</b>.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 520, "foco": "top", "nota": "Foco"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "PRA SALVAR",
+      "titulo": "SALVA PRA USAR {g}NO PRÓXIMO TRAJETO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Flashcards com IA", "texto": "a IA monta do PDF da aula"},
+          {"titulo": "Revisão espaçada", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Caderno de erros", "texto": "a questão errada volta pra você"},
+          {"titulo": "Mentor de IA por voz", "texto": "pergunta sem digitar"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
