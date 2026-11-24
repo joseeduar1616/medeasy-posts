@@ -148,7 +148,7 @@ A1 = meme com tela do app (foto). A2 = meme animado (Reel). Marque `~~...~~ *(sa
 28. ~~A1 · Eu mandando o **ranking da sala** do **Cadência Med** no grupo da turma às **23h**. Tela: foco, com o ranking desenhado. Legenda: "Marca quem tá atrás de você no ranking"~~ *(saiu em 21/11)*
 29. ~~A2 · POV: domingo 22h e a semana ainda não tá montada. Abre na cena, carimbo "22H" aos 2 s, aos 4 s o mentor de IA do Cadência Med montando a semana. Fecha repetindo a primeira frase~~ *(saiu em 22/11)*
 30. ~~A1 · (nicho) Eu no **primeiro dia do rodízio de GO** abrindo o **Cadência Med** pra ver onde a área entra na semana. Tela: cronograma (ciclo clínico). Legenda: "Marca quem começou rodízio novo hoje"~~ *(saiu em 23/11)*
-31. A2 · (nicho) POV: 6h40 no ônibus pro hospital e 15 minutos até chegar. Abre na cena, carimbo "15 MIN" aos 2 s, aos 4 s os flashcards do Cadência Med. Fecha repetindo a primeira frase
+31. ~~A2 · (nicho) POV: 6h40 no ônibus pro hospital e 15 minutos até chegar. Abre na cena, carimbo "15 MIN" aos 2 s, aos 4 s os flashcards do Cadência Med. Fecha repetindo a primeira frase~~ *(saiu em 24/11)*
 32. A1 · Meu amigo me vendo **falar sozinho** no corredor do hospital. Eu: perguntando pro **mentor de IA** do **Cadência Med** o que estudar hoje. Tela: assistente. Legenda: "Marca quem estuda no caminho de casa"
 33. A2 · POV: terminou a prova antiga e só conferiu o gabarito. Abre na cena, carimbo "SÓ O GABARITO" aos 2 s, aos 4 s o caderno de erros com a escada de revisão do Cadência Med. Fecha repetindo a primeira frase
 34. A1 · (Black) Eu na **Black Friday** fechando o **anual** do **Cadência Med** por **R$ 25 por mês** enquanto a turma discute o que comprar. Tela: planos. Legenda: "Marca quem tá no carrinho desde cedo"
