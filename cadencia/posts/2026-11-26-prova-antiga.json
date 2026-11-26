@@ -1,0 +1,93 @@
+{
+  "id": "2026-11-26-prova-antiga",
+  "legenda": "Fez a prova antiga e só conferiu o gabarito? 📝\n\nContar os acertos dá uma ideia da nota, mas a prova antiga rende mesmo no que vem depois. Quem só olha o gabarito deixa passar as erradas e, pior, as chutadas que deram certo. Na próxima prova a mesma dúvida aparece e o chute pode não acertar de novo.\n\nO jeito certo cabe em 4 passos: fazer no tempo da prova, corrigir, ler o comentário das erradas e das chutadas, e mandar tudo pro caderno de erros. No Cadência Med as provas vêm comentadas, o Foco conta o tempo e o que você erra entra na escada de revisão (1 semana, 1 mês, 2, 4 e 6 meses).\n\nSalva esse post pra usar na próxima prova antiga e manda pro amigo que só confere o gabarito 📌\n\nQuantas provas antigas você já fez? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #provaderesidencia\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "PROVA ANTIGA",
+      "tag": "4 PASSOS",
+      "titulo": "FEZ A PROVA ANTIGA E {g}SÓ CONFERIU O GABARITO{/g}",
+      "texto": "4 passos pra <b>a prova antiga render de verdade</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 380, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "OS 4 PASSOS",
+      "tag": "DO JEITO CERTO",
+      "titulo": "A PROVA ANTIGA {g}EM 4 PASSOS{/g}",
+      "texto": "Vale pra prova de residência, do ENAMED ou o simulado da turma.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Prova antiga",
+        "itens": [
+          {"titulo": "Faça no tempo", "sub": "o tempo da prova, sem pausa no meio", "selo": "1", "cor": "#A86BFF"},
+          {"titulo": "Corrija tudo", "sub": "e marque as que você chutou", "selo": "2", "cor": "#46D9F5"},
+          {"titulo": "Leia o comentário", "sub": "das erradas e das chutadas", "selo": "3", "cor": "#F5A524"},
+          {"titulo": "Mande pro caderno", "sub": "pra revisão voltar no dia certo", "selo": "4", "cor": "#2DD4A0"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "O PASSO 3",
+      "tag": "A CHUTADA",
+      "titulo": "ACERTOU NO CHUTE? {g}CONTA COMO ERRO{/g}",
+      "texto": "O gabarito marca certo, mas <b>a dúvida continua lá</b>.",
+      "ui": {
+        "tipo": "questao",
+        "enunciado": "Qual o antídoto da intoxicação por opioide?",
+        "alternativas": ["Flumazenil", "Naloxona", "N-acetilcisteína", "Atropina"],
+        "certa": 1,
+        "comentario": "Você ficou entre A e B e chutou. Lê o comentário e manda pro caderno."
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "O PASSO 4",
+      "titulo": "O ERRO VOLTA {g}NO DIA CERTO{/g}",
+      "texto": "No Cadência Med o que você erra vai pro caderno de erros e entra na escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "FOCO",
+      "tag": "NA HORA DA PROVA",
+      "titulo": "A PROVA {g}NO TEMPO CERTO{/g}",
+      "texto": "Liga o Foco em tempo corrido e <b>cada sessão fica registrada</b>.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 520, "foco": "top", "nota": "Foco"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "HOJE",
+      "tag": "NO PAINEL",
+      "titulo": "AS QUESTÕES {g}CONTAM NO DIA{/g}",
+      "texto": "A tela Hoje mostra <b>tempo estudado e questões</b> do dia e da semana.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 520, "foco": "top", "nota": "Tela Hoje"}
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "SALVA ESSE",
+      "titulo": "PROVA ANTIGA {g}QUE VIRA REVISÃO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Provas comentadas", "texto": "o comentário das erradas e das chutadas"},
+          {"titulo": "Caderno de erros", "texto": "o que errou vira revisão"},
+          {"titulo": "Revisão espaçada", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Foco", "texto": "pomodoro ou tempo corrido"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
