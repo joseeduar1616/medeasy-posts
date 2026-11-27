@@ -1,0 +1,142 @@
+{
+  "id": "2026-11-27-tres-dias-gratis",
+  "legenda": "Black Friday: 3 dias grátis e o que testar em cada um 🗓️\n\nTeste grátis que passa sem você abrir o app não ajuda ninguém a decidir. Com um plano pra cada dia, em 3 dias dá pra ver se o Cadência Med encaixa na sua rotina de estudo.\n\nDia 1: escolhe o cronograma pronto ou manda o do seu cursinho, que a IA lê. Dia 2: conhece a escada de revisão e monta flashcards com IA a partir de um PDF. Dia 3: pergunta pro mentor de IA o que priorizar e monta a sua semana na agenda.\n\nSem cartão pra começar. Se gostar, o anual sai por R$ 300 (R$ 25 por mês) e o mensal por R$ 39, com 7 dias de garantia.\n\nSalva esse post pra seguir o roteiro no teste e manda pro amigo que tá na dúvida 📌\n\nMensal ou anual? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #blackfriday\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "BLACK FRIDAY",
+      "tag": "3 DIAS GRÁTIS",
+      "titulo": "BLACK FRIDAY: {g}3 DIAS GRÁTIS{/g} E O QUE TESTAR EM CADA UM",
+      "texto": "Um roteiro pra <b>o teste não passar em branco</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "planos",
+        "altura": 380,
+        "foco": "top"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O PROBLEMA",
+      "tag": "TESTE PERDIDO",
+      "titulo": "BAIXOU, ABRIU UMA VEZ E {g}O TESTE ACABOU{/g}",
+      "texto": "Sem plano, os 3 dias passam e <b>você não sabe se o app serve pra você</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "O roteiro",
+        "itens": [
+          {
+            "titulo": "Dia 1",
+            "sub": "manda o cronograma",
+            "selo": "1",
+            "cor": "#A86BFF"
+          },
+          {
+            "titulo": "Dia 2",
+            "sub": "revisão e flashcards",
+            "selo": "2",
+            "cor": "#46D9F5"
+          },
+          {
+            "titulo": "Dia 3",
+            "sub": "a semana com o mentor de IA",
+            "selo": "3",
+            "cor": "#2DD4A0"
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "DIA 1",
+      "tag": "O CRONOGRAMA",
+      "titulo": "ESCOLHE {g}O SEU CRONOGRAMA{/g}",
+      "texto": "Cronograma pronto, ciclo clínico ou os dois juntos. Ou manda o do seu cursinho, que <b>a IA lê</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cronograma",
+        "altura": 500,
+        "foco": "top",
+        "nota": "Cronograma"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "DIA 2",
+      "tag": "A REVISÃO",
+      "titulo": "A REVISÃO {g}E OS FLASHCARDS{/g}",
+      "texto": "Sobe um PDF da aula e <b>a IA monta os cartões</b> pra você revisar.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "cartoes_ia",
+        "altura": 500,
+        "foco": "top",
+        "nota": "Flashcards com IA"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "DIA 3",
+      "tag": "A SEMANA",
+      "titulo": "MONTA A SEMANA {g}COM O MENTOR DE IA{/g}",
+      "texto": "Pergunta o que priorizar e ele responde <b>com base no seu painel</b>.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "assistente",
+        "altura": 500,
+        "foco": "top",
+        "nota": "Mentor de IA"
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "DEPOIS",
+      "tag": "SE GOSTAR",
+      "titulo": "O ANUAL SAI POR {g}R$ 25 POR MÊS{/g}",
+      "texto": "Anual por <b>R$ 300</b> ou mensal por <b>R$ 39</b>, com 7 dias de garantia.",
+      "ui": {
+        "tipo": "print",
+        "imagem": "planos",
+        "altura": 500,
+        "foco": "bottom",
+        "nota": "Planos"
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "SALVA ESSE",
+      "titulo": "3 DIAS GRÁTIS {g}SEM CARTÃO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {
+            "titulo": "Cronograma",
+            "texto": "pronto ou o do seu cursinho"
+          },
+          {
+            "titulo": "Flashcards com IA",
+            "texto": "montados a partir do PDF"
+          },
+          {
+            "titulo": "Revisão espaçada",
+            "texto": "1 semana, 1 mês, 2, 4 e 6 meses"
+          },
+          {
+            "titulo": "Mentor de IA",
+            "texto": "o que priorizar na semana"
+          }
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
