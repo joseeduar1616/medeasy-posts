@@ -1,0 +1,102 @@
+{
+  "id": "2026-11-28-simulado-turma",
+  "legenda": "Sábado, 8h, e a turma do internato toda fazendo o mesmo simulado 📝\n\nO simulado acaba ao meio-dia, a turma compara a nota no grupo e cada um confere o gabarito do seu jeito. Na segunda o rodízio volta, a semana aperta e as questões erradas ficam pra trás. Na prova, a mesma dúvida aparece de novo.\n\nNo Cadência Med a turma faz o simulado junto, o Foco conta o tempo como na prova e o que você erra vai pro caderno de erros e entra na escada de revisão (1 semana, 1 mês, 2, 4 e 6 meses). Na sala com os amigos, o ranking mostra as horas líquidas de cada um na semana.\n\nManda esse post pra turma que faz simulado junto no sábado 📌\n\nVocê faz simulado sozinho ou com a turma? Conta aqui 👇\n\nTeste 3 dias grátis, sem cartão. Link na bio 👉 cadenciamed.com.br\n\n#residenciamedica #medicina #estudantedemedicina #internato #simulado\n\nBlack Friday: anual por R$ 300 (R$ 25 por mês). Manda BLACK no direct",
+  "slides": [
+    {
+      "tipo": "capa",
+      "tema": "degrade",
+      "direita": "INTERNATO",
+      "tag": "SÁBADO DE FOLGA",
+      "titulo": "SÁBADO, 8H, A TURMA DO INTERNATO {g}NO MESMO SIMULADO{/g}",
+      "texto": "E depois, <b>cada um corrige do seu jeito</b>.",
+      "ui": {"tipo": "print", "imagem": "hoje", "altura": 380, "foco": "top"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "O SÁBADO",
+      "tag": "NA VIDA REAL",
+      "titulo": "O SIMULADO ACABA {g}NO GRUPO DA TURMA{/g}",
+      "texto": "A folga passa e <b>as erradas ficam pra trás</b>.",
+      "ui": {
+        "tipo": "lista",
+        "titulo": "Sábado de simulado",
+        "itens": [
+          {"titulo": "8h", "sub": "a turma toda começa o mesmo simulado", "selo": "1", "cor": "#A86BFF"},
+          {"titulo": "12h", "sub": "acaba e a nota vai pro grupo", "selo": "2", "cor": "#46D9F5"},
+          {"titulo": "13h", "sub": "cada um confere o gabarito do seu jeito", "selo": "3", "cor": "#F5A524"},
+          {"titulo": "Segunda", "sub": "o rodízio volta e ninguém revisou", "selo": "4", "cor": "#2DD4A0"}
+        ]
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "O PROBLEMA",
+      "tag": "A ERRADA",
+      "titulo": "A NOTA VAI PRO GRUPO, {g}O ERRO FICA COM VOCÊ{/g}",
+      "texto": "Sem revisar, <b>a mesma dúvida volta na prova</b>.",
+      "ui": {
+        "tipo": "questao",
+        "enunciado": "Qual a primeira medicação na anafilaxia?",
+        "alternativas": ["Anti-histamínico IV", "Adrenalina IM", "Corticoide IV", "Salbutamol inalatório"],
+        "certa": 1,
+        "comentario": "Errou no simulado? Lê o comentário e manda pro caderno de erros."
+      }
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "A VIRADA",
+      "tag": "NO TEMPO DA PROVA",
+      "titulo": "O SIMULADO {g}COM O RELÓGIO CERTO{/g}",
+      "texto": "Simulado com a turma no Cadência Med e o Foco em tempo corrido: <b>cada sessão fica registrada</b>.",
+      "ui": {"tipo": "print", "imagem": "foco", "altura": 520, "foco": "top", "nota": "Foco"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "escuro",
+      "direita": "REVISÃO",
+      "tag": "DEPOIS DO SIMULADO",
+      "titulo": "O QUE ERROU {g}VOLTA NO DIA CERTO{/g}",
+      "texto": "A errada vai pro caderno de erros e entra na escada: <b>1 semana, 1 mês, 2, 4 e 6 meses</b>.",
+      "ui": {"tipo": "print", "imagem": "revisoes", "altura": 520, "foco": "top", "nota": "Escada de revisão"}
+    },
+    {
+      "tipo": "passo",
+      "tema": "claro",
+      "direita": "SALAS",
+      "tag": "COM A TURMA",
+      "titulo": "NA SEMANA, {g}O RANKING DA SALA{/g}",
+      "texto": "Na sala com os amigos o ranking é por <b>horas líquidas</b>. A turma segue junto depois do sábado.",
+      "ui": {
+        "tipo": "barras",
+        "titulo": "Ranking da sala (exemplo)",
+        "itens": [
+          {"nome": "Amigo 1", "valor": 0.95, "rotulo": "14h"},
+          {"nome": "Você", "valor": 0.82, "rotulo": "12h"},
+          {"nome": "Amigo 2", "valor": 0.6, "rotulo": "9h"},
+          {"nome": "Amigo 3", "valor": 0.4, "rotulo": "6h"}
+        ]
+      }
+    },
+    {
+      "tipo": "final",
+      "tema": "claro",
+      "direita": "BLACK FRIDAY",
+      "tag": "COM A TURMA",
+      "titulo": "SIMULADO JUNTO, {g}REVISÃO NO DIA CERTO{/g}",
+      "ui": {
+        "tipo": "recursos",
+        "itens": [
+          {"titulo": "Simulados com a turma", "texto": "todo mundo na mesma prova"},
+          {"titulo": "Caderno de erros", "texto": "o que errou vira revisão"},
+          {"titulo": "Revisão espaçada", "texto": "1 semana, 1 mês, 2, 4 e 6 meses"},
+          {"titulo": "Salas com amigos", "texto": "ranking por horas líquidas"}
+        ]
+      },
+      "botao": "Teste 3 dias grátis",
+      "site": "BLACK FRIDAY · MANDA BLACK NO DIRECT"
+    }
+  ]
+}
