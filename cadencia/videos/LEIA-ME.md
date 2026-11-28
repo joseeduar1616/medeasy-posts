@@ -29,6 +29,7 @@ Termina sempre no cartão "Teste 3 dias grátis · sem cartão · cadenciamed.co
 | `v19.js` | Meme animado: POV domingo 22h e a semana ainda não tá montada, carimbo 22H e a tela real do mentor de IA | 11,5 s |
 | `v20.js` | Meme animado de nicho: POV 6h40 no ônibus pro hospital, carimbo 15 MIN e a tela real de flashcards com IA | 11,5 s |
 | `v21.js` | Meme animado: POV terminou a prova antiga e só conferiu o gabarito, carimbo SÓ O GABARITO e o caderno de erros com a escada de revisão | 11,5 s |
+| `v22.js` | Meme animado de nicho: POV sábado 8h e a turma do internato toda no mesmo simulado, carimbo A TURMA TODA e o ranking da sala | 11,5 s |
 
 ## Como gerar
 
