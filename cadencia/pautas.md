@@ -42,7 +42,7 @@ Formato: capa com dor + print, problema, consequência, virada, duas telas da so
 32. ~~Saindo do hospital sem mão livre pra digitar e o mentor de IA por voz dizendo o que estudar hoje. Capa: "20h, saindo do hospital, e ainda não sabe o que estudar hoje". Prints: assistente, hoje, rotina~~ *(saiu em 25/11)*
 33. ~~(nicho, pra salvar) Prova antiga do jeito certo em 4 passos: fazer no tempo, corrigir, ler o comentário das erradas e das chutadas, mandar pro caderno de erros. Capa: "Fez a prova antiga e só conferiu o gabarito". Bloco `questao` desenhado. Prints: revisoes, hoje~~ *(saiu em 26/11)*
 34. ~~(Black) 3 dias grátis sem cartão e o que testar em cada um: dia 1 manda o cronograma, dia 2 faz a revisão e os flashcards, dia 3 monta a semana com o mentor de IA. Preço do site. Prints: planos, cronograma, cartoes_ia, assistente~~ *(saiu em 27/11)*
-35. (nicho) Simulado com a turma do internato no sábado de folga, e o ranking da sala depois. Capa: "Sábado, 8h, a turma do internato fazendo o mesmo simulado". Prints: hoje, foco (ranking desenhado), bloco `questao`
+35. ~~(nicho) Simulado com a turma do internato no sábado de folga, e o ranking da sala depois. Capa: "Sábado, 8h, a turma do internato fazendo o mesmo simulado". Prints: hoje, foco (ranking desenhado), bloco `questao`~~ *(saiu em 28/11)*
 36. (pra salvar) Dezembro com festa, viagem e plantão: o que marcar na agenda (com o Google Agenda) antes do mês começar. Lista inteira no slide 2. Prints: rotina, revisoes, assistente
 
 ## Reels (14:55)
